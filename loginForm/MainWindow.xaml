@@ -23,7 +23,7 @@
     </Window.Resources>
 
     <Grid>
-        <Border CornerRadius="20" BorderThickness="4">
+        <Border CornerRadius="20" BorderThickness="8">
             <Border.Triggers>
                 <EventTrigger RoutedEvent="Loaded">
                     <BeginStoryboard Storyboard="{StaticResource GradientRotateStoryboard}"/>
@@ -47,7 +47,7 @@
                 </LinearGradientBrush>
             </Border.BorderBrush>
 
-            <Border Background="White" CornerRadius="17">
+            <Border Background="White" CornerRadius="15.7">
                 <Grid>
                     <Grid Margin="0,30,606,30" />
                     <Grid Margin="250,60,0,60">
@@ -64,16 +64,19 @@
                MouseLeftButtonDown="CloseProgram_Click"
                ToolTip="Close Program"/>
         <Image Source="assets/Martify.png"
-               Margin="10,10,730,0"
+               Margin="25,25,715,0"
                Width="60" Height="60"
                VerticalAlignment="Top" />
         <Label Content="Martify"
                FontFamily="Comic Sans MS"
-               Margin="80,14,45,0"
+               Margin="90,30,35,370"
                FontSize="30"
                FontWeight="Bold"
-               VerticalAlignment="Top"
+               VerticalContentAlignment="Center"
                Foreground="#FF055BAC" />
+        
+        
+
     </Grid>
 
 </Window>

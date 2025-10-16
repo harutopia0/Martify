@@ -1,0 +1,79 @@
+﻿<Window x:Class="loginForm.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com:8000/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:loginForm"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="450"
+        Width="800"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <Window.Resources>
+        <Storyboard x:Key="GradientRotateStoryboard" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="AnimatedBorderBrush"
+                             Storyboard.TargetProperty="Transform.Children[0].Angle"
+                             From="0" To="360" Duration="0:0:5" />
+        </Storyboard>
+    </Window.Resources>
+
+    <Grid>
+        <Border CornerRadius="20" BorderThickness="4">
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource GradientRotateStoryboard}"/>
+                </EventTrigger>
+            </Border.Triggers>
+
+            <Border.BorderBrush>
+                <LinearGradientBrush x:Name="AnimatedBorderBrush" 
+                                     StartPoint="0,0" EndPoint="1,1">
+
+                    <GradientStop Color="#FF055BAC" Offset="0.00" />
+                    <GradientStop Color="#FF71FBF8" Offset="0.30" />
+                    <GradientStop Color="#FF000000" Offset="0.55" />
+                    <GradientStop Color="#FF71FBF8" Offset="0.80" />
+                    <GradientStop Color="#FF055BAC" Offset="1.00" />
+                    <LinearGradientBrush.Transform>
+                        <TransformGroup>
+                            <RotateTransform CenterX="0.5" CenterY="0.5" />
+                        </TransformGroup>
+                    </LinearGradientBrush.Transform>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+
+            <Border Background="White" CornerRadius="17">
+                <Grid>
+                    <Grid Margin="0,30,606,30" />
+                    <Grid Margin="250,60,0,60">
+                        <Image Source="assets/login-banner.png" />
+                    </Grid>
+                </Grid>
+            </Border>
+        </Border>
+        <Image Source="assets/x_icon.png"
+               Margin="0,15,15,0"
+               Width="30" Height="30"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Top"
+               MouseLeftButtonDown="CloseProgram_Click"
+               ToolTip="Close Program"/>
+        <Image Source="assets/Martify.png"
+               Margin="10,10,730,0"
+               Width="60" Height="60"
+               VerticalAlignment="Top" />
+        <Label Content="Martify"
+               FontFamily="Comic Sans MS"
+               Margin="80,14,45,0"
+               FontSize="30"
+               FontWeight="Bold"
+               VerticalAlignment="Top"
+               Foreground="#FF055BAC" />
+    </Grid>
+
+</Window>

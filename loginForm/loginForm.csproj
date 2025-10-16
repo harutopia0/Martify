@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="assets\login-banner.png" />
+    <None Remove="assets\Martify.png" />
+    <None Remove="assets\x_icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\login-banner.png" />
+    <Resource Include="assets\Martify.png" />
+    <Resource Include="assets\x_icon.png" />
+  </ItemGroup>
+
+</Project>

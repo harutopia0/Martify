@@ -1,0 +1,75 @@
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio cache files
+.vs/
+.vscode/
+
+# Rider IDE files
+.idea/
+
+# NuGet packages
+*.nupkg
+# Package folder (do not include packages installed via NuGet)
+packages/
+!packages/build/
+*.snupkg
+
+# Ignore test results
+[Tt]est[Rr]esult*/
+*.VisualState.xml
+TestResult.xml
+
+# Ignore temporary files
+*.tmp
+*.temp
+*.bak
+*.log
+
+# Ignore backup and autosave files
+*~ 
+*.bak
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Publish output
+publish/
+out/
+AppPackages/
+BundleArtifacts/
+
+# Ignore configuration secrets
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# For Unity (if you use Unity with C#)
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+MemoryCaptures/
+*.unitypackage
+
+# JetBrains Rider cache
+.idea/
+*.sln.iml
+
+# Optional: if you use Resharper
+_ReSharper*/
+*.DotSettings.user

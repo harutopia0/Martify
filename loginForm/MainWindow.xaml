@@ -49,8 +49,7 @@
 
             <Border Background="White" CornerRadius="15.7">
                 <Grid>
-                    <Grid Margin="0,30,606,30" />
-                    <Grid Margin="250,60,0,60">
+                    <Grid Margin="300,50,0,30">
                         <Image Source="assets/login-banner.png" />
                     </Grid>
                 </Grid>
@@ -74,9 +73,105 @@
                FontWeight="Bold"
                VerticalContentAlignment="Center"
                Foreground="#FF055BAC" />
-        
-        
 
+        <Image Source="assets/blur_image.png" 
+               Margin="24,90,0,0" 
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               RenderTransformOrigin="0.369,0.45" Height="319"></Image>
+
+        <Grid Margin="44,107,508,70">
+            <Border CornerRadius="20" 
+                    BorderThickness="2"
+                    BorderBrush="Black">
+                <Border Background="Gray" 
+                        Opacity="0.14"
+                        CornerRadius="17">
+                </Border>
+            </Border>
+        </Grid>
+
+
+        <Grid Margin="44,107,508,70">
+            <Border CornerRadius="20" 
+                    BorderThickness="2"
+                    BorderBrush="Black">
+
+            </Border>
+
+            <Label Content="Sign in"
+                   FontFamily="Comic Sans MS"
+                   Margin="8,8,0,210"
+                   FontSize="30"
+                   FontWeight="Bold"
+                   VerticalContentAlignment="Center"
+                   HorizontalAlignment="Left"
+                   Foreground="#FF055BAC" RenderTransformOrigin="0.5,0.5" >
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleX="23.775"/>
+                        <RotateTransform/>
+                        <TranslateTransform X="10.15"/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+
+            <Label Content="Username or email address"
+                   FontFamily="/fonts/YanoneKaffeesatz-Regular.ttf#Yanone Kaffeesatz"
+                   Margin="20,71,0,178"
+                   FontSize="16"
+                   VerticalContentAlignment="Center"
+                   HorizontalAlignment="Left"
+                   Foreground="Gray" />
+            <Grid Margin="24,100,53,145">
+                <Border x:Name="usernameBorder" 
+                        BorderThickness="1" 
+                        BorderBrush="Gray" 
+                        CornerRadius="3">
+                    <Border Background="AliceBlue" CornerRadius="4">
+                        <TextBox x:Name="usernameTextBox"
+                                 VerticalContentAlignment="Center"          
+                                 FontFamily="/fonts/YanoneKaffeesatz-Regular.ttf#Yanone Kaffeesatz"
+                                 FontSize="12.5"
+                                 BorderBrush="Transparent"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 Foreground="Black"
+                                 GotFocus="usernameTextBoxGotFocus"
+                                 LostFocus="usernameTextBoxLostFocus"/>
+                    </Border>
+                </Border>
+            </Grid>
+
+
+            <Label Content="Password"
+                   FontFamily="/fonts/YanoneKaffeesatz-Regular.ttf#Yanone Kaffeesatz"
+                   Margin="20,151,0,99"
+                   FontSize="16"
+                   VerticalContentAlignment="Center"
+                   HorizontalAlignment="Left"
+                   Foreground="Gray" Width="142" />
+            <Grid Margin="24,179,53,66">
+                <Border x:Name="passwordBorder" 
+                        BorderThickness="1" 
+                        BorderBrush="Gray" 
+                        CornerRadius="3">
+                    <Border Background="AliceBlue" CornerRadius="4">
+                        <PasswordBox x:Name="passwordBox"
+                                     VerticalContentAlignment="Center"          
+                                     FontFamily="/fonts/YanoneKaffeesatz-Regular.ttf#Yanone Kaffeesatz"
+                                     FontSize="12.5"
+                                     BorderBrush="Transparent"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     Foreground="Black"
+                                     GotFocus="passwordBoxGotFocus"
+                                     LostFocus="passwordBoxLostFocus"/>
+                    </Border>
+                </Border>
+            </Grid>
+            
+        </Grid>
     </Grid>
-
 </Window>

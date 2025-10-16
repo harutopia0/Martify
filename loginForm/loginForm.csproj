@@ -9,15 +9,34 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\blur_image.png" />
     <None Remove="assets\login-banner.png" />
     <None Remove="assets\Martify.png" />
     <None Remove="assets\x_icon.png" />
+    <None Remove="fonts\YanoneKaffeesatz-Bold.ttf" />
+    <None Remove="fonts\YanoneKaffeesatz-ExtraLight.ttf" />
+    <None Remove="fonts\YanoneKaffeesatz-Light.ttf" />
+    <None Remove="fonts\YanoneKaffeesatz-Medium.ttf" />
+    <None Remove="fonts\YanoneKaffeesatz-Regular.ttf" />
+    <None Remove="fonts\YanoneKaffeesatz-SemiBold.ttf" />
+    <None Remove="fonts\YanoneKaffeesatz-VariableFont_wght.ttf" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="assets\blur_image.png" />
     <Resource Include="assets\login-banner.png" />
     <Resource Include="assets\Martify.png" />
     <Resource Include="assets\x_icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="fonts\YanoneKaffeesatz-Bold.ttf" />
+    <Resource Include="fonts\YanoneKaffeesatz-ExtraLight.ttf" />
+    <Resource Include="fonts\YanoneKaffeesatz-Light.ttf" />
+    <Resource Include="fonts\YanoneKaffeesatz-Medium.ttf" />
+    <Resource Include="fonts\YanoneKaffeesatz-Regular.ttf" />
+    <Resource Include="fonts\YanoneKaffeesatz-SemiBold.ttf" />
+    <Resource Include="fonts\YanoneKaffeesatz-VariableFont_wght.ttf" />
   </ItemGroup>
 
 </Project>

@@ -28,37 +28,26 @@ namespace loginForm
 
         private void usernameTextBoxGotFocus(object sender, RoutedEventArgs e)
         {
-            usernameBorder.BorderThickness = new Thickness(3);
-            usernameBorder.CornerRadius = new CornerRadius(5);
-
-            string hexColor = "#4b91cf";
-            Color color = (Color)ColorConverter.ConvertFromString(hexColor);
-            SolidColorBrush brush = new SolidColorBrush(color);
-            usernameBorder.BorderBrush = brush;
+            // Apply focus effect border
+            usernameFocusBorder.Opacity = 1;
         }
 
         private void usernameTextBoxLostFocus(object sender, RoutedEventArgs e)
         {
-            usernameBorder.BorderThickness = new Thickness(1);
-            usernameBorder.CornerRadius = new CornerRadius(3);
-            usernameBorder.BorderBrush = Brushes.Gray;
+            // Hide focus effect border
+            usernameFocusBorder.Opacity = 0;
         }
 
         private void passwordBoxGotFocus(object sender, RoutedEventArgs e)
         {
-            passwordBorder.BorderThickness = new Thickness(3);
-            passwordBorder.CornerRadius = new CornerRadius(5);
-
-            string hexColor = "#4b91cf";
-            Color color = (Color)ColorConverter.ConvertFromString(hexColor);
-            passwordBorder.BorderBrush = new SolidColorBrush(color);
+            // Apply focus effect border
+            passwordFocusBorder.Opacity = 1;
         }
 
         private void passwordBoxLostFocus(object sender, RoutedEventArgs e)
         {
-            passwordBorder.BorderThickness = new Thickness(1);
-            passwordBorder.CornerRadius = new CornerRadius(3);
-            passwordBorder.BorderBrush = Brushes.Gray;
+            // Hide focus effect border
+            passwordFocusBorder.Opacity = 0;
         }
     }
 }

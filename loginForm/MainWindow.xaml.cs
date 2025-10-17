@@ -1,21 +1,15 @@
-﻿using System.Text;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace loginForm
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private bool isPasswordVisible = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,26 +22,49 @@ namespace loginForm
 
         private void usernameTextBoxGotFocus(object sender, RoutedEventArgs e)
         {
-            // Apply focus effect border
-            usernameFocusBorder.Opacity = 1;
+            usernameFocusBorder.Visibility = Visibility.Visible;
         }
 
         private void usernameTextBoxLostFocus(object sender, RoutedEventArgs e)
         {
-            // Hide focus effect border
-            usernameFocusBorder.Opacity = 0;
+            usernameFocusBorder.Visibility = Visibility.Collapsed;
         }
 
         private void passwordBoxGotFocus(object sender, RoutedEventArgs e)
         {
-            // Apply focus effect border
-            passwordFocusBorder.Opacity = 1;
+            passwordFocusBorder.Visibility = Visibility.Visible;
         }
 
         private void passwordBoxLostFocus(object sender, RoutedEventArgs e)
         {
-            // Hide focus effect border
-            passwordFocusBorder.Opacity = 0;
+            passwordFocusBorder.Visibility = Visibility.Collapsed;
+        }
+
+        private void EyeIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            isPasswordVisible = !isPasswordVisible;
+
+            if (isPasswordVisible)
+            {
+                // ---- Show Password ----
+                showPasswordTextBox.Text = passwordBox.Password;
+                showPasswordTextBox.Visibility = Visibility.Visible;
+                passwordBox.Visibility = Visibility.Collapsed;
+
+                eyeIcon.Source = new BitmapImage(new Uri("assets/eye_open.png", UriKind.Relative));
+            }
+            else
+            {
+                // ---- Hide Password ----
+                passwordBox.Password = showPasswordTextBox.Text;
+                showPasswordTextBox.Visibility = Visibility.Collapsed;
+                passwordBox.Visibility = Visibility.Visible;
+
+                eyeIcon.Source = new BitmapImage(new Uri("assets/eye_closed.png", UriKind.Relative));
+            }
+
+            // Move the keyboard focus to a hidden focus sink to clear focus from other controls
+            FocusSink.Focus();
         }
     }
 }

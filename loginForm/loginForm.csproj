@@ -17,6 +17,8 @@
     <None Remove="assets\Martify.png" />
     <None Remove="assets\user_icon.png" />
     <None Remove="assets\x_icon.png" />
+    <None Remove="fonts\PasseroOne-Regular.ttf" />
+    <None Remove="fonts\RubikGlitchPop-Regular.ttf" />
     <None Remove="fonts\YanoneKaffeesatz-Bold.ttf" />
     <None Remove="fonts\YanoneKaffeesatz-ExtraLight.ttf" />
     <None Remove="fonts\YanoneKaffeesatz-Light.ttf" />
@@ -35,6 +37,8 @@
     <Resource Include="assets\Martify.png" />
     <Resource Include="assets\user_icon.png" />
     <Resource Include="assets\x_icon.png" />
+    <Resource Include="fonts\PasseroOne-Regular.ttf" />
+    <Resource Include="fonts\RubikGlitchPop-Regular.ttf" />
   </ItemGroup>
 
   <ItemGroup>

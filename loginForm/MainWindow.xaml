@@ -29,7 +29,7 @@
                 Background="Transparent"
                 Opacity="0"/>
 
-        <Border CornerRadius="20" BorderThickness="8">
+        <Border CornerRadius="26" BorderThickness="8">
             <Border.Triggers>
                 <EventTrigger RoutedEvent="Loaded">
                     <BeginStoryboard Storyboard="{StaticResource GradientRotateStoryboard}"/>
@@ -37,12 +37,12 @@
             </Border.Triggers>
 
             <Border.BorderBrush>
-                <LinearGradientBrush x:Name="AnimatedBorderBrush" StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#FF055BAC" Offset="0.00" />
-                    <GradientStop Color="#FF71FBF8" Offset="0.30" />
-                    <GradientStop Color="#FF000000" Offset="0.55" />
-                    <GradientStop Color="#FF71FBF8" Offset="0.80" />
-                    <GradientStop Color="#FF055BAC" Offset="1.00" />
+                <LinearGradientBrush x:Name="AnimatedBorderBrush" StartPoint="-1,0.5" EndPoint="0.5,1">
+                    <GradientStop Color="#FF71FBF8" Offset="0.00" />
+                    <GradientStop Color="LightBlue" Offset="0.30" />
+                    <GradientStop Color="#FF71FBF8" Offset="0.55" />
+                    <GradientStop Color="AliceBlue" Offset="0.80" />
+                    <GradientStop Color="Gray" Offset="1.00" />
                     <LinearGradientBrush.Transform>
                         <TransformGroup>
                             <RotateTransform CenterX="0.5" CenterY="0.5" />
@@ -51,7 +51,7 @@
                 </LinearGradientBrush>
             </Border.BorderBrush>
 
-            <Border Background="White" CornerRadius="15.7">
+            <Border Background="White" CornerRadius="20">
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -63,22 +63,22 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="25,25,0,0">
                             <Image Source="assets/Martify.png" Width="60" Height="60" />
                             <Label Content="Martify"
-                                   FontFamily="Comic Sans MS"
-                                   FontSize="30"
+                                   FontFamily="/fonts/#Passero One"
+                                   FontSize="42"
                                    FontWeight="Bold"
                                    VerticalContentAlignment="Center"
-                                   Foreground="#FF055BAC" 
-                                   Margin="5,0,0,0"/>
+                                   Foreground="Black" 
+                                   Margin="10,0,0,0"/>
                         </StackPanel>
 
-                        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,30,0,0" Width="248">
+                        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,60,0,0" Width="248">
 
                             <Image Source="assets/blur_image.png"
                                    Stretch="Fill"
                                    Width="248" Height="273" />
 
-                            <Border CornerRadius="20" BorderThickness="2" Focusable="False" BorderBrush="Black">
-                                <Border Background="Gray" Opacity="0.14" Focusable="False" CornerRadius="17" />
+                            <Border CornerRadius="20" BorderThickness="2" Focusable="False" BorderBrush="Transparent">
+                                <Border Background="Gray" Opacity="0.1" Focusable="False" CornerRadius="17" />
                             </Border>
 
                             <Grid Margin="20,15,20,15">
@@ -91,9 +91,11 @@
                                 </Grid.RowDefinitions>
 
                                 <Label Grid.Row="0" Content="Sign in"
-                                       FontFamily="Comic Sans MS"
-                                       FontSize="30"
+                                       Margin="-8,0,0,0"
+                                       FontFamily="/fonts/#Rubik Glitch Pop"
+                                       FontSize="35"
                                        FontWeight="Bold"
+                                       VerticalContentAlignment="Center"
                                        Foreground="#FF055BAC" RenderTransformOrigin="0.5,0.5" >
                                     <Label.RenderTransform>
                                         <TransformGroup>
@@ -108,7 +110,7 @@
                                 <Label Grid.Row="1" Content="Username or email address"
                                        FontFamily="/fonts/YanoneKaffeesatz-Regular.ttf#Yanone Kaffeesatz"
                                        FontSize="16"
-                                       Foreground="Gray" Margin="0,5,0,0" />
+                                       Foreground="Gray" Margin="0,10,0,0" />
 
                                 <Grid Grid.Row="2" Margin="0,2,0,0">
                                     <Border x:Name="usernameBorder" Focusable="False" BorderThickness="1" BorderBrush="Gray" CornerRadius="8" Background="AliceBlue">
@@ -199,12 +201,12 @@
                     </Grid>
 
                     <Grid Grid.Column="1">
-                        <Image Source="assets/login-banner.png" Margin="20" />
+                        <Image Source="assets/login-banner.png" Margin="20,30,10,5"/>
                     </Grid>
 
                     <Image Source="assets/x_icon.png"
                            Grid.Column="1"
-                           Margin="0,15,15,0"
+                           Margin="0,10,10,0"
                            Width="30" Height="30"
                            HorizontalAlignment="Right"
                            VerticalAlignment="Top"

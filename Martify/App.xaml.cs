@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace loginForm
+namespace Martify
 {
     /// <summary>
     /// Interaction logic for App.xaml

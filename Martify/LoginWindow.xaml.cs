@@ -47,5 +47,17 @@ namespace Martify
             // Move focus to a hidden focus sink to clear focus from other controls
             FocusSink.Focus();
         }
+
+        private void moveFocustoFocusSink(object sender, MouseButtonEventArgs e)
+        {
+            FocusSink.Focus();
+        }
+
+        private void loginButtonClick(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Close();
+        }
     }
 }

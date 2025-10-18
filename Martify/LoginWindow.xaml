@@ -68,8 +68,8 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <!--Sign-in-->
-                    <Grid Grid.Column="0">
+                    <!--Login-->
+                    <Grid Grid.Column="0" MouseLeftButtonDown="moveFocustoFocusSink">
 
                         <!--Martify Logo && Name-->
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="50,25,0,0">
@@ -99,7 +99,7 @@
                             </Label>
                         </StackPanel>
 
-                        <!--Sign-in Panel-->
+                        <!--Login Panel-->
                         <Grid VerticalAlignment="Center"
                               HorizontalAlignment="Center" Margin="0,65,0,0" Width="250">
 
@@ -120,7 +120,7 @@
                                         CornerRadius="17" />
                             </Border>
 
-                            <!--Sign-in Panel Grid-->
+                            <!--Login Panel Grid-->
                             <Grid Margin="20,15,20,15">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -132,7 +132,7 @@
                                 </Grid.RowDefinitions>
 
                                 <Label Grid.Row="0"
-                                       Content="Sign in"
+                                       Content="Login"
                                        Margin="-8,0,0,0"
                                        FontFamily="{StaticResource RubikGlitchPop}"
                                        FontSize="35"
@@ -156,7 +156,7 @@
                                        FontFamily="{StaticResource YanoneKaffeesatz}"
                                        FontSize="16"
                                        Foreground="Gray"
-                                       Margin="0,10,0,0" />
+                                       Margin="0,5,0,0" />
                                 <Grid Grid.Row="2" Margin="0,2,0,0">
                                     <Border x:Name="usernameBorder"
                                             Focusable="False"
@@ -280,15 +280,23 @@
                                     </Border>
                                 </Grid>
 
-                                <Grid Grid.Row="5" Margin="0,20,0,0" Height="40">
-                                    <Button Content="Sign in" Width="100"
-                                            FontSize="20" FontWeight="Bold" 
-                                            FontFamily="{StaticResource PasseroOne}"
-                                            HorizontalAlignment="Left"
-                                            Background="LightBlue"
+                                <Grid Grid.Row="5" Margin="0,20,0,0" Height="35">
+                                    <Button IsDefault="True"
+                                            Content="Log In"
+                                            FontSize="15"
+                                            Margin="-1"
+                                            Foreground="White"
+                                            FontFamily="Times New Roman"
                                             BorderBrush="LightGray"
                                             BorderThickness="1"
-                                            FocusVisualStyle="{x:Null}">
+                                            FocusVisualStyle="{x:Null}"
+                                            Click="loginButtonClick">
+                                        <Button.Background>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <GradientStop Color="#FF363333" Offset="0.311"/>
+                                                <GradientStop Color="Black" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Button.Background>
                                         <Button.Template>
                                             <ControlTemplate TargetType="{x:Type Button}">
                                                 <Border x:Name="templateBorder"
@@ -309,16 +317,18 @@
                                         </Button.Template>
                                     </Button>
                                 </Grid>
-                                
+
                             </Grid>
                         </Grid>
                     </Grid>
 
                     <!--Banner Grid-->
-                    <Grid Grid.Column="1">
+                    <Grid Grid.Column="1" MouseLeftButtonDown="moveFocustoFocusSink">
+                        <!--Banner-->
                         <Image Source="resources/images/login-banner.png"
                                Margin="20,30,10,5" />
 
+                        <!--Close Program Button-->
                         <Grid HorizontalAlignment="Right"
                               VerticalAlignment="Top"
                               Margin="0"

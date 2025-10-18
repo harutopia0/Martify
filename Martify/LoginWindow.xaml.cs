@@ -20,27 +20,7 @@ namespace Martify
             Application.Current.Shutdown();
         }
 
-        private void usernameTextBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-            usernameFocusBorder.Visibility = Visibility.Visible;
-        }
-
-        private void usernameTextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            usernameFocusBorder.Visibility = Visibility.Collapsed;
-        }
-
-        private void passwordBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-            passwordFocusBorder.Visibility = Visibility.Visible;
-        }
-
-        private void passwordBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            passwordFocusBorder.Visibility = Visibility.Collapsed;
-        }
-
-        private void EyeIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void showAndHidePasswordClick(object sender, MouseButtonEventArgs e)
         {
             isPasswordVisible = !isPasswordVisible;
 

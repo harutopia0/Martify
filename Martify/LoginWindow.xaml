@@ -24,10 +24,11 @@
 
     <Grid>
         <!--FocusSink Border-->
-        <Border x:Name="FocusSink"
+        <Button x:Name="FocusSink"
                 Width="0"
                 Height="0"
                 Focusable="True"
+                IsTabStop="False"
                 Background="Transparent"
                 Opacity="0" />
 
@@ -71,7 +72,7 @@
                     <Grid Grid.Column="0">
 
                         <!--Martify Logo && Name-->
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="25,25,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="50,25,0,0">
 
                             <!--Marify Logo-->
                             <Image Source="resources/images/Martify.png"
@@ -99,7 +100,8 @@
                         </StackPanel>
 
                         <!--Sign-in Panel-->
-                        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,60,0,0" Width="248">
+                        <Grid VerticalAlignment="Center"
+                              HorizontalAlignment="Center" Margin="0,65,0,0" Width="250">
 
                             <!--Blur Background-->
                             <Image Source="resources/images/blur_image.png"
@@ -113,7 +115,7 @@
                                     Focusable="False"
                                     BorderBrush="Transparent">
                                 <Border Background="Gray"
-                                        Opacity="0.1"
+                                        Opacity="0.085"
                                         Focusable="False"
                                         CornerRadius="17" />
                             </Border>
@@ -121,6 +123,7 @@
                             <!--Sign-in Panel Grid-->
                             <Grid Margin="20,15,20,15">
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
@@ -181,12 +184,22 @@
                                         </Grid>
                                     </Border>
                                     <Border x:Name="usernameFocusBorder"
-                                            BorderThickness="3"
-                                            CornerRadius="5"
+                                            BorderThickness="2"
+                                            CornerRadius="10"
                                             IsHitTestVisible="False"
                                             Focusable="False"
-                                            BorderBrush="#4b91cf"
-                                            Style="{StaticResource UsernameFocusBorderStyle}">
+                                            Margin="-1"
+                                            BorderBrush="#4b91cf">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=usernameTextBox, Path=IsFocused}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
                                     </Border>
                                 </Grid>
 
@@ -245,12 +258,56 @@
                                         </Grid>
                                     </Border>
                                     <Border x:Name="passwordFocusBorder"
-                                            BorderThickness="3"
-                                            CornerRadius="8" IsHitTestVisible="False"
+                                            BorderThickness="2"
+                                            CornerRadius="10" 
+                                            IsHitTestVisible="False"
                                             Focusable="False"
-                                            BorderBrush="#4b91cf"
-                                            Style="{StaticResource PasswordFocusBorderStyle}">                                            
+                                            Margin="-1"
+                                            BorderBrush="#4b91cf">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=passwordBox, Path=IsFocused}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=showPasswordTextBox, Path=IsFocused}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
                                     </Border>
+                                </Grid>
+
+                                <Grid Grid.Row="5" Margin="0,20,0,0" Height="40">
+                                    <Button Content="Sign in" Width="100"
+                                            FontSize="20" FontWeight="Bold" 
+                                            FontFamily="{StaticResource PasseroOne}"
+                                            HorizontalAlignment="Left"
+                                            Background="LightBlue"
+                                            BorderBrush="LightGray"
+                                            BorderThickness="1"
+                                            FocusVisualStyle="{x:Null}">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border x:Name="templateBorder"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        CornerRadius="10">
+                                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsFocused" Value="True">
+                                                        <Setter TargetName="templateBorder" Property="BorderBrush" Value="DodgerBlue" />
+                                                        <Setter TargetName="templateBorder" Property="BorderThickness" Value="2" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
                                 </Grid>
                                 
                             </Grid>

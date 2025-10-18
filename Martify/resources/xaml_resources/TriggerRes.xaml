@@ -125,25 +125,6 @@
         </StringAnimationUsingKeyFrames>
     </Storyboard>
 
-    <Style x:Key="PasswordFocusBorderStyle" TargetType="Border">
-        <Setter Property="Visibility" Value="Collapsed" />
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding ElementName=passwordBox, Path=IsFocused}" Value="True">
-                <Setter Property="Visibility" Value="Visible" />
-            </DataTrigger>
-            <DataTrigger Binding="{Binding ElementName=showPasswordTextBox, Path=IsFocused}" Value="True">
-                <Setter Property="Visibility" Value="Visible" />
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style x:Key="UsernameFocusBorderStyle" TargetType="Border">
-        <Setter Property="Visibility" Value="Collapsed"></Setter>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding ElementName=usernameTextBox, Path=IsFocused}" Value="True">
-                <Setter Property="Visibility" Value="Visible" />
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
+    
+    
 </ResourceDictionary>

@@ -43,7 +43,7 @@
                     Style="{StaticResource CompletelyCustomButtonStyle}"
                     Command="{Binding MinimizeWindowCommand}"
                     CommandParameter="{Binding ElementName=ucWindowCommand}">
-                <Image Source="../resources/images/minimize.png"
+                <Image Source="../Resources/images/minimize.png"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Cursor="Hand">
@@ -77,13 +77,13 @@
                     <Image.Style>
                         <Style TargetType="Image">
                             <Setter Property="Width" Value="25" />
-                            <Setter Property="Source" Value="../resources/images/maximize.png" />
+                            <Setter Property="Source" Value="../Resources/images/maximize.png" />
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Width" Value="30" />
                                 </Trigger>
                                 <DataTrigger Binding="{Binding Path=WindowState, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Maximized">
-                                    <Setter Property="Source" Value="../resources/images/restore_down.png"/>
+                                    <Setter Property="Source" Value="../Resources/images/restore_down.png"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -102,7 +102,7 @@
                     Style="{StaticResource CompletelyCustomButtonStyle}"
                     Command="{Binding CloseWindowCommand}"
                     CommandParameter="{Binding ElementName=ucWindowCommand}">
-                <Image Source="../resources/images/close_program.png"
+                <Image Source="../Resources/images/close_program.png"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Cursor="Hand">

@@ -42,7 +42,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="50,25,0,0">
 
                             <!--Marify Logo-->
-                            <Image Source="resources/images/Martify.png"
+                            <Image Source="Resources/images/Martify.png"
                                    Width="60"
                                    Height="60" />
 
@@ -71,7 +71,7 @@
                               HorizontalAlignment="Center" Margin="0,65,0,0" Width="250">
 
                             <!--Blur Background-->
-                            <Image Source="resources/images/blur_image.png"
+                            <Image Source="Resources/images/blur_image.png"
                                    Stretch="Fill"
                                    Width="248"
                                    Height="273" />
@@ -142,7 +142,7 @@
                                                      Background="Transparent"
                                                      Foreground="Black" />
 
-                                            <Image Source="resources/images/user_icon.png"
+                                            <Image Source="Resources/images/user_icon.png"
                                                    HorizontalAlignment="Left"
                                                    Width="20"
                                                    Height="20"
@@ -206,7 +206,7 @@
                                                          Background="Transparent"
                                                          Foreground="Black" />
 
-                                            <Image Source="resources/images/key_icon.png"
+                                            <Image Source="Resources/images/key_icon.png"
                                                    HorizontalAlignment="Left"
                                                    Width="20"
                                                    Height="20"
@@ -214,7 +214,7 @@
                                                    IsHitTestVisible="False" />
 
                                             <Image x:Name="eyeIcon"
-                                                   Source="resources/images/eye_closed.png"
+                                                   Source="Resources/images/eye_closed.png"
                                                    HorizontalAlignment="Right"
                                                    Width="20"
                                                    Height="20"
@@ -292,7 +292,7 @@
                     <!--Banner Grid-->
                     <Grid Grid.Column="1" MouseLeftButtonDown="moveFocustoFocusSink">
                         <!--Banner-->
-                        <Image Source="resources/images/login-banner.png" Margin="20,30,10,5" />
+                        <Image Source="/Resources/images/login-banner.png" Margin="20,30,10,5" />
 
 
                     </Grid>

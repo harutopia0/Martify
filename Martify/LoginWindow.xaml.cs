@@ -32,7 +32,7 @@ namespace Martify
                 passwordBox.Visibility = Visibility.Collapsed;
                 showPasswordTextBox.CaretIndex = showPasswordTextBox.Text.Length;
 
-                eyeIcon.Source = new BitmapImage(new Uri("resources/images/eye_open.png", UriKind.Relative));
+                eyeIcon.Source = new BitmapImage(new Uri("Resources/images/eye_open.png", UriKind.Relative));
             }
             else
             {
@@ -41,7 +41,7 @@ namespace Martify
                 showPasswordTextBox.Visibility = Visibility.Collapsed;
                 passwordBox.Visibility = Visibility.Visible;
 
-                eyeIcon.Source = new BitmapImage(new Uri("resources/images/eye_closed.png", UriKind.Relative));
+                eyeIcon.Source = new BitmapImage(new Uri("Resources/images/eye_closed.png", UriKind.Relative));
             }
 
             // Move focus to a hidden focus sink to clear focus from other controls

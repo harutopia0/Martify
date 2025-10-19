@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Martify"
+        xmlns:uc="clr-namespace:Martify.UserCtrl"
         mc:Ignorable="d"
         Height="450"
         Width="800"
@@ -12,15 +13,6 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">
-
-    <Window.Resources>
-        <Storyboard x:Key="GradientRotateStoryboard"
-                    RepeatBehavior="Forever">
-            <DoubleAnimation Storyboard.TargetName="AnimatedBorderBrush"
-                             Storyboard.TargetProperty="Transform.Children[0].Angle"
-                             From="0" To="360" Duration="0:0:5" />
-        </Storyboard>
-    </Window.Resources>
 
     <Grid>
         <!--FocusSink Border-->
@@ -32,32 +24,7 @@
                 Background="Transparent"
                 Opacity="0" />
 
-        <Border CornerRadius="26" BorderThickness="8">
-            <!--Gradient Border Trigger-->
-            <Border.Triggers>
-                <EventTrigger RoutedEvent="Loaded">
-                    <BeginStoryboard Storyboard="{StaticResource GradientRotateStoryboard}" />
-                </EventTrigger>
-            </Border.Triggers>
-
-            <!--Border Brush-->
-            <Border.BorderBrush>
-                <LinearGradientBrush x:Name="AnimatedBorderBrush"
-                                     StartPoint="-1,0.5"
-                                     EndPoint="0.5,1">
-                    <GradientStop Color="#FF71FBF8" Offset="0.00" />
-                    <GradientStop Color="LightBlue" Offset="0.30" />
-                    <GradientStop Color="#FF71FBF8" Offset="0.55" />
-                    <GradientStop Color="AliceBlue" Offset="0.80" />
-                    <GradientStop Color="Gray" Offset="1.00" />
-                    <LinearGradientBrush.Transform>
-                        <TransformGroup>
-                            <RotateTransform CenterX="0.5" CenterY="0.5" />
-                        </TransformGroup>
-                    </LinearGradientBrush.Transform>
-                </LinearGradientBrush>
-            </Border.BorderBrush>
-
+        <Grid Margin="7.5">
             <!--Login Form-->
             <Border Background="White" CornerRadius="20">
                 <Grid>
@@ -305,7 +272,7 @@
                                                         BorderThickness="{TemplateBinding BorderThickness}"
                                                         CornerRadius="10">
                                                     <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsFocused" Value="True">
@@ -325,36 +292,16 @@
                     <!--Banner Grid-->
                     <Grid Grid.Column="1" MouseLeftButtonDown="moveFocustoFocusSink">
                         <!--Banner-->
-                        <Image Source="resources/images/login-banner.png"
-                               Margin="20,30,10,5" />
+                        <Image Source="resources/images/login-banner.png" Margin="20,30,10,5" />
 
-                        <!--Close Program Button-->
-                        <Grid HorizontalAlignment="Right"
-                              VerticalAlignment="Top"
-                              Margin="0"
-                              Width="50"
-                              Height="50">
-                            <Image Source="resources/images/x_icon.png"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Cursor="Hand"
-                                   MouseLeftButtonDown="CloseProgram_Click">
-                                <Image.Style>
-                                    <Style TargetType="Image">
-                                        <Setter Property="Width" Value="25" />
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Width" Value="30" />
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Image.Style>
-                            </Image>
-                        </Grid>
+
                     </Grid>
-
                 </Grid>
             </Border>
-        </Border>
+        </Grid>
+
+        
+        <uc:GradientBorderUC></uc:GradientBorderUC>
+        <uc:WindowCommandUC></uc:WindowCommandUC>
     </Grid>
 </Window>

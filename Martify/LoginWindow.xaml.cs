@@ -17,7 +17,7 @@ namespace Martify
 
         private void CloseProgram_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            this.Close();
         }
 
         private void showAndHidePasswordClick(object sender, MouseButtonEventArgs e)
@@ -55,9 +55,9 @@ namespace Martify
 
         private void loginButtonClick(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            this.Close();
+            //MainWindow mainWindow = new MainWindow();
+            //mainWindow.Show();
+            //this.Close();
         }
     }
 }

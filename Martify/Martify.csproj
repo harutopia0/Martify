@@ -10,41 +10,81 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="resources\images\blur_image.png" />
-    <None Remove="resources\images\eye_closed.png" />
-    <None Remove="resources\images\eye_open.png" />
-    <None Remove="resources\images\key_icon.png" />
-    <None Remove="resources\images\login-banner.png" />
-    <None Remove="resources\images\Martify.png" />
-    <None Remove="resources\images\user_icon.png" />
-    <None Remove="resources\images\x_icon.png" />
-    <None Remove="resources\fonts\PasseroOne-Regular.ttf" />
-    <None Remove="resources\fonts\RubikGlitchPop-Regular.ttf" />
-    <None Remove="resources\fonts\YanoneKaffeesatz-Bold.ttf" />
-    <None Remove="resources\fonts\YanoneKaffeesatz-ExtraLight.ttf" />
-    <None Remove="resources\fonts\YanoneKaffeesatz-Light.ttf" />
-    <None Remove="resources\fonts\YanoneKaffeesatz-Medium.ttf" />
-    <None Remove="resources\fonts\YanoneKaffeesatz-Regular.ttf" />
-    <None Remove="resources\fonts\YanoneKaffeesatz-SemiBold.ttf" />
-    <None Remove="resources\fonts\YanoneKaffeesatz-VariableFont_wght.ttf" />
+    <None Remove="Resources\images\blur_image.png" />
+    <None Remove="Resources\images\close_program.png" />
+    <None Remove="Resources\images\eye_closed.png" />
+    <None Remove="Resources\images\eye_open.png" />
+    <None Remove="Resources\images\key_icon.png" />
+    <None Remove="Resources\images\login-banner.png" />
+    <None Remove="Resources\images\Martify.png" />
+    <None Remove="Resources\images\maximize.png" />
+    <None Remove="Resources\images\minimize.png" />
+    <None Remove="Resources\images\restore_down.png" />
+    <None Remove="Resources\images\user_icon.png" />
+    <None Remove="Resources\fonts\PasseroOne-Regular.ttf" />
+    <None Remove="Resources\fonts\RubikGlitchPop-Regular.ttf" />
+    <None Remove="Resources\fonts\YanoneKaffeesatz-Bold.ttf" />
+    <None Remove="Resources\fonts\YanoneKaffeesatz-ExtraLight.ttf" />
+    <None Remove="Resources\fonts\YanoneKaffeesatz-Light.ttf" />
+    <None Remove="Resources\fonts\YanoneKaffeesatz-Medium.ttf" />
+    <None Remove="Resources\fonts\YanoneKaffeesatz-Regular.ttf" />
+    <None Remove="Resources\fonts\YanoneKaffeesatz-SemiBold.ttf" />
+    <None Remove="Resources\fonts\YanoneKaffeesatz-VariableFont_wght.ttf" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="resources\icon\Martify.ico" />
-    <Resource Include="resources\images\blur_image.png" />
-    <Resource Include="resources\images\eye_closed.png" />
-    <Resource Include="resources\images\eye_open.png" />
-    <Resource Include="resources\images\key_icon.png" />
-    <Resource Include="resources\images\login-banner.png" />
-    <Resource Include="resources\images\Martify.png" />
-    <Resource Include="resources\images\user_icon.png" />
-    <Resource Include="resources\images\x_icon.png" />
-    <Resource Include="resources\fonts\PasseroOne-Regular.ttf" />
-    <Resource Include="resources\fonts\RubikGlitchPop-Regular.ttf" />
+    <Resource Include="Resources\icon\Martify.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\images\blur_image.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\images\close_program.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\images\eye_closed.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\images\eye_open.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\images\key_icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\images\login-banner.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\images\Martify.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\images\maximize.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\images\minimize.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\images\restore_down.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\images\user_icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\fonts\PasseroOne-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\fonts\RubikGlitchPop-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="resources\fonts\YanoneKaffeesatz-Regular.ttf" />
+    <Resource Include="Resources\fonts\YanoneKaffeesatz-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
 
 </Project>

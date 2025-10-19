@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:viewmodel="clr-namespace:Martify.ViewModel"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <viewmodel:MainViewModel x:Key="MainVModel"></viewmodel:MainViewModel>
+    
+    <Storyboard x:Key="GradientRotateStoryboard"
+                    RepeatBehavior="Forever">
+        <DoubleAnimation Storyboard.TargetName="AnimatedBorderBrush"
+                             Storyboard.TargetProperty="Transform.Children[0].Angle"
+                             From="0" To="360" Duration="0:0:5" />
+    </Storyboard>
+    
+</ResourceDictionary>

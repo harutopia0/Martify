@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Martify.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,23 +11,21 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Martify
+namespace Martify.UserCtrl
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for WindowCommandUC.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WindowCommandUC : UserControl
     {
-        public MainWindow()
+        public WindowCommandViewModel Viewmodel { get; set; }
+        public WindowCommandUC()
         {
             InitializeComponent();
-        }
-
-        private void CloseProgram_Click(object sender, MouseButtonEventArgs e)
-        {
-            this.Close();
+            this.DataContext = Viewmodel = new WindowCommandViewModel();
         }
     }
 }

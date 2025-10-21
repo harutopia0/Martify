@@ -15,11 +15,6 @@ namespace Martify
             InitializeComponent();
         }
 
-        private void CloseProgram_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
         private void showAndHidePasswordClick(object sender, MouseButtonEventArgs e)
         {
             isPasswordVisible = !isPasswordVisible;

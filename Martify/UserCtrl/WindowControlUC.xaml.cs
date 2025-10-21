@@ -17,15 +17,15 @@ using System.Windows.Shapes;
 namespace Martify.UserCtrl
 {
     /// <summary>
-    /// Interaction logic for WindowCommandUC.xaml
+    /// Interaction logic for WindowControlUC.xaml
     /// </summary>
-    public partial class WindowCommandUC : UserControl
+    public partial class WindowControlUC : UserControl
     {
-        public WindowCommandViewModel Viewmodel { get; set; }
-        public WindowCommandUC()
+        public WindowControlViewModel Viewmodel { get; set; }
+        public WindowControlUC()
         {
             InitializeComponent();
-            this.DataContext = Viewmodel = new WindowCommandViewModel();
+            this.DataContext = Viewmodel = new WindowControlViewModel();
         }
     }
 }

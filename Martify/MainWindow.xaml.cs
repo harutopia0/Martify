@@ -23,10 +23,5 @@ namespace Martify
         {
             InitializeComponent();
         }
-
-        private void CloseProgram_Click(object sender, MouseButtonEventArgs e)
-        {
-            this.Close();
-        }
     }
 }

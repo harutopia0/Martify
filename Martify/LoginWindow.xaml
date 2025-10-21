@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Martify"
         xmlns:uc="clr-namespace:Martify.UserCtrl"
         mc:Ignorable="d"
-        Height="450"
-        Width="800"
+        Title="Martify"
+        Height="450" Width="800"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -31,8 +31,8 @@
 
                     <!--Definitions-->
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="320" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="1.5*" />
                     </Grid.ColumnDefinitions>
 
                     <!--Login-->
@@ -71,7 +71,7 @@
                               HorizontalAlignment="Center" Margin="0,65,0,0" Width="250">
 
                             <!--Blur Background-->
-                            <Image Source="Resources/images/blur_image.png"
+                            <Image Source="/Resources/images/blur_image.png"
                                    Stretch="Fill"
                                    Width="248"
                                    Height="273" />
@@ -100,21 +100,19 @@
 
                                 <Label Grid.Row="0"
                                        Content="Login"
-                                       Margin="-8,0,0,0"
-                                       FontFamily="{StaticResource RubikGlitchPop}"
+                                       Margin="-2,0,0,0"
+                                       FontFamily="{StaticResource BungeeSpice}"
                                        FontSize="35"
                                        FontWeight="Bold"
                                        VerticalContentAlignment="Center"
-                                       Foreground="#FF055BAC"
                                        RenderTransformOrigin="0.5,0.5">
-                                    <Label.RenderTransform>
-                                        <TransformGroup>
-                                            <ScaleTransform />
-                                            <SkewTransform AngleX="23.775" />
-                                            <RotateTransform />
-                                            <TranslateTransform X="10.15" />
-                                        </TransformGroup>
-                                    </Label.RenderTransform>
+                                    <Label.Foreground>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF7179D9"/>
+                                            <GradientStop Color="#FF95F0EC" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Label.Foreground>
+
                                 </Label>
 
                                 <!--Username Section-->
@@ -122,8 +120,8 @@
                                        Content="Username or email address"
                                        FontFamily="{StaticResource YanoneKaffeesatz}"
                                        FontSize="16"
-                                       Foreground="Gray"
-                                       Margin="0,5,0,0" />
+                                       Foreground="#FF5A6364"
+                                       Margin="0,-2.5,0,0" />
                                 <Grid Grid.Row="2" Margin="0,2,0,0">
                                     <Border x:Name="usernameBorder"
                                             Focusable="False"
@@ -175,7 +173,7 @@
                                        Content="Password"
                                        FontFamily="{StaticResource YanoneKaffeesatz}"
                                        FontSize="16"
-                                       Foreground="Gray"
+                                       Foreground="#FF5A6364"
                                        Margin="0,10,0,0" />
                                 <Grid Grid.Row="4" Margin="0,2,0,0">
                                     <Border x:Name="passwordBorder"
@@ -300,8 +298,8 @@
             </Border>
         </Grid>
 
-        
+
         <uc:GradientBorderUC></uc:GradientBorderUC>
-        <uc:WindowCommandUC></uc:WindowCommandUC>
+        <uc:WindowControlUC></uc:WindowControlUC>
     </Grid>
 </Window>

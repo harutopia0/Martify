@@ -12,14 +12,12 @@
   <ItemGroup>
     <None Remove="Resources\fonts\BungeeSpice-Regular.ttf" />
     <None Remove="Resources\images\blur_image.png" />
-    <None Remove="Resources\images\close1.png" />
     <None Remove="Resources\images\close_program.png" />
     <None Remove="Resources\images\eye_closed.png" />
     <None Remove="Resources\images\eye_open.png" />
     <None Remove="Resources\images\key_icon.png" />
     <None Remove="Resources\images\login-banner.png" />
     <None Remove="Resources\images\Martify.png" />
-    <None Remove="Resources\images\maximize1.png" />
     <None Remove="Resources\images\user_icon.png" />
     <None Remove="Resources\fonts\PasseroOne-Regular.ttf" />
     <None Remove="Resources\fonts\YanoneKaffeesatz-Bold.ttf" />
@@ -41,9 +39,6 @@
     <Resource Include="Resources\images\blur_image.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\images\close1.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resources\images\close_program.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -60,9 +55,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\images\Martify.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\images\maximize1.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\images\user_icon.png">

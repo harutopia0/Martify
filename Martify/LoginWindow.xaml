@@ -42,7 +42,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="50,25,0,0">
 
                             <!--Marify Logo-->
-                            <Image Source="Resources/images/Martify.png"
+                            <Image Source="{StaticResource Martify}"
                                    Width="60"
                                    Height="60" />
 
@@ -71,7 +71,7 @@
                               HorizontalAlignment="Center" Margin="0,65,0,0" Width="250">
 
                             <!--Blur Background-->
-                            <Image Source="/Resources/images/blur_image.png"
+                            <Image Source="{StaticResource BlurImage}"
                                    Stretch="Fill"
                                    Width="248"
                                    Height="273" />
@@ -140,7 +140,7 @@
                                                      Background="Transparent"
                                                      Foreground="Black" />
 
-                                            <Image Source="Resources/images/user_icon.png"
+                                            <Image Source="{StaticResource UserIcon}"
                                                    HorizontalAlignment="Left"
                                                    Width="20"
                                                    Height="20"
@@ -204,7 +204,7 @@
                                                          Background="Transparent"
                                                          Foreground="Black" />
 
-                                            <Image Source="Resources/images/key_icon.png"
+                                            <Image Source="{StaticResource KeyIcon}"
                                                    HorizontalAlignment="Left"
                                                    Width="20"
                                                    Height="20"
@@ -212,7 +212,7 @@
                                                    IsHitTestVisible="False" />
 
                                             <Image x:Name="eyeIcon"
-                                                   Source="Resources/images/eye_closed.png"
+                                                   Source="{StaticResource EyeClosed}"
                                                    HorizontalAlignment="Right"
                                                    Width="20"
                                                    Height="20"

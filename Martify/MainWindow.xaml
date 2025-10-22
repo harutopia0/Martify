@@ -16,33 +16,34 @@
         DataContext="{StaticResource MainVModel}">
 
     <Grid>
-        <Grid Margin="7.5">
-            <!--Main Form-->
-            <Border Background="White" CornerRadius="20">
-                <Grid>
+        <Border Background="#f5f7fb" 
+                CornerRadius="30">
 
-                    <!--Definitions-->
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="320" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
 
-                    <!--Login-->
-                    <Grid Grid.Column="0">
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2.75*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#4853b6" CornerRadius="30,30,0,0"></Border>
+                    <Border Grid.Row="1" Background="#FF626DDF" CornerRadius="0,0,30,30"></Border>
+                    
+                    <Grid Grid.Row="1">
+                        <uc:PanelUC Margin="0,30,0,0" HorizontalAlignment="Left"></uc:PanelUC>
 
                     </Grid>
-
-                    <!--Banner Grid-->
-                    <Grid Grid.Column="1">
-                        
-                    </Grid>
-
                 </Grid>
-            </Border>
-        </Grid>
-
+            </Grid>
         
-        <uc:GradientBorderUC></uc:GradientBorderUC>
-        <uc:WindowControlUC></uc:WindowControlUC>
+            
+        </Border>
+
+        <uc:WindowControlUC/>
     </Grid>
 </Window>

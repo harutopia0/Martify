@@ -10,63 +10,63 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\fonts\BungeeSpice-Regular.ttf" />
-    <None Remove="Resources\images\blur_image.png" />
-    <None Remove="Resources\images\close_program.png" />
-    <None Remove="Resources\images\eye_closed.png" />
-    <None Remove="Resources\images\eye_open.png" />
-    <None Remove="Resources\images\key_icon.png" />
-    <None Remove="Resources\images\login-banner.png" />
-    <None Remove="Resources\images\Martify.png" />
-    <None Remove="Resources\images\user_icon.png" />
-    <None Remove="Resources\fonts\PasseroOne-Regular.ttf" />
-    <None Remove="Resources\fonts\YanoneKaffeesatz-Bold.ttf" />
-    <None Remove="Resources\fonts\YanoneKaffeesatz-ExtraLight.ttf" />
-    <None Remove="Resources\fonts\YanoneKaffeesatz-Light.ttf" />
-    <None Remove="Resources\fonts\YanoneKaffeesatz-Medium.ttf" />
-    <None Remove="Resources\fonts\YanoneKaffeesatz-Regular.ttf" />
-    <None Remove="Resources\fonts\YanoneKaffeesatz-SemiBold.ttf" />
-    <None Remove="Resources\fonts\YanoneKaffeesatz-VariableFont_wght.ttf" />
+    <None Remove="Resources\Fonts\BungeeSpice-Regular.ttf" />
+    <None Remove="Resources\Images\blur_image.png" />
+    <None Remove="Resources\Images\close_program.png" />
+    <None Remove="Resources\Images\eye_closed.png" />
+    <None Remove="Resources\Images\eye_open.png" />
+    <None Remove="Resources\Images\key_icon.png" />
+    <None Remove="Resources\Images\login-banner.png" />
+    <None Remove="Resources\Images\Martify.png" />
+    <None Remove="Resources\Images\user_icon.png" />
+    <None Remove="Resources\Fonts\PasseroOne-Regular.ttf" />
+    <None Remove="Resources\Fonts\YanoneKaffeesatz-Bold.ttf" />
+    <None Remove="Resources\Fonts\YanoneKaffeesatz-ExtraLight.ttf" />
+    <None Remove="Resources\Fonts\YanoneKaffeesatz-Light.ttf" />
+    <None Remove="Resources\Fonts\YanoneKaffeesatz-Medium.ttf" />
+    <None Remove="Resources\Fonts\YanoneKaffeesatz-Regular.ttf" />
+    <None Remove="Resources\Fonts\YanoneKaffeesatz-SemiBold.ttf" />
+    <None Remove="Resources\Fonts\YanoneKaffeesatz-VariableFont_wght.ttf" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\fonts\BungeeSpice-Regular.ttf">
+    <Resource Include="Resources\Fonts\BungeeSpice-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\icon\Martify.ico">
+    <Resource Include="Resources\Icon\Martify.ico">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\images\blur_image.png">
+    <Resource Include="Resources\Images\blur_image.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\images\close_program.png">
+    <Resource Include="Resources\Images\close_program.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\images\eye_closed.png">
+    <Resource Include="Resources\Images\eye_closed.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\images\eye_open.png">
+    <Resource Include="Resources\Images\eye_open.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\images\key_icon.png">
+    <Resource Include="Resources\Images\key_icon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\images\login-banner.png">
+    <Resource Include="Resources\Images\login-banner.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\images\Martify.png">
+    <Resource Include="Resources\Images\Martify.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\images\user_icon.png">
+    <Resource Include="Resources\Images\user_icon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\fonts\PasseroOne-Regular.ttf">
+    <Resource Include="Resources\Fonts\PasseroOne-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\fonts\YanoneKaffeesatz-Regular.ttf">
+    <Resource Include="Resources\Fonts\YanoneKaffeesatz-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

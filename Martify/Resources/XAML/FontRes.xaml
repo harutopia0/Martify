@@ -1,0 +1,6 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <FontFamily x:Key="YanoneKaffeesatz">/Martify;component/Resources/Fonts/YanoneKaffeesatz-Regular.ttf#Yanone Kaffeesatz</FontFamily>
+    <FontFamily x:Key="PasseroOne">/Martify;component/Resources/Fonts/PasseroOne-Regular.ttf#Passero One</FontFamily>
+    <FontFamily x:Key="BungeeSpice">/Martify;component/Resources/Fonts/BungeeSpice-Regular.ttf#Bungee Spice</FontFamily>
+</ResourceDictionary>

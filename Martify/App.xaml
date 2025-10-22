@@ -6,10 +6,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/xaml_resources/TriggerRes.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="/Resources/xaml_resources/FontRes.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="/Resources/xaml_resources/MainResource.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="/Resources/xaml_resources/ImageRes.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/XAML/TriggerRes.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/XAML/FontRes.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/XAML/MainResource.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/XAML/ImageRes.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

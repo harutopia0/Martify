@@ -1,5 +1,4 @@
-﻿using Martify.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,18 +13,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Martify.UserCtrl
+namespace Martify.Views
 {
     /// <summary>
-    /// Interaction logic for WindowControlUC.xaml
+    /// Interaction logic for SidePanel.xaml
     /// </summary>
-    public partial class WindowControlUC : UserControl
+    public partial class SidePanel : UserControl
     {
-        public WindowControlViewModel Viewmodel { get; set; }
-        public WindowControlUC()
+        public SidePanel()
         {
             InitializeComponent();
-            this.DataContext = Viewmodel = new WindowControlViewModel();
         }
+
     }
 }

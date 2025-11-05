@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Martify"
-        xmlns:uc="clr-namespace:Martify.UserCtrl"
+        xmlns:uc="clr-namespace:Martify.Views"
         mc:Ignorable="d"
         Title="Martify"
         Height="450" Width="800"
@@ -15,7 +15,7 @@
         Background="Transparent">
 
     <Grid>
-        <!--FocusSink Border-->
+        <!--FocusSink-->
         <Button x:Name="FocusSink"
                 Width="0"
                 Height="0"
@@ -299,7 +299,7 @@
         </Grid>
 
 
-        <uc:GradientBorderUC></uc:GradientBorderUC>
-        <uc:WindowControlUC></uc:WindowControlUC>
+        <uc:GradientBorder></uc:GradientBorder>
+        <uc:WindowControl></uc:WindowControl>
     </Grid>
 </Window>

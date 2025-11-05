@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Martify.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,17 +14,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Martify.UserCtrl
+namespace Martify.Views
 {
     /// <summary>
-    /// Interaction logic for PanelUC.xaml
+    /// Interaction logic for WindowControl.xaml
     /// </summary>
-    public partial class PanelUC : UserControl
+    public partial class WindowControl : UserControl
     {
-        public PanelUC()
+        public WindowControlViewModels ViewModels { get; set; }
+        public WindowControl()
         {
             InitializeComponent();
+            this.DataContext = ViewModels = new WindowControlViewModels();
         }
-
     }
 }

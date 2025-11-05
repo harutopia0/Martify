@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Model\**" />
+    <EmbeddedResource Remove="Model\**" />
+    <None Remove="Model\**" />
+    <Page Remove="Model\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\Fonts\BungeeSpice-Regular.ttf" />
     <None Remove="Resources\Images\blur_image.png" />
     <None Remove="Resources\Images\close_program.png" />
@@ -69,10 +76,6 @@
     <Resource Include="Resources\Fonts\YanoneKaffeesatz-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Model\" />
   </ItemGroup>
 
 </Project>

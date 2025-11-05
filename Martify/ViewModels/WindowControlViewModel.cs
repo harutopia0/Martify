@@ -1,4 +1,4 @@
-﻿using Martify.ViewModel;
+﻿using Martify.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +8,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Martify.ViewModel
+namespace Martify.ViewModels
 {
-    public class WindowControlViewModel : BaseViewModel
+    public class WindowControlViewModels : BaseViewModels
     {
         #region commands
         public ICommand CloseWindowControl { get; set; }
         #endregion
 
-        public WindowControlViewModel()
+        public WindowControlViewModels()
         {
             CloseWindowControl = new RelayCommand<UserControl>((p) => { return p != null; }, (p) =>
             {

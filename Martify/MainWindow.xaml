@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Martify" 
-        xmlns:uc="clr-namespace:Martify.UserCtrl"
+        xmlns:uc="clr-namespace:Martify.Views"
         mc:Ignorable="d"
         Title="Marity" 
         Height="720" Width="1080"
@@ -35,7 +35,7 @@
                     <Border Grid.Row="1" Background="#FF626DDF" CornerRadius="0,0,30,30"></Border>
                     
                     <Grid Grid.Row="1">
-                        <uc:PanelUC Margin="0,30,0,0" HorizontalAlignment="Left"></uc:PanelUC>
+                        <uc:SidePanel Margin="0,30,0,0" HorizontalAlignment="Left"></uc:SidePanel>
 
                     </Grid>
                 </Grid>
@@ -44,6 +44,6 @@
             
         </Border>
 
-        <uc:WindowControlUC/>
+        <uc:WindowControl/>
     </Grid>
 </Window>

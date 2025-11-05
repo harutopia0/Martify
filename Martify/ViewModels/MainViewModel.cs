@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using Martify.ViewModel;
+using Martify.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Martify.ViewModel
+namespace Martify.ViewModels
 {
-    public class MainViewModel : BaseViewModel
+    public class MainViewModels : BaseViewModels
     {
         public bool isLoaded = false;
 
 
         //Mọi xử lý nằm ở đây.
-        public MainViewModel()
+        public MainViewModels()
         {
             // Chỉ chạy code này khi chương trình KHÔNG ở chế độ Design
             if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))

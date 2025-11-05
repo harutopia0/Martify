@@ -1,4 +1,4 @@
-﻿using Martify.ViewModel;
+﻿using Martify.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +14,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Martify.UserCtrl
+namespace Martify.Views
 {
     /// <summary>
-    /// Interaction logic for GradientBorderUC.xaml
+    /// Interaction logic for GradientBorder.xaml
     /// </summary>
-    public partial class GradientBorderUC : UserControl
+    public partial class GradientBorder : UserControl
     {
         
-        public GradientBorderUC()
+        public GradientBorder()
         {
             InitializeComponent();
         }

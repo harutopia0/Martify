@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Martify.ViewModel
+namespace Martify.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModels : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

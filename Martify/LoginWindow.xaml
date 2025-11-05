@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Martify"
         xmlns:uc="clr-namespace:Martify.Views"
+        xmlns:ctrl="clr-namespace:Martify.Controls"
         mc:Ignorable="d"
         Title="Martify"
         Height="450" Width="800"
@@ -14,8 +15,10 @@
         AllowsTransparency="True"
         Background="Transparent">
 
+
     <Grid>
-        <!--FocusSink-->
+
+
         <Button x:Name="FocusSink"
                 Width="0"
                 Height="0"
@@ -24,282 +27,243 @@
                 Background="Transparent"
                 Opacity="0" />
 
-        <Grid Margin="7.5">
-            <!--Login Form-->
-            <Border Background="White" CornerRadius="20">
-                <Grid>
 
-                    <!--Definitions-->
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="1.5*" />
-                    </Grid.ColumnDefinitions>
+        <Border CornerRadius="30">
+            <Border.Background>
+                <ImageBrush ImageSource="{StaticResource LoginBackground}" 
+                            Stretch="UniformToFill"/>
+            </Border.Background>
 
-                    <!--Login-->
-                    <Grid Grid.Column="0" MouseLeftButtonDown="moveFocustoFocusSink">
 
-                        <!--Martify Logo && Name-->
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="50,25,0,0">
+            <Grid>
 
-                            <!--Marify Logo-->
-                            <Image Source="{StaticResource Martify}"
-                                   Width="60"
-                                   Height="60" />
+                <uc:WindowControl></uc:WindowControl>
+            </Grid>
+        </Border>
 
-                            <!--Marify Label Animation/Trigger-->
-                            <Label FontFamily="{StaticResource PasseroOne}"
-                                   FontSize="42"
-                                   FontWeight="Bold"
-                                   VerticalContentAlignment="Center"
-                                   Foreground="Black"
-                                   Margin="10,0,0,0">
-                                <Label.Style>
-                                    <Style TargetType="Label">
-                                        <Setter Property="Content" Value="Martify"></Setter>
-                                        <Style.Triggers>
-                                            <EventTrigger RoutedEvent="Window.Loaded">
-                                                <BeginStoryboard Storyboard="{StaticResource MartifyAnimation}"></BeginStoryboard>
-                                            </EventTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Label.Style>
-                            </Label>
-                        </StackPanel>
 
-                        <!--Login Panel-->
-                        <Grid VerticalAlignment="Center"
-                              HorizontalAlignment="Center" Margin="0,65,0,0" Width="250">
+        <Grid Width="250" Height="300" VerticalAlignment="Center" HorizontalAlignment="Center">
 
-                            <!--Blur Background-->
-                            <Image Source="{StaticResource BlurImage}"
-                                   Stretch="Fill"
-                                   Width="248"
-                                   Height="273" />
+            <Border Background="Transparent"
+                    CornerRadius="10"
+                    Opacity="0.05"/>
 
-                            <!--Blur Overlay-->
-                            <Border CornerRadius="20"
-                                    BorderThickness="2"
-                                    Focusable="False"
-                                    BorderBrush="Transparent">
-                                <Border Background="Gray"
-                                        Opacity="0.085"
-                                        Focusable="False"
-                                        CornerRadius="17" />
-                            </Border>
+            <ctrl:BackgroundPresenter>
+                <ctrl:BackgroundPresenter.Effect>
+                    <BlurEffect Radius="20"/>
+                </ctrl:BackgroundPresenter.Effect>
+                <ctrl:BackgroundPresenter.Clip>
+                    <RectangleGeometry RadiusX="10" RadiusY="10"
+                                           Rect="0,0,250,300" />
+                </ctrl:BackgroundPresenter.Clip>
+            </ctrl:BackgroundPresenter>
 
-                            <!--Login Panel Grid-->
-                            <Grid Margin="20,15,20,15">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
+            <Border CornerRadius="10"
+                    BorderThickness="1"
+                    BorderBrush="White">
 
-                                <Label Grid.Row="0"
-                                       Content="Login"
-                                       Margin="-2,0,0,0"
-                                       FontFamily="{StaticResource BungeeSpice}"
-                                       FontSize="35"
-                                       FontWeight="Bold"
-                                       VerticalContentAlignment="Center"
-                                       RenderTransformOrigin="0.5,0.5">
-                                    <Label.Foreground>
-                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                            <GradientStop Color="#FF7179D9"/>
-                                            <GradientStop Color="#FF95F0EC" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Label.Foreground>
+                <Grid Margin="20,15,20,15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-                                </Label>
+                    <Label Grid.Row="0"
+           Content="Login"
+           Margin="-2,0,0,0"
+           FontFamily="{StaticResource BungeeSpice}"
+           FontSize="35"
+           FontWeight="Bold"
+           VerticalContentAlignment="Center"
+           RenderTransformOrigin="0.5,0.5">
+                        <Label.Foreground>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF7179D9"/>
+                                <GradientStop Color="#FF95F0EC" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Label.Foreground>
 
-                                <!--Username Section-->
-                                <Label Grid.Row="1"
-                                       Content="Username or email address"
-                                       FontFamily="{StaticResource YanoneKaffeesatz}"
-                                       FontSize="16"
-                                       Foreground="#FF5A6364"
-                                       Margin="0,-2.5,0,0" />
-                                <Grid Grid.Row="2" Margin="0,2,0,0">
-                                    <Border x:Name="usernameBorder"
-                                            Focusable="False"
-                                            BorderThickness="1"
-                                            BorderBrush="Gray"
-                                            CornerRadius="8"
-                                            Background="AliceBlue">
-                                        <Grid>
-                                            <TextBox x:Name="usernameTextBox"
-                                                     VerticalContentAlignment="Center"
-                                                     Padding="30,0,5,0"
-                                                     Height="30"
-                                                     FontFamily="Arial"
-                                                     FontSize="12"
-                                                     BorderThickness="0"
-                                                     Background="Transparent"
-                                                     Foreground="Black" />
+                    </Label>
 
-                                            <Image Source="{StaticResource UserIcon}"
-                                                   HorizontalAlignment="Left"
-                                                   Width="20"
-                                                   Height="20"
-                                                   Margin="5,0,0,0"
-                                                   IsHitTestVisible="False" />
-                                        </Grid>
-                                    </Border>
-                                    <Border x:Name="usernameFocusBorder"
-                                            BorderThickness="2"
-                                            CornerRadius="10"
-                                            IsHitTestVisible="False"
-                                            Focusable="False"
-                                            Margin="-1"
-                                            BorderBrush="#4b91cf">
-                                        <Border.Style>
-                                            <Style TargetType="Border">
-                                                <Setter Property="Visibility" Value="Collapsed"></Setter>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=usernameTextBox, Path=IsFocused}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                    </Border>
-                                </Grid>
+                    <!--Username Section-->
+                    <Label Grid.Row="1"
+           Content="Username or email address"
+           FontFamily="{StaticResource YanoneKaffeesatz}"
+           FontSize="16"
+           Foreground="#FF5A6364"
+           Margin="0,-2.5,0,0" />
+                    <Grid Grid.Row="2" Margin="0,2,0,0">
+                        <Border x:Name="usernameBorder"
+                Focusable="False"
+                BorderThickness="1"
+                BorderBrush="Gray"
+                CornerRadius="8"
+                Background="AliceBlue">
+                            <Grid>
+                                <TextBox x:Name="usernameTextBox"
+                         VerticalContentAlignment="Center"
+                         Padding="30,0,5,0"
+                         Height="30"
+                         FontFamily="Arial"
+                         FontSize="12"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         Foreground="Black" />
 
-                                <!--Password Section-->
-                                <Label Grid.Row="3"
-                                       Content="Password"
-                                       FontFamily="{StaticResource YanoneKaffeesatz}"
-                                       FontSize="16"
-                                       Foreground="#FF5A6364"
-                                       Margin="0,10,0,0" />
-                                <Grid Grid.Row="4" Margin="0,2,0,0">
-                                    <Border x:Name="passwordBorder"
-                                            Focusable="False"
-                                            BorderThickness="1"
-                                            BorderBrush="Gray"
-                                            CornerRadius="8"
-                                            Background="AliceBlue">
-                                        <Grid>
-                                            <TextBox x:Name="showPasswordTextBox"
-                                                     VerticalContentAlignment="Center"
-                                                     Padding="30,0,35,0"
-                                                     Height="30"
-                                                     FontFamily="Arial"
-                                                     FontSize="12"
-                                                     BorderThickness="0"
-                                                     Background="Transparent"
-                                                     Foreground="Black"
-                                                     Visibility="Collapsed" />
-
-                                            <PasswordBox x:Name="passwordBox"
-                                                         VerticalContentAlignment="Center"
-                                                         Padding="30,0,35,0"
-                                                         Height="30"
-                                                         FontFamily="Arial"
-                                                         FontSize="8"
-                                                         BorderThickness="0"
-                                                         Background="Transparent"
-                                                         Foreground="Black" />
-
-                                            <Image Source="{StaticResource KeyIcon}"
-                                                   HorizontalAlignment="Left"
-                                                   Width="20"
-                                                   Height="20"
-                                                   Margin="5,0,0,0"
-                                                   IsHitTestVisible="False" />
-
-                                            <Image x:Name="eyeIcon"
-                                                   Source="{StaticResource EyeClosed}"
-                                                   HorizontalAlignment="Right"
-                                                   Width="20"
-                                                   Height="20"
-                                                   Margin="0,0,8,0"
-                                                   Cursor="Hand"
-                                                   Focusable="False"
-                                                   MouseLeftButtonDown="showAndHidePasswordClick" />
-                                        </Grid>
-                                    </Border>
-                                    <Border x:Name="passwordFocusBorder"
-                                            BorderThickness="2"
-                                            CornerRadius="10" 
-                                            IsHitTestVisible="False"
-                                            Focusable="False"
-                                            Margin="-1"
-                                            BorderBrush="#4b91cf">
-                                        <Border.Style>
-                                            <Style TargetType="Border">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=passwordBox, Path=IsFocused}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding ElementName=showPasswordTextBox, Path=IsFocused}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                    </Border>
-                                </Grid>
-
-                                <Grid Grid.Row="5" Margin="0,20,0,0" Height="35">
-                                    <Button IsDefault="True"
-                                            Content="Log In"
-                                            FontSize="15"
-                                            Margin="-1"
-                                            Foreground="White"
-                                            FontFamily="Times New Roman"
-                                            BorderBrush="LightGray"
-                                            BorderThickness="1"
-                                            FocusVisualStyle="{x:Null}"
-                                            Click="loginButtonClick">
-                                        <Button.Background>
-                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                <GradientStop Color="Black"/>
-                                                <GradientStop Color="#FF0A0A0A" Offset="1"/>
-                                                <GradientStop Color="#FF454545" Offset="0.002"/>
-                                            </LinearGradientBrush>
-                                        </Button.Background>
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="{x:Type Button}">
-                                                <Border x:Name="templateBorder"
-                                                        Background="{TemplateBinding Background}"
-                                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                                        BorderThickness="{TemplateBinding BorderThickness}"
-                                                        CornerRadius="10">
-                                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsFocused" Value="True">
-                                                        <Setter TargetName="templateBorder" Property="BorderBrush" Value="DodgerBlue" />
-                                                        <Setter TargetName="templateBorder" Property="BorderThickness" Value="2" />
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                    </Button>
-                                </Grid>
+                                <Image Source="{StaticResource UserIcon}"
+                       HorizontalAlignment="Left"
+                       Width="20"
+                       Height="20"
+                       Margin="5,0,0,0"
+                       IsHitTestVisible="False" />
                             </Grid>
-                        </Grid>
+                        </Border>
+                        <Border x:Name="usernameFocusBorder"
+                BorderThickness="2"
+                CornerRadius="10"
+                IsHitTestVisible="False"
+                Focusable="False"
+                Margin="-1"
+                BorderBrush="#4b91cf">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=usernameTextBox, Path=IsFocused}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
                     </Grid>
 
-                    <!--Banner Grid-->
-                    <Grid Grid.Column="1" MouseLeftButtonDown="moveFocustoFocusSink">
-                        <!--Banner-->
-                        <Image Source="/Resources/images/login-banner.png" Margin="20,30,10,5" />
+                    <!--Password Section-->
+                    <Label Grid.Row="3"
+           Content="Password"
+           FontFamily="{StaticResource YanoneKaffeesatz}"
+           FontSize="16"
+           Foreground="#FF5A6364"
+           Margin="0,10,0,0" />
+                    <Grid Grid.Row="4" Margin="0,2,0,0">
+                        <Border x:Name="passwordBorder"
+                Focusable="False"
+                BorderThickness="1"
+                BorderBrush="Gray"
+                CornerRadius="8"
+                Background="AliceBlue">
+                            <Grid>
+                                <TextBox x:Name="showPasswordTextBox"
+                         VerticalContentAlignment="Center"
+                         Padding="30,0,35,0"
+                         Height="30"
+                         FontFamily="Arial"
+                         FontSize="12"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         Foreground="Black"
+                         Visibility="Collapsed" />
 
+                                <PasswordBox x:Name="passwordBox"
+                             VerticalContentAlignment="Center"
+                             Padding="30,0,35,0"
+                             Height="30"
+                             FontFamily="Arial"
+                             FontSize="8"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             Foreground="Black" />
 
+                                <Image Source="{StaticResource KeyIcon}"
+                       HorizontalAlignment="Left"
+                       Width="20"
+                       Height="20"
+                       Margin="5,0,0,0"
+                       IsHitTestVisible="False" />
+
+                                <Image x:Name="eyeIcon"
+                       Source="{StaticResource EyeClosed}"
+                       HorizontalAlignment="Right"
+                       Width="20"
+                       Height="20"
+                       Margin="0,0,8,0"
+                       Cursor="Hand"
+                       Focusable="False"
+                       MouseLeftButtonDown="showAndHidePasswordClick" />
+                            </Grid>
+                        </Border>
+                        <Border x:Name="passwordFocusBorder"
+                BorderThickness="2"
+                CornerRadius="10" 
+                IsHitTestVisible="False"
+                Focusable="False"
+                Margin="-1"
+                BorderBrush="#4b91cf">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=passwordBox, Path=IsFocused}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ElementName=showPasswordTextBox, Path=IsFocused}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    </Grid>
+
+                    <Grid Grid.Row="5" Margin="0,20,0,0" Height="35">
+                        <Button IsDefault="True"
+                Content="Log In"
+                FontSize="15"
+                Margin="-1"
+                Foreground="White"
+                FontFamily="Times New Roman"
+                BorderBrush="LightGray"
+                BorderThickness="1"
+                FocusVisualStyle="{x:Null}"
+                Click="loginButtonClick">
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Black"/>
+                                    <GradientStop Color="#FF0A0A0A" Offset="1"/>
+                                    <GradientStop Color="#FF454545" Offset="0.002"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border x:Name="templateBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter TargetName="templateBorder" Property="BorderBrush" Value="DodgerBlue" />
+                                            <Setter TargetName="templateBorder" Property="BorderThickness" Value="2" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
                     </Grid>
                 </Grid>
             </Border>
+            
+            
         </Grid>
 
-
         <uc:GradientBorder></uc:GradientBorder>
-        <uc:WindowControl></uc:WindowControl>
+        
     </Grid>
 </Window>

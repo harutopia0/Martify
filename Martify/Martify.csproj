@@ -18,12 +18,10 @@
 
   <ItemGroup>
     <None Remove="Resources\Fonts\BungeeSpice-Regular.ttf" />
-    <None Remove="Resources\Images\blur_image.png" />
     <None Remove="Resources\Images\close_program.png" />
     <None Remove="Resources\Images\eye_closed.png" />
     <None Remove="Resources\Images\eye_open.png" />
     <None Remove="Resources\Images\key_icon.png" />
-    <None Remove="Resources\Images\login-banner.png" />
     <None Remove="Resources\Images\Martify.png" />
     <None Remove="Resources\Images\user_icon.png" />
     <None Remove="Resources\Fonts\PasseroOne-Regular.ttf" />
@@ -43,9 +41,6 @@
     <Resource Include="Resources\Icon\Martify.ico">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\blur_image.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resources\Images\close_program.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -58,7 +53,7 @@
     <Resource Include="Resources\Images\key_icon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\login-banner.png">
+    <Resource Include="Resources\Images\login_background.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\Martify.png">

@@ -10,5 +10,5 @@
     <BitmapImage x:Key="Martify" UriSource="/Resources/Images/Martify.png" />
     <BitmapImage x:Key="UserIcon" UriSource="/Resources/Images/user_icon.png" />
     
-    <BitmapImage x:Key="LoginBackground" UriSource="/Resources/Images/login_background.jpg" />
+    <BitmapImage x:Key="LoginBackground" UriSource="/Resources/Images/background.png" />
 </ResourceDictionary>

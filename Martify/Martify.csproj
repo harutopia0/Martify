@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <None Remove="Resources\Fonts\BungeeSpice-Regular.ttf" />
+    <None Remove="Resources\Fonts\Rubik-Regular.ttf" />
+    <None Remove="Resources\Images\background.png" />
     <None Remove="Resources\Images\close_program.png" />
     <None Remove="Resources\Images\eye_closed.png" />
     <None Remove="Resources\Images\eye_open.png" />
@@ -35,10 +37,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Fonts\Rubik-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignColors" Version="5.3.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Fonts\BungeeSpice-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Icon\Martify.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\background.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\close_program.png">
@@ -51,9 +67,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\key_icon.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Images\login_background.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\Martify.png">

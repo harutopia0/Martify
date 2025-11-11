@@ -36,7 +36,7 @@
                                   HorizontalAlignment="Right">
 
                                     <TextBlock Text="{TemplateBinding TextBlock.Text}"
-                                               FontFamily="Times New Roman"
+                                               FontFamily="{StaticResource Rubik}"
                                                FontSize="17"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Left"
@@ -70,7 +70,7 @@
                                                Text="{Binding Content, 
                                                               RelativeSource={RelativeSource FindAncestor,
                                                               AncestorType={x:Type RadioButton}}}"
-                                               FontFamily="Times New Roman"
+                                               FontFamily="{StaticResource Rubik}"
                                                FontSize="17"
                                                Foreground="#FFFFFF"
                                                Margin="20,0,0,0"

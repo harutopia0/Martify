@@ -6,6 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/XAML/MaterialDesignRes.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="/Resources/XAML/TriggerRes.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="/Resources/XAML/FontRes.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="/Resources/XAML/MainResource.xaml"></ResourceDictionary>

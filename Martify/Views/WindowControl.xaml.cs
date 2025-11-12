@@ -21,11 +21,11 @@ namespace Martify.Views
     /// </summary>
     public partial class WindowControl : UserControl
     {
-        public WindowControlViewModels ViewModels { get; set; }
+        public WindowControlVMs ViewModels { get; set; }
         public WindowControl()
         {
             InitializeComponent();
-            this.DataContext = ViewModels = new WindowControlViewModels();
+            this.DataContext = ViewModels = new WindowControlVMs();
         }
     }
 }

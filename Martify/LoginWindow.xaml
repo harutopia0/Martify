@@ -81,7 +81,7 @@
                             <Label Grid.Row="1" Margin="0,-7.5,0,0"
                                    Content="Đăng nhập vào tài khoản của bạn"
                                    HorizontalAlignment="Center"
-                                   FontFamily="{StaticResource Rubik}"
+                                   FontFamily="{StaticResource MaterialDesignFont}"
                                    FontSize="12"
                                    FontWeight="Bold"
                                    VerticalContentAlignment="Center">
@@ -97,16 +97,25 @@
                             <Grid Grid.Row="2" Margin="0,15,0,0">
                                 <Border>
                                     <Grid>
-                                        <StackPanel>
+                                        <Grid>
                                             <TextBox Height="40"
                                                      VerticalAlignment="Top"
                                                      materialDesign:HintAssist.Hint="Email hoặc tên người dùng"
                                                      materialDesign:HintAssist.HintPaddingBrush="White"
                                                      IsEnabled="True"
-                                                     Padding="10"
+                                                     Padding="32.5,0,0,0"
                                                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                                     FontSize="14" />
-                                        </StackPanel>
+                                                     FontSize="14" 
+                                                     FontFamily="Times New Roman"/>
+
+                                            <materialDesign:PackIcon Kind="AccountCircleOutline"
+                                                             Width="25"
+                                                             Height="25"
+                                                             VerticalAlignment="Center"
+                                                             HorizontalAlignment="Left"
+                                                             Margin="5,0,0,0"
+                                                             Foreground="Gray" />
+                                        </Grid>
                                     </Grid>
                                 </Border>
                             </Grid>
@@ -116,15 +125,25 @@
                             <Grid Grid.Row="3" Margin="0,10,0,0">
                                 <Border>
                                     <Grid>
-                                        <StackPanel>
+                                        <Grid>
                                             <PasswordBox VerticalAlignment="Top"
                                                          Height="40"
-                                                         Padding="10"
+                                                         Padding="32.5,0,0,0"
                                                          materialDesign:HintAssist.Hint="Mật khẩu"
                                                          materialDesign:HintAssist.HintPaddingBrush="White"
                                                          IsEnabled="True"
-                                                         Style="{StaticResource MaterialDesignOutlinedPasswordBox}" />
-                                        </StackPanel>
+                                                         FontSize="14"
+                                                         Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                                                         FontFamily="Times New Roman"/>
+
+                                            <materialDesign:PackIcon Kind="PasswordOutline"
+                                                             Width="25"
+                                                             Height="25"
+                                                             VerticalAlignment="Center"
+                                                             HorizontalAlignment="Left"
+                                                             Margin="5,0,0,0"
+                                                             Foreground="Gray" />
+                                        </Grid>
                                     </Grid>
                                 </Border>
                             </Grid>

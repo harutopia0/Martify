@@ -4,11 +4,8 @@
 
     <BitmapImage x:Key="CloseProgram" UriSource="/Resources/Images/close_program.png" />
     
-    <BitmapImage x:Key="EyeOpen" UriSource="/Resources/Images/eye_open.png" />
-    <BitmapImage x:Key="EyeClosed" UriSource="/Resources/Images/eye_closed.png" />
-    <BitmapImage x:Key="KeyIcon" UriSource="/Resources/Images/key_icon.png" />
     <BitmapImage x:Key="Martify" UriSource="/Resources/Images/Martify.png" />
-    <BitmapImage x:Key="UserIcon" UriSource="/Resources/Images/user_icon.png" />
+    <BitmapImage x:Key="User" UriSource="/Resources/Images/user.png" />
     
     <BitmapImage x:Key="LoginBackground" UriSource="/Resources/Images/background.png" />
 </ResourceDictionary>

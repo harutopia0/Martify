@@ -27,13 +27,34 @@
 
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="2.75*"/>
+                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition Height="0.7*"/>
                     </Grid.RowDefinitions>
 
                     <Border Grid.Row="0" Background="#48B7FF" CornerRadius="30,30,0,0"></Border>
                     <Border Grid.Row="1" Background="#6DC6FE" CornerRadius="0,0,30,30"></Border>
-                    
+
+
+                    <Grid Grid.Row="0" Margin="25">
+
+                        <Image Source="{StaticResource User}" Stretch="Uniform" 
+                               VerticalAlignment="Top" Width="140"/>
+
+                        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                            <TextBlock Text="NGUYỄN VĂN A"
+                                       FontSize="14"
+                                       Foreground="White"
+                                       VerticalAlignment="Bottom"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="nguyenvana@gmail.com"
+                                       Margin="0,2.5,0,0"
+                                       FontSize="8.5"
+                                       Foreground="White"
+                                       VerticalAlignment="Bottom"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+
+                    </Grid>
                     <Grid Grid.Row="1">
                         <uc:SidePanel Margin="0,30,0,0" HorizontalAlignment="Left"></uc:SidePanel>
 

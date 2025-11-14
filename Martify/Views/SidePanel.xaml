@@ -275,13 +275,13 @@
                                                         Value="DASHBOARD" />
 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource KeyIcon}" />
+                                                        Value="{StaticResource User}" />
 
                                                 <Setter Property="Image.Source"
-                                                        Value="{StaticResource UserIcon}" />
+                                                        Value="{StaticResource Martify}" />
 
                                                 <Setter Property="DataContext"
-                                                        Value="{StaticResource EyeOpen}" />
+                                                        Value="{StaticResource CloseProgram}" />
 
                                             </Style>
                                         </RadioButton.Style>
@@ -312,13 +312,13 @@
                                                         Value="LINH TINH" />
 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource KeyIcon}" />
+                                                        Value="{StaticResource User}" />
 
                                                 <Setter Property="Image.Source"
-                                                        Value="{StaticResource UserIcon}" />
+                                                        Value="{StaticResource Martify}" />
 
                                                 <Setter Property="DataContext"
-                                                        Value="{StaticResource EyeOpen}" />
+                                                        Value="{StaticResource CloseProgram}" />
                                             </Style>
 
                                         </RadioButton.Style>
@@ -349,13 +349,13 @@
                                                         Value="CUSTOMER" />
 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource KeyIcon}" />
+                                                        Value="{StaticResource User}" />
 
                                                 <Setter Property="Image.Source"
-                                                        Value="{StaticResource UserIcon}" />
+                                                        Value="{StaticResource Martify}" />
 
                                                 <Setter Property="DataContext"
-                                                        Value="{StaticResource EyeOpen}" />
+                                                        Value="{StaticResource CloseProgram}" />
                                             </Style>
 
                                         </RadioButton.Style>
@@ -386,13 +386,13 @@
                                                         Value="ANALYTICS" />
 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource KeyIcon}" />
+                                                        Value="{StaticResource User}" />
 
                                                 <Setter Property="Image.Source"
-                                                        Value="{StaticResource UserIcon}" />
+                                                        Value="{StaticResource Martify}" />
 
                                                 <Setter Property="DataContext"
-                                                        Value="{StaticResource EyeOpen}" />
+                                                        Value="{StaticResource CloseProgram}" />
                                             </Style>
 
                                         </RadioButton.Style>
@@ -422,13 +422,13 @@
                                                         Value="SETTINGS" />
 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource KeyIcon}" />
+                                                        Value="{StaticResource User}" />
 
                                                 <Setter Property="Image.Source"
-                                                        Value="{StaticResource UserIcon}" />
+                                                        Value="{StaticResource Martify}" />
 
                                                 <Setter Property="DataContext"
-                                                        Value="{StaticResource EyeOpen}" />
+                                                        Value="{StaticResource CloseProgram}" />
                                             </Style>
                                         </RadioButton.Style>
                                     </RadioButton>

@@ -103,7 +103,7 @@
                                                      materialDesign:HintAssist.Hint="Email hoặc tên người dùng"
                                                      materialDesign:HintAssist.HintPaddingBrush="White"
                                                      IsEnabled="True"
-                                                     Padding="32.5,0,0,0"
+                                                     Padding="32.5,0,5,0"
                                                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                                      FontSize="14" 
                                                      FontFamily="Times New Roman"/>
@@ -128,7 +128,7 @@
                                         <Grid>
                                             <PasswordBox VerticalAlignment="Top"
                                                          Height="40"
-                                                         Padding="32.5,0,0,0"
+                                                         Padding="32.5,0,5,0"
                                                          materialDesign:HintAssist.Hint="Mật khẩu"
                                                          materialDesign:HintAssist.HintPaddingBrush="White"
                                                          IsEnabled="True"
@@ -150,42 +150,26 @@
 
                             <!-- Row 5: Nút "Log In" -->
                             <Grid Grid.Row="4" Margin="0,15,0,0">
-                                <Button Height="40" Width="125"
-                                        IsDefault="True"
-                                        Content="Log In"
-                                        FontSize="15"
-                                        Foreground="White"
-                                        FontFamily="Times New Roman"
-                                        BorderBrush="LightGray"
-                                        BorderThickness="1"
-                                        FocusVisualStyle="{x:Null}"
-                                        Click="loginButtonClick">
-                                    <Button.Background>
-                                        <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
-                                            <GradientStop Color="Black" Offset="1"/>
-                                            <GradientStop Color="#FF5474E2" Offset="0"/>
-                                            <GradientStop Color="#FFCB6EF9" Offset="0.999"/>
-                                        </LinearGradientBrush>
-                                    </Button.Background>
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="{x:Type Button}">
-                                            <Border x:Name="templateBorder"
-                                                    Background="{TemplateBinding Background}"
-                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                                    CornerRadius="10">
-                                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsFocused" Value="True">
-                                                    <Setter TargetName="templateBorder" Property="BorderBrush" Value="DodgerBlue" />
-                                                    <Setter TargetName="templateBorder" Property="BorderThickness" Value="2" />
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
+                                <Grid Width="125">
+                                    <Button Height="40"
+                                            materialDesign:ButtonAssist.CornerRadius="10"
+                                            IsEnabled="{Binding DataContext.ControlsEnabled, 
+                                            RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                            Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}">
+                                        <Button.Background>
+                                            <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
+                                                <GradientStop Color="Black" Offset="1"/>
+                                                <GradientStop Color="#FF5474E2" Offset="0"/>
+                                                <GradientStop Color="#FFCB6EF9" Offset="0.999"/>
+                                            </LinearGradientBrush>
+                                        </Button.Background>
+
+                                        <TextBlock Text="Login"
+                                                   FontFamily="Times New Roman"
+                                                   FontSize="14"/>
+                                    </Button>
+                                </Grid>
+
                             </Grid>
                         </Grid>
                     </Border>

@@ -13,7 +13,7 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
-        DataContext="{StaticResource MainVModel}">
+        DataContext="{StaticResource MainVM}">
 
     <Grid>
         <Border Background="#f5f7fb" 

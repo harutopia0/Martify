@@ -41,9 +41,9 @@
                     Margin="0,0,10,0"
                     IsTabStop="False"
                     Style="{StaticResource CompletelyCustomButtonStyle}"
-                    Command="{Binding CloseWindowControl}"
+                    Command="{Binding CloseWindowCommand}"
                     CommandParameter="{Binding ElementName=ucWindowControl}">
-                <Image Source="../Resources/images/close_program.png"
+                <Image Source="{StaticResource CloseProgram}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Cursor="Hand">

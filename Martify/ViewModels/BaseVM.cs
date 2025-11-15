@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace Martify.ViewModels
 {
-    public class BaseVMs : INotifyPropertyChanged
+    public class BaseVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

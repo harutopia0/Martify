@@ -9,13 +9,13 @@ using System.Windows;
 
 namespace Martify.ViewModels
 {
-    public class MainVMs : BaseVMs
+    public class MainVM : BaseVM
     {
         public bool isLoaded = false;
 
 
         //Mọi xử lý nằm ở đây.
-        public MainVMs()
+        public MainVM()
         {
             // Chỉ chạy code này khi chương trình KHÔNG ở chế độ Design
             if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))

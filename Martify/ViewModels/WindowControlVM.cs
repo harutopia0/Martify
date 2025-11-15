@@ -10,15 +10,15 @@ using System.Windows.Input;
 
 namespace Martify.ViewModels
 {
-    public class WindowControlVMs : BaseVMs
+    public class WindowControlVM : BaseVM
     {
         #region commands
-        public ICommand CloseWindowControl { get; set; }
+        public ICommand CloseWindowCommand { get; set; }
         #endregion
 
-        public WindowControlVMs()
+        public WindowControlVM()
         {
-            CloseWindowControl = new RelayCommand<UserControl>((p) => { return p != null; }, (p) =>
+            CloseWindowCommand = new RelayCommand<UserControl>((p) => { return p != null; }, (p) =>
             {
                 var win = Window.GetWindow(p);
 

@@ -13,6 +13,8 @@ namespace Martify.ViewModels
     {
         public bool isLoaded = false;
 
+        public NavigationVM Navigation { get; }
+
 
         //Mọi xử lý nằm ở đây.
         public MainVM()
@@ -27,6 +29,8 @@ namespace Martify.ViewModels
                     login.ShowDialog();
                 }
             }
+
+            Navigation = new NavigationVM();
         }
     }
 }

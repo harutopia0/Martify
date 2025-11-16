@@ -8,4 +8,25 @@
     <BitmapImage x:Key="User" UriSource="/Resources/Images/user.png" />
     
     <BitmapImage x:Key="LoginBackground" UriSource="/Resources/Images/background.png" />
+
+
+
+
+
+
+
+
+    <!--Dashboard-->
+    <BitmapImage x:Key="DashboardNormal" UriSource="/Resources/Images/dashboard_normal.png"></BitmapImage>
+    <BitmapImage x:Key="DashboardHover" UriSource="/Resources/Images/dashboard_hover.png"></BitmapImage>
+    <BitmapImage x:Key="DashboardActive" UriSource="/Resources/Images/dashboard_active.png"></BitmapImage>
+    
+    <!--Products-->
+    <BitmapImage x:Key="ProductsNormal" UriSource="/Resources/Images/products_normal.png"></BitmapImage>
+    <BitmapImage x:Key="ProductsHover" UriSource="/Resources/Images/products_hover.png"></BitmapImage>
+    <BitmapImage x:Key="ProductsActive" UriSource="/Resources/Images/products_active.png"></BitmapImage>
+
+
+
+
 </ResourceDictionary>

@@ -31,8 +31,8 @@
                         <RowDefinition Height="0.7*"/>
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" Background="#48B7FF" CornerRadius="30,30,0,0"></Border>
-                    <Border Grid.Row="1" Background="#6DC6FE" CornerRadius="0,0,30,30"></Border>
+                    <Border Grid.Row="0" Background="#3C5654" CornerRadius="30,30,0,0"></Border>
+                    <Border Grid.Row="1" Background="#425C5A" CornerRadius="0,0,30,30"></Border>
 
 
                     <Grid Grid.Row="0" Margin="25">

@@ -21,19 +21,19 @@
                             <Grid>
 
                                 <Image x:Name="SidePanel_Menu_Image"
-                                   Source="{TemplateBinding Image.Source}"
-                                   Stretch="Uniform"
-                                   Margin="0,0,12,0"
-                                   Width="25" Height="25"
-                                   HorizontalAlignment="Right"
-                                   VerticalAlignment="Center" />
+                                       Source="{TemplateBinding Image.Source}"
+                                       Stretch="Uniform"
+                                       Margin="0,0,12,0"
+                                       Width="25" Height="25"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Center" />
 
                                 <Grid x:Name="TextBlock_Panel"
-                                  Background="Transparent"
-                                  Height="35"
-                                  Width="150"
-                                  Margin="0,0,50,0"
-                                  HorizontalAlignment="Right">
+                                      Background="Transparent"
+                                      Height="35"
+                                      Width="150"
+                                      Margin="0,0,50,0"
+                                      HorizontalAlignment="Right">
 
                                     <TextBlock Text="{TemplateBinding TextBlock.Text}"
                                                FontFamily="{StaticResource Rubik}"
@@ -45,21 +45,21 @@
                                 </Grid>
 
                                 <Grid x:Name="Sliding_UpperCase_Panel"
-                                  Height="35"
-                                  Width="0"
-                                  Background="Transparent"
-                                  HorizontalAlignment="Left"
-                                  Margin="0,0,0,0">
+                                      Height="35"
+                                      Width="0"
+                                      Background="Transparent"
+                                      HorizontalAlignment="Left"
+                                      Margin="0,0,0,0">
 
 
                                     <Border x:Name="Highlighter"
-                                        Height="30"
-                                        Width="300"
-                                        Background="#FF679BCB"
-                                        CornerRadius="1"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        Margin="0,0,15,0" />
+                                            Height="30"
+                                            Width="300"
+                                            Background="#FF679BCB"
+                                            CornerRadius="1"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,15,0" />
                                     <Ellipse Width="30"
                                              Height="30"
                                              Fill="#FF679BCB"
@@ -86,44 +86,44 @@
                         <ControlTemplate.Triggers>
 
                             <Trigger Property="RadioButton.IsMouseOver"
-                                   Value="true">
+                                     Value="true">
 
                                 <Setter Property="Background"
-                                    TargetName="border"
-                                    Value="Transparent" />
+                                        TargetName="border"
+                                        Value="Transparent" />
 
                                 <Setter TargetName="SidePanel_Menu_Image"
-                                    Property="Source"
-                                    Value="{Binding Tag, 
-                                                    RelativeSource={RelativeSource FindAncestor,
-                                                    AncestorType={x:Type RadioButton}}}" />
+                                        Property="Source"
+                                        Value="{Binding Tag, 
+                                                        RelativeSource={RelativeSource FindAncestor,
+                                                        AncestorType={x:Type RadioButton}}}" />
 
                             </Trigger>
 
                             <Trigger Property="RadioButton.IsChecked"
-                                   Value="true">
+                                     Value="true">
 
                                 <Setter Property="Background"
-                                    TargetName="border"
-                                    Value="Transparent" />
+                                        TargetName="border"
+                                        Value="Transparent" />
 
                                 <Setter Property="Background"
-                                    TargetName="Highlighter"
-                                    Value="#FFFFFF" />
+                                        TargetName="Highlighter"
+                                        Value="#FFFFFF" />
 
                                 <Setter Property="Foreground"
-                                    TargetName="UpperCase_Text"
-                                    Value="Black" />
+                                        TargetName="UpperCase_Text"
+                                        Value="Black" />
 
                                 <Setter Property="FontSize"
-                                    TargetName="UpperCase_Text"
-                                    Value="17" />
+                                        TargetName="UpperCase_Text"
+                                        Value="17" />
 
                                 <Setter TargetName="SidePanel_Menu_Image"
-                                    Property="Source"
-                                    Value="{Binding DataContext, 
-                                                    RelativeSource={RelativeSource FindAncestor,
-                                                    AncestorType={x:Type RadioButton}}}" />
+                                        Property="Source"
+                                        Value="{Binding DataContext, 
+                                                        RelativeSource={RelativeSource FindAncestor,
+                                                        AncestorType={x:Type RadioButton}}}" />
 
                             </Trigger>
 
@@ -216,16 +216,16 @@
         </Style>
 
         <Style x:Key="SidePanelListBoxStyle"
-           TargetType="{x:Type ListBox}">
+               TargetType="{x:Type ListBox}">
 
             <Setter Property="VerticalAlignment"
-                Value="Top" />
+                    Value="Top" />
 
             <Setter Property="SelectionMode"
-                Value="Single" />
+                    Value="Single" />
 
             <Setter Property="Cursor"
-                Value="Hand" />
+                    Value="Hand" />
 
             <Setter Property="Template">
                 <Setter.Value>
@@ -233,8 +233,8 @@
                         <Border>
 
                             <ScrollViewer Focusable="False"
-                                      HorizontalScrollBarVisibility="Disabled"
-                                      VerticalScrollBarVisibility="Disabled">
+                                          HorizontalScrollBarVisibility="Disabled"
+                                          VerticalScrollBarVisibility="Disabled">
 
                                 <ItemsPresenter />
 
@@ -275,14 +275,15 @@
                                                 <Setter Property="Content"
                                                         Value="DASHBOARD" />
 
-                                                <Setter Property="Tag"
-                                                        Value="{StaticResource User}" />
 
                                                 <Setter Property="Image.Source"
-                                                        Value="{StaticResource Martify}" />
+                                                        Value="{StaticResource DashboardNormal}" />
+                                                
+                                                <Setter Property="Tag"
+                                                        Value="{StaticResource DashboardHover}" />
 
                                                 <Setter Property="DataContext"
-                                                        Value="{StaticResource CloseProgram}" />
+                                                        Value="{StaticResource DashboardActive}" />
 
                                             </Style>
                                         </RadioButton.Style>
@@ -313,14 +314,16 @@
                                                 <Setter Property="Content"
                                                         Value="PRODUCTS" />
 
-                                                <Setter Property="Tag"
-                                                        Value="{StaticResource User}" />
 
                                                 <Setter Property="Image.Source"
-                                                        Value="{StaticResource Martify}" />
+                                                        Value="{StaticResource ProductsNormal}" />
+
+                                                <Setter Property="Tag"
+                                                        Value="{StaticResource ProductsHover}" />
 
                                                 <Setter Property="DataContext"
-                                                        Value="{StaticResource CloseProgram}" />
+                                                        Value="{StaticResource ProductsActive}" />
+                                                
                                             </Style>
 
                                         </RadioButton.Style>

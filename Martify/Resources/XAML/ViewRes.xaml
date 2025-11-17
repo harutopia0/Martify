@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+                    xmlns:vm="clr-namespace:Martify.ViewModels"
+                    xmlns:view="clr-namespace:Martify.Views">
+    
+    
+    
+    
+
+    <DataTemplate DataType="{x:Type vm:DashboardVM}">
+        <view:Dashboard />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:ProductsVM}">
+        <view:Products />
+    </DataTemplate>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</ResourceDictionary>

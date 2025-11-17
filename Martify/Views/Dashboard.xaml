@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:Martify.Views"
              xmlns:vm="clr-namespace:Martify.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="720" d:DesignWidth="1080">
+             d:DesignHeight="720" d:DesignWidth="1080"
+             Style="{StaticResource Page_Style}">
 
     <UserControl.DataContext>
         <vm:DashboardVM />

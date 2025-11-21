@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:Martify.Views"
              xmlns:vm="clr-namespace:Martify.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="720" d:DesignWidth="1080"
-             Style="{StaticResource Page_Style}">
+             d:DesignHeight="720" d:DesignWidth="864"
+             Style="{StaticResource Page_CinematicFocus_Style}">
 
     <UserControl.DataContext>
         <vm:ProductsVM />
@@ -15,12 +15,7 @@
 
     <Grid>
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="4*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid Grid.Column="1">
+            <Grid>
                 <Grid Width="500" Height="400"
                       Margin="25,0,0,25"
                       VerticalAlignment="Bottom"

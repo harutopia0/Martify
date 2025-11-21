@@ -15,8 +15,6 @@ namespace Martify.ViewModels
 
         public NavigationVM Navigation { get; }
 
-
-        //Mọi xử lý nằm ở đây.
         public MainVM()
         {
             // Chỉ chạy code này khi chương trình KHÔNG ở chế độ Design

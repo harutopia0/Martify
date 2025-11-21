@@ -60,17 +60,19 @@
 
                     </Grid>
                 </Grid>
-
+                
+                
+                <Grid Grid.Column="1">
+                    <ContentControl x:Name="Pages"
+                                    Content="{Binding Navigation.CurrentView}"></ContentControl>
+                </Grid>
 
             </Grid>
         
             
         </Border>
 
-        <Grid>
-            <ContentControl x:Name="Pages"
-                                    Content="{Binding Navigation.CurrentView}"></ContentControl>
-        </Grid>
+
 
         <uc:WindowControl/>
     </Grid>

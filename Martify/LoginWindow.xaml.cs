@@ -54,10 +54,5 @@ namespace Martify
             mainWindow.Show();
             this.Close();
         }
-
-        private void WindowControl_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

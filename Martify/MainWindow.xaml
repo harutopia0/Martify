@@ -64,16 +64,14 @@
                 
                 <Grid Grid.Column="1">
                     <ContentControl x:Name="Pages"
-                                    Content="{Binding Navigation.CurrentView}" Loaded="WindowControl_Loaded"></ContentControl>
+                                    Content="{Binding Navigation.CurrentView}"></ContentControl>
                 </Grid>
 
             </Grid>
         
-            
         </Border>
 
 
-
-        <uc:WindowControl Loaded="WindowControl_Loaded"/>
+        <uc:WindowControl/>
     </Grid>
 </Window>

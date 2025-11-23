@@ -153,8 +153,6 @@
                                 <Grid Width="125">
                                     <Button Height="40"
                                         materialDesign:ButtonAssist.CornerRadius="10"
-                                        IsEnabled="{Binding DataContext.ControlsEnabled, 
-                                        RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                                         Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}"
                                         Click="LoginButton_Click"
                                         IsDefault="True">           

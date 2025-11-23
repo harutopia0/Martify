@@ -152,10 +152,12 @@
                             <Grid Grid.Row="4" Margin="0,15,0,0">
                                 <Grid Width="125">
                                     <Button Height="40"
-                                            materialDesign:ButtonAssist.CornerRadius="10"
-                                            IsEnabled="{Binding DataContext.ControlsEnabled, 
-                                            RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                                            Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}">
+                                        materialDesign:ButtonAssist.CornerRadius="10"
+                                        IsEnabled="{Binding DataContext.ControlsEnabled, 
+                                        RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}"
+                                        Click="LoginButton_Click"
+                                        IsDefault="True">           
                                         <Button.Background>
                                             <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
                                                 <GradientStop Color="Black" Offset="1"/>
@@ -163,10 +165,9 @@
                                                 <GradientStop Color="#FFCB6EF9" Offset="0.999"/>
                                             </LinearGradientBrush>
                                         </Button.Background>
-
                                         <TextBlock Text="Login"
-                                                   FontFamily="Times New Roman"
-                                                   FontSize="14"/>
+                                           FontFamily="Times New Roman"
+                                           FontSize="14"/>              
                                     </Button>
                                 </Grid>
 

@@ -48,11 +48,16 @@ namespace Martify
         //    FocusSink.Focus();
         //}
 
-        private void loginButtonClick(object sender, RoutedEventArgs e)
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            //MainWindow mainWindow = new MainWindow();
-            //mainWindow.Show();
-            //this.Close();
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Close();
+        }
+
+        private void WindowControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

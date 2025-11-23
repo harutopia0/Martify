@@ -11,13 +11,17 @@ namespace Martify.ViewModels
 {
     public class MainVM : BaseVM
     {
-        public bool isLoaded = false;
+        // Xóa 'public bool isLoaded = false;'
 
         public NavigationVM Navigation { get; }
 
         public MainVM()
         {
-            // Chỉ chạy code này khi chương trình KHÔNG ở chế độ Design
+            // CHỈ KHỞI TẠO CÁC THUỘC TÍNH CỦA VIEWMODEL Ở ĐÂY
+            Navigation = new NavigationVM();
+
+            // XÓA TẤT CẢ CODE SAU:
+            /*
             if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
                 if (!isLoaded)
@@ -27,8 +31,7 @@ namespace Martify.ViewModels
                     login.ShowDialog();
                 }
             }
-
-            Navigation = new NavigationVM();
+            */
         }
     }
 }

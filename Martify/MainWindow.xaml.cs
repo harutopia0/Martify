@@ -23,5 +23,12 @@ namespace Martify
         {
             InitializeComponent();
         }
+
+        private void WindowControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
     }
 }

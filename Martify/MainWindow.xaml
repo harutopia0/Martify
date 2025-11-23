@@ -64,7 +64,7 @@
                 
                 <Grid Grid.Column="1">
                     <ContentControl x:Name="Pages"
-                                    Content="{Binding Navigation.CurrentView}"></ContentControl>
+                                    Content="{Binding Navigation.CurrentView}" Loaded="WindowControl_Loaded"></ContentControl>
                 </Grid>
 
             </Grid>
@@ -74,6 +74,6 @@
 
 
 
-        <uc:WindowControl/>
+        <uc:WindowControl Loaded="WindowControl_Loaded"/>
     </Grid>
 </Window>

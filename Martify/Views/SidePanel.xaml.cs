@@ -25,6 +25,9 @@ namespace Martify.Views
             InitializeComponent();
         }
 
-       
+        private void dashboard_sidepanel_listboxitem_Selected(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

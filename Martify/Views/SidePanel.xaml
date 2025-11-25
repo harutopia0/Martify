@@ -55,11 +55,11 @@
 
 
                                     <Border x:Name="Highlighter"
-                                            Height="30"
-                                            Width="200"
+                                            Height="35"
+                                            Width="190"
                                             Background="White"
-                                            CornerRadius="13"
-                                            HorizontalAlignment="Center"
+                                            CornerRadius="0,10,10,0"
+                                            HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Margin="0,0,0,0"
                                             />
@@ -84,19 +84,12 @@
 
                         <ControlTemplate.Triggers>
 
-                            <Trigger Property="RadioButton.IsMouseOver"
-                                     Value="true">
-
-                                <Setter Property="Background"
-                                        TargetName="border"
-                                        Value="Transparent" />
-
+                            <Trigger Property="RadioButton.IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="Transparent" />
                                 <Setter TargetName="SidePanel_Menu_Image"
                                         Property="Source"
-                                        Value="{Binding Tag, 
-                                                        RelativeSource={RelativeSource FindAncestor,
-                                                        AncestorType={x:Type RadioButton}}}" />
-
+                                        Value="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RadioButton}}}" />
+                                <Setter Property="Background" TargetName="Highlighter" Value="#FFD3D3D3" /> <!-- Grey on hover -->
                             </Trigger>
 
                             <Trigger Property="RadioButton.IsChecked"
@@ -176,7 +169,7 @@
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetName="Sliding_UpperCase_Panel"
                                                              Storyboard.TargetProperty="Width"
-                                                             From="160"
+                                                             From="200"
                                                              To="200"
                                                              Duration="0:0:0.3" />
                                         </Storyboard>

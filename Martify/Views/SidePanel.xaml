@@ -23,17 +23,19 @@
                                 <Image x:Name="SidePanel_Menu_Image"
                                        Source="{TemplateBinding Image.Source}"
                                        Stretch="Uniform"
-                                       Margin="0,0,12,0"
+                                       Margin="0,0,20,0"
                                        Width="25" Height="25"
                                        HorizontalAlignment="Right"
-                                       VerticalAlignment="Center" />
+                                       VerticalAlignment="Center" 
+                                       Panel.ZIndex="1"
+                                       />
 
                                 <Grid x:Name="TextBlock_Panel"
                                       Background="Transparent"
                                       Height="35"
                                       Width="150"
-                                      Margin="0,0,50,0"
-                                      HorizontalAlignment="Right">
+                                      Margin="0,0,0,0"
+                                      HorizontalAlignment="Left">
 
                                     <TextBlock Text="{TemplateBinding TextBlock.Text}"
                                                FontFamily="{StaticResource Rubik}"
@@ -54,17 +56,14 @@
 
                                     <Border x:Name="Highlighter"
                                             Height="30"
-                                            Width="300"
-                                            Background="#FF679BCB"
-                                            CornerRadius="1"
-                                            HorizontalAlignment="Right"
+                                            Width="200"
+                                            Background="White"
+                                            CornerRadius="13"
+                                            HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            Margin="0,0,15,0" />
-                                    <Ellipse Width="30"
-                                             Height="30"
-                                             Fill="#FF679BCB"
-                                             HorizontalAlignment="Right"
-                                             VerticalAlignment="Center" />
+                                            Margin="0,0,0,0"
+                                            />
+                                    
 
                                     <TextBlock x:Name="UpperCase_Text"
                                                Text="{Binding Content, 
@@ -72,8 +71,8 @@
                                                               AncestorType={x:Type RadioButton}}}"
                                                FontFamily="{StaticResource Rubik}"
                                                FontSize="17"
-                                               Foreground="#FFFFFF"
-                                               Margin="20,0,0,0"
+                                               Foreground="#3A5EEA"
+                                               Margin="10,0,0,0"
                                                HorizontalAlignment="Left"
                                                VerticalAlignment="Center">
 
@@ -113,7 +112,7 @@
 
                                 <Setter Property="Foreground"
                                         TargetName="UpperCase_Text"
-                                        Value="Black" />
+                                        Value="#3A5EEA" />
 
                                 <Setter Property="FontSize"
                                         TargetName="UpperCase_Text"
@@ -141,7 +140,7 @@
                                                              Storyboard.TargetProperty="Width"
                                                              DecelerationRatio="0.6"
                                                              From="0"
-                                                             To="160"
+                                                             To="200"
                                                              Duration="0:0:0.5" />
                                         </Storyboard>
                                     </BeginStoryboard>
@@ -154,7 +153,7 @@
                                             <DoubleAnimation Storyboard.TargetName="Sliding_UpperCase_Panel"
                                                              Storyboard.TargetProperty="Width"
                                                              DecelerationRatio="0.6"
-                                                             From="160"
+                                                             From="200"
                                                              To="0"
                                                              Duration="0:0:0.75" />
                                         </Storyboard>
@@ -178,7 +177,7 @@
                                             <DoubleAnimation Storyboard.TargetName="Sliding_UpperCase_Panel"
                                                              Storyboard.TargetProperty="Width"
                                                              From="160"
-                                                             To="165"
+                                                             To="200"
                                                              Duration="0:0:0.3" />
                                         </Storyboard>
                                     </BeginStoryboard>
@@ -280,11 +279,11 @@
                                                         Value="{StaticResource DashboardNormal}" />
                                                 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource DashboardHover}" />
+                                                        Value="{StaticResource DashboardActive}" />
 
                                                 <Setter Property="DataContext"
                                                         Value="{StaticResource DashboardActive}" />
-
+                                                
                                             </Style>
                                         </RadioButton.Style>
                                     </RadioButton>
@@ -319,7 +318,7 @@
                                                         Value="{StaticResource ProductsNormal}" />
 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource ProductsHover}" />
+                                                        Value="{StaticResource ProductsActive}" />
 
                                                 <Setter Property="DataContext"
                                                         Value="{StaticResource ProductsActive}" />
@@ -334,7 +333,7 @@
                         </Setter>
                     </Style>
 
-                    <Style x:Key="customer_listboxitem_style"
+                    <Style x:Key="staff_listboxitem_style"
                            TargetType="ListBoxItem">
                         <Setter Property="Template">
                             <Setter.Value>
@@ -349,18 +348,18 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Customer" />
+                                                        Value="Staff" />
                                                 <Setter Property="Content"
-                                                        Value="CUSTOMER" />
+                                                        Value="STAFF" />
 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource User}" />
+                                                        Value="{StaticResource StaffActive}" />
 
                                                 <Setter Property="Image.Source"
-                                                        Value="{StaticResource Martify}" />
+                                                        Value="{StaticResource StaffNormal}" />
 
                                                 <Setter Property="DataContext"
-                                                        Value="{StaticResource CloseProgram}" />
+                                                        Value="{StaticResource StaffActive}" />
                                             </Style>
 
                                         </RadioButton.Style>
@@ -371,7 +370,7 @@
                         </Setter>
                     </Style>
 
-                    <Style x:Key="analytics_listboxitem_style"
+                    <Style x:Key="receipts_listboxitem_style"
                            TargetType="ListBoxItem">
                         <Setter Property="Template">
                             <Setter.Value>
@@ -386,18 +385,18 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Analytics" />
+                                                        Value="Receipts" />
                                                 <Setter Property="Content"
-                                                        Value="ANALYTICS" />
+                                                        Value="RECEIPTS" />
 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource User}" />
+                                                        Value="{StaticResource ReceiptActive}" />
 
                                                 <Setter Property="Image.Source"
-                                                        Value="{StaticResource Martify}" />
+                                                        Value="{StaticResource ReceiptNormal}" />
 
                                                 <Setter Property="DataContext"
-                                                        Value="{StaticResource CloseProgram}" />
+                                                        Value="{StaticResource ReceiptActive}" />
                                             </Style>
 
                                         </RadioButton.Style>
@@ -427,13 +426,13 @@
                                                         Value="SETTINGS" />
 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource User}" />
+                                                        Value="{StaticResource SettingsActive}" />
 
                                                 <Setter Property="Image.Source"
-                                                        Value="{StaticResource Martify}" />
+                                                        Value="{StaticResource SettingsNormal}" />
 
                                                 <Setter Property="DataContext"
-                                                        Value="{StaticResource CloseProgram}" />
+                                                        Value="{StaticResource SettingsActive}" />
                                             </Style>
                                         </RadioButton.Style>
                                     </RadioButton>
@@ -451,7 +450,7 @@
 
                             <Grid.ColumnDefinitions>
 
-                                <ColumnDefinition Width="210" />
+                                <ColumnDefinition Width="200" />
                                 <ColumnDefinition Width="0" />
 
                             </Grid.ColumnDefinitions>
@@ -475,19 +474,19 @@
                 <ListBoxItem x:Name="dashboard_sidepanel_listboxitem"
                              Grid.Row="0"
                              Style="{StaticResource dashboard_listboxitem_style}"
-                             IsSelected="True"/>
+                             IsSelected="True" Width="200"/>
 
                 <ListBoxItem x:Name="products_sidepanel_listboxitem"
                              Grid.Row="1"
                              Style="{StaticResource products_listboxitem_style}" />
 
-                <ListBoxItem x:Name="customer_sidepanel_listboxitem"
+                <ListBoxItem x:Name="staff_sidepanel_listboxitem"
                              Grid.Row="2"
-                             Style="{StaticResource customer_listboxitem_style}" />
+                             Style="{StaticResource staff_listboxitem_style}" />
 
-                <ListBoxItem x:Name="analytics_sidepanel_listboxitem"
+                <ListBoxItem x:Name="receipts_sidepanel_listboxitem"
                              Grid.Row="3"
-                             Style="{StaticResource analytics_listboxitem_style}" />
+                             Style="{StaticResource receipts_listboxitem_style}" />
 
                 <ListBoxItem x:Name="settings_sidepanel_listboxitem"
                              Grid.Row="4"

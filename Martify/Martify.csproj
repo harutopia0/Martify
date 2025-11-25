@@ -23,7 +23,9 @@
     <None Remove="Resources\Images\close_program.png" />
     <None Remove="Resources\Images\dashboard_active.png" />
     <None Remove="Resources\Images\dashboard_hover.png" />
+    <None Remove="Resources\Images\dashboard_hover2.png" />
     <None Remove="Resources\Images\dashboard_normal.png" />
+    <None Remove="Resources\Images\dashboard_normal2.png" />
     <None Remove="Resources\Images\eye_closed.png" />
     <None Remove="Resources\Images\eye_open.png" />
     <None Remove="Resources\Images\key_icon.png" />
@@ -31,6 +33,12 @@
     <None Remove="Resources\Images\products_active.png" />
     <None Remove="Resources\Images\products_hover.png" />
     <None Remove="Resources\Images\products_normal.png" />
+    <None Remove="Resources\Images\receipt_active.png" />
+    <None Remove="Resources\Images\receipt_normal.png" />
+    <None Remove="Resources\Images\settings_active.png" />
+    <None Remove="Resources\Images\settings_normal.png" />
+    <None Remove="Resources\Images\staff_active.png" />
+    <None Remove="Resources\Images\staff_normal.png" />
     <None Remove="Resources\Images\user.png" />
     <None Remove="Resources\Images\user_icon.png" />
     <None Remove="Resources\Fonts\PasseroOne-Regular.ttf" />
@@ -70,9 +78,6 @@
     <Resource Include="Resources\Images\dashboard_active.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\dashboard_hover.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resources\Images\dashboard_normal.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -91,11 +96,26 @@
     <Resource Include="Resources\Images\products_active.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\products_hover.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resources\Images\products_normal.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\receipt_active.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\receipt_normal.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\settings_active.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\settings_normal.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\staff_active.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\staff_normal.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\user.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

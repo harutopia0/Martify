@@ -20,7 +20,7 @@
                       Margin="25,0,0,25"
                       VerticalAlignment="Bottom"
                       HorizontalAlignment="Left">
-                    <Border Background="LightPink"
+                    <Border Background="White"
                             CornerRadius="20">
 
                     </Border>
@@ -30,7 +30,7 @@
                       Margin="50,55,0,0"
                       VerticalAlignment="Top"
                       HorizontalAlignment="Left">
-                    <Border Background="LightPink"
+                    <Border Background="White"
                             CornerRadius="20">
 
                     </Border>
@@ -40,7 +40,7 @@
                       Margin="0,25,25,0"
                       VerticalAlignment="Top"
                       HorizontalAlignment="Right">
-                    <Border Background="LightPink"
+                    <Border Background="White"
                             CornerRadius="20">
 
                     </Border>

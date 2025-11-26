@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ViewModels:MainVM x:Key="MainVM"></ViewModels:MainVM>
+    <ViewModels:LoginVM x:Key="LoginVM"></ViewModels:LoginVM>
 
     <Storyboard x:Key="GradientRotateStoryboard"
                     RepeatBehavior="Forever">

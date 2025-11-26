@@ -84,13 +84,13 @@
             </EventTrigger>
         </Style.Triggers>
     </Style>
-    
-    
-    
-    
-    
 
-    <Style x:Key="Page_SpiralIn_Style" TargetType="{x:Type UserControl}">
+
+
+
+
+
+    <Style x:Key="Page_SpiralInOut_Style" TargetType="{x:Type UserControl}">
         <Style.Setters>
             <Setter Property="Opacity" Value="0"/>
             <Setter Property="RenderTransformOrigin" Value="0.5, 0.5"/>
@@ -103,19 +103,32 @@
                 </Setter.Value>
             </Setter>
         </Style.Setters>
+
         <Style.Triggers>
             <EventTrigger RoutedEvent="Loaded">
                 <BeginStoryboard>
                     <Storyboard>
-                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.8"/>
-                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" From="0" To="1" Duration="0:0:0.8"/>
-                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" From="0" To="1" Duration="0:0:0.8"/>
+                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" 
+                                     From="0" To="1" Duration="0:0:0.8"/>
+                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" 
+                                     From="0" To="1" Duration="0:0:0.8"/>
                         <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[1].(RotateTransform.Angle)" 
-                                         From="-180" To="0" Duration="0:0:0.8">
+                                     From="-180" To="0" Duration="0:0:0.8">
                             <DoubleAnimation.EasingFunction>
                                 <BackEase EasingMode="EaseOut" Amplitude="0.3"/>
                             </DoubleAnimation.EasingFunction>
                         </DoubleAnimation>
+
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                            <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+
+                            <LinearDoubleKeyFrame KeyTime="0:0:0.8" Value="1"/>
+
+                            <LinearDoubleKeyFrame KeyTime="0:0:2" Value="1"/>
+
+                            <LinearDoubleKeyFrame KeyTime="0:0:3" Value="0"/>
+                        </DoubleAnimationUsingKeyFrames>
+
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>

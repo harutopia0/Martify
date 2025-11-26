@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:Martify" 
         xmlns:uc="clr-namespace:Martify.Views"
         mc:Ignorable="d"
@@ -13,7 +14,15 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
-        DataContext="{StaticResource MainVM}">
+        DataContext="{StaticResource MainVM}"
+        Name="mainWindow">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedWindowCommand}" 
+                                   CommandParameter="{Binding ElementName=mainWindow}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Grid>
         <Border Background="#FFDFDFDF" 
@@ -51,12 +60,12 @@
                                />
 
                         <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                            <TextBlock Text="NGUYỄN VĂN A"
+                            <TextBlock Text="{Binding FullName}"
                                        FontSize="20"
                                        Foreground="White"
                                        VerticalAlignment="Bottom"
                                        HorizontalAlignment="Center"/>
-                            <TextBlock Text="nguyenvana@gmail.com"
+                            <TextBlock Text="{Binding Email}"
                                        Margin="0,0,0,-15"
                                        FontSize="12"
                                        Foreground="White"

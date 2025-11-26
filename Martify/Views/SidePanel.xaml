@@ -137,7 +137,7 @@
                                                              DecelerationRatio="0.6"
                                                              From="0"
                                                              To="200"
-                                                             Duration="0:0:0.5" />
+                                                             Duration="0:0:0.75" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                     <RemoveStoryboard BeginStoryboardName="Stop_Indicator" />

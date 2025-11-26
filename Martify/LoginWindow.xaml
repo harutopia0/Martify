@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Martify"
         xmlns:uc="clr-namespace:Martify.Views"
         xmlns:ctrl="clr-namespace:Martify.Controls"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Martify"
@@ -15,16 +16,12 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Style="{StaticResource MaterialDesignWindow}"
-        Background="Transparent">
+        DataContext="{StaticResource LoginVM}"
+        Background="Transparent"
+        Name="loginWindow">
 
     <Grid>
-        <Button x:Name="FocusSink"
-                Width="0"
-                Height="0"
-                Focusable="True"
-                IsTabStop="False"
-                Background="Transparent"
-                Opacity="0" />
+
 
 
 
@@ -106,7 +103,8 @@
                                                      Padding="32.5,0,5,0"
                                                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                                      FontSize="14" 
-                                                     FontFamily="Times New Roman"/>
+                                                     FontFamily="Times New Roman"
+                                                     Text="{Binding Username}"/>
 
                                             <materialDesign:PackIcon Kind="AccountCircleOutline"
                                                              Width="25"
@@ -126,7 +124,8 @@
                                 <Border>
                                     <Grid>
                                         <Grid>
-                                            <PasswordBox VerticalAlignment="Top"
+                                            <PasswordBox x:Name="OutlinedPassword"
+                                                         VerticalAlignment="Top"
                                                          Height="40"
                                                          Padding="32.5,0,5,0"
                                                          materialDesign:HintAssist.Hint="Mật khẩu"
@@ -134,7 +133,14 @@
                                                          IsEnabled="True"
                                                          FontSize="14"
                                                          Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
-                                                         FontFamily="Times New Roman"/>
+                                                         FontFamily="Times New Roman">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="PasswordChanged">
+                                                        <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" 
+                                                                               CommandParameter="{Binding ElementName=OutlinedPassword}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </PasswordBox>
 
                                             <materialDesign:PackIcon Kind="PasswordOutline"
                                                              Width="25"
@@ -154,8 +160,9 @@
                                     <Button Height="40"
                                         materialDesign:ButtonAssist.CornerRadius="10"
                                         Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}"
-                                        Click="LoginButton_Click"
-                                        IsDefault="True">           
+                                        IsDefault="True"
+                                        Command="{Binding LoginCommand}"
+                                        CommandParameter="{Binding ElementName=loginWindow}">           
                                         <Button.Background>
                                             <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
                                                 <GradientStop Color="Black" Offset="1"/>
@@ -217,5 +224,11 @@
 
         <uc:WindowControl></uc:WindowControl>
 
+
+        <ContentControl Content="{Binding Status}"
+                        Width="500"
+                        Height="100"
+                        VerticalAlignment="Top"
+                        Margin="0,25,0,0"></ContentControl>
     </Grid>
 </Window>

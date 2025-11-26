@@ -1,37 +1,77 @@
-﻿using System.ComponentModel;
+﻿using Martify.Models;
 using Martify.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Martify.ViewModels
 {
     public class MainVM : BaseVM
     {
-        // Xóa 'public bool isLoaded = false;'
-
+        public bool isLoaded = false;
+        public ICommand LoadedWindowCommand { get; set; }
         public NavigationVM Navigation { get; }
+
+
+        private string _FullName;
+        public string FullName
+        {
+            get { return _FullName; }
+            set { _FullName = value; OnPropertyChanged(); }
+        }
+
+        private string _Email;
+        public string Email
+        {
+            get { return _Email; }
+            set { _Email = value; OnPropertyChanged(); }
+        }
+
 
         public MainVM()
         {
-            // CHỈ KHỞI TẠO CÁC THUỘC TÍNH CỦA VIEWMODEL Ở ĐÂY
+            
             Navigation = new NavigationVM();
 
-            // XÓA TẤT CẢ CODE SAU:
-            /*
-            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
-            {
-                if (!isLoaded)
+
+            LoadedWindowCommand = new RelayCommand<Window>((p) => { return true; }, (p) => {
+                isLoaded = true;
+                if (p == null) return;
+                p.Hide();
+                LoginWindow loginWindow = new LoginWindow();
+                loginWindow.ShowDialog();
+
+                if (loginWindow.DataContext == null) return;
+                var loginVM = loginWindow.DataContext as LoginVM;
+
+                if (loginVM.isLogin) 
                 {
-                    isLoaded = true;
-                    LoginWindow login = new LoginWindow();
-                    login.ShowDialog();
+                    LoadCurrentUserData();
+                    p.Show();
                 }
+                else p.Close();
+            });
+        }
+
+        void LoadCurrentUserData()
+        {
+            var acc = DataProvider.Ins.CurrentAccount;
+
+            if (acc != null && acc.Employee != null)
+            {
+                FullName = acc.Employee.FullName;
+                Email = acc.Employee.Email;
             }
-            */
+            else
+            {
+                FullName = "N/A";
+                Email = "Chưa cập nhật";
+            }
         }
     }
 }

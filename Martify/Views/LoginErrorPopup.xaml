@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="Martify.Views.LoginErrorPopup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Martify.Views"
+             mc:Ignorable="d" 
+             xmlns:vm="clr-namespace:Martify.ViewModels"
+             d:DesignHeight="100" d:DesignWidth="500"
+             Style="{StaticResource Page_SpiralInOut_Style}"
+             d:Style="{x:Null}">
+    <UserControl.DataContext>
+        <vm:LoginErrorPopupVM />
+    </UserControl.DataContext>
+
+
+    <Grid>
+        <Grid Height="100" Width="500">
+            <TextBlock Text="Login Error" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Top"
+                       Margin="0,15,0,0">
+                <TextBlock.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFEBF538"/>
+                        <GradientStop Color="#FF77DAFB" Offset="1"/>
+                    </LinearGradientBrush>
+                </TextBlock.Foreground>
+            </TextBlock>
+            <TextBlock Text="Cái này đang test, đừng động vào (username với pass là admin - admin)" 
+                       FontSize="14" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Top" 
+                       Margin="0,60,0,0"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"
+                       Width="480" Foreground="#FFF87E7E"/>
+        </Grid>
+
+    </Grid>
+</UserControl>

@@ -436,6 +436,7 @@
                             </Setter.Value>
                         </Setter>
                     </Style>
+
                 </ListBox.Resources>
 
                 <ListBox.ItemsPanel>

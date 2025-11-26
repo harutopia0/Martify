@@ -7,7 +7,8 @@
              xmlns:vm="clr-namespace:Martify.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="864"
-             Style="{StaticResource Page_CinematicFocus_Style}">
+             Style="{StaticResource Page_CinematicFocus_Style}"
+             d:Style="{x:Null}">
 
     <UserControl.DataContext>
         <vm:ProductsVM />
@@ -22,12 +23,12 @@
                       HorizontalAlignment="Left">
                     <Border Background="LightBlue"
                             CornerRadius="20">
-                        
+
                     </Border>
                 </Grid>
 
-                <Grid Width="400" Height="200"
-                      Margin="50,55,0,0"
+                <Grid Width="500" Height="251"
+                      Margin="25,25,0,0"
                       VerticalAlignment="Top"
                       HorizontalAlignment="Left">
                     <Border Background="LightBlue"
@@ -36,10 +37,10 @@
                     </Border>
                 </Grid>
 
-                <Grid Width="300" Height="400"
-                      Margin="0,25,25,0"
-                      VerticalAlignment="Top"
-                      HorizontalAlignment="Right">
+                <Grid Width="300" Height="670"
+                      Margin="539,0,0,0"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Left">
                     <Border Background="LightBlue"
                             CornerRadius="20">
 

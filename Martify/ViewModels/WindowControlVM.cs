@@ -14,6 +14,9 @@ namespace Martify.ViewModels
     {
         #region commands
         public ICommand CloseWindowCommand { get; set; }
+        public ICommand HideWindowCommand { get; set; }
+
+        public ICommand DragWindowCommand { get; set; }
         #endregion
 
         public WindowControlVM()
@@ -25,6 +28,24 @@ namespace Martify.ViewModels
                 if (win != null)
                 {
                     win.Close();
+                }
+            });
+
+            HideWindowCommand = new RelayCommand<UserControl>((p) => p != null, (p) =>
+            {
+                var win = Window.GetWindow(p);
+                if (win != null)
+                {
+                    win.WindowState = WindowState.Minimized;
+                }
+            });
+
+            DragWindowCommand = new RelayCommand<UserControl>((p) => p != null, (p) =>
+            {
+                var win = Window.GetWindow(p);
+                if (win != null)
+                {
+                    win.DragMove();
                 }
             });
         }

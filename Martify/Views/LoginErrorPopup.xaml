@@ -8,7 +8,8 @@
              xmlns:vm="clr-namespace:Martify.ViewModels"
              d:DesignHeight="100" d:DesignWidth="500"
              Style="{StaticResource Page_SpiralInOut_Style}"
-             d:Style="{x:Null}">
+             d:Style="{x:Null}"
+             IsTabStop="False">
     <UserControl.DataContext>
         <vm:LoginErrorPopupVM />
     </UserControl.DataContext>

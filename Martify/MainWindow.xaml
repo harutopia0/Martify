@@ -104,7 +104,7 @@
 
 
                 <Grid Grid.Column="1">
-                    <ContentControl x:Name="Pages"
+                    <ContentControl x:Name="Pages" IsTabStop="False"
                                     Content="{Binding Navigation.CurrentView}"></ContentControl>
                 </Grid>
 

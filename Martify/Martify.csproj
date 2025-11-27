@@ -40,6 +40,7 @@
     <None Remove="Resources\Images\settings_normal.png" />
     <None Remove="Resources\Images\staff_active.png" />
     <None Remove="Resources\Images\staff_normal.png" />
+    <None Remove="Resources\Images\upload_image.png" />
     <None Remove="Resources\Images\user_icon.png" />
     <None Remove="Resources\Fonts\PasseroOne-Regular.ttf" />
     <None Remove="Resources\Fonts\YanoneKaffeesatz-Bold.ttf" />
@@ -124,6 +125,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\staff_normal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\upload_image.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

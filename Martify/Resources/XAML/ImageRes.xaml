@@ -9,7 +9,7 @@
     
     <BitmapImage x:Key="LoginBackground" UriSource="/Resources/Images/background.png" />
 
-
+    <BitmapImage x:Key="UploadImage" UriSource="/Resources/Images/upload_image.png" />
 
 
 

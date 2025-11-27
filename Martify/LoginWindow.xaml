@@ -229,6 +229,7 @@
                         Width="500"
                         Height="100"
                         VerticalAlignment="Top"
-                        Margin="0,25,0,0"></ContentControl>
+                        Margin="0,25,0,0"
+                        IsTabStop="False"></ContentControl>
     </Grid>
 </Window>

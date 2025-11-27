@@ -8,6 +8,7 @@
     <ViewModels:DashboardVM x:Key="DashboardVM"></ViewModels:DashboardVM>
     <ViewModels:ProductsVM x:Key="ProductsVM"></ViewModels:ProductsVM>
     <ViewModels:EmployeeVM x:Key="EmployeeVM"></ViewModels:EmployeeVM>
+    <ViewModels:AddEmployeeVM x:Key="AddEmployeeVM"></ViewModels:AddEmployeeVM>
 
     <Storyboard x:Key="GradientRotateStoryboard"
                     RepeatBehavior="Forever">

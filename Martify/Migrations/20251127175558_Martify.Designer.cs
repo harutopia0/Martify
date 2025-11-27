@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Martify.Migrations
 {
     [DbContext(typeof(MartifyDbContext))]
-    [Migration("20251127063737_Martify")]
+    [Migration("20251127175558_Martify")]
     partial class Martify
     {
         /// <inheritdoc />
@@ -51,17 +51,24 @@ namespace Martify.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Address")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Gender")
+                        .HasMaxLength(5)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("HireDate")
@@ -72,13 +79,15 @@ namespace Martify.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("TEXT");
 
                     b.HasKey("EmployeeID");
 
-                    b.ToTable("Employee");
+                    b.ToTable("Employee", t =>
+                        {
+                            t.HasCheckConstraint("CK_Employee_Gender", "Gender IS NULL OR Gender IN ('Nam', 'Nữ')");
+                        });
                 });
 
             modelBuilder.Entity("Martify.Models.ImportReceipt", b =>

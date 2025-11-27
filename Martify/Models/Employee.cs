@@ -22,14 +22,20 @@ namespace Martify.Models
         public DateTime BirthDate { get; set; }
 
         [MaxLength(15)]
-        [RegularExpression(@"^[0-9+]+$", ErrorMessage = "Phone không hợp lệ")]
-        public string Phone { get; set; }
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Số điện thoại không hợp lệ")]
+        public string? Phone { get; set; }
+
+        [MaxLength(5)]
+        public string? Gender { get; set; }
 
         [MaxLength(255)]
         [EmailAddress(ErrorMessage = "Email không hợp lệ")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         public DateTime HireDate { get; set; }
+
+        [MaxLength(200)]
+        public string? Address { get; set; }
 
         [MaxLength(255)]
         public string? ImagePath { get; set; }

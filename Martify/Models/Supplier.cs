@@ -22,7 +22,7 @@ namespace Martify.Models
         public string Address { get; set; }
 
         [MaxLength(15)]
-        [RegularExpression(@"^[0-9+]+$", ErrorMessage = "Phone chỉ chứa số hoặc dấu +")]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Số điện thoại không hợp lệ")]
         public string Phone { get; set; }
 
         public virtual ICollection<ImportReceipt> ImportReceipts { get; set; } = new List<ImportReceipt>();

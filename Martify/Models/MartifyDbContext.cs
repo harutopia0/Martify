@@ -51,6 +51,14 @@ namespace Martify.Models
 
             modelBuilder.Entity<InvoiceDetail>()
                 .HasKey(id => new { id.InvoiceID, id.ProductID });
+
+
+
+            // Thêm ràng buộc CHECK
+            modelBuilder.Entity<Employee>(e =>
+            {
+                e.ToTable(t => t.HasCheckConstraint("CK_Employee_Gender", "Gender IS NULL OR Gender IN ('Nam', 'Nữ')"));
+            });
         }
     }
 }

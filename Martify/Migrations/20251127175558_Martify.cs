@@ -18,14 +18,17 @@ namespace Martify.Migrations
                     EmployeeID = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
                     FullName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     BirthDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Phone = table.Column<string>(type: "TEXT", maxLength: 15, nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    Phone = table.Column<string>(type: "TEXT", maxLength: 15, nullable: true),
+                    Gender = table.Column<string>(type: "TEXT", maxLength: 5, nullable: true),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
                     HireDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
                     ImagePath = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employee", x => x.EmployeeID);
+                    table.CheckConstraint("CK_Employee_Gender", "Gender IS NULL OR Gender IN ('Nam', 'Nữ')");
                 });
 
             migrationBuilder.CreateTable(

@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:Martify" 
         xmlns:uc="clr-namespace:Martify.Views"
         mc:Ignorable="d"
+        xmlns:cv="clr-namespace:Martify.Converters"
         Title="Marity" 
         Height="720" Width="1080"
         ResizeMode="CanMinimize"
@@ -16,6 +17,10 @@
         Background="Transparent"
         DataContext="{StaticResource MainVM}"
         Name="mainWindow">
+
+    <Window.Resources>
+        <cv:ImagePathConverter x:Key="ImgConverter"/>
+    </Window.Resources>
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -36,7 +41,7 @@
 
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="200"/>
+                        <RowDefinition Height="250"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
@@ -51,31 +56,48 @@
                     </Border>
 
 
-                    <Grid Grid.Row="0" Margin="25">
+                    <Grid Grid.Row="0" Margin="0" 
+                          Width="200" Height="200"
+                          HorizontalAlignment="Center">
 
-                        <Image Source="{StaticResource User}" Stretch="Uniform" 
-                               VerticalAlignment="Top"
-                               Width="140"
-                               Margin="0,0,0,20"
-                               />
+                        <StackPanel Orientation="Vertical">
+                            <Grid Width="120" Height="120">
+                                <Ellipse Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                    <Ellipse.Fill>
+                                        <ImageBrush Stretch="UniformToFill">
+                                            <ImageBrush.ImageSource>
+                                                <Binding Path="ImagePath" 
+                                                         Converter="{StaticResource ImgConverter}"
+                                                         TargetNullValue="{StaticResource Anonymous}"
+                                                         FallbackValue="{StaticResource Anonymous}"/>
+                                            </ImageBrush.ImageSource>
+                                        </ImageBrush>
+                                    </Ellipse.Fill>
+                                </Ellipse>
 
-                        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                            <TextBlock Text="{Binding FullName}"
+                            </Grid>
+
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding FullName}"
                                        FontSize="20"
                                        Foreground="White"
                                        VerticalAlignment="Bottom"
-                                       HorizontalAlignment="Center"/>
-                            <TextBlock Text="{Binding Email}"
-                                       Margin="0,0,0,-15"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,7.5,0,0"/>
+                                <TextBlock Text="{Binding Email}"
+                                       Margin="0,0,0,0"
                                        FontSize="12"
                                        Foreground="White"
                                        VerticalAlignment="Bottom"
                                        HorizontalAlignment="Center"/>
+                            </StackPanel>
                         </StackPanel>
+                        
+            
 
                     </Grid>
                     <Grid Grid.Row="1">
-                        <uc:SidePanel Margin="0,30,0,0" HorizontalAlignment="Left"/>
+                        <uc:SidePanel Margin="0,-25,0,0" HorizontalAlignment="Left"/>
 
                     </Grid>
                 </Grid>

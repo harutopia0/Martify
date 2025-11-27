@@ -32,6 +32,13 @@ namespace Martify.ViewModels
             set { _Email = value; OnPropertyChanged(); }
         }
 
+        private string _imagePath;
+        public string ImagePath
+        {
+            get { return _imagePath; }
+            set { _imagePath = value; OnPropertyChanged(); }
+        }
+
 
         public MainVM()
         {
@@ -66,11 +73,13 @@ namespace Martify.ViewModels
             {
                 FullName = acc.Employee.FullName;
                 Email = acc.Employee.Email;
+                ImagePath = acc.Employee.ImagePath;
             }
             else
             {
                 FullName = "N/A";
                 Email = "Chưa cập nhật";
+                ImagePath = null;
             }
         }
     }

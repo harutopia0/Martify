@@ -19,6 +19,7 @@
   <ItemGroup>
     <None Remove="Resources\Fonts\BungeeSpice-Regular.ttf" />
     <None Remove="Resources\Fonts\Rubik-Regular.ttf" />
+    <None Remove="Resources\Images\anonymous.png" />
     <None Remove="Resources\Images\background.png" />
     <None Remove="Resources\Images\close_program.png" />
     <None Remove="Resources\Images\dashboard_active.png" />
@@ -39,7 +40,6 @@
     <None Remove="Resources\Images\settings_normal.png" />
     <None Remove="Resources\Images\staff_active.png" />
     <None Remove="Resources\Images\staff_normal.png" />
-    <None Remove="Resources\Images\user.png" />
     <None Remove="Resources\Images\user_icon.png" />
     <None Remove="Resources\Fonts\PasseroOne-Regular.ttf" />
     <None Remove="Resources\Fonts\YanoneKaffeesatz-Bold.ttf" />
@@ -75,6 +75,9 @@
     <Resource Include="Resources\Icon\Martify.ico">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\anonymous.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\background.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -106,26 +109,48 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\receipt_active.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\receipt_normal.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\settings_active.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\settings_normal.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\staff_active.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\staff_normal.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Images\user.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\administrator.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+
+
+
+	<ItemGroup>
+		<None Update="Assets\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+
+
+
+	<ItemGroup>
+	  <None Update="Assets\administrator.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 
 </Project>

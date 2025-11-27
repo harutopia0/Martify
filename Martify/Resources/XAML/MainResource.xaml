@@ -5,6 +5,9 @@
 
     <ViewModels:MainVM x:Key="MainVM"></ViewModels:MainVM>
     <ViewModels:LoginVM x:Key="LoginVM"></ViewModels:LoginVM>
+    <ViewModels:DashboardVM x:Key="DashboardVM"></ViewModels:DashboardVM>
+    <ViewModels:ProductsVM x:Key="ProductsVM"></ViewModels:ProductsVM>
+    <ViewModels:EmployeeVM x:Key="EmployeeVM"></ViewModels:EmployeeVM>
 
     <Storyboard x:Key="GradientRotateStoryboard"
                     RepeatBehavior="Forever">

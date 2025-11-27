@@ -14,7 +14,9 @@
     <DataTemplate DataType="{x:Type vm:ProductsVM}">
         <view:Products />
     </DataTemplate>
-
+    <DataTemplate DataType="{x:Type vm:EmployeeVM}">
+        <view:Employee />
+    </DataTemplate>
 
 
 

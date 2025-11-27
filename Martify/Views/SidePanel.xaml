@@ -336,7 +336,8 @@
                                 <ControlTemplate>
                                     <RadioButton IsChecked="{Binding Path=IsSelected, 
                                                                        RelativeSource={RelativeSource TemplatedParent}}"
-                                                 GroupName="SidePanelGroup">
+                                                 GroupName="SidePanelGroup"                                                 
+                                                 Command="{Binding DataContext.Navigation.EmployeesCommand, ElementName=ucPanel}">
 
                                         <RadioButton.Style>
 

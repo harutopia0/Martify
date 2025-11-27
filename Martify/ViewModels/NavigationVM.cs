@@ -22,15 +22,18 @@ namespace Martify.ViewModels
         #region commands
         public ICommand DashboardCommand { get; set; }
         public ICommand ProductsCommand { get; set; }
+        public ICommand EmployeesCommand { get; set; }
         #endregion
 
         private void Dashboard(object obj) => CurrentView = new DashboardVM();
         private void Products(object obj) => CurrentView = new ProductsVM();
+        private void Employees(object obj) => CurrentView = new EmployeeVM();
 
         public NavigationVM()
         {
             DashboardCommand = new RelayCommand(Dashboard);
             ProductsCommand = new RelayCommand(Products);
+            EmployeesCommand = new RelayCommand(Employees);
 
             // Startup Page
             CurrentView = new DashboardVM();

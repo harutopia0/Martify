@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Martify.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Martify : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,8 @@ namespace Martify.Migrations
                     BirthDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Phone = table.Column<string>(type: "TEXT", maxLength: 15, nullable: false),
                     Email = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    HireDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    HireDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ImagePath = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -102,7 +103,7 @@ namespace Martify.Migrations
                     Unit = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Price = table.Column<decimal>(type: "TEXT", nullable: false),
                     StockQuantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    ImagePath = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    ImagePath = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
                     CategoryID = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false)
                 },
                 constraints: table =>

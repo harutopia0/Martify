@@ -31,6 +31,9 @@ namespace Martify.Models
 
         public DateTime HireDate { get; set; }
 
+        [MaxLength(255)]
+        public string? ImagePath { get; set; }
+
         public virtual ICollection<ImportReceipt> ImportReceipts { get; set; } = new List<ImportReceipt>();
         public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
         public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();

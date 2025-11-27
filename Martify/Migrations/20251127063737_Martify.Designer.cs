@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Martify.Migrations
 {
     [DbContext(typeof(MartifyDbContext))]
-    [Migration("20251126214015_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251127063737_Martify")]
+    partial class Martify
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,6 +65,10 @@ namespace Martify.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("HireDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImagePath")
+                        .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Phone")
@@ -190,7 +194,6 @@ namespace Martify.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 

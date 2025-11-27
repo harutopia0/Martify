@@ -28,7 +28,7 @@ namespace Martify.Models
         public int StockQuantity { get; set; }
 
         [MaxLength(255)]
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
 
         [MaxLength(10)]
         public string CategoryID { get; set; }

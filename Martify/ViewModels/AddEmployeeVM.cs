@@ -125,12 +125,12 @@ namespace Martify.ViewModels
                     {
                         string projectFolder = Path.GetFullPath(Path.Combine(binFolder, @"..\..\..\"));
                         // SỬA: Thêm "Employee" vào đường dẫn
-                        string sourceAssetsPath = Path.Combine(projectFolder, "Assets", "Employee");
+                        string sourceEmployeeAssetsPath = Path.Combine(projectFolder, "Assets", "Employee");
 
                         // Tạo thư mục nếu chưa có
-                        if (!Directory.Exists(sourceAssetsPath)) Directory.CreateDirectory(sourceAssetsPath);
+                        if (!Directory.Exists(sourceEmployeeAssetsPath)) Directory.CreateDirectory(sourceEmployeeAssetsPath);
 
-                        string destSourceFile = Path.Combine(sourceAssetsPath, fileName);
+                        string destSourceFile = Path.Combine(sourceEmployeeAssetsPath, fileName);
                         File.Copy(_sourceImageFile, destSourceFile, true);
                     }
                     catch { /* Bỏ qua lỗi nếu không tìm thấy source code (máy client) */ }

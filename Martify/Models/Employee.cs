@@ -39,6 +39,7 @@ namespace Martify.Models
 
         [MaxLength(255)]
         public string? ImagePath { get; set; }
+        public bool? Status { get; set; }
 
         public virtual ICollection<ImportReceipt> ImportReceipts { get; set; } = new List<ImportReceipt>();
         public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();

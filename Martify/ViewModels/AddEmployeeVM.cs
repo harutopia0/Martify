@@ -1,6 +1,5 @@
 ﻿using Martify.Models;
 using Martify.Views;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -39,7 +38,7 @@ namespace Martify.ViewModels
         private DateTime? _hireDate;
         public DateTime? HireDate { get => _hireDate; set { _hireDate = value; OnPropertyChanged(); } }
 
-        // Biến này để Binding hiển thị lên View (Lúc chọn thì là đường dẫn gốc, lúc load thì là đường dẫn app)
+        // Biến hiển thị ảnh trên View
         private string _selectedImagePath;
         public string SelectedImagePath
         {
@@ -47,8 +46,7 @@ namespace Martify.ViewModels
             set { _selectedImagePath = value; OnPropertyChanged(); }
         }
 
-        // Biến lưu đường dẫn ảnh gốc tạm thời (VD: C:\Users\Desktop\avatar.jpg)
-        // Chỉ dùng biến này để copy khi bấm Save
+        // Biến lưu đường dẫn ảnh gốc tạm thời
         private string _sourceImageFile;
 
         // --- Commands ---
@@ -78,11 +76,11 @@ namespace Martify.ViewModels
             // 4. Kéo Window
             DragWindowCommand = new RelayCommand<Window>((p) => p != null, (p) => { try { p.DragMove(); } catch { } });
 
-            // 5. Chọn Ảnh (Chỉ xem trước)
+            // 5. Chọn Ảnh
             SelectImageCommand = new RelayCommand<object>((p) => true, (p) => SelectImage());
         }
 
-        // --- Hàm Chọn Ảnh (Chỉ hiển thị, KHÔNG Copy) ---
+        // --- Hàm Chọn Ảnh ---
         void SelectImage()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -90,68 +88,65 @@ namespace Martify.ViewModels
 
             if (openFileDialog.ShowDialog() == true)
             {
-                // Lưu đường dẫn gốc vào biến tạm
                 _sourceImageFile = openFileDialog.FileName;
-
-                // Hiển thị lên View ngay lập tức để người dùng xem trước
                 SelectedImagePath = _sourceImageFile;
             }
         }
 
-        // --- Hàm Lưu Nhân Viên (Thực hiện Copy & Lưu DB) ---
+        // --- Hàm Lưu Nhân Viên ---
         void SaveEmployee(Window p)
         {
             if (!ValidateInput()) return;
 
             string newEmpId = GenerateEmployeeID();
-            string dbPath = null; // Đường dẫn tương đối để lưu vào DB (Assets/...)
+            string dbPath = null;
 
-            // --- BƯỚC 1: XỬ LÝ COPY ẢNH (Nếu người dùng có chọn ảnh) ---
+            // --- BƯỚC 1: XỬ LÝ COPY ẢNH VÀO Assets/Employee/ ---
             if (!string.IsNullOrEmpty(_sourceImageFile))
             {
                 try
                 {
-                    // Tạo tên file chuẩn: [MãNV]Emp[ThờiGian].ext
                     string fileExt = Path.GetExtension(_sourceImageFile);
-                    string fileName = $"{newEmpId}Emp{DateTime.Now:yyyyMMddHHmmss}{fileExt}";
+                    string fileName = $"{newEmpId}_{DateTime.Now:yyyyMMddHHmmss}{fileExt}";
 
-                    // A. Copy vào thư mục BIN (Nơi App đang chạy)
+                    // A. Copy vào thư mục BIN/Assets/Employee
                     string binFolder = AppDomain.CurrentDomain.BaseDirectory;
-                    string binAssetsPath = Path.Combine(binFolder, "Assets");
+                    // SỬA: Thêm "Employee" vào đường dẫn
+                    string binAssetsPath = Path.Combine(binFolder, "Assets", "Employee");
 
+                    // Tạo thư mục nếu chưa có
                     if (!Directory.Exists(binAssetsPath)) Directory.CreateDirectory(binAssetsPath);
 
                     string destBinFile = Path.Combine(binAssetsPath, fileName);
                     File.Copy(_sourceImageFile, destBinFile, true);
 
-                    // B. Copy vào thư mục SOURCE CODE (Để lưu trữ lâu dài - Chỉ chạy khi Dev)
+                    // B. Copy vào thư mục SOURCE CODE/Assets/Employee (Để lưu trữ lâu dài)
                     try
                     {
-                        // Lùi 3 cấp từ bin/Debug/net...
                         string projectFolder = Path.GetFullPath(Path.Combine(binFolder, @"..\..\..\"));
-                        string sourceAssetsPath = Path.Combine(projectFolder, "Assets");
+                        // SỬA: Thêm "Employee" vào đường dẫn
+                        string sourceAssetsPath = Path.Combine(projectFolder, "Assets", "Employee");
 
-                        if (Directory.Exists(sourceAssetsPath))
-                        {
-                            string destSourceFile = Path.Combine(sourceAssetsPath, fileName);
-                            File.Copy(_sourceImageFile, destSourceFile, true);
-                        }
+                        // Tạo thư mục nếu chưa có
+                        if (!Directory.Exists(sourceAssetsPath)) Directory.CreateDirectory(sourceAssetsPath);
+
+                        string destSourceFile = Path.Combine(sourceAssetsPath, fileName);
+                        File.Copy(_sourceImageFile, destSourceFile, true);
                     }
-                    catch { /* Bỏ qua lỗi nếu máy khách hàng không có source code */ }
+                    catch { /* Bỏ qua lỗi nếu không tìm thấy source code (máy client) */ }
 
-                    // C. Gán đường dẫn tương đối để lưu DB
-                    dbPath = Path.Combine("Assets", fileName);
+                    // C. Gán đường dẫn tương đối để lưu DB: "Assets/Employee/TenFile.jpg"
+                    dbPath = Path.Combine("Assets", "Employee", fileName);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Lỗi khi lưu ảnh: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return; // Dừng lại nếu copy lỗi
+                    return;
                 }
             }
 
             // --- BƯỚC 2: TẠO DATA & LƯU DB ---
 
-            // Tạo đối tượng Employee
             var newEmployee = new Models.Employee()
             {
                 EmployeeID = newEmpId,
@@ -159,13 +154,13 @@ namespace Martify.ViewModels
                 Address = Address,
                 Phone = Phone,
                 Email = Email,
-                // Gender = Gender, // Bỏ comment nếu DB có cột Gender
+                Status = true,
+                Gender = Gender,
                 BirthDate = BirthDate.Value,
                 HireDate = HireDate.Value,
 
-                // Nếu có ảnh -> Lưu đường dẫn Assets/...
-                // Nếu không -> Lưu null (để Converter tự hiện Anonymous)
-                ImagePath = dbPath
+
+                ImagePath = dbPath // Lưu đường dẫn Assets/Employee/...
             };
 
             // Tạo Account tự động
@@ -178,7 +173,7 @@ namespace Martify.ViewModels
             {
                 Username = username,
                 HashPassword = hashPassword,
-                Role = 1, // 1: Nhân viên
+                Role = 1,
                 EmployeeID = newEmpId
             };
 

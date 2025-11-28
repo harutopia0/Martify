@@ -23,7 +23,8 @@ namespace Martify.Migrations
                     Email = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
                     HireDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Address = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    ImagePath = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true)
+                    ImagePath = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
+                    Status = table.Column<bool>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {

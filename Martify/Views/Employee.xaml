@@ -19,6 +19,7 @@
 
     <UserControl.Resources>
         <cv:ImagePathConverter x:Key="ImgConverter"/>
+        <cv:StatusConverter x:Key="StatusConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -36,8 +37,12 @@
                     HorizontalAlignment="Right" 
                     Margin="0,0,25,0"/>
         </Grid>
-        
-        <DataGrid Grid.Row="1" Margin="25,0,25,0"
+
+        <Border Grid.Row="1"
+                Background="White"
+                CornerRadius="25"
+                Margin="10">
+            <DataGrid Margin="25,10,25,10"
                   ItemsSource="{Binding Employees}" 
                   RowStyle="{DynamicResource DataGridRowStyle}" 
                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" 
@@ -49,64 +54,82 @@
                   CanUserReorderColumns="False"  
                   CanUserResizeColumns="False">
 
-            <DataGrid.Columns>
-                <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{DynamicResource DataGridCheckBoxStyle}">
-                    <DataGridCheckBoxColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <CheckBox Style="{DynamicResource DataGridCheckBoxStyle}"/>
-                        </DataTemplate>
-                    </DataGridCheckBoxColumn.HeaderTemplate>
-                </DataGridCheckBoxColumn>
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{DynamicResource DataGridCheckBoxStyle}">
+                        <DataGridCheckBoxColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <CheckBox Style="{DynamicResource DataGridCheckBoxStyle}"/>
+                            </DataTemplate>
+                        </DataGridCheckBoxColumn.HeaderTemplate>
+                    </DataGridCheckBoxColumn>
 
-                <DataGridTextColumn Header="Mã" IsReadOnly="True" CanUserResize="False" Width="0.75*" Binding="{Binding EmployeeID}"/>
+                    <DataGridTextColumn Header="Mã" IsReadOnly="True" CanUserResize="False" Width="0.75*" Binding="{Binding EmployeeID}"/>
 
-                <DataGridTemplateColumn Header="Nhân viên" IsReadOnly="True" Width="1.5*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Ellipse Width="30" Height="30" Margin="0 0 10 0">
-                                    <Ellipse.Fill>
-                                        <ImageBrush Stretch="UniformToFill">
-                                            <ImageBrush.ImageSource>
-                                                <Binding Path="ImagePath" 
+                    <DataGridTemplateColumn Header="Nhân viên" IsReadOnly="True" Width="1.5*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Ellipse Width="30" Height="30" Margin="0 0 10 0">
+                                        <Ellipse.Fill>
+                                            <ImageBrush Stretch="UniformToFill">
+                                                <ImageBrush.ImageSource>
+                                                    <Binding Path="ImagePath" 
                                                          Converter="{StaticResource ImgConverter}"
                                                          TargetNullValue="{StaticResource Anonymous}"
                                                          FallbackValue="{StaticResource Anonymous}"/>
-                                            </ImageBrush.ImageSource>
-                                        </ImageBrush>
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <TextBlock Text="{Binding FullName}" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                                                </ImageBrush.ImageSource>
+                                            </ImageBrush>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <TextBlock Text="{Binding FullName}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <DataGridTextColumn Header="Địa chỉ" Binding="{Binding Address}" IsReadOnly="True" Width="1.5*"/>
+                    <DataGridTextColumn Header="Ngày vào làm" Binding="{Binding HireDate, StringFormat=dd/MM/yyyy}" IsReadOnly="True" Width="*"/>
+                    <DataGridTextColumn Header="Trạng thái" 
+                                        Binding="{Binding Status, Converter={StaticResource StatusConverter}}" 
+                                        IsReadOnly="True" 
+                                        Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Status}" Value="True">
+                                        <Setter Property="Foreground" Value="Green"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Status}" Value="False">
+                                        <Setter Property="Foreground" Value="Red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Ngày vào làm" Binding="{Binding HireDate, StringFormat=dd/MM/yyyy}" IsReadOnly="True" Width="*"/>
-                <DataGridTextColumn Header="Email" Binding="{Binding Email}" IsReadOnly="True" Width="1.5*"/>
-                <DataGridTextColumn Header="Số điện thoại" Binding="{Binding Phone}" IsReadOnly="True" Width="*"/>
-
-                <DataGridTemplateColumn Header="Công cụ" 
+                    <DataGridTemplateColumn Header="Công cụ" 
                         Width="Auto" 
                         CanUserReorder="False" 
                         CanUserResize="False"
                         IsReadOnly="True">
 
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Style="{DynamicResource GridEditButtonStyle}">
-                                    <Image Source="{StaticResource CloseProgram}" Width="10" Height="10"></Image>
-                                </Button>
-                                <Button Margin="5 0 0 0" Style="{DynamicResource GridRemoveButtonStyle}">
-                                    <Image Source="{StaticResource Martify}" Width="10" Height="10"></Image>
-                                </Button>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Style="{DynamicResource GridEditButtonStyle}">
+                                        <Image Source="{StaticResource CloseProgram}" Width="10" Height="10"></Image>
+                                    </Button>
+                                    <Button Margin="5 0 0 0" Style="{DynamicResource GridRemoveButtonStyle}">
+                                        <Image Source="{StaticResource Martify}" Width="10" Height="10"></Image>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
 
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
     </Grid>
 </UserControl>

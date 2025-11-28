@@ -79,6 +79,9 @@ namespace Martify.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("TEXT");
 
+                    b.Property<bool?>("Status")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("EmployeeID");
 
                     b.ToTable("Employee", t =>

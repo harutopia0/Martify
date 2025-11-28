@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Martify.Migrations
 {
     [DbContext(typeof(MartifyDbContext))]
-    [Migration("20251127175558_Martify")]
+    [Migration("20251128094155_Martify")]
     partial class Martify
     {
         /// <inheritdoc />
@@ -81,6 +81,9 @@ namespace Martify.Migrations
                     b.Property<string>("Phone")
                         .HasMaxLength(15)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool?>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("EmployeeID");
 

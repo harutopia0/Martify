@@ -65,7 +65,7 @@
 
                     <DataGridTextColumn Header="Mã" IsReadOnly="True" CanUserResize="False" Width="0.75*" Binding="{Binding EmployeeID}"/>
 
-                    <DataGridTemplateColumn Header="Nhân viên" IsReadOnly="True" Width="1.5*">
+                    <DataGridTemplateColumn Header="Nhân viên" IsReadOnly="True" Width="1.6*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -87,12 +87,12 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     
-                    <DataGridTextColumn Header="Địa chỉ" Binding="{Binding Address}" IsReadOnly="True" Width="1.5*"/>
+                    <DataGridTextColumn Header="Địa chỉ" Binding="{Binding Address}" IsReadOnly="True" Width="1.25*"/>
                     <DataGridTextColumn Header="Ngày vào làm" Binding="{Binding HireDate, StringFormat=dd/MM/yyyy}" IsReadOnly="True" Width="*"/>
                     <DataGridTextColumn Header="Trạng thái" 
                                         Binding="{Binding Status, Converter={StaticResource StatusConverter}}" 
                                         IsReadOnly="True" 
-                                        Width="*">
+                                        Width="1.15*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
@@ -109,10 +109,10 @@
                     </DataGridTextColumn>
 
                     <DataGridTemplateColumn Header="Công cụ" 
-                        Width="Auto" 
-                        CanUserReorder="False" 
-                        CanUserResize="False"
-                        IsReadOnly="True">
+                                            Width="Auto" 
+                                            CanUserReorder="False" 
+                                            CanUserResize="False"
+                                            IsReadOnly="True">
 
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

@@ -3,6 +3,7 @@ using Martify.Views;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -14,9 +15,13 @@ using System.Windows.Input;
 
 namespace Martify.ViewModels
 {
-    public class AddEmployeeVM : BaseVM
+    // Kế thừa BaseVM (để dùng OnPropertyChanged) và IDataErrorInfo (để Validate lỗi hiển thị lên View)
+    public class AddEmployeeVM : BaseVM, IDataErrorInfo
     {
-        // --- Properties Binding ---
+        // =================================================================================================
+        // PHẦN 1: KHAI BÁO PROPERITES (BINDING VỚI VIEW)
+        // =================================================================================================
+
         private string _fullName;
         public string FullName { get => _fullName; set { _fullName = value; OnPropertyChanged(); } }
 
@@ -32,13 +37,34 @@ namespace Martify.ViewModels
         private string _gender;
         public string Gender { get => _gender; set { _gender = value; OnPropertyChanged(); } }
 
+        // --- Xử lý Logic chéo giữa Ngày sinh và Ngày vào làm ---
         private DateTime? _birthDate;
-        public DateTime? BirthDate { get => _birthDate; set { _birthDate = value; OnPropertyChanged(); } }
+        public DateTime? BirthDate
+        {
+            get => _birthDate;
+            set
+            {
+                _birthDate = value;
+                OnPropertyChanged();
+                // Logic: Khi người dùng đổi Ngày Sinh -> Cần kích hoạt kiểm tra lại Ngày Vào Làm.
+                OnPropertyChanged(nameof(HireDate));
+            }
+        }
 
         private DateTime? _hireDate;
-        public DateTime? HireDate { get => _hireDate; set { _hireDate = value; OnPropertyChanged(); } }
+        public DateTime? HireDate
+        {
+            get => _hireDate;
+            set
+            {
+                _hireDate = value;
+                OnPropertyChanged();
+                // Logic: Khi người dùng đổi Ngày Vào Làm -> Cần kích hoạt kiểm tra lại Ngày Sinh.
+                OnPropertyChanged(nameof(BirthDate));
+            }
+        }
 
-        // Biến hiển thị ảnh trên View
+        // --- Xử lý hiển thị ảnh ---
         private string _selectedImagePath;
         public string SelectedImagePath
         {
@@ -46,10 +72,99 @@ namespace Martify.ViewModels
             set { _selectedImagePath = value; OnPropertyChanged(); }
         }
 
-        // Biến lưu đường dẫn ảnh gốc tạm thời
         private string _sourceImageFile;
 
-        // --- Commands ---
+        // =================================================================================================
+        // PHẦN 2: CƠ CHẾ LAZY VALIDATION (VALIDATE TRỄ)
+        // =================================================================================================
+
+        // Biến cờ (Flag) xác định đã bấm nút Lưu chưa
+        private bool _isSaveClicked = false;
+
+        public string Error => null;
+
+        public string this[string columnName]
+        {
+            get
+            {
+                // Bước 1: Lấy lỗi thực tế
+                string error = GetValidationError(columnName);
+
+                // Bước 2: Nếu không có lỗi -> Trả về null (Xanh)
+                if (string.IsNullOrEmpty(error)) return null;
+
+                // Bước 3: Nếu có lỗi nhưng chưa bấm Lưu -> Trả về null (Ẩn lỗi)
+                if (!_isSaveClicked) return null;
+
+                // Bước 4: Nếu có lỗi và đã bấm Lưu -> Hiện đỏ
+                return error;
+            }
+        }
+
+        // Hàm chứa toàn bộ quy tắc (Rules) kiểm tra dữ liệu
+        private string GetValidationError(string columnName)
+        {
+            string result = null;
+            switch (columnName)
+            {
+                case nameof(FullName):
+                    if (string.IsNullOrWhiteSpace(FullName)) result = "Vui lòng nhập họ và tên.";
+                    else if (!Regex.IsMatch(FullName, @"^[\p{L}\s]+$")) result = "Họ tên không được chứa số hoặc ký tự đặc biệt.";
+                    break;
+
+                case nameof(Address):
+                    if (string.IsNullOrWhiteSpace(Address)) result = "Vui lòng nhập nơi cư trú.";
+                    break;
+
+                case nameof(Phone):
+                    if (string.IsNullOrEmpty(Phone)) result = "Vui lòng nhập SĐT.";
+                    else if (!Regex.IsMatch(Phone, @"^[0-9]+$")) result = "SĐT chỉ được chứa số.";
+                    else if (Phone.Length < 9 || Phone.Length > 12) result = "SĐT phải từ 9-12 số.";
+                    // Kiểm tra SĐT duy nhất
+                    else if (CheckPhoneExist(Phone)) result = "SĐT này đã tồn tại trong hệ thống.";
+                    break;
+
+                case nameof(Email):
+                    if (string.IsNullOrWhiteSpace(Email)) result = "Vui lòng nhập Email.";
+                    else if (!Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$")) result = "Email không đúng định dạng.";
+                    // Kiểm tra Email duy nhất (MỚI THÊM)
+                    else if (CheckEmailExist(Email)) result = "Email này đã tồn tại trong hệ thống.";
+                    break;
+
+                case nameof(Gender):
+                    if (string.IsNullOrEmpty(Gender)) result = "Vui lòng chọn giới tính.";
+                    break;
+
+                case nameof(BirthDate):
+                    if (BirthDate == null) result = "Vui lòng chọn ngày sinh.";
+                    else if (BirthDate.Value.Date > DateTime.Now.Date) result = "Ngày sinh không được lớn hơn hiện tại.";
+                    else if (HireDate != null && BirthDate.Value >= HireDate.Value) result = "Ngày sinh phải nhỏ hơn ngày vào làm.";
+                    break;
+
+                case nameof(HireDate):
+                    if (HireDate == null) result = "Vui lòng chọn ngày vào làm.";
+                    else if (HireDate.Value.Date > DateTime.Now.Date) result = "Ngày vào làm không được lớn hơn hiện tại.";
+                    else if (BirthDate != null)
+                    {
+                        if (HireDate.Value <= BirthDate.Value)
+                            result = "Ngày vào làm phải lớn hơn ngày sinh.";
+                        else
+                        {
+                            int age = HireDate.Value.Year - BirthDate.Value.Year;
+                            if (BirthDate.Value > HireDate.Value.AddYears(-age)) age--;
+
+                            if (age < 18)
+                                result = $"Chưa đủ 18 tuổi (Tính đến ngày vào làm là {age} tuổi).";
+                        }
+                    }
+                    break;
+            }
+            return result;
+        }
+
+        // =================================================================================================
+        // PHẦN 3: COMMANDS
+        // =================================================================================================
         public ICommand SaveCommand { get; set; }
         public ICommand CloseCommand { get; set; }
         public ICommand GenderSelectionChangedCommand { get; set; }
@@ -58,34 +173,25 @@ namespace Martify.ViewModels
 
         public AddEmployeeVM()
         {
-            // 1. Lệnh Đóng window
             CloseCommand = new RelayCommand<Window>((p) => { return true; }, (p) => p?.Close());
 
-            // 2. Lệnh Lưu nhân viên
             SaveCommand = new RelayCommand<Window>((p) => { return true; }, (p) => SaveEmployee(p));
 
-            // 3. Xử lý chọn giới tính
             GenderSelectionChangedCommand = new RelayCommand<ListBox>((p) => { return p != null; }, (p) =>
             {
                 if (p.SelectedItem is ListBoxItem selectedItem && selectedItem.Tag != null)
-                {
                     Gender = selectedItem.Tag.ToString();
-                }
             });
 
-            // 4. Kéo Window
             DragWindowCommand = new RelayCommand<Window>((p) => p != null, (p) => { try { p.DragMove(); } catch { } });
 
-            // 5. Chọn Ảnh
             SelectImageCommand = new RelayCommand<object>((p) => true, (p) => SelectImage());
         }
 
-        // --- Hàm Chọn Ảnh ---
         void SelectImage()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
-
             if (openFileDialog.ShowDialog() == true)
             {
                 _sourceImageFile = openFileDialog.FileName;
@@ -93,59 +199,27 @@ namespace Martify.ViewModels
             }
         }
 
-        // --- Hàm Lưu Nhân Viên ---
+        // =================================================================================================
+        // PHẦN 4: HÀM LƯU NHÂN VIÊN
+        // =================================================================================================
         void SaveEmployee(Window p)
         {
-            if (!ValidateInput()) return;
+            // 1. Bật cờ đã bấm nút Lưu -> Refresh UI để hiện lỗi đỏ
+            _isSaveClicked = true;
+            OnPropertyChanged(null);
 
+            // 2. Kiểm tra xem còn lỗi nào không
+            if (!IsValid()) return;
+
+            // 3. Sinh mã và xử lý lưu
             string newEmpId = GenerateEmployeeID();
             string dbPath = null;
 
-            // --- BƯỚC 1: XỬ LÝ COPY ẢNH VÀO Assets/Employee/ ---
             if (!string.IsNullOrEmpty(_sourceImageFile))
             {
-                try
-                {
-                    string fileExt = Path.GetExtension(_sourceImageFile);
-                    string fileName = $"{newEmpId}_{DateTime.Now:yyyyMMddHHmmss}{fileExt}";
-
-                    // A. Copy vào thư mục BIN/Assets/Employee
-                    string binFolder = AppDomain.CurrentDomain.BaseDirectory;
-                    // SỬA: Thêm "Employee" vào đường dẫn
-                    string binAssetsPath = Path.Combine(binFolder, "Assets", "Employee");
-
-                    // Tạo thư mục nếu chưa có
-                    if (!Directory.Exists(binAssetsPath)) Directory.CreateDirectory(binAssetsPath);
-
-                    string destBinFile = Path.Combine(binAssetsPath, fileName);
-                    File.Copy(_sourceImageFile, destBinFile, true);
-
-                    // B. Copy vào thư mục SOURCE CODE/Assets/Employee (Để lưu trữ lâu dài)
-                    try
-                    {
-                        string projectFolder = Path.GetFullPath(Path.Combine(binFolder, @"..\..\..\"));
-                        // SỬA: Thêm "Employee" vào đường dẫn
-                        string sourceEmployeeAssetsPath = Path.Combine(projectFolder, "Assets", "Employee");
-
-                        // Tạo thư mục nếu chưa có
-                        if (!Directory.Exists(sourceEmployeeAssetsPath)) Directory.CreateDirectory(sourceEmployeeAssetsPath);
-
-                        string destSourceFile = Path.Combine(sourceEmployeeAssetsPath, fileName);
-                        File.Copy(_sourceImageFile, destSourceFile, true);
-                    }
-                    catch { /* Bỏ qua lỗi nếu không tìm thấy source code (máy client) */ }
-
-                    // C. Gán đường dẫn tương đối để lưu DB: "Assets/Employee/TenFile.jpg"
-                    dbPath = Path.Combine("Assets", "Employee", fileName);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi khi lưu ảnh: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                dbPath = HandleImageSave(newEmpId, _sourceImageFile);
+                if (dbPath == "ERROR") return;
             }
-
-            // --- BƯỚC 2: TẠO DATA & LƯU DB ---
 
             var newEmployee = new Models.Employee()
             {
@@ -158,12 +232,9 @@ namespace Martify.ViewModels
                 Gender = Gender,
                 BirthDate = BirthDate.Value,
                 HireDate = HireDate.Value,
-
-
-                ImagePath = dbPath // Lưu đường dẫn Assets/Employee/...
+                ImagePath = dbPath
             };
 
-            // Tạo Account tự động
             string firstName = GetFirstName(FullName);
             string username = (ConvertToUnSign(firstName) + newEmpId).ToLower().Replace(" ", "");
             string rawPassword = BirthDate.Value.ToString("ddMMyyyy");
@@ -190,67 +261,97 @@ namespace Martify.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi hệ thống: " + ex.Message + "\n" + ex.InnerException?.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Lỗi hệ thống: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        // --- Validate ---
-        private bool ValidateInput()
+        // =================================================================================================
+        // PHẦN 5: CÁC HÀM HỖ TRỢ (HELPERS)
+        // =================================================================================================
+
+        private bool IsValid()
         {
-            if (string.IsNullOrWhiteSpace(FullName)) return ShowError("Vui lòng nhập họ và tên.");
-            if (string.IsNullOrWhiteSpace(Address)) return ShowError("Vui lòng nhập nơi cư trú.");
-
-            if (string.IsNullOrEmpty(Phone) || !Regex.IsMatch(Phone, @"^[0-9]+$")) return ShowError("Số điện thoại chỉ được chứa số.");
-            if (Phone.Length < 9 || Phone.Length > 12) return ShowError("Số điện thoại phải từ 9-12 số.");
-            if (DataProvider.Ins.DB.Employees.Any(x => x.Phone == Phone)) return ShowError("Số điện thoại này đã tồn tại.");
-
-            if (string.IsNullOrWhiteSpace(Email)) return ShowError("Vui lòng nhập Email.");
-            if (!Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$")) return ShowError("Email không đúng định dạng.");
-
-            if (string.IsNullOrEmpty(Gender)) return ShowError("Vui lòng chọn giới tính.");
-
-            if (BirthDate == null) return ShowError("Vui lòng chọn ngày sinh.");
-            if (HireDate == null) return ShowError("Vui lòng chọn ngày vào làm.");
-            if (BirthDate.Value >= HireDate.Value) return ShowError("Ngày sinh phải nhỏ hơn ngày vào làm.");
-
-            int age = HireDate.Value.Year - BirthDate.Value.Year;
-            if (BirthDate.Value > HireDate.Value.AddYears(-age)) age--;
-            if (age < 18) return ShowError($"Nhân viên chưa đủ 18 tuổi (Hiện tại: {age}).");
-
+            string[] properties = { nameof(FullName), nameof(Address), nameof(Phone), nameof(Email), nameof(Gender), nameof(BirthDate), nameof(HireDate) };
+            foreach (var prop in properties)
+            {
+                if (!string.IsNullOrEmpty(GetValidationError(prop))) return false;
+            }
             return true;
         }
 
-        private bool ShowError(string msg)
+        // Helper: Kiểm tra SĐT đã tồn tại chưa
+        private bool CheckPhoneExist(string phone)
         {
-            MessageBox.Show(msg, "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return false;
+            return DataProvider.Ins.DB.Employees.Any(x => x.Phone == phone);
         }
 
-        // --- Helpers ---
+        // Helper: Kiểm tra Email đã tồn tại chưa
+        private bool CheckEmailExist(string email)
+        {
+            // Kiểm tra trong DB xem có ai có Email trùng với email đang nhập không
+            return DataProvider.Ins.DB.Employees.Any(x => x.Email == email);
+        }
+
+        private string HandleImageSave(string empId, string sourceFile)
+        {
+            try
+            {
+                string fileExt = Path.GetExtension(sourceFile);
+                string fileName = $"{empId}_{DateTime.Now:yyyyMMddHHmmss}{fileExt}";
+
+                string binFolder = AppDomain.CurrentDomain.BaseDirectory;
+
+                // A. Copy vào BIN
+                string binAssetsPath = Path.Combine(binFolder, "Assets", "Employee");
+                if (!Directory.Exists(binAssetsPath)) Directory.CreateDirectory(binAssetsPath);
+
+                string destBinFile = Path.Combine(binAssetsPath, fileName);
+                File.Copy(sourceFile, destBinFile, true);
+
+                // B. Copy vào SOURCE CODE
+                try
+                {
+                    string projectFolder = Path.GetFullPath(Path.Combine(binFolder, @"..\..\..\"));
+                    string sourcePath = Path.Combine(projectFolder, "Assets", "Employee");
+
+                    if (Directory.Exists(Path.Combine(projectFolder, "Assets")))
+                    {
+                        if (!Directory.Exists(sourcePath)) Directory.CreateDirectory(sourcePath);
+                        File.Copy(sourceFile, Path.Combine(sourcePath, fileName), true);
+                    }
+                }
+                catch { }
+
+                return Path.Combine("Assets", "Employee", fileName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi lưu ảnh: " + ex.Message);
+                return "ERROR";
+            }
+        }
+
         private string GenerateEmployeeID()
         {
-            var lastEmp = DataProvider.Ins.DB.Employees
+            var empIds = DataProvider.Ins.DB.Employees
                 .Where(x => x.EmployeeID.StartsWith("NV"))
-                .AsEnumerable()
-                .OrderByDescending(x => x.EmployeeID)
-                .FirstOrDefault();
+                .Select(x => x.EmployeeID).ToList();
 
-            if (lastEmp == null) return "NV001";
+            if (empIds.Count == 0) return "NV001";
 
-            string lastId = lastEmp.EmployeeID;
-            string numberPart = lastId.Substring(2);
-            if (int.TryParse(numberPart, out int number))
+            int maxId = 0;
+            foreach (var id in empIds)
             {
-                return "NV" + (number + 1).ToString("D3");
+                if (id.Length > 2 && int.TryParse(id.Substring(2), out int num))
+                    if (num > maxId) maxId = num;
             }
-            return "NV" + Guid.NewGuid().ToString().Substring(0, 3).ToUpper();
+            return "NV" + (maxId + 1).ToString("D3");
         }
 
         private string GetFirstName(string fullName)
         {
             if (string.IsNullOrWhiteSpace(fullName)) return "";
-            var parts = fullName.Trim().Split(' ');
-            return parts.Last();
+            return fullName.Trim().Split(' ').Last();
         }
 
         private string ConvertToUnSign(string text)
@@ -267,10 +368,7 @@ namespace Martify.ViewModels
             {
                 byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
                 StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
+                for (int i = 0; i < bytes.Length; i++) builder.Append(bytes[i].ToString("x2"));
                 return builder.ToString();
             }
         }

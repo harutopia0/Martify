@@ -55,7 +55,11 @@
                   CanUserResizeColumns="False">
 
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Header="C" CanUserResize="False" Width="auto" ElementStyle="{DynamicResource DataGridCheckBoxStyle}">
+                    <DataGridCheckBoxColumn Header="C" 
+                                            CanUserSort="False"
+                                            CanUserResize="False" 
+                                            Width="auto" 
+                                            ElementStyle="{DynamicResource DataGridCheckBoxStyle}">
                         <DataGridCheckBoxColumn.HeaderTemplate>
                             <DataTemplate>
                                 <CheckBox Style="{DynamicResource DataGridCheckBoxStyle}"/>
@@ -65,7 +69,7 @@
 
                     <DataGridTextColumn Header="Mã" IsReadOnly="True" CanUserResize="False" Width="0.75*" Binding="{Binding EmployeeID}"/>
 
-                    <DataGridTemplateColumn Header="Nhân viên" IsReadOnly="True" Width="1.6*">
+                    <DataGridTemplateColumn Header="Nhân viên" SortMemberPath="FullName" IsReadOnly="True" Width="1.6*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -74,9 +78,9 @@
                                             <ImageBrush Stretch="UniformToFill">
                                                 <ImageBrush.ImageSource>
                                                     <Binding Path="ImagePath" 
-                                                         Converter="{StaticResource ImgConverter}"
-                                                         TargetNullValue="{StaticResource Anonymous}"
-                                                         FallbackValue="{StaticResource Anonymous}"/>
+                                                             Converter="{StaticResource ImgConverter}"
+                                                             TargetNullValue="{StaticResource Anonymous}"
+                                                             FallbackValue="{StaticResource Anonymous}"/>
                                                 </ImageBrush.ImageSource>
                                             </ImageBrush>
                                         </Ellipse.Fill>
@@ -86,9 +90,9 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    
+
                     <DataGridTextColumn Header="Địa chỉ" Binding="{Binding Address}" IsReadOnly="True" Width="1.25*"/>
-                    <DataGridTextColumn Header="Ngày vào làm" Binding="{Binding HireDate, StringFormat=dd/MM/yyyy}" IsReadOnly="True" Width="*"/>
+                    <DataGridTextColumn Header="Ngày vào làm" Binding="{Binding HireDate, StringFormat=dd/MM/yyyy}" IsReadOnly="True" Width="1.25*"/>
                     <DataGridTextColumn Header="Trạng thái" 
                                         Binding="{Binding Status, Converter={StaticResource StatusConverter}}" 
                                         IsReadOnly="True" 
@@ -109,6 +113,7 @@
                     </DataGridTextColumn>
 
                     <DataGridTemplateColumn Header="Công cụ" 
+                                            CanUserSort="False"
                                             Width="Auto" 
                                             CanUserReorder="False" 
                                             CanUserResize="False"

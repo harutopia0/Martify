@@ -34,7 +34,13 @@ namespace Martify.Converters // Nhớ check namespace cho đúng folder
                     // CacheOption = OnLoad: Load xong nhả file ra ngay, để sau này có xóa/sửa file cũng không bị lỗi "File đang được sử dụng"
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache; // Tránh cache cũ
+
+
+                    bitmap.DecodePixelWidth = 150;
+
                     bitmap.EndInit();
+
+                    bitmap.Freeze(); // Quan trọng: Tăng tốc render UI
 
                     return bitmap; // Trả về ảnh thật
                 }

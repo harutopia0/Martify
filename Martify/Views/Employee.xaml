@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Martify.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:Martify.ViewModels"
              xmlns:uc="clr-namespace:Martify.Views"
              xmlns:cv="clr-namespace:Martify.Converters" 
@@ -30,15 +31,32 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <uc:WindowControl></uc:WindowControl>
-        </Grid>
-        <Grid Grid.Row="1">
-            <Button Content="Thêm nhân viên" 
-                    Style="{DynamicResource PrimaryButtonStyle}" 
+            <Button Width="150" Height="40"
+                    materialDesign:ButtonAssist.CornerRadius="10"
+                    Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Foreground="White" BorderBrush="{x:Null}"
+                    Padding="0"
                     Command="{Binding AddEmployeeCommand}"
-                    Width="150" Height="40" 
-                    HorizontalAlignment="Right" 
-                    Margin="0,0,25,0"/>
+                    HorizontalAlignment="Right"
+                    Margin="0,0,25,0">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
+                        <GradientStop Color="#FF86E5A0" Offset="0.948"/>
+                        <GradientStop Color="#FF84E1A9" Offset="0.147"/>
+                        <GradientStop Color="#FF66E7AF" Offset="0.514"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="AccountPlusOutline" Width="25" Height="25"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"/>
+                    <TextBlock Text="Thêm nhân viên" FontFamily="Times New Roman" FontSize="16"
+                               Margin="5,0,0,0"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+                
+            </Button>
         </Grid>
 
         <Border Grid.Row="2"

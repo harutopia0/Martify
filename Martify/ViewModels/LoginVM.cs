@@ -40,7 +40,7 @@ namespace Martify.ViewModels
         public LoginVM()
         {
             isLogin = false;
-            LoginCommand = new RelayCommand<Window>((p) => { return true; }, (p) => { Login(p); });
+            LoginCommand = new RelayCommand<Window>((p) => { return true; }, async (p) => { await Login(p); });
             PasswordChangedCommand = new RelayCommand<PasswordBox>((p) => { return true; }, (p) => { Password = p.Password; });
 
 
@@ -95,38 +95,74 @@ namespace Martify.ViewModels
             }
         }*/
 
-        void Login(Window p)
+        //void Login(Window p)
+        //{
+        //    if (p == null) return;
+        //    if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+        //    {
+        //        //MessageBox.Show("Please enter username and password!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //        FailedLoginCommand.Execute(null);
+
+        //        return;
+        //    }
+
+
+        //    string passHash = ConvertToSHA256(Password);
+
+        //    var acc = DataProvider.Ins.DB.Accounts
+        //        .Include(x => x.Employee)
+        //        .Where(x => x.Username == Username && x.HashPassword == passHash)
+        //        .FirstOrDefault();
+
+        //    if (acc != null)
+        //    {
+        //        DataProvider.Ins.CurrentAccount = acc;
+        //        isLogin = true;
+        //        p.Close();
+        //    }
+        //    else
+        //    {
+        //        isLogin = false;
+        //        //MessageBox.Show("Invalid username or password!", "Login failed", MessageBoxButton.OK, MessageBoxImage.Error);
+        //        FailedLoginCommand.Execute(null);
+        //    }
+        //}
+
+
+        async Task Login(Window p)
         {
             if (p == null) return;
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
             {
-                //MessageBox.Show("Please enter username and password!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 FailedLoginCommand.Execute(null);
-
                 return;
             }
 
+            // Hiển thị loading nếu muốn (tùy chọn)
 
-            string passHash = ConvertToSHA256(Password);
-
-            var acc = DataProvider.Ins.DB.Accounts
-                .Include(x => x.Employee)
-                .Where(x => x.Username == Username && x.HashPassword == passHash)
-                .FirstOrDefault();
+            // Chạy tác vụ nặng ở luồng phụ
+            var acc = await Task.Run(() =>
+            {
+                string passHash = ConvertToSHA256(Password);
+                return DataProvider.Ins.DB.Accounts
+                    .Include(x => x.Employee)
+                    .Where(x => x.Username == Username && x.HashPassword == passHash)
+                    .FirstOrDefault();
+            });
 
             if (acc != null)
             {
                 DataProvider.Ins.CurrentAccount = acc;
                 isLogin = true;
-                p.Close();
+                p.Close(); // Đóng window ngay khi có kết quả
             }
             else
             {
                 isLogin = false;
-                //MessageBox.Show("Invalid username or password!", "Login failed", MessageBoxButton.OK, MessageBoxImage.Error);
                 FailedLoginCommand.Execute(null);
             }
         }
+
 
         public static string ConvertToSHA256(string password)
         {

@@ -31,7 +31,7 @@
 
 
         <Grid Grid.Row="0">
-            <Button Width="150" Height="50"
+            <Button Width="150" Height="40"
                     materialDesign:ButtonAssist.CornerRadius="10"
                     Style="{StaticResource MaterialDesignRaisedButton}" 
                     Foreground="White" BorderBrush="{x:Null}"

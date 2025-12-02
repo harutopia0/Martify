@@ -5,32 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:Martify.Views"
+              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Name="ucWindowControl">
-    <UserControl.Resources>
-        <Style x:Key="CompletelyCustomButtonStyle" TargetType="Button">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-
-            <Setter Property="Background" Value="MediumSeaGreen"/>
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-    </UserControl.Resources>
-
-    
-    
     <Grid>
         <Grid x:Name="Dragging_Zone" 
               Background="Transparent"
@@ -45,39 +23,32 @@
                 <!-- Optional: Add title or icon here -->
         </Grid>
         
-        <StackPanel HorizontalAlignment="Right"
+        <StackPanel x:Name ="ControlButton"
+                    HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    Margin="0,20,10,0" Orientation="Horizontal">
-            <Button Content="-"
-                    Command="{Binding HideWindowCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                    Margin="0,0,10,0" Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="2 15 2 10"/>
+                    <Setter Property="Width" Value="30"/>
+                    <Setter Property="Height" Value="25"/>
+                    <Setter Property="Background" Value="Lavender"/>
+                    <Setter Property="BorderBrush" Value="MediumPurple"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Command="{Binding HideWindowCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}" >
+                <materialDesign:PackIcon Kind="WindowMinimize" />
+            </Button>
+            <Button Command="{Binding MaximizeWindowCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}">
+                <materialDesign:PackIcon Kind="WindowMaximize" />
+            </Button>
 
-            <Button Background="Transparent" 
-                    BorderBrush="Transparent" 
-                    Foreground="Transparent"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Width="35" Height="35"
-                    Margin="0,0,10,0"
-                    IsTabStop="False"
-                    Style="{StaticResource CompletelyCustomButtonStyle}"
-                    Command="{Binding CloseWindowCommand}"
+            <Button Command="{Binding CloseWindowCommand}"
                     CommandParameter="{Binding ElementName=ucWindowControl}">
-                <Image Source="{StaticResource CloseProgram}"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Cursor="Hand">
-                    <Image.Style>
-                        <Style TargetType="Image">
-                            <Setter Property="Width" Value="20" />
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Width" Value="30" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Image.Style>
-                </Image>
+                <materialDesign:PackIcon Kind="CloseBox" />
+                
             </Button>
 
         </StackPanel>

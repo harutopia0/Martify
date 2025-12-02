@@ -15,7 +15,6 @@ namespace Martify.ViewModels
         #region commands
         public ICommand CloseWindowCommand { get; set; }
         public ICommand HideWindowCommand { get; set; }
-        public ICommand MaximizeWindowCommand { get; set; }
         public ICommand DragWindowCommand { get; set; }
         #endregion
 
@@ -40,23 +39,6 @@ namespace Martify.ViewModels
                 }
             });
 
-            MaximizeWindowCommand = new RelayCommand<UserControl>((p) => p != null, (p) =>
-            {
-                var win = Window.GetWindow(p);
-                if (win != null)
-                {
-                    if(win.WindowState != WindowState.Maximized)
-                    {
-                        win.WindowState = WindowState.Maximized;
-                    }
-                    else 
-                    { 
-                        win.WindowState = WindowState.Normal;
-                    }
-
-
-                }
-            });
 
             DragWindowCommand = new RelayCommand<UserControl>((p) => p != null, (p) =>
             {

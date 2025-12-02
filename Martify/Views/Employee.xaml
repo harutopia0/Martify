@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Martify.Views"
              xmlns:vm="clr-namespace:Martify.ViewModels"
-             
+             xmlns:uc="clr-namespace:Martify.Views"
              xmlns:cv="clr-namespace:Martify.Converters" 
              
              mc:Ignorable="d" 
@@ -24,12 +24,15 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="1.5*"/>
         </Grid.RowDefinitions>
 
-
         <Grid Grid.Row="0">
+            <uc:WindowControl></uc:WindowControl>
+        </Grid>
+        <Grid Grid.Row="1">
             <Button Content="Thêm nhân viên" 
                     Style="{DynamicResource PrimaryButtonStyle}" 
                     Command="{Binding AddEmployeeCommand}"
@@ -38,7 +41,7 @@
                     Margin="0,0,25,0"/>
         </Grid>
 
-        <Border Grid.Row="1"
+        <Border Grid.Row="2"
                 Background="White"
                 CornerRadius="25"
                 Margin="10">

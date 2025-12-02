@@ -31,6 +31,7 @@
     <None Remove="Resources\Images\eye_open.png" />
     <None Remove="Resources\Images\key_icon.png" />
     <None Remove="Resources\Images\Martify.png" />
+    <None Remove="Resources\Images\minimize_program.png" />
     <None Remove="Resources\Images\products_active.png" />
     <None Remove="Resources\Images\products_hover.png" />
     <None Remove="Resources\Images\products_normal.png" />
@@ -102,6 +103,9 @@
   <ItemGroup>
     <Resource Include="Resources\Fonts\YanoneKaffeesatz-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\minimize_program.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\products_active.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

@@ -33,14 +33,14 @@
               >
             <Border
                 Background="white"
-                CornerRadius="15"
-                Margin="10 5 10 5">
+                CornerRadius="5"
+                Margin="0 1 0 1">
 
             </Border>
             <TextBox
                 VerticalAlignment="Center"
                 materialDesign:HintAssist.Hint="Search..."
-                Margin="50 0 50 5"
+                Margin="50 0 140 5"
                 Height="50"
                 FontSize="18"
                 
@@ -50,13 +50,42 @@
                                      Height="30" Width="30" Margin="15,0,0,0"
                                      Opacity="20"
                                      />
+            <Grid
+                 VerticalAlignment="Top"
+                 HorizontalAlignment="Right"
+                 Margin="0 0 10 0"
+                 Width="120"
+                 Height="50">
+                            <Button
+                     Content="Add Product"
+                     HorizontalContentAlignment="Right"
+                     VerticalContentAlignment="Center"
+                     Padding="0 0 12 0"
+                     Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}"
+                     Command="{Binding AddProductCommand}"
+                     Background="#633FCE" Foreground="White"
+                     BorderThickness ="0"
+                     ToolTip="Resource name: MaterialDesignRaisedSecondaryDarkButton">
+                            </Button>
+                        <materialDesign:PackIcon Kind="Plus" Margin="3 0 0 0" VerticalAlignment="Center"
+                                          Width="20" Height="20" HorizontalAlignment="Left"
+                                          Foreground="White"/>
+            </Grid>
         </Grid>
         <Grid Grid.Row="2">
             <DataGrid
+                Background="white"
+                Margin="0 1 0 1"
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
-                HeadersVisibility="All"
-                ItemsSource="{Binding Items1}">
+                HeadersVisibility="All">
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type DataGridColumnHeader}" 
+                        BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="FontSize" Value="14"/>
+                    </Style>
+                </DataGrid.Resources>
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn
                         Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"
@@ -65,27 +94,25 @@
                             <DataGridCheckBoxColumn.Header>
                                 <Border
                                     Background="Transparent">
-                                <CheckBox
-                                            IsChecked="{Binding DataContext.IsAllItems1Selected}" />
+                                <CheckBox/>
                             </Border>
                             </DataGridCheckBoxColumn.Header>
                         <DataGridCheckBoxColumn.HeaderStyle>
                             <Style
                                 TargetType="{x:Type DataGridColumnHeader}"
                                 BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                                <Setter
-                                    Property="HorizontalContentAlignment"
-                                    Value="Center" />
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
                             </Style>
                         </DataGridCheckBoxColumn.HeaderStyle>
                     </DataGridCheckBoxColumn>
-                <DataGridTextColumn
+                        <DataGridTextColumn
                   Binding="{Binding Code}"
                   EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
                   ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-                  Header="ProductID" />
+                  Header="ProductID"
+                  />
                                 <!-- if you want to use the pop up style (MaterialDesignDataGridTextColumnPopupEditingStyle), you must use MaterialDataGridTextColumn -->
-                <materialDesign:DataGridTextColumn
+                    <materialDesign:DataGridTextColumn
                   EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                   ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
                   Header="Name">
@@ -101,7 +128,7 @@
                         Header="Unit"
                         IsEditable="True"
                         ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Foods}"
-                        SelectedValueBinding="{Binding Food}">
+                        SelectedValueBinding="{Binding Unit}">
                                                 <!--Setting the editing element style allows access to all of the combo box's properties
                                         <materialDesign:MaterialDataGridComboBoxColumn.EditingElementStyle>
                                             <Style TargetType="ComboBox" BasedOn="{StaticResource {ComponentResourceKey TypeInTargetAssembly={x:Type ComboBox}, ResourceId=MaterialDataGridComboBoxColumnEditingStyle}}" >
@@ -125,36 +152,17 @@
 
                     <DataGridTextColumn
                           Width="80"
-                          Binding="{Binding Code}"
+                          Binding="{Binding StockQuantity}"
                           EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
                           ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
                           Header="Stock" /> 
                     <materialDesign:DataGridTextColumn
-                          Width="100"
+                          Width="120"
                           Binding="{Binding Numeric}"
                           EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                           Header="CategoryID">
                     
-                                            <DataGridTextColumn.HeaderStyle>
-                                                <Style
-                              TargetType="{x:Type DataGridColumnHeader}"
-                              BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                                                    <Setter
-                                Property="ContentTemplate">
-                                                        <Setter.Value>
-                                                            <DataTemplate>
-                                                                <TextBlock
-                                      Text="{Binding}"
-                                      TextAlignment="Right"
-                                      TextWrapping="Wrap" />
-                                                            </DataTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                    <Setter
-                                Property="HorizontalContentAlignment"
-                                Value="Right" />
-                                                </Style>
-                                            </DataGridTextColumn.HeaderStyle>
+                                            
                                         <DataGridTextColumn.ElementStyle>
                                             <Style
                               TargetType="{x:Type TextBlock}"
@@ -162,7 +170,8 @@
                                                 <Setter
                                 Property="HorizontalAlignment"
                                 Value="Right" />
-                                            </Style>
+                                                
+                            </Style>
                                         </DataGridTextColumn.ElementStyle>  
                     </materialDesign:DataGridTextColumn>
                     <!-- use custom combo box column to get better combos. Use ItemsSourceBinding as your binding template to be applied to each combo -->
@@ -170,26 +179,7 @@
                 </DataGrid.Columns>
                 
             </DataGrid>
-            <Grid
-                VerticalAlignment="Top"
-                HorizontalAlignment="Right"
-                Margin="0 0 10 0"
-                Width="120"
-                Height="50">
-                <Button
-                    Content="Add Product"
-                    HorizontalContentAlignment="Right"
-                    VerticalContentAlignment="Center"
-                    Padding="0 0 12 0"
-                    IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                    Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}"
-                    Background="Gray" Foreground="Black"
-                    BorderThickness ="0"
-                    ToolTip="Resource name: MaterialDesignRaisedSecondaryDarkButton">
-                </Button>
-                <materialDesign:PackIcon Kind="Plus" Margin="3 0 0 0" VerticalAlignment="Center"
-                                         Width="20" Height="20" HorizontalAlignment="Left"/>
-            </Grid>
+           
             
             
         </Grid>

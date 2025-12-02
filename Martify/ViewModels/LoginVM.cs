@@ -34,6 +34,7 @@ namespace Martify.ViewModels
             set { _Password = value; OnPropertyChanged(); }
         }
 
+        private bool _isLoggingIn = false;
         public ICommand LoginCommand { get; set; }
         public ICommand PasswordChangedCommand { get; set; }
 
@@ -131,35 +132,49 @@ namespace Martify.ViewModels
 
         async Task Login(Window p)
         {
-            if (p == null) return;
-            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+            // Nếu đang đăng nhập (cờ = true) thì thoát ngay, không làm gì cả
+            if (_isLoggingIn) return;
+
+            // Bắt đầu đăng nhập -> Bật cờ lên
+            _isLoggingIn = true;
+
+            try
             {
-                FailedLoginCommand.Execute(null);
-                return;
+                if (p == null) return;
+                if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+                {
+                    FailedLoginCommand.Execute(null);
+                    return;
+                }
+
+                // Chạy tác vụ nặng ở luồng phụ (Background Thread)
+                var acc = await Task.Run(() =>
+                {
+                    // Tạo context mới hoặc dùng Ins (nhưng chạy tuần tự nhờ await)
+                    string passHash = ConvertToSHA256(Password);
+                    return DataProvider.Ins.DB.Accounts
+                        .Include(x => x.Employee)
+                        .Where(x => x.Username == Username && x.HashPassword == passHash)
+                        .FirstOrDefault();
+                });
+
+                if (acc != null)
+                {
+                    DataProvider.Ins.CurrentAccount = acc;
+                    isLogin = true;
+                    p.Close();
+                }
+                else
+                {
+                    isLogin = false;
+                    FailedLoginCommand.Execute(null);
+                }
             }
-
-            // Hiển thị loading nếu muốn (tùy chọn)
-
-            // Chạy tác vụ nặng ở luồng phụ
-            var acc = await Task.Run(() =>
+            finally
             {
-                string passHash = ConvertToSHA256(Password);
-                return DataProvider.Ins.DB.Accounts
-                    .Include(x => x.Employee)
-                    .Where(x => x.Username == Username && x.HashPassword == passHash)
-                    .FirstOrDefault();
-            });
-
-            if (acc != null)
-            {
-                DataProvider.Ins.CurrentAccount = acc;
-                isLogin = true;
-                p.Close(); // Đóng window ngay khi có kết quả
-            }
-            else
-            {
-                isLogin = false;
-                FailedLoginCommand.Execute(null);
+                // Dù thành công hay thất bại (lỗi), luôn phải nhả cờ ra
+                // để lần sau người dùng còn bấm lại được
+                _isLoggingIn = false;
             }
         }
 

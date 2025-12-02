@@ -58,7 +58,7 @@
             </Button>
         </Grid>
 
-        <Border Grid.Row="2"
+        <Border Grid.Row="1"
                 Background="White"
                 CornerRadius="25"
                 Margin="10">

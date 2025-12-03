@@ -8,5 +8,6 @@ namespace Martify.ViewModels
 {
     class DashboardVM : BaseVM
     {
+
     }
 }

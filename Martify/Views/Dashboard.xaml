@@ -12,14 +12,28 @@
              d:Style="{x:Null}">
 
     <UserControl.DataContext>
-        <vm:DashboardVM />
+            <vm:DashboardVM />
     </UserControl.DataContext>
 
     <Grid>
-        <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="250"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="280"/>
+        </Grid.RowDefinitions>
+
+        <!-- Main Content Area (Left Side) -->
+        <Grid Grid.Column="0" Grid.Row="0">
+            <!-- Weekly Revenue Card -->
             <Border Background="White" 
-                    Margin="20,40,20,500"
-                    CornerRadius="30">
+                    Margin="20,20,15,15"
+                    VerticalAlignment="Top"
+                    CornerRadius="30"
+                    Height="180">
                 <Border.Effect>
                     <DropShadowEffect Color="#80000000"
                                       BlurRadius="15"
@@ -28,40 +42,374 @@
                                       Opacity="0.3"/>
                 </Border.Effect>
                 <Grid>
-                    <TextBlock Margin="29,10,308,70"
-                               Text="Doanh Thu Hôm Nay"
-                               FontSize="25" FontFamily="Roboto Black"
-                               TextAlignment="Left"/>
+                    <TextBlock Margin="25,20,0,0"
+                               Text="Doanh Thu Tuần Này"
+                               FontSize="25" 
+                               FontFamily="Roboto Black"
+                               TextAlignment="Left"
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Left"/>
 
                     <StackPanel Orientation="Horizontal" 
-                                VerticalAlignment="Top" 
+                                VerticalAlignment="Center" 
+                                HorizontalAlignment="Center"
+                                Margin="0,30,0,0">
+
+                        <TextBlock Text="{Binding GiaTriDoanhThu, StringFormat={}{0:N0} VND}"
+                                   FontSize="35"
+                                   FontFamily="Roboto Bold"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Foreground="#067FF8"
+                                   Margin="0,0,15,0"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" 
+                                VerticalAlignment="Bottom" 
                                 HorizontalAlignment="Right"
-                                Margin="0,10,30,0"
-                                Width="Auto">
+                                Margin="0,0,20,20">
 
                         <TextBlock Text="500%"
-                                   FontSize="25"
+                                   FontSize="20"
                                    FontFamily="Roboto Medium"
                                    VerticalAlignment="Center"
                                    TextAlignment="Right"
-                                   Width="Auto"/>
+                                   Foreground="Green"
+                                   Margin="0,0,5,0"/>
 
                         <materialDesign:PackIcon Kind="TrendingUp"
-                             Width="32"
-                             Height="32"
-                             Foreground="#3A5EEA"
-                             VerticalAlignment="Center"
-                             Margin="10,0,10,0"/>
-
-                        <TextBlock Text="100.000.000VND"
-                                   FontSize="25"
-                                   FontFamily="Roboto Medium"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Right"
-                                   Width="Auto"/>
+                                                 Width="28"
+                                                 Height="28"
+                                                 Foreground="Green"
+                                                 VerticalAlignment="Center"/>
                     </StackPanel>
                 </Grid>
             </Border>
         </Grid>
+
+        <!-- Right Summary Panel -->
+        <Border Grid.Column="1" 
+                Grid.Row="0" 
+                Grid.RowSpan="2"
+                Background="White" 
+                Margin="0,20,20,20"
+                CornerRadius="30">
+            <Border.Effect>
+                <DropShadowEffect Color="#80000000"
+                                  BlurRadius="15"
+                                  ShadowDepth="4"
+                                  Direction="270"
+                                  Opacity="0.3"/>
+            </Border.Effect>
+            <StackPanel Margin="15">
+                <TextBlock Text="Tổng Quan Nhanh"
+                           FontSize="20"
+                           FontFamily="Roboto Black"
+                           Margin="0,10,0,20"
+                           HorizontalAlignment="Center"/>
+
+                <!-- Summary Item 1: Total Products -->
+                <Border Background="#F5F5F5" 
+                        CornerRadius="15" 
+                        Padding="15" 
+                        Margin="0,0,0,15">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <materialDesign:PackIcon Kind="Package" 
+                                                     Width="24" 
+                                                     Height="24" 
+                                                     Foreground="#067FF8"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,10,0"/>
+                            <TextBlock Text="Sản Phẩm"
+                                       FontSize="16"
+                                       FontFamily="Roboto Medium"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="1,234"
+                                   FontSize="28"
+                                   FontFamily="Roboto Bold"
+                                   Foreground="#067FF8"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Summary Item 2: Total Orders -->
+                <Border Background="#F5F5F5" 
+                        CornerRadius="15" 
+                        Padding="15" 
+                        Margin="0,0,0,15">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <materialDesign:PackIcon Kind="Receipt" 
+                                                     Width="24" 
+                                                     Height="24" 
+                                                     Foreground="#4CAF50"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,10,0"/>
+                            <TextBlock Text="Đơn Hàng"
+                                       FontSize="16"
+                                       FontFamily="Roboto Medium"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="567"
+                                   FontSize="28"
+                                   FontFamily="Roboto Bold"
+                                   Foreground="#4CAF50"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Summary Item 3: Total Customers -->
+                <Border Background="#F5F5F5" 
+                        CornerRadius="15" 
+                        Padding="15" 
+                        Margin="0,0,0,15">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <materialDesign:PackIcon Kind="AccountGroup" 
+                                                     Width="24" 
+                                                     Height="24" 
+                                                     Foreground="#FF9800"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,10,0"/>
+                            <TextBlock Text="Nhân Viên"
+                                       FontSize="16"
+                                       FontFamily="Roboto Medium"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="89"
+                                   FontSize="28"
+                                   FontFamily="Roboto Bold"
+                                   Foreground="#FF9800"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Summary Item 4: Low Stock Alert -->
+                <Border Background="#FFEBEE" 
+                        CornerRadius="15" 
+                        Padding="15" 
+                        Margin="0,0,0,0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <materialDesign:PackIcon Kind="AlertCircle" 
+                                                     Width="24" 
+                                                     Height="24" 
+                                                     Foreground="#F44336"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,10,0"/>
+                            <TextBlock Text="Cảnh Báo"
+                                       FontSize="16"
+                                       FontFamily="Roboto Medium"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="12"
+                                   FontSize="28"
+                                   FontFamily="Roboto Bold"
+                                   Foreground="#F44336"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5,0,0"/>
+                        <TextBlock Text="Sản phẩm sắp hết"
+                                   FontSize="12"
+                                   FontFamily="Roboto"
+                                   Foreground="#666"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <!-- Bottom Valuable Receipts Section -->
+        <Border Grid.Column="0" 
+                Grid.Row="1" 
+                Background="White" 
+                Margin="20,0,15,20"
+                CornerRadius="30">
+            <Border.Effect>
+                <DropShadowEffect Color="#80000000"
+                                  BlurRadius="15"
+                                  ShadowDepth="4"
+                                  Direction="270"
+                                  Opacity="0.3"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <StackPanel Grid.Row="0" 
+                            Orientation="Horizontal" 
+                            Margin="25,15,25,10"
+                            HorizontalAlignment="Stretch">
+                    <TextBlock Text="Hóa Đơn Giá Trị Cao"
+                               FontSize="20"
+                               FontFamily="Roboto Black"
+                               VerticalAlignment="Center"/>
+                    
+                    <materialDesign:PackIcon Kind="Trophy" 
+                                             Width="28" 
+                                             Height="28" 
+                                             Foreground="#FFD700"
+                                             VerticalAlignment="Center"
+                                             Margin="10,0,0,0"/>
+                </StackPanel>
+
+                <!-- Receipts List -->
+                <ScrollViewer Grid.Row="1" 
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Margin="15,0,15,15">
+                    <StackPanel>
+                        <!-- Receipt Item 1 -->
+                        <Border Background="#F8F9FA" 
+                                CornerRadius="15" 
+                                Padding="15" 
+                                Margin="5,5,5,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0" 
+                                        Background="#067FF8" 
+                                        CornerRadius="10" 
+                                        Width="40" 
+                                        Height="40"
+                                        Margin="0,0,15,0">
+                                    <TextBlock Text="1" 
+                                               FontSize="20" 
+                                               FontFamily="Roboto Bold"
+                                               Foreground="White"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="HD001234"
+                                               FontSize="16"
+                                               FontFamily="Roboto Bold"
+                                               Foreground="#333"/>
+                                    <TextBlock Text="Nguyễn Văn A - 15/11/2024"
+                                               FontSize="12"
+                                               FontFamily="Roboto"
+                                               Foreground="#666"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+
+                                <TextBlock Grid.Column="2" 
+                                           Text="15,500,000 VND"
+                                           FontSize="16"
+                                           FontFamily="Roboto Bold"
+                                           Foreground="#067FF8"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Receipt Item 2 -->
+                        <Border Background="#F8F9FA" 
+                                CornerRadius="15" 
+                                Padding="15" 
+                                Margin="5,0,5,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0" 
+                                        Background="#4CAF50" 
+                                        CornerRadius="10" 
+                                        Width="40" 
+                                        Height="40"
+                                        Margin="0,0,15,0">
+                                    <TextBlock Text="2" 
+                                               FontSize="20" 
+                                               FontFamily="Roboto Bold"
+                                               Foreground="White"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="HD001235"
+                                               FontSize="16"
+                                               FontFamily="Roboto Bold"
+                                               Foreground="#333"/>
+                                    <TextBlock Text="Trần Thị B - 14/11/2024"
+                                               FontSize="12"
+                                               FontFamily="Roboto"
+                                               Foreground="#666"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+
+                                <TextBlock Grid.Column="2" 
+                                           Text="12,800,000 VND"
+                                           FontSize="16"
+                                           FontFamily="Roboto Bold"
+                                           Foreground="#4CAF50"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Receipt Item 3 -->
+                        <Border Background="#F8F9FA" 
+                                CornerRadius="15" 
+                                Padding="15" 
+                                Margin="5,0,5,5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0" 
+                                        Background="#FF9800" 
+                                        CornerRadius="10" 
+                                        Width="40" 
+                                        Height="40"
+                                        Margin="0,0,15,0">
+                                    <TextBlock Text="3" 
+                                               FontSize="20" 
+                                               FontFamily="Roboto Bold"
+                                               Foreground="White"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="HD001236"
+                                               FontSize="16"
+                                               FontFamily="Roboto Bold"
+                                               Foreground="#333"/>
+                                    <TextBlock Text="Lê Văn C - 13/11/2024"
+                                               FontSize="12"
+                                               FontFamily="Roboto"
+                                               Foreground="#666"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+
+                                <TextBlock Grid.Column="2" 
+                                           Text="10,200,000 VND"
+                                           FontSize="16"
+                                           FontFamily="Roboto Bold"
+                                           Foreground="#FF9800"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

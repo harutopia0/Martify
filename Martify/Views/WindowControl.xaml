@@ -32,43 +32,79 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <Grid x:Name="Dragging_Zone" 
-              Background="Transparent"
+        <!-- Hover detection area that contains both dragging zone and buttons -->
+        <Grid x:Name="HoverArea" 
               Height="50"
-              VerticalAlignment="Top">
+              VerticalAlignment="Top"
+              Background="Transparent">
+            <Grid.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ControlButton" 
+                                                           Storyboard.TargetProperty="Visibility">
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <DoubleAnimation Storyboard.TargetName="ControlButton"
+                                           Storyboard.TargetProperty="Opacity"
+                                           From="0" To="1" Duration="0:0:0.3"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="ControlButton"
+                                           Storyboard.TargetProperty="Opacity"
+                                           From="1" To="0" Duration="0:0:0.3"/>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ControlButton" 
+                                                           Storyboard.TargetProperty="Visibility">
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Grid.Triggers>
+            
+            <!-- Dragging Zone (covers full width) -->
+            <Grid x:Name="Dragging_Zone" 
+                  Background="Transparent">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
                         <i:InvokeCommandAction Command="{Binding DragWindowCommand}"
-                                       CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <!-- Optional: Add title or icon here -->
+            </Grid>
+
+            <!-- Control Buttons (on top of dragging zone) -->
+            <StackPanel x:Name="ControlButton"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Height="50" 
+                        Margin="0,0,10,0" 
+                        Orientation="Horizontal"
+                        Visibility="Collapsed"
+                        Background="Transparent">
+                
+                <Button Command="{Binding HideWindowCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                        Background="transparent"
+                        Height="30" Width="30"
+                        Style="{StaticResource CompletelyCustomButtonStyle}">
+                    <Image Height="20"
+                           Width="20"
+                           Source="/Resources/Images/minimize_program.png"/>
+                </Button>
+                
+                <Button Command="{Binding CloseWindowCommand}"
+                        CommandParameter="{Binding ElementName=ucWindowControl}"
+                        Background="transparent"
+                        Height="30" Width="30"
+                        Style="{StaticResource CompletelyCustomButtonStyle}">
+                    <Image Source="/Resources/Images/close_program.png"/>
+                </Button>
+            </StackPanel>
         </Grid>
-
-        <StackPanel x:Name ="ControlButton"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Height="50" 
-                    Margin="0,0,10,0" Orientation="Horizontal">
-            <Button Command="{Binding HideWindowCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                    Background="transparent"
-                    Height="30" Width="30"
-                    Style="{StaticResource CompletelyCustomButtonStyle}">
-                <Image Height="20"
-                       Width="20"
-                       Source="/Resources/Images/minimize_program.png"/>
-               
-            </Button>
-            
-            <Button Command="{Binding CloseWindowCommand}"
-                    CommandParameter="{Binding ElementName=ucWindowControl}"
-                    Background="transparent"
-                    Height="30" Width="30"
-                    Style="{StaticResource CompletelyCustomButtonStyle}">
-                <Image Source="/Resources/Images/close_program.png"/>
-            </Button>
-
-        </StackPanel>
     </Grid>
 </UserControl>

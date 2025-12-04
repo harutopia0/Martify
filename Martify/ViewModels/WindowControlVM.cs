@@ -18,6 +18,22 @@ namespace Martify.ViewModels
         public ICommand DragWindowCommand { get; set; }
         #endregion
 
+        #region properties
+        private Visibility _controlButtonsVisibility = Visibility.Collapsed;
+        public Visibility ControlButtonsVisibility
+        {
+            get => _controlButtonsVisibility;
+            set
+            {
+                if (_controlButtonsVisibility != value)
+                {
+                    _controlButtonsVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
         public WindowControlVM()
         {
             CloseWindowCommand = new RelayCommand<UserControl>((p) => { return p != null; }, (p) =>

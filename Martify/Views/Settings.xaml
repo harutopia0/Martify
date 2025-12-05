@@ -29,6 +29,7 @@
 
             <StackPanel Margin="30">
 
+                <!-- 1. Thông Tin Tài Khoản -->
                 <Border Background="{DynamicResource ItemBackground}" 
                         CornerRadius="15" Padding="20" Margin="0,0,0,20">
                     <Grid>
@@ -52,6 +53,7 @@
                     </Grid>
                 </Border>
 
+                <!-- 2. Cấu Hình Chung -->
                 <Border Background="{DynamicResource ItemBackground}" 
                         CornerRadius="15" Padding="20" Margin="0,0,0,20">
                     <Grid>
@@ -77,7 +79,9 @@
                     </Grid>
                 </Border>
 
-                <Border Background="{DynamicResource ItemBackground}" CornerRadius="15" Padding="20">
+                <!-- 3. Về Martify -->
+                <Border Background="{DynamicResource ItemBackground}" 
+                        CornerRadius="15" Padding="20" Margin="0,0,0,20">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -92,9 +96,44 @@
                         </StackPanel>
                     </Grid>
                 </Border>
+
+                <!-- 4. MỚI: Đăng Xuất -->
+                <Border Background="{DynamicResource ItemBackground}" 
+                        CornerRadius="15" Padding="20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Icon Logout màu đỏ -->
+                        <materialDesign:PackIcon Grid.Column="0" Kind="Logout" 
+                                                 Width="40" Height="40" 
+                                                 Foreground="#FF5252" 
+                                                 VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="Đăng Xuất" FontSize="18" FontFamily="Roboto Bold" 
+                                       Foreground="{DynamicResource PrimaryText}"/>
+                            <TextBlock Text="Thoát khỏi phiên làm việc hiện tại" FontSize="14" FontFamily="Roboto" 
+                                       Foreground="{DynamicResource SecondaryText}"/>
+                        </StackPanel>
+
+                        <!-- Nút bấm Đăng xuất -->
+                        <Button Grid.Column="2" 
+                                Command="{Binding LogoutCommand}"
+                                Style="{StaticResource MaterialDesignOutlinedButton}" 
+                                Content="THOÁT" 
+                                BorderBrush="#FF5252" 
+                                Foreground="#FF5252"/>
+                    </Grid>
+                </Border>
+
             </StackPanel>
         </Border>
 
+        <!-- Popup Cấu Hình (Giữ nguyên) -->
         <Grid Background="#AA000000" Visibility="{Binding ConfigVisibility}">
             <Border Width="400" Height="300" 
                     Background="{DynamicResource CardBackground}" 

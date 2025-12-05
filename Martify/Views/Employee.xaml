@@ -21,9 +21,30 @@
     <UserControl.Resources>
         <cv:ImagePathConverter x:Key="ImgConverter"/>
         <cv:StatusConverter x:Key="StatusConverter"/>
+
+        <Style x:Key="CustomDataGridCellStyle" TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        </Style>
+
+        <Style x:Key="CenterTextColumnStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style x:Key="LeftTextColumnStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="10,0,0,0"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{DynamicResource MainBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="1.5*"/>
@@ -54,25 +75,43 @@
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
-                
             </Button>
         </Grid>
 
         <Border Grid.Row="1"
-                Background="White"
+                Background="{DynamicResource CardBackground}"
                 CornerRadius="25"
                 Margin="10">
+
             <DataGrid Margin="25,10,25,10"
-                  ItemsSource="{Binding Employees}" 
-                  RowStyle="{DynamicResource DataGridRowStyle}" 
-                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" 
-                  CellStyle="{DynamicResource DataGridCellStyle}" 
-                  x:Name="membersDataGrid" 
-                  Style="{DynamicResource DataGridStyle}"
-                  AutoGenerateColumns="False"
-                  HorizontalAlignment="Center"
-                  CanUserReorderColumns="False"  
-                  CanUserResizeColumns="False">
+                      ItemsSource="{Binding Employees}" 
+                      x:Name="membersDataGrid" 
+                      
+                      Style="{DynamicResource DataGridStyle}"
+                      CellStyle="{StaticResource CustomDataGridCellStyle}"
+                      
+                      AutoGenerateColumns="False"
+                      HorizontalAlignment="Center"
+                      CanUserReorderColumns="False"  
+                      CanUserResizeColumns="False"
+                      
+                      Background="Transparent"
+                      Foreground="{DynamicResource PrimaryText}">
+
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type DataGridColumnHeader}" 
+                           BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                        <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                        <Setter Property="FontSize" Value="14"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                    </Style>
+
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                        <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                    </Style>
+                </DataGrid.Resources>
 
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Header="C" 
@@ -87,7 +126,12 @@
                         </DataGridCheckBoxColumn.HeaderTemplate>
                     </DataGridCheckBoxColumn>
 
-                    <DataGridTextColumn Header="Mã" IsReadOnly="True" CanUserResize="False" Width="0.75*" Binding="{Binding EmployeeID}"/>
+                    <DataGridTextColumn Header="Mã" 
+                                        IsReadOnly="True" 
+                                        CanUserResize="False" 
+                                        Width="0.75*" 
+                                        Binding="{Binding EmployeeID}"
+                                        ElementStyle="{StaticResource CenterTextColumnStyle}"/>
 
                     <DataGridTemplateColumn Header="Nhân viên" SortMemberPath="FullName" IsReadOnly="True" Width="1.6*">
                         <DataGridTemplateColumn.CellTemplate>
@@ -105,20 +149,36 @@
                                             </ImageBrush>
                                         </Ellipse.Fill>
                                     </Ellipse>
-                                    <TextBlock Text="{Binding FullName}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding FullName}" 
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               Foreground="{DynamicResource PrimaryText}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTextColumn Header="Địa chỉ" Binding="{Binding Address}" IsReadOnly="True" Width="1.25*"/>
-                    <DataGridTextColumn Header="Ngày vào làm" Binding="{Binding HireDate, StringFormat=dd/MM/yyyy}" IsReadOnly="True" Width="1.25*"/>
+                    <DataGridTextColumn Header="Địa chỉ" 
+                                        Binding="{Binding Address}" 
+                                        IsReadOnly="True" 
+                                        Width="1.25*"
+                                        ElementStyle="{StaticResource LeftTextColumnStyle}"/>
+
+                    <DataGridTextColumn Header="Ngày vào làm" 
+                                        Binding="{Binding HireDate, StringFormat=dd/MM/yyyy}" 
+                                        IsReadOnly="True" 
+                                        Width="1.25*"
+                                        ElementStyle="{StaticResource CenterTextColumnStyle}"/>
+
                     <DataGridTextColumn Header="Trạng thái" 
                                         Binding="{Binding Status, Converter={StaticResource StatusConverter}}" 
                                         IsReadOnly="True" 
                                         Width="1.15*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="FontSize" Value="14"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Status}" Value="True">
                                         <Setter Property="Foreground" Value="Green"/>
@@ -138,10 +198,9 @@
                                             CanUserReorder="False" 
                                             CanUserResize="False"
                                             IsReadOnly="True">
-
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Button Style="{DynamicResource GridEditButtonStyle}">
                                         <Image Source="{StaticResource CloseProgram}" Width="10" Height="10"></Image>
                                     </Button>
@@ -151,7 +210,6 @@
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>

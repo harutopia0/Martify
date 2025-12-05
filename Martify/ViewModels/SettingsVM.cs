@@ -23,5 +23,29 @@ namespace Martify.ViewModels
             OpenConfigCommand = new RelayCommand(o => ConfigVisibility = Visibility.Visible);
             CloseConfigCommand = new RelayCommand(o => ConfigVisibility = Visibility.Collapsed);
         }
+
+        private bool _isDarkMode;
+        public bool IsDarkMode
+        {
+            get => _isDarkMode;
+            set
+            {
+                if (_isDarkMode != value)
+                {
+                    _isDarkMode = value;
+                    OnPropertyChanged();
+
+                    // GỌI HÀM ĐỔI THEME CỦA APP TẠI ĐÂY
+                    var app = Application.Current as App;
+                    app?.SetTheme(_isDarkMode);
+
+                    // (Tùy chọn) Lưu lại cài đặt để lần sau mở app vẫn nhớ
+                    // Properties.Settings.Default.IsDark = value;
+                    // Properties.Settings.Default.Save();
+                }
+            }
+        }
+
+        // Constructor
     }
 }

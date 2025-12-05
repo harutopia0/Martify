@@ -30,7 +30,7 @@
     </i:Interaction.Triggers>
 
     <Grid>
-        <Border Background="#FFDFDFDF" 
+        <Border Background="{DynamicResource MainBackground}" 
                 CornerRadius="30" >
 
             <Grid>
@@ -46,6 +46,7 @@
                     </Grid.RowDefinitions>
 
                     <Border Grid.Row="0" Background="#067FF8" CornerRadius="30,30,0,0"></Border>
+
                     <Border Grid.Row="1" CornerRadius="0,0,30,30">
                         <Border.Background>
                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -74,31 +75,28 @@
                                         </ImageBrush>
                                     </Ellipse.Fill>
                                 </Ellipse>
-
                             </Grid>
 
                             <StackPanel HorizontalAlignment="Center">
                                 <TextBlock Text="{Binding FullName}"
-                                       FontSize="20"
-                                       Foreground="White"
-                                       VerticalAlignment="Bottom"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,7.5,0,0"/>
+                                           FontSize="20"
+                                           Foreground="White" 
+                                           VerticalAlignment="Bottom"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,7.5,0,0"/>
+
                                 <TextBlock Text="{Binding Email}"
-                                       Margin="0,0,0,0"
-                                       FontSize="12"
-                                       Foreground="White"
-                                       VerticalAlignment="Bottom"
-                                       HorizontalAlignment="Center"/>
+                                           Margin="0,0,0,0"
+                                           FontSize="12"
+                                           Foreground="White"
+                                           VerticalAlignment="Bottom"
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
                         </StackPanel>
-                        
-            
-
                     </Grid>
+
                     <Grid Grid.Row="1">
                         <uc:SidePanel Margin="0,-25,0,0" HorizontalAlignment="Left"/>
-
                     </Grid>
                 </Grid>
 
@@ -111,7 +109,6 @@
             </Grid>
 
         </Border>
-
 
         <uc:WindowControl/>
     </Grid>

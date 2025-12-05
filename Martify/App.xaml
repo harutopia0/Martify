@@ -4,23 +4,20 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:Martify"
              StartupUri="MainWindow.xaml">
-    
+
     <Application.Resources>
-        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-
-                <ResourceDictionary Source="/Resources/XAML/MaterialDesignRes.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="/Resources/XAML/TriggerRes.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="/Resources/XAML/FontRes.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="/Resources/XAML/MainResource.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="/Resources/XAML/ImageRes.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="/Resources/XAML/ViewRes.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="/Resources/XAML/StyleRes.xaml"></ResourceDictionary>
-
+                <ResourceDictionary Source="/Resources/XAML/MaterialDesignRes.xaml"/>
+                <ResourceDictionary Source="/Resources/XAML/TriggerRes.xaml"/>
+                <ResourceDictionary Source="/Resources/XAML/FontRes.xaml"/>
+                <ResourceDictionary Source="/Resources/XAML/MainResource.xaml"/>
+                <ResourceDictionary Source="/Resources/XAML/ImageRes.xaml"/>
+                <ResourceDictionary Source="/Resources/XAML/ViewRes.xaml"/>
+                <ResourceDictionary Source="/Resources/XAML/StyleRes.xaml"/>
+                <ResourceDictionary Source="Resources/XAML/LightTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
-    
+
 </Application>
-    

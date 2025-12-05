@@ -12,10 +12,10 @@
              d:Style="{x:Null}">
 
     <UserControl.DataContext>
-            <vm:DashboardVM />
+        <vm:DashboardVM />
     </UserControl.DataContext>
 
-    <Grid>
+    <Grid Background="{DynamicResource MainBackground}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="250"/>
@@ -26,16 +26,14 @@
             <RowDefinition Height="280"/>
         </Grid.RowDefinitions>
 
-        <!-- Main Content Area (Left Side) -->
         <Grid Grid.Column="0" Grid.Row="0">
-            <!-- Weekly Revenue Card -->
-            <Border Background="White" 
+            <Border Background="{DynamicResource CardBackground}" 
                     Margin="20,20,15,15"
                     VerticalAlignment="Top"
                     CornerRadius="30"
                     Height="180">
                 <Border.Effect>
-                    <DropShadowEffect Color="#80000000"
+                    <DropShadowEffect Color="{DynamicResource ShadowColor}"
                                       BlurRadius="15"
                                       ShadowDepth="4"
                                       Direction="270"
@@ -48,7 +46,8 @@
                                FontFamily="Roboto Black"
                                TextAlignment="Left"
                                VerticalAlignment="Top"
-                               HorizontalAlignment="Left"/>
+                               HorizontalAlignment="Left"
+                               Foreground="{DynamicResource PrimaryText}"/>
 
                     <StackPanel Orientation="Horizontal" 
                                 VerticalAlignment="Center" 
@@ -87,15 +86,14 @@
             </Border>
         </Grid>
 
-        <!-- Right Summary Panel -->
         <Border Grid.Column="1" 
                 Grid.Row="0" 
                 Grid.RowSpan="2"
-                Background="White" 
+                Background="{DynamicResource CardBackground}" 
                 Margin="0,20,20,20"
                 CornerRadius="30">
             <Border.Effect>
-                <DropShadowEffect Color="#80000000"
+                <DropShadowEffect Color="{DynamicResource ShadowColor}"
                                   BlurRadius="15"
                                   ShadowDepth="4"
                                   Direction="270"
@@ -106,10 +104,10 @@
                            FontSize="20"
                            FontFamily="Roboto Black"
                            Margin="0,10,0,20"
-                           HorizontalAlignment="Center"/>
+                           HorizontalAlignment="Center"
+                           Foreground="{DynamicResource PrimaryText}"/>
 
-                <!-- Summary Item 1: Total Products -->
-                <Border Background="#F5F5F5" 
+                <Border Background="{DynamicResource ItemBackground}" 
                         CornerRadius="15" 
                         Padding="15" 
                         Margin="0,0,0,15">
@@ -124,7 +122,8 @@
                             <TextBlock Text="Sản Phẩm"
                                        FontSize="16"
                                        FontFamily="Roboto Medium"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource PrimaryText}"/>
                         </StackPanel>
                         <TextBlock Text="1,234"
                                    FontSize="28"
@@ -135,8 +134,7 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Summary Item 2: Total Orders -->
-                <Border Background="#F5F5F5" 
+                <Border Background="{DynamicResource ItemBackground}" 
                         CornerRadius="15" 
                         Padding="15" 
                         Margin="0,0,0,15">
@@ -151,7 +149,8 @@
                             <TextBlock Text="Đơn Hàng"
                                        FontSize="16"
                                        FontFamily="Roboto Medium"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource PrimaryText}"/>
                         </StackPanel>
                         <TextBlock Text="567"
                                    FontSize="28"
@@ -162,8 +161,7 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Summary Item 3: Total Customers -->
-                <Border Background="#F5F5F5" 
+                <Border Background="{DynamicResource ItemBackground}" 
                         CornerRadius="15" 
                         Padding="15" 
                         Margin="0,0,0,15">
@@ -178,7 +176,8 @@
                             <TextBlock Text="Nhân Viên"
                                        FontSize="16"
                                        FontFamily="Roboto Medium"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource PrimaryText}"/>
                         </StackPanel>
                         <TextBlock Text="89"
                                    FontSize="28"
@@ -189,8 +188,7 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Summary Item 4: Low Stock Alert -->
-                <Border Background="#FFEBEE" 
+                <Border Background="{DynamicResource AlertBackground}" 
                         CornerRadius="15" 
                         Padding="15" 
                         Margin="0,0,0,0">
@@ -205,7 +203,8 @@
                             <TextBlock Text="Cảnh Báo"
                                        FontSize="16"
                                        FontFamily="Roboto Medium"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource PrimaryText}"/>
                         </StackPanel>
                         <TextBlock Text="12"
                                    FontSize="28"
@@ -216,7 +215,7 @@
                         <TextBlock Text="Sản phẩm sắp hết"
                                    FontSize="12"
                                    FontFamily="Roboto"
-                                   Foreground="#666"
+                                   Foreground="{DynamicResource SecondaryText}"
                                    HorizontalAlignment="Center"
                                    Margin="0,2,0,0"/>
                     </StackPanel>
@@ -224,14 +223,13 @@
             </StackPanel>
         </Border>
 
-        <!-- Bottom Valuable Receipts Section -->
         <Border Grid.Column="0" 
                 Grid.Row="1" 
-                Background="White" 
+                Background="{DynamicResource CardBackground}" 
                 Margin="20,0,15,20"
                 CornerRadius="30">
             <Border.Effect>
-                <DropShadowEffect Color="#80000000"
+                <DropShadowEffect Color="{DynamicResource ShadowColor}"
                                   BlurRadius="15"
                                   ShadowDepth="4"
                                   Direction="270"
@@ -243,7 +241,6 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- Header -->
                 <StackPanel Grid.Row="0" 
                             Orientation="Horizontal" 
                             Margin="25,15,25,10"
@@ -251,8 +248,9 @@
                     <TextBlock Text="Hóa Đơn Giá Trị Cao"
                                FontSize="20"
                                FontFamily="Roboto Black"
-                               VerticalAlignment="Center"/>
-                    
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource PrimaryText}"/>
+
                     <materialDesign:PackIcon Kind="Trophy" 
                                              Width="28" 
                                              Height="28" 
@@ -261,14 +259,12 @@
                                              Margin="10,0,0,0"/>
                 </StackPanel>
 
-                <!-- Receipts List -->
                 <ScrollViewer Grid.Row="1" 
                               VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled"
                               Margin="15,0,15,15">
                     <StackPanel>
-                        <!-- Receipt Item 1 -->
-                        <Border Background="#F8F9FA" 
+                        <Border Background="{DynamicResource ItemBackground}" 
                                 CornerRadius="15" 
                                 Padding="15" 
                                 Margin="5,5,5,10">
@@ -297,11 +293,11 @@
                                     <TextBlock Text="HD001234"
                                                FontSize="16"
                                                FontFamily="Roboto Bold"
-                                               Foreground="#333"/>
+                                               Foreground="{DynamicResource PrimaryText}"/>
                                     <TextBlock Text="Nguyễn Văn A - 15/11/2024"
                                                FontSize="12"
                                                FontFamily="Roboto"
-                                               Foreground="#666"
+                                               Foreground="{DynamicResource SecondaryText}"
                                                Margin="0,2,0,0"/>
                                 </StackPanel>
 
@@ -314,8 +310,7 @@
                             </Grid>
                         </Border>
 
-                        <!-- Receipt Item 2 -->
-                        <Border Background="#F8F9FA" 
+                        <Border Background="{DynamicResource ItemBackground}" 
                                 CornerRadius="15" 
                                 Padding="15" 
                                 Margin="5,0,5,10">
@@ -344,11 +339,11 @@
                                     <TextBlock Text="HD001235"
                                                FontSize="16"
                                                FontFamily="Roboto Bold"
-                                               Foreground="#333"/>
+                                               Foreground="{DynamicResource PrimaryText}"/>
                                     <TextBlock Text="Trần Thị B - 14/11/2024"
                                                FontSize="12"
                                                FontFamily="Roboto"
-                                               Foreground="#666"
+                                               Foreground="{DynamicResource SecondaryText}"
                                                Margin="0,2,0,0"/>
                                 </StackPanel>
 
@@ -361,8 +356,7 @@
                             </Grid>
                         </Border>
 
-                        <!-- Receipt Item 3 -->
-                        <Border Background="#F8F9FA" 
+                        <Border Background="{DynamicResource ItemBackground}" 
                                 CornerRadius="15" 
                                 Padding="15" 
                                 Margin="5,0,5,5">
@@ -391,11 +385,11 @@
                                     <TextBlock Text="HD001236"
                                                FontSize="16"
                                                FontFamily="Roboto Bold"
-                                               Foreground="#333"/>
+                                               Foreground="{DynamicResource PrimaryText}"/>
                                     <TextBlock Text="Lê Văn C - 13/11/2024"
                                                FontSize="12"
                                                FontFamily="Roboto"
-                                               Foreground="#666"
+                                               Foreground="{DynamicResource SecondaryText}"
                                                Margin="0,2,0,0"/>
                                 </StackPanel>
 

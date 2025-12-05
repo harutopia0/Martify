@@ -14,19 +14,23 @@
         <vm:SettingsVM />
     </UserControl.DataContext>
 
-    <Grid>
+    <Grid Background="{DynamicResource MainBackground}">
         <TextBlock Text="Cài Đặt Hệ Thống"
-                   FontSize="30" FontFamily="Roboto Black" Foreground="#333"
+                   FontSize="30" FontFamily="Roboto Black" 
+                   Foreground="{DynamicResource PrimaryText}"
                    Margin="30,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-        <Border Background="White" Margin="30,80,30,30" CornerRadius="30">
+        <Border Background="{DynamicResource CardBackground}" 
+                Margin="30,80,30,30" CornerRadius="30">
             <Border.Effect>
-                <DropShadowEffect Color="#80000000" BlurRadius="15" ShadowDepth="4" Direction="270" Opacity="0.3"/>
+                <DropShadowEffect Color="{DynamicResource ShadowColor}" 
+                                  BlurRadius="15" ShadowDepth="4" Direction="270" Opacity="0.3"/>
             </Border.Effect>
 
             <StackPanel Margin="30">
 
-                <Border Background="#F8F9FA" CornerRadius="15" Padding="20" Margin="0,0,0,20">
+                <Border Background="{DynamicResource ItemBackground}" 
+                        CornerRadius="15" Padding="20" Margin="0,0,0,20">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -37,8 +41,10 @@
                         <materialDesign:PackIcon Grid.Column="0" Kind="AccountCircle" Width="40" Height="40" Foreground="#067FF8" VerticalAlignment="Center"/>
 
                         <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                            <TextBlock Text="Thông Tin Tài Khoản" FontSize="18" FontFamily="Roboto Bold" Foreground="#333"/>
-                            <TextBlock Text="Chỉnh sửa thông tin cá nhân và mật khẩu" FontSize="14" FontFamily="Roboto" Foreground="#666"/>
+                            <TextBlock Text="Thông Tin Tài Khoản" FontSize="18" FontFamily="Roboto Bold" 
+                                       Foreground="{DynamicResource PrimaryText}"/>
+                            <TextBlock Text="Chỉnh sửa thông tin cá nhân và mật khẩu" FontSize="14" FontFamily="Roboto" 
+                                       Foreground="{DynamicResource SecondaryText}"/>
                         </StackPanel>
 
                         <Button Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}" 
@@ -46,7 +52,8 @@
                     </Grid>
                 </Border>
 
-                <Border Background="#F8F9FA" CornerRadius="15" Padding="20" Margin="0,0,0,20">
+                <Border Background="{DynamicResource ItemBackground}" 
+                        CornerRadius="15" Padding="20" Margin="0,0,0,20">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -57,8 +64,10 @@
                         <materialDesign:PackIcon Grid.Column="0" Kind="Tune" Width="40" Height="40" Foreground="#FF9800" VerticalAlignment="Center"/>
 
                         <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                            <TextBlock Text="Cấu Hình Chung" FontSize="18" FontFamily="Roboto Bold" Foreground="#333"/>
-                            <TextBlock Text="Ngôn ngữ, thông báo và giao diện" FontSize="14" FontFamily="Roboto" Foreground="#666"/>
+                            <TextBlock Text="Cấu Hình Chung" FontSize="18" FontFamily="Roboto Bold" 
+                                       Foreground="{DynamicResource PrimaryText}"/>
+                            <TextBlock Text="Ngôn ngữ, thông báo và giao diện" FontSize="14" FontFamily="Roboto" 
+                                       Foreground="{DynamicResource SecondaryText}"/>
                         </StackPanel>
 
                         <Button Grid.Column="2" 
@@ -68,7 +77,7 @@
                     </Grid>
                 </Border>
 
-                <Border Background="#F8F9FA" CornerRadius="15" Padding="20">
+                <Border Background="{DynamicResource ItemBackground}" CornerRadius="15" Padding="20">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -76,8 +85,10 @@
                         </Grid.ColumnDefinitions>
                         <materialDesign:PackIcon Grid.Column="0" Kind="Information" Width="40" Height="40" Foreground="#4CAF50" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                            <TextBlock Text="Về Martify" FontSize="18" FontFamily="Roboto Bold" Foreground="#333"/>
-                            <TextBlock Text="Phiên bản 1.0.0 - Copyright 2024" FontSize="14" FontFamily="Roboto" Foreground="#666"/>
+                            <TextBlock Text="Về Martify" FontSize="18" FontFamily="Roboto Bold" 
+                                       Foreground="{DynamicResource PrimaryText}"/>
+                            <TextBlock Text="Phiên bản 1.0.0 - Copyright 2024" FontSize="14" FontFamily="Roboto" 
+                                       Foreground="{DynamicResource SecondaryText}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -85,7 +96,9 @@
         </Border>
 
         <Grid Background="#AA000000" Visibility="{Binding ConfigVisibility}">
-            <Border Width="400" Height="300" Background="White" CornerRadius="20" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Border Width="400" Height="300" 
+                    Background="{DynamicResource CardBackground}" 
+                    CornerRadius="20" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Grid Margin="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -93,12 +106,21 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Chi Tiết Cấu Hình" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Chi Tiết Cấu Hình" FontSize="20" FontWeight="Bold" 
+                               HorizontalAlignment="Center"
+                               Foreground="{DynamicResource PrimaryText}"/>
 
                     <StackPanel Grid.Row="1" VerticalAlignment="Center">
-                        <CheckBox Content="Bật thông báo hệ thống" Margin="0,10"/>
-                        <CheckBox Content="Chế độ tối (Dark Mode)" Margin="0,10"/>
-                        <ComboBox materialDesign:HintAssist.Hint="Ngôn Ngữ" Margin="0,10">
+                        <CheckBox Content="Bật thông báo hệ thống" Margin="0,10"
+                                  Foreground="{DynamicResource PrimaryText}"/>
+
+                        <CheckBox Content="Chế độ tối (Dark Mode)" 
+                                  IsChecked="{Binding IsDarkMode}" 
+                                  Margin="0,10"
+                                  Foreground="{DynamicResource PrimaryText}"/>
+
+                        <ComboBox materialDesign:HintAssist.Hint="Ngôn Ngữ" Margin="0,10"
+                                  Foreground="{DynamicResource PrimaryText}">
                             <ComboBoxItem Content="Tiếng Việt"/>
                             <ComboBoxItem Content="English"/>
                         </ComboBox>

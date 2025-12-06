@@ -162,6 +162,12 @@ namespace Martify.ViewModels
                 {
                     DataProvider.Ins.CurrentAccount = acc;
                     isLogin = true;
+
+
+                    // Xóa thông tin đăng nhập sau khi đăng nhập thành công
+                    Username = string.Empty;
+                    Password = string.Empty;
+
                     p.Close();
                 }
                 else

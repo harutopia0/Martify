@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Martify.Migrations
 {
     [DbContext(typeof(MartifyDbContext))]
-    [Migration("20251128094155_Martify")]
-    partial class Martify
+    [Migration("20251206130556_MartifyInitial")]
+    partial class MartifyInitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

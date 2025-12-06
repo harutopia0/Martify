@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Martify.Migrations
 {
     /// <inheritdoc />
-    public partial class Martify : Migration
+    public partial class MartifyInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

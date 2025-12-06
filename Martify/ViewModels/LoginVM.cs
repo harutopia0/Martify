@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Threading;
 using System.Threading.Tasks;
+using Martify.Helpers;
 
 namespace Martify.ViewModels
 {
@@ -40,6 +41,11 @@ namespace Martify.ViewModels
 
         public LoginVM()
         {
+            // === GỌI HÀM SEED TỪ HELPER ===
+            // Hàm này sẽ kiểm tra: nếu DB trống thì tạo Admin, NV, SP... còn không thì bỏ qua
+            DatabaseRenderIfEmpty.EnsureDatabaseCreatedAndSeed(DataProvider.Ins.DB);
+
+
             isLogin = false;
             LoginCommand = new RelayCommand<Window>((p) => { return true; }, async (p) => { await Login(p); });
             PasswordChangedCommand = new RelayCommand<PasswordBox>((p) => { return true; }, (p) => { Password = p.Password; });

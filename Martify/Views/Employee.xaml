@@ -31,7 +31,7 @@
         <Style x:Key="CenterTextColumnStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="FontSize" Value="14"/>
         </Style>
 
@@ -39,9 +39,9 @@
             <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Padding" Value="10,0,0,0"/>
             <Setter Property="FontSize" Value="14"/>
         </Style>
+
     </UserControl.Resources>
 
     <Grid Background="{DynamicResource MainBackground}">
@@ -133,13 +133,13 @@
                 CornerRadius="25"
                 Margin="10">
 
-            <DataGrid Margin="25,10,25,10"
+            <DataGrid Margin="10,10,10,10"
                       ItemsSource="{Binding Employees}" 
                       x:Name="membersDataGrid" 
                       Style="{DynamicResource DataGridStyle}"
                       CellStyle="{StaticResource CustomDataGridCellStyle}"
                       AutoGenerateColumns="False"
-                      HorizontalAlignment="Stretch" 
+                      HorizontalAlignment="Center" 
                       CanUserReorderColumns="False"  
                       CanUserResizeColumns="False"
                       Background="Transparent"
@@ -150,13 +150,13 @@
                            BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
                         <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
                         <Setter Property="FontSize" Value="14"/>
-                        <Setter Property="FontWeight" Value="Bold"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
                         <Setter Property="Background" Value="Transparent"/>
                     </Style>
 
                     <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
                         <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                        <Setter Property="Margin" Value="0,2.5,0,2.5"/>
                     </Style>
                 </DataGrid.Resources>
 
@@ -189,7 +189,7 @@
                     <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status, Converter={StaticResource StatusConverter}}" IsReadOnly="True" Width="1.15*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                                 <Setter Property="FontSize" Value="14"/>
                                 <Style.Triggers>

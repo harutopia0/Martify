@@ -17,12 +17,12 @@
                 <BeginStoryboard>
                     <Storyboard>
                         <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5" />
-                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.OpacityMask).(RadialGradientBrush.RadiusX)" From="0" To="1.5" Duration="0:0:1.5">
+                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.OpacityMask).(RadialGradientBrush.RadiusX)" From="0" To="1.75" Duration="0:0:1.5">
                             <DoubleAnimation.EasingFunction>
                                 <CubicEase EasingMode="EaseOut"/>
                             </DoubleAnimation.EasingFunction>
                         </DoubleAnimation>
-                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.OpacityMask).(RadialGradientBrush.RadiusY)" From="0" To="1.5" Duration="0:0:1.5">
+                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.OpacityMask).(RadialGradientBrush.RadiusY)" From="0" To="1.75" Duration="0:0:1.5">
                             <DoubleAnimation.EasingFunction>
                                 <CubicEase EasingMode="EaseOut"/>
                             </DoubleAnimation.EasingFunction>

@@ -18,140 +18,228 @@
 
     <Grid Background="{DynamicResource MainBackground}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- Hàng tiêu đề -->
         <Grid Grid.Row="0">
+            <TextBlock Text="Quản lý sản phẩm" 
+                       FontSize="24" 
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="15,0,0,0"
+                       Foreground="{DynamicResource PrimaryText}"/>
         </Grid>
 
+        <!-- Hàng tìm kiếm và nút Thêm -->
         <Grid Grid.Row="1"
-              VerticalAlignment="Top"
-              Background="Transparent"
-              Height="50">
+              VerticalAlignment="Center"
+              Height="50"
+              Margin="0,5,0,5">
 
             <Border Background="{DynamicResource CardBackground}"
-                    CornerRadius="5"
-                    Margin="0 1 0 1">
+                    CornerRadius="5">
             </Border>
 
-            <TextBox VerticalAlignment="Center"
-                     materialDesign:HintAssist.Hint="Search..."
-                     Margin="50 0 140 5"
-                     Height="50"
-                     FontSize="18"
-                     Foreground="{DynamicResource PrimaryText}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-
+            <!-- Biểu tượng tìm kiếm -->
             <materialDesign:PackIcon Kind="Magnify"
                                      VerticalAlignment="Center"
-                                     Height="30" Width="30" Margin="15,0,0,0"
-                                     Opacity="0.5"
+                                     HorizontalAlignment="Left"
+                                     Height="24" 
+                                     Width="24" 
+                                     Margin="15,0,0,0"
+                                     Opacity="0.6"
                                      Foreground="{DynamicResource PrimaryText}"/>
 
-            <Grid VerticalAlignment="Top"
-                  HorizontalAlignment="Right"
-                  Margin="0 0 10 0"
-                  Width="120"
-                  Height="50">
-                <Button Content="Add Product"
-                        HorizontalContentAlignment="Right"
-                        VerticalContentAlignment="Center"
-                        Padding="0 0 12 0"
-                        Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}"
-                        Command="{Binding AddProductCommand}"
-                        Background="#633FCE" Foreground="White"
-                        BorderThickness ="0"
-                        ToolTip="Add new product">
-                </Button>
-                <materialDesign:PackIcon Kind="Plus" Margin="3 0 0 0" VerticalAlignment="Center"
-                                         Width="20" Height="20" HorizontalAlignment="Left"
-                                         Foreground="White"/>
-            </Grid>
+            <!-- Ô tìm kiếm -->
+            <TextBox VerticalAlignment="Center"
+                     materialDesign:HintAssist.Hint="Tìm kiếm sản phẩm..."
+                     Margin="50,5,160,5"
+                     FontSize="16"
+                     Foreground="{DynamicResource PrimaryText}"
+                     BorderThickness="0"
+                     Background="Transparent"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+
+            <!-- Nút Thêm sản phẩm -->
+            <Button HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,10,0"
+                    Height="40"
+                    Padding="15,0,15,0"
+                    Command="{Binding AddProductCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Background="#633FCE" 
+                    Foreground="White"
+                    BorderThickness="0"
+                    ToolTip="Thêm sản phẩm mới">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Plus" 
+                                             Width="20" 
+                                             Height="20" 
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,8,0"/>
+                    <TextBlock Text="Thêm sản phẩm" 
+                               VerticalAlignment="Center"
+                               FontSize="14"/>
+                </StackPanel>
+            </Button>
         </Grid>
 
+        <!-- Hàng DataGrid -->
         <Grid Grid.Row="2">
             <DataGrid Background="{DynamicResource CardBackground}"
-                      Margin="0 1 0 1"
+                      Margin="0,5,0,0"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
-                      HeadersVisibility="All">
+                      CanUserDeleteRows="False"
+                      IsReadOnly="False"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                      HeadersVisibility="All"
+                      ItemsSource="{Binding Products}"
+                      SelectedItem="{Binding SelectedProduct}"
+                      GridLinesVisibility="Horizontal"
+                      HorizontalGridLinesBrush="#E0E0E0"
+                      RowHeight="50"
+                      ColumnHeaderHeight="45">
 
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridColumnHeader}" 
                            BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
                         <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
                         <Setter Property="FontSize" Value="14"/>
-                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+                        <Setter Property="Padding" Value="10,5,10,5"/>
+                    </Style>
+
+                    <Style TargetType="{x:Type DataGridRow}" 
+                           BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource MaterialDesignDivider}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <Style TargetType="{x:Type DataGridCell}" 
+                           BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                        <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                        <Setter Property="BorderThickness" Value="0"/>
                     </Style>
                 </DataGrid.Resources>
 
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                    <!-- Cột Chọn (checkbox) -->
+                    <DataGridCheckBoxColumn Width="80"
                                             EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}"
-                                            ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}">
-                        <DataGridCheckBoxColumn.Header>
-                            <Border Background="Transparent">
-                                <CheckBox/>
-                            </Border>
-                        </DataGridCheckBoxColumn.Header>
-                        <DataGridCheckBoxColumn.HeaderStyle>
-                            <Style TargetType="{x:Type DataGridColumnHeader}"
-                                   BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridCheckBoxColumn.HeaderStyle>
-                    </DataGridCheckBoxColumn>
+                                            ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                                            Header="Chọn"
+                                            Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <DataGridTextColumn Binding="{Binding Code}"
-                                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
-                                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-                                        Header="ProductID"/>
-
-                    <materialDesign:DataGridTextColumn EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-                                                       Header="Name">
-                        <materialDesign:DataGridTextColumn.Binding>
-                            <Binding Path="Name"/>
-                        </materialDesign:DataGridTextColumn.Binding>
-                    </materialDesign:DataGridTextColumn>
-
-                    <materialDesign:DataGridComboBoxColumn Width="80"
-                                                           Header="Unit"
-                                                           IsEditable="True"
-                                                           ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Foods}"
-                                                           SelectedValueBinding="{Binding Unit}">
-                    </materialDesign:DataGridComboBoxColumn>
-
-                    <DataGridTextColumn Width="100"
-                                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
-                                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-                                        Header="Price">
-                        <DataGridTextColumn.Binding>
-                            <Binding Path="Description"/>
-                        </DataGridTextColumn.Binding>
-                    </DataGridTextColumn>
-
+                    <!-- Mã sản phẩm -->
                     <DataGridTextColumn Width="80"
-                                        Binding="{Binding StockQuantity}"
+                                        Binding="{Binding ProductID}"
                                         EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
                                         ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-                                        Header="Stock" />
+                                        Header="ID"
+                                        IsReadOnly="True"/>
 
-                    <materialDesign:DataGridTextColumn Width="120"
-                                                       Binding="{Binding Numeric}"
-                                                       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                       Header="CategoryID">
+                    <!-- Tên sản phẩm -->
+                    <DataGridTextColumn Width="*"
+                                        MinWidth="200"
+                                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                        Header="Tên sản phẩm"
+                                        Binding="{Binding ProductName, UpdateSourceTrigger=LostFocus}"/>
+
+                    <!-- Đơn vị -->
+                    <DataGridTextColumn Width="100"
+                                        Header="Đơn vị"
+                                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                        Binding="{Binding Unit, UpdateSourceTrigger=LostFocus}"/>
+
+                    <!-- Đơn giá -->
+                    <DataGridTextColumn Width="120"
+                                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                        Header="Đơn giá"
+                                        Binding="{Binding Price, StringFormat=N0, UpdateSourceTrigger=LostFocus}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}"
                                    BasedOn="{StaticResource MaterialDesignDataGridTextColumnStyle}">
-                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                <Setter Property="Margin" Value="0,0,10,0"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
-                    </materialDesign:DataGridTextColumn>
+                    </DataGridTextColumn>
 
+                    <!-- Số lượng tồn -->
+                    <DataGridTextColumn Width="100"
+                                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                        Header="Số lượng"
+                                        Binding="{Binding StockQuantity, UpdateSourceTrigger=LostFocus}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}"
+                                   BasedOn="{StaticResource MaterialDesignDataGridTextColumnStyle}">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Danh mục -->
+                    <DataGridTextColumn Width="150"
+                                        Binding="{Binding Category.CategoryName}"
+                                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                        Header="Danh mục"
+                                        IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}"
+                                   BasedOn="{StaticResource MaterialDesignDataGridTextColumnStyle}">
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Cột Thao tác -->
+                    <DataGridTemplateColumn Width="120" Header="Thao tác">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" 
+                                            HorizontalAlignment="Center">
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="Chỉnh sửa"
+                                            Command="{Binding DataContext.EditProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Width="32"
+                                            Height="32"
+                                            Padding="0">
+                                        <materialDesign:PackIcon Kind="Pencil" 
+                                                                Width="18" 
+                                                                Height="18"/>
+                                    </Button>
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="Xóa"
+                                            Command="{Binding DataContext.DeleteProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Width="32"
+                                            Height="32"
+                                            Padding="0"
+                                            Margin="5,0,0,0"
+                                            Foreground="#F44336">
+                                        <materialDesign:PackIcon Kind="Delete" 
+                                                                Width="18" 
+                                                                Height="18"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

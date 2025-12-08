@@ -5,42 +5,58 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Martify.ViewModels
 {
-    // Kế thừa BaseVM (để dùng OnPropertyChanged) và IDataErrorInfo (để Validate lỗi hiển thị lên View)
     public class AddProductVM : BaseVM, IDataErrorInfo
     {
         // =================================================================================================
-        // PHẦN 1: KHAI BÁO PROPERITES (BINDING VỚI VIEW)
+        // THUỘC TÍNH
         // =================================================================================================
-                
-        private string _productCode;
-        public string ProductCode { get => _productCode; set { _productCode = value; OnPropertyChanged(); } }
 
         private string _productName;
-        public string ProductName { get => _productName; set { _productName = value; OnPropertyChanged(); } }
+        public string ProductName
+        {
+            get => _productName;
+            set { _productName = value; OnPropertyChanged(); }
+        }
 
         private string _unit;
-        public string Unit { get => _unit; set { _unit = value; OnPropertyChanged(); } }
+        public string Unit
+        {
+            get => _unit;
+            set { _unit = value; OnPropertyChanged(); }
+        }
 
         private decimal? _price;
-        public decimal? Price { get => _price; set { _price = value; OnPropertyChanged(); } }
+        public decimal? Price
+        {
+            get => _price;
+            set { _price = value; OnPropertyChanged(); }
+        }
 
         private int? _stockQuantity;
-        public int? StockQuantity { get => _stockQuantity; set { _stockQuantity = value; OnPropertyChanged(); } }
+        public int? StockQuantity
+        {
+            get => _stockQuantity;
+            set { _stockQuantity = value; OnPropertyChanged(); }
+        }
 
         private string _categoryID;
-        // internal backing for selected category
-        public string CategoryID { get => _categoryID; set { _categoryID = value; OnPropertyChanged(); } }
+        public string CategoryID
+        {
+            get => _categoryID;
+            set { _categoryID = value; OnPropertyChanged(); }
+        }
 
-        // Exposed to XAML: CategoryList and SelectedCategoryID
         private List<ProductCategory> _categoryList;
-        public List<ProductCategory> CategoryList { get => _categoryList; set { _categoryList = value; OnPropertyChanged(); } }
+        public List<ProductCategory> CategoryList
+        {
+            get => _categoryList;
+            set { _categoryList = value; OnPropertyChanged(); }
+        }
 
         private string _selectedCategoryID;
         public string SelectedCategoryID
@@ -49,20 +65,25 @@ namespace Martify.ViewModels
             set
             {
                 _selectedCategoryID = value;
-                // keep internal CategoryID in sync
-                CategoryID = value;
+                CategoryID = value; // Giữ đồng bộ
                 OnPropertyChanged();
             }
         }
 
-        // Suppliers for XAML
         private List<Supplier> _supplierList;
-        public List<Supplier> SupplierList { get => _supplierList; set { _supplierList = value; OnPropertyChanged(); } }
+        public List<Supplier> SupplierList
+        {
+            get => _supplierList;
+            set { _supplierList = value; OnPropertyChanged(); }
+        }
 
         private string _selectedSupplierID;
-        public string SelectedSupplierID { get => _selectedSupplierID; set { _selectedSupplierID = value; OnPropertyChanged(); } }
+        public string SelectedSupplierID
+        {
+            get => _selectedSupplierID;
+            set { _selectedSupplierID = value; OnPropertyChanged(); }
+        }
 
-        // --- Xử lý hiển thị ảnh ---
         private string _selectedImagePath;
         public string SelectedImagePath
         {
@@ -73,10 +94,9 @@ namespace Martify.ViewModels
         private string _sourceImageFile;
 
         // =================================================================================================
-        // PHẦN 2: CƠ CHẾ LAZY VALIDATION (VALIDATE TRỄ)
+        // XÁC THỰC
         // =================================================================================================
 
-        // Biến cờ (Flag) xác định đã bấm nút Lưu chưa
         private bool _isSaveClicked = false;
 
         public string Error => null;
@@ -85,110 +105,130 @@ namespace Martify.ViewModels
         {
             get
             {
-                // Bước 1: Lấy lỗi thực tế
                 string error = GetValidationError(columnName);
-
-                // Bước 2: Nếu không có lỗi -> Trả về null (Xanh)
                 if (string.IsNullOrEmpty(error)) return null;
-
-                // Bước 3: Nếu có lỗi nhưng chưa bấm Lưu -> Trả về null (Ẩn lỗi)
                 if (!_isSaveClicked) return null;
-
-                // Bước 4: Nếu có lỗi và đã bấm Lưu -> Hiện đỏ
                 return error;
             }
         }
 
-        // Hàm chứa toàn bộ quy tắc (Rules) kiểm tra dữ liệu
         private string GetValidationError(string columnName)
         {
             string result = null;
             switch (columnName)
             {
                 case nameof(ProductName):
-                    if (string.IsNullOrWhiteSpace(ProductName)) result = "Vui lòng nhập tên sản phẩm.";
-                    else if (ProductName.Length > 100) result = "Tên sản phẩm không được quá 100 ký tự.";
-                    // Thêm kiểm tra tên sản phẩm duy nhất (tùy theo nghiệp vụ)
-                    else if (CheckProductNameExist(ProductName)) result = "Tên sản phẩm này đã tồn tại trong hệ thống.";
+                    if (string.IsNullOrWhiteSpace(ProductName))
+                        result = "Vui lòng nhập tên sản phẩm.";
+                    else if (ProductName.Length > 100)
+                        result = "Tên sản phẩm không được quá 100 ký tự.";
+                    else if (CheckProductNameExist(ProductName))
+                        result = "Tên sản phẩm này đã tồn tại.";
                     break;
 
                 case nameof(Unit):
-                    if (string.IsNullOrWhiteSpace(Unit)) result = "Vui lòng nhập đơn vị tính.";
-                    else if (Unit.Length > 20) result = "Đơn vị tính không được quá 20 ký tự.";
+                    if (string.IsNullOrWhiteSpace(Unit))
+                        result = "Vui lòng nhập đơn vị tính.";
+                    else if (Unit.Length > 20)
+                        result = "Đơn vị tính không được quá 20 ký tự.";
                     break;
 
                 case nameof(Price):
-                    if (Price == null) result = "Vui lòng nhập giá bán.";
-                    else if (Price < 0) result = "Giá bán không được âm.";
+                    if (Price == null)
+                        result = "Vui lòng nhập giá bán.";
+                    else if (Price <= 0)
+                        result = "Giá bán phải lớn hơn 0.";
                     break;
 
                 case nameof(StockQuantity):
-                    if (StockQuantity == null) result = "Vui lòng nhập số lượng tồn kho.";
-                    else if (StockQuantity < 0) result = "Số lượng tồn kho không được âm.";
+                    if (StockQuantity == null)
+                        result = "Vui lòng nhập số lượng.";
+                    else if (StockQuantity < 0)
+                        result = "Số lượng không được âm.";
                     break;
 
                 case nameof(CategoryID):
-                    if (string.IsNullOrWhiteSpace(CategoryID)) result = "Vui lòng chọn danh mục.";
+                case nameof(SelectedCategoryID):
+                    if (string.IsNullOrWhiteSpace(SelectedCategoryID))
+                        result = "Vui lòng chọn danh mục.";
                     break;
             }
             return result;
         }
 
         // =================================================================================================
-        // PHẦN 3: COMMANDS
+        // LỆNH
         // =================================================================================================
+
         public ICommand SaveCommand { get; set; }
         public ICommand CloseCommand { get; set; }
-        public ICommand CategorySelectionChangedCommand { get; set; }
         public ICommand SelectImageCommand { get; set; }
-        public ICommand DragWindowCommand { get; set; }
+
+        // =================================================================================================
+        // HÀM KHỞI TẠO
+        // =================================================================================================
 
         public AddProductVM()
         {
-            // Ensure StockQuantity has a default so validation doesn't block when UI doesn't provide a field.
-            _stockQuantity = 0;
+            // Khởi tạo giá trị mặc định
+            StockQuantity = 0;
 
-            // Tải danh sách Category (Giả định DataProvider có thể lấy Categories)
+            // Tải dữ liệu
             LoadCategories();
             LoadSuppliers();
 
-            // Khởi tạo Commands
-            CloseCommand = new RelayCommand<Window>((p) => { return true; }, (p) => p?.Close());
+            // Khởi tạo lệnh
+            SaveCommand = new RelayCommand<Window>(
+                (p) => true,
+                (p) => SaveProduct(p));
 
-            SaveCommand = new RelayCommand<Window>((p) => { return true; }, (p) => SaveProduct(p));
+            CloseCommand = new RelayCommand<Window>(
+                (p) => true,
+                (p) => p?.Close());
 
-            SelectImageCommand = new RelayCommand<object>((p) => true, (p) => SelectImage());
-
-            CategorySelectionChangedCommand = new RelayCommand<ComboBox>((p) => p != null, (p) =>
-            {
-                if (p.SelectedItem is ProductCategory selectedCategory)
-                    SelectedCategoryID = selectedCategory.CategoryID;
-            });
-
-            DragWindowCommand = new RelayCommand<Window>((p) => p != null, (p) => { try { p.DragMove(); } catch { } });
+            SelectImageCommand = new RelayCommand<object>(
+                (p) => true,
+                (p) => SelectImage());
         }
 
-        void LoadCategories()
+        // =================================================================================================
+        // PHƯƠNG THỨC
+        // =================================================================================================
+
+        private void LoadCategories()
         {
-            // Thay thế bằng logic truy vấn DB thực tế
-            CategoryList = DataProvider.Ins.DB.ProductCategories.ToList();
-            // Keep internal CategoryID in sync if a selected value exists
-            if (CategoryList.Any() && string.IsNullOrEmpty(SelectedCategoryID))
+            try
             {
-                // do not auto-select; leave selection to user — or uncomment to auto-select:
-                // SelectedCategoryID = CategoryList.First().CategoryID;
+                CategoryList = DataProvider.Ins.DB.ProductCategories.ToList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi tải danh sách danh mục: {ex.Message}",
+                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        void LoadSuppliers()
+        private void LoadSuppliers()
         {
-            SupplierList = DataProvider.Ins.DB.Suppliers.ToList();
+            try
+            {
+                SupplierList = DataProvider.Ins.DB.Suppliers.ToList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi tải danh sách nhà cung cấp: {ex.Message}",
+                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-        void SelectImage()
+        private void SelectImage()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif",
+                Title = "Chọn ảnh sản phẩm"
+            };
+
             if (openFileDialog.ShowDialog() == true)
             {
                 _sourceImageFile = openFileDialog.FileName;
@@ -196,72 +236,108 @@ namespace Martify.ViewModels
             }
         }
 
-        // =================================================================================================
-        // PHẦN 4: HÀM LƯU SẢN PHẨM
-        // =================================================================================================
-        void SaveProduct(Window p)
+        private void SaveProduct(Window window)
         {
-            // 1. Bật cờ đã bấm nút Lưu -> Refresh UI để hiện lỗi đỏ
+            // Hiển thị xác thực
             _isSaveClicked = true;
-            OnPropertyChanged(null);
+            OnPropertyChanged(null); // Cập nhật lại tất cả thuộc tính
 
-            // 2. Kiểm tra xem còn lỗi nào không
-            if (!IsValid()) return;
-
-            // 3. Sinh mã và xử lý lưu
-            string newProductID = GenerateProductID();
-            string dbPath = null;
-
-            if (!string.IsNullOrEmpty(_sourceImageFile))
+            // Xác thực tất cả trường
+            if (!IsValid())
             {
-                dbPath = HandleImageSave(newProductID, _sourceImageFile);
-                if (dbPath == "ERROR") return;
+                MessageBox.Show("Vui lòng kiểm tra lại thông tin nhập vào.",
+                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
-
-            var newProduct = new Models.Product()
-            {
-                ProductID = newProductID,
-                ProductName = ProductName,
-                Unit = Unit,
-                Price = Price.Value,
-                StockQuantity = StockQuantity.Value,
-                ImagePath = dbPath,
-                CategoryID = CategoryID // Đã chọn ở ComboBox
-            };
 
             try
             {
+                // Tạo mã sản phẩm mới
+                string newProductID = GenerateProductID();
+
+                // Xử lý lưu ảnh
+                string dbImagePath = null;
+                if (!string.IsNullOrEmpty(_sourceImageFile))
+                {
+                    dbImagePath = HandleImageSave(newProductID, _sourceImageFile);
+                    if (dbImagePath == "ERROR")
+                    {
+                        MessageBox.Show("Không thể lưu ảnh sản phẩm.",
+                            "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                }
+
+                // Tạo sản phẩm mới
+                var newProduct = new Product
+                {
+                    ProductID = newProductID,
+                    ProductName = ProductName.Trim(),
+                    Unit = Unit.Trim(),
+                    Price = Price.Value,
+                    StockQuantity = StockQuantity.Value,
+                    ImagePath = dbImagePath,
+                    CategoryID = SelectedCategoryID,
+                };
+
+                // Lưu vào cơ sở dữ liệu
                 DataProvider.Ins.DB.Products.Add(newProduct);
                 DataProvider.Ins.DB.SaveChanges();
 
-                MessageBox.Show($"Thêm sản phẩm thành công!\n\n- Mã SP: {newProductID}\n- Tên SP: {ProductName}",
-                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                p?.Close();
+                MessageBox.Show(
+                    $"Thêm sản phẩm thành công!\n\n" +
+                    $"Mã SP: {newProductID}\n" +
+                    $"Tên: {ProductName}",
+                    "Thành công",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                window?.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi hệ thống: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Lỗi khi lưu sản phẩm: {ex.Message}",
+                    "Lỗi",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
-
-        // =================================================================================================
-        // PHẦN 5: CÁC HÀM HỖ TRỢ (HELPERS)
-        // =================================================================================================
 
         private bool IsValid()
         {
-            string[] properties = { nameof(ProductName), nameof(Unit), nameof(Price), nameof(StockQuantity), nameof(CategoryID) };
+            string[] properties =
+            {
+                nameof(ProductName),
+                nameof(Unit),
+                nameof(Price),
+                nameof(StockQuantity),
+                nameof(SelectedCategoryID)
+            };
+
             foreach (var prop in properties)
             {
-                if (!string.IsNullOrEmpty(GetValidationError(prop))) return false;
+                if (!string.IsNullOrEmpty(GetValidationError(prop)))
+                    return false;
             }
+
             return true;
         }
 
-        // Helper: Kiểm tra Tên sản phẩm đã tồn tại chưa (Giả định không trùng tên)
         private bool CheckProductNameExist(string productName)
         {
-            return DataProvider.Ins.DB.Products.Any(x => x.ProductName == productName);
+            if (string.IsNullOrWhiteSpace(productName))
+                return false;
+
+            try
+            {
+                return DataProvider.Ins.DB.Products
+                    .Any(p => p.ProductName.Trim().ToLower() == productName.Trim().ToLower());
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private string HandleImageSave(string productId, string sourceFile)
@@ -273,14 +349,15 @@ namespace Martify.ViewModels
 
                 string binFolder = AppDomain.CurrentDomain.BaseDirectory;
 
-                // A. Copy vào BIN (Đảm bảo đường dẫn)
+                // Sao chép vào thư mục BIN
                 string binAssetsPath = Path.Combine(binFolder, "Assets", "Product");
-                if (!Directory.Exists(binAssetsPath)) Directory.CreateDirectory(binAssetsPath);
+                if (!Directory.Exists(binAssetsPath))
+                    Directory.CreateDirectory(binAssetsPath);
 
                 string destBinFile = Path.Combine(binAssetsPath, fileName);
                 File.Copy(sourceFile, destBinFile, true);
 
-                // B. Copy vào SOURCE CODE (Tùy chọn, giống AddEmployeeVM)
+                // Thử sao chép vào thư mục nguồn (tùy chọn)
                 try
                 {
                     string projectFolder = Path.GetFullPath(Path.Combine(binFolder, @"..\..\..\"));
@@ -288,37 +365,56 @@ namespace Martify.ViewModels
 
                     if (Directory.Exists(Path.Combine(projectFolder, "Assets")))
                     {
-                        if (!Directory.Exists(sourcePath)) Directory.CreateDirectory(sourcePath);
-                        File.Copy(sourceFile, Path.Combine(sourcePath, fileName), true);
+                        if (!Directory.Exists(sourcePath))
+                            Directory.CreateDirectory(sourcePath);
+
+                        string destSourceFile = Path.Combine(sourcePath, fileName);
+                        File.Copy(sourceFile, destSourceFile, true);
                     }
                 }
-                catch { /* Bỏ qua lỗi khi không copy được vào thư mục Source Code */ }
+                catch
+                {
+                    // Bỏ qua lỗi khi sao chép vào thư mục nguồn
+                }
 
-                return Path.Combine("Assets", "Product", fileName);
+                // Trả về đường dẫn tương đối để lưu vào cơ sở dữ liệu
+                return Path.Combine("Assets", "Product", fileName).Replace("\\", "/");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi lưu ảnh: " + ex.Message);
+                MessageBox.Show($"Lỗi lưu ảnh: {ex.Message}");
                 return "ERROR";
             }
         }
 
         private string GenerateProductID()
         {
-            // Logic sinh ID sản phẩm (Ví dụ: SP001)
-            var productIds = DataProvider.Ins.DB.Products
-                .Where(x => x.ProductID.StartsWith("SP"))
-                .Select(x => x.ProductID).ToList();
-
-            if (productIds.Count == 0) return "SP001";
-
-            int maxId = 0;
-            foreach (var id in productIds)
+            try
             {
-                if (id.Length > 2 && int.TryParse(id.Substring(2), out int num))
-                    if (num > maxId) maxId = num;
+                var productIds = DataProvider.Ins.DB.Products
+                    .Where(x => x.ProductID.StartsWith("SP"))
+                    .Select(x => x.ProductID)
+                    .ToList();
+
+                if (productIds.Count == 0)
+                    return "SP001";
+
+                int maxId = 0;
+                foreach (var id in productIds)
+                {
+                    if (id.Length > 2 && int.TryParse(id.Substring(2), out int num))
+                    {
+                        if (num > maxId)
+                            maxId = num;
+                    }
+                }
+
+                return "SP" + (maxId + 1).ToString("D3");
             }
-            return "SP" + (maxId + 1).ToString("D3");
+            catch
+            {
+                return "SP001";
+            }
         }
     }
 }

@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:Martify.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:Martify.ViewModels"
-             xmlns:uc="clr-namespace:Martify.Views"
              xmlns:cv="clr-namespace:Martify.Converters" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              Background="Transparent"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="864"
@@ -24,8 +24,17 @@
 
         <Style x:Key="CustomDataGridCellStyle" TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
             <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
-            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="CenterTextColumnStyle" TargetType="TextBlock">
@@ -42,9 +51,40 @@
             <Setter Property="FontSize" Value="14"/>
         </Style>
 
+        <Style x:Key="SlidingDetailsPanelStyle" TargetType="Border">
+            <Setter Property="Width" Value="0"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsDetailsPanelOpen}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Width" 
+                                                 To="350" Duration="0:0:0.4">
+                                    <DoubleAnimation.EasingFunction>
+                                        <QuadraticEase EasingMode="EaseOut"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Width" 
+                                                 To="0" Duration="0:0:0.3">
+                                    <DoubleAnimation.EasingFunction>
+                                        <QuadraticEase EasingMode="EaseIn"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
-    <Grid Background="{DynamicResource MainBackground}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="60"/>
@@ -58,56 +98,30 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-
                 <Border Background="{DynamicResource CardBackground}" CornerRadius="20" Height="40" Width="220" Margin="0,0,10,0">
                     <Grid>
-                        <materialDesign:PackIcon Kind="Magnify" 
-                                                 VerticalAlignment="Center" 
-                                                 Margin="10,0,0,0" 
-                                                 Foreground="{DynamicResource SecondaryText}"/>
+                        <materialDesign:PackIcon Kind="Magnify" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="{DynamicResource SecondaryText}"/>
                         <TextBox materialDesign:HintAssist.Hint="Tìm tên nhân viên..."
                                  materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
-                                 BorderThickness="0"
-                                 VerticalAlignment="Center"
-                                 Margin="35,0,10,0"
-                                 FontSize="14"
-                                 Foreground="{DynamicResource PrimaryText}"
+                                 BorderThickness="0" VerticalAlignment="Center" Margin="35,0,10,0"
+                                 FontSize="14" Foreground="{DynamicResource PrimaryText}"
                                  Text="{Binding Keyword, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Border>
+                <ComboBox Width="90" Height="40" ItemsSource="{Binding Months}" SelectedValue="{Binding SelectedMonth}"
+                          materialDesign:HintAssist.Hint="Tháng" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryText}" Margin="0,0,10,0" Padding="10,0"/>
+                <ComboBox Width="90" Height="40" ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}"
+                          materialDesign:HintAssist.Hint="Năm" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryText}" Margin="0,0,10,0" Padding="10,0"/>
 
-                <ComboBox Width="90" Height="40"
-                          ItemsSource="{Binding Months}"
-                          SelectedValue="{Binding SelectedMonth}"
-                          materialDesign:HintAssist.Hint="Tháng"
-                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                          Background="{DynamicResource CardBackground}"
-                          Foreground="{DynamicResource PrimaryText}"
-                          Margin="0,0,10,0" Padding="10,0"/>
-
-                <ComboBox Width="90" Height="40"
-                          ItemsSource="{Binding Years}"
-                          SelectedValue="{Binding SelectedYear}"
-                          materialDesign:HintAssist.Hint="Năm"
-                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                          Background="{DynamicResource CardBackground}"
-                          Foreground="{DynamicResource PrimaryText}"
-                          Margin="0,0,10,0" Padding="10,0"/>
-
-                <Button Style="{StaticResource MaterialDesignToolButton}"
-                        Command="{Binding ClearFilterCommand}"
-                        ToolTip="Xóa bộ lọc"
-                        Height="40" Width="40">
+                <Button Style="{StaticResource MaterialDesignToolButton}" Command="{Binding ClearFilterCommand}" ToolTip="Xóa bộ lọc" Height="40" Width="40">
                     <materialDesign:PackIcon Kind="FilterOff" Foreground="Red" />
                 </Button>
-
             </StackPanel>
 
-            <Button Grid.Column="1" Width="150" Height="40"
-                    materialDesign:ButtonAssist.CornerRadius="10"
-                    Style="{StaticResource MaterialDesignRaisedButton}" 
-                    Foreground="White" BorderBrush="{x:Null}"
-                    Padding="0"
+            <Button Grid.Column="1" Width="150" Height="40" materialDesign:ButtonAssist.CornerRadius="10"
+                    Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}" Padding="0"
                     Command="{Binding AddEmployeeCommand}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
@@ -117,110 +131,220 @@
                     </LinearGradientBrush>
                 </Button.Background>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="AccountPlusOutline" Width="25" Height="25"
-                                             HorizontalAlignment="Center"
-                                             VerticalAlignment="Center"/>
-                    <TextBlock Text="Thêm nhân viên" FontFamily="Times New Roman" FontSize="16"
-                               Margin="5,0,0,0"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"/>
+                    <materialDesign:PackIcon Kind="AccountPlusOutline" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Text="Thêm nhân viên" FontFamily="Times New Roman" FontSize="16" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Button>
         </Grid>
 
-        <Border Grid.Row="2"
-                Background="{DynamicResource CardBackground}"
-                CornerRadius="25"
-                Margin="10">
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-            <DataGrid Margin="10,10,10,10"
-                      ItemsSource="{Binding Employees}" 
-                      x:Name="membersDataGrid" 
-                      Style="{DynamicResource DataGridStyle}"
-                      CellStyle="{StaticResource CustomDataGridCellStyle}"
-                      AutoGenerateColumns="False"
-                      HorizontalAlignment="Center" 
-                      CanUserReorderColumns="False"  
-                      CanUserResizeColumns="False"
-                      Background="Transparent"
-                      Foreground="{DynamicResource PrimaryText}">
+            <Border Grid.Column="0" Background="{DynamicResource CardBackground}" CornerRadius="25" Margin="10" Padding="5">
+                <DataGrid Margin="5"
+                          ItemsSource="{Binding Employees}" 
+                          x:Name="membersDataGrid" 
+                          Style="{DynamicResource DataGridStyle}"
+                          CellStyle="{StaticResource CustomDataGridCellStyle}"
+                          AutoGenerateColumns="False"
+                          HorizontalAlignment="Center" 
+                          CanUserReorderColumns="False"  
+                          CanUserResizeColumns="False"
+                          Background="Transparent"
+                          Foreground="{DynamicResource PrimaryText}"
+                          
+                          SelectionUnit="FullRow"
+                          CanUserAddRows="False">
+                    <DataGrid.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick"
+                                      Command="{Binding OpenDetailsCommand}"
+                                      CommandParameter="{Binding ElementName=membersDataGrid, Path=SelectedItem}"/>
+                    </DataGrid.InputBindings>
 
-                <DataGrid.Resources>
-                    <Style TargetType="{x:Type DataGridColumnHeader}" 
-                           BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                        <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-                        <Setter Property="FontSize" Value="14"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                        <Setter Property="Background" Value="Transparent"/>
-                    </Style>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                            <Setter Property="Margin" Value="0,2.5,0,2.5"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Style>
+                    </DataGrid.RowStyle>
 
-                    <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
-                        <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-                        <Setter Property="Margin" Value="0,2.5,0,2.5"/>
-                    </Style>
-                </DataGrid.Resources>
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Style>
+                    </DataGrid.Resources>
 
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Mã" IsReadOnly="True" CanUserResize="False" Width="0.75*" Binding="{Binding EmployeeID}" ElementStyle="{StaticResource CenterTextColumnStyle}"/>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Mã" IsReadOnly="True" CanUserResize="False" Width="0.75*" Binding="{Binding EmployeeID}" ElementStyle="{StaticResource CenterTextColumnStyle}"/>
 
-                    <DataGridTemplateColumn Header="Nhân viên" SortMemberPath="FullName" IsReadOnly="True" Width="1.6*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Ellipse Width="30" Height="30" Margin="0 0 10 0">
-                                        <Ellipse.Fill>
-                                            <ImageBrush Stretch="UniformToFill">
-                                                <ImageBrush.ImageSource>
-                                                    <Binding Path="ImagePath" Converter="{StaticResource ImgConverter}" TargetNullValue="{StaticResource Anonymous}" FallbackValue="{StaticResource Anonymous}"/>
-                                                </ImageBrush.ImageSource>
-                                            </ImageBrush>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <TextBlock Text="{Binding FullName}" VerticalAlignment="Center" FontSize="14" Foreground="{DynamicResource PrimaryText}"/>
+                        <DataGridTemplateColumn Header="Nhân viên" SortMemberPath="FullName" IsReadOnly="True" Width="1.6*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Ellipse Width="30" Height="30" Margin="0 0 10 0">
+                                            <Ellipse.Fill>
+                                                <ImageBrush Stretch="UniformToFill">
+                                                    <ImageBrush.ImageSource>
+                                                        <Binding Path="ImagePath" Converter="{StaticResource ImgConverter}" TargetNullValue="{StaticResource Anonymous}" FallbackValue="{StaticResource Anonymous}"/>
+                                                    </ImageBrush.ImageSource>
+                                                </ImageBrush>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <TextBlock Text="{Binding FullName}" VerticalAlignment="Center" FontSize="14" Foreground="{DynamicResource PrimaryText}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="Địa chỉ" Binding="{Binding Address}" IsReadOnly="True" Width="1.5*" ElementStyle="{StaticResource LeftTextColumnStyle}"/>
+                        <DataGridTextColumn Header="Ngày vào làm" Binding="{Binding HireDate, StringFormat=dd/MM/yyyy}" IsReadOnly="True" Width="1.25*" ElementStyle="{StaticResource CenterTextColumnStyle}"/>
+
+                        <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status, Converter={StaticResource StatusConverter}}" IsReadOnly="True" Width="1.15*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Status}" Value="True">
+                                            <Setter Property="Foreground" Value="Green"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status}" Value="False">
+                                            <Setter Property="Foreground" Value="Red"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTemplateColumn Header="Công cụ" CanUserSort="False" Width="Auto" CanUserReorder="False" CanUserResize="False" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Style="{DynamicResource GridEditButtonStyle}">
+                                            <Image Source="{StaticResource CloseProgram}" Width="10" Height="10"></Image>
+                                        </Button>
+                                        <Button Margin="5 0 0 0" Style="{DynamicResource GridRemoveButtonStyle}">
+                                            <Image Source="{StaticResource Martify}" Width="10" Height="10"></Image>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <Border Grid.Column="1"
+                    Style="{StaticResource SlidingDetailsPanelStyle}"
+                    Background="{DynamicResource CardBackground}"
+                    BorderBrush="{DynamicResource MaterialDesignDivider}"
+                    BorderThickness="1,0,0,0"
+                    Margin="0,10,10,10" CornerRadius="10">
+
+                <Grid Margin="20" DataContext="{Binding SelectedDetailEmployee}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,20,0,30">
+                        <Ellipse Width="100" Height="100" Margin="0,0,0,15">
+                            <Ellipse.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
+                            </Ellipse.Effect>
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="{Binding ImagePath, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource Anonymous}, FallbackValue={StaticResource Anonymous}}" Stretch="UniformToFill"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <TextBlock Text="{Binding FullName}" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Text="{Binding EmployeeID}" FontSize="14" Foreground="{DynamicResource SecondaryText}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                    </StackPanel>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:PackIcon Kind="Email" Width="24" Height="24" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Email" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                                    <TextBlock Text="{Binding Email}" FontSize="15" Foreground="{DynamicResource PrimaryText}" TextWrapping="Wrap"/>
                                 </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                            </Grid>
 
-                    <DataGridTextColumn Header="Địa chỉ" Binding="{Binding Address}" IsReadOnly="True" Width="1.5*" ElementStyle="{StaticResource LeftTextColumnStyle}"/>
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:PackIcon Kind="Phone" Width="24" Height="24" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Số điện thoại" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                                    <TextBlock Text="{Binding Phone}" FontSize="15" Foreground="{DynamicResource PrimaryText}"/>
+                                </StackPanel>
+                            </Grid>
 
-                    <DataGridTextColumn Header="Ngày vào làm" Binding="{Binding HireDate, StringFormat=dd/MM/yyyy}" IsReadOnly="True" Width="1.25*" ElementStyle="{StaticResource CenterTextColumnStyle}"/>
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:PackIcon Kind="GenderMaleFemale" Width="24" Height="24" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Giới tính" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                                    <TextBlock Text="{Binding Gender}" FontSize="15" Foreground="{DynamicResource PrimaryText}"/>
+                                </StackPanel>
+                            </Grid>
 
-                    <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status, Converter={StaticResource StatusConverter}}" IsReadOnly="True" Width="1.15*">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Left"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="FontSize" Value="14"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Status}" Value="True">
-                                        <Setter Property="Foreground" Value="Green"/>
-                                        <Setter Property="FontWeight" Value="SemiBold"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Status}" Value="False">
-                                        <Setter Property="Foreground" Value="Red"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:PackIcon Kind="CakeVariant" Width="24" Height="24" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Ngày sinh" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                                    <TextBlock Text="{Binding BirthDate, StringFormat=dd/MM/yyyy}" FontSize="15" Foreground="{DynamicResource PrimaryText}"/>
+                                </StackPanel>
+                            </Grid>
 
-                    <DataGridTemplateColumn Header="Công cụ" CanUserSort="False" Width="Auto" CanUserReorder="False" CanUserResize="False" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:PackIcon Kind="MapMarker" Width="24" Height="24" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Địa chỉ" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                                    <TextBlock Text="{Binding Address}" FontSize="15" Foreground="{DynamicResource PrimaryText}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Border Margin="0,10,0,0" Padding="15" CornerRadius="10" 
+                                    Background="{Binding Status, Converter={StaticResource StatusConverter}, ConverterParameter=Background}">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <Button Style="{DynamicResource GridEditButtonStyle}">
-                                        <Image Source="{StaticResource CloseProgram}" Width="10" Height="10"></Image>
-                                    </Button>
-                                    <Button Margin="5 0 0 0" Style="{DynamicResource GridRemoveButtonStyle}">
-                                        <Image Source="{StaticResource Martify}" Width="10" Height="10"></Image>
-                                    </Button>
+                                    <materialDesign:PackIcon Kind="AccountCheck" Margin="0,0,10,0" 
+                                                             Foreground="{Binding Status, Converter={StaticResource StatusConverter}, ConverterParameter=Foreground}"/>
+                                    <TextBlock Text="{Binding Status, Converter={StaticResource StatusConverter}}" 
+                                               FontWeight="Bold"
+                                               Foreground="{Binding Status, Converter={StaticResource StatusConverter}, ConverterParameter=Foreground}"/>
                                 </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Border>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

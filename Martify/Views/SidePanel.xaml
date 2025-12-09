@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:Martify"
              mc:Ignorable="d"
              Background="Transparent"
-             Name="ucPanel">
+             Name="ucPanel"
+             d:Style="{x:Null}">
     <UserControl.Resources>
 
         <Style x:Key="SidePanelStyle"
@@ -289,6 +290,46 @@
                         </Setter>
                     </Style>
 
+                    <Style x:Key="productselection_listboxitem_style"
+                           TargetType="ListBoxItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <RadioButton IsChecked="{Binding Path=IsSelected, 
+                                                                       RelativeSource={RelativeSource TemplatedParent}}"
+                                                 GroupName="SidePanelGroup"
+                                                 Command="{Binding DataContext.Navigation.ProductSelectionCommand, ElementName=ucPanel}">
+
+                                        <RadioButton.Style>
+
+                                            <Style TargetType="RadioButton"
+                                                   BasedOn="{StaticResource SidePanelStyle}">
+
+                                                <Setter Property="TextBlock.Text"
+                                                        Value="Sell" />
+                                                <Setter Property="Content"
+                                                        Value="SELL" />
+
+
+                                                <Setter Property="Image.Source"
+                                                        Value="{StaticResource ProductsNormal}" />
+
+                                                <Setter Property="Tag"
+                                                        Value="{StaticResource ProductsActive}" />
+
+                                                <Setter Property="DataContext"
+                                                        Value="{StaticResource ProductsActive}" />
+
+                                            </Style>
+
+                                        </RadioButton.Style>
+
+                                    </RadioButton>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
                     <Style x:Key="products_listboxitem_style"
                            TargetType="ListBoxItem">
                         <Setter Property="Template">
@@ -460,8 +501,8 @@
                                 <RowDefinition Height="40" />
                                 <RowDefinition Height="40" />
                                 <RowDefinition Height="40" />
-                                <RowDefinition Height="40
-                                               " />
+                                <RowDefinition Height="40" />
+                                <RowDefinition Height="40" />
 
                             </Grid.RowDefinitions>
 
@@ -476,21 +517,25 @@
                              Style="{StaticResource dashboard_listboxitem_style}"
                              IsSelected="True" Width="200"/>
 
-                <ListBoxItem x:Name="products_sidepanel_listboxitem"
+                <ListBoxItem x:Name="sellproducts_sidepanel_listboxitem"
                              Grid.Row="1"
+                             Style="{StaticResource productselection_listboxitem_style}" />
+
+                <ListBoxItem x:Name="products_sidepanel_listboxitem"
+                             Grid.Row="2"
                              Style="{StaticResource products_listboxitem_style}" />
 
                 <ListBoxItem x:Name="staff_sidepanel_listboxitem"
-                             Grid.Row="2"
+                             Grid.Row="3"
                              Style="{StaticResource staff_listboxitem_style}" />
 
                 <ListBoxItem x:Name="receipts_sidepanel_listboxitem"
-                             Grid.Row="3"
+                             Grid.Row="4"
                              Style="{StaticResource receipts_listboxitem_style}" />
 
                 <ListBoxItem x:Name="settings_sidepanel_listboxitem"
                              VerticalAlignment="Bottom"
-                             Grid.Row="4"
+                             Grid.Row="5"
                              Style="{StaticResource settings_listboxitem_style}" />
             </ListBox>
         </StackPanel>

@@ -11,6 +11,9 @@
     <DataTemplate DataType="{x:Type vm:DashboardVM}">
         <view:Dashboard />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:ProductSelectionVM}">
+        <view:ProductSelection />
+    </DataTemplate>
     <DataTemplate DataType="{x:Type vm:ProductsVM}">
         <view:Products />
     </DataTemplate>

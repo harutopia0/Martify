@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;//
 
 namespace Martify.Models
 {
@@ -30,7 +31,18 @@ namespace Martify.Models
         private DataProvider()
         {
             DB = new MartifyDbContext();
-
+            //
+            try
+            {
+                // If you use EF Migrations, apply them.
+                DB.Database.Migrate();
+            }
+            catch
+            {
+                // If migrations are not configured, ensure database and tables exist (development fallback).
+                DB.Database.EnsureCreated();
+            }
+            //
         }
     }
 }

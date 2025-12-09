@@ -59,7 +59,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation Storyboard.TargetProperty="Width" 
-                                                 To="350" Duration="0:0:0.4">
+                                                 To="300" Duration="0:0:0.4">
                                     <DoubleAnimation.EasingFunction>
                                         <QuadraticEase EasingMode="EaseOut"/>
                                     </DoubleAnimation.EasingFunction>
@@ -155,9 +155,9 @@
                           CanUserResizeColumns="False"
                           Background="Transparent"
                           Foreground="{DynamicResource PrimaryText}"
-                          
                           SelectionUnit="FullRow"
                           CanUserAddRows="False">
+
                     <DataGrid.InputBindings>
                         <MouseBinding MouseAction="LeftDoubleClick"
                                       Command="{Binding OpenDetailsCommand}"
@@ -229,11 +229,14 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Button Style="{DynamicResource GridEditButtonStyle}">
-                                            <Image Source="{StaticResource CloseProgram}" Width="10" Height="10"></Image>
+                                        <Button Style="{DynamicResource GridEditButtonStyle}"
+                                                Command="{Binding DataContext.OpenDetailsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}">
+                                            <materialDesign:PackIcon Kind="Wrench" Width="12" Height="12" Foreground="White"/>
                                         </Button>
+
                                         <Button Margin="5 0 0 0" Style="{DynamicResource GridRemoveButtonStyle}">
-                                            <Image Source="{StaticResource Martify}" Width="10" Height="10"></Image>
+                                            <materialDesign:PackIcon Kind="Delete" Width="12" Height="12" Foreground="White"/>
                                         </Button>
                                     </StackPanel>
                                 </DataTemplate>
@@ -248,7 +251,7 @@
                     Background="{DynamicResource CardBackground}"
                     BorderBrush="{DynamicResource MaterialDesignDivider}"
                     BorderThickness="1,0,0,0"
-                    Margin="0,10,10,10" CornerRadius="10">
+                    Margin="0,10,10,10" CornerRadius="20">
 
                 <Grid Margin="20" DataContext="{Binding SelectedDetailEmployee}">
                     <Grid.RowDefinitions>
@@ -271,76 +274,61 @@
 
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
                         <StackPanel>
-                            <Grid Margin="0,0,0,20">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Kind="Email" Width="24" Height="24" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Email" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
-                                    <TextBlock Text="{Binding Email}" FontSize="15" Foreground="{DynamicResource PrimaryText}" TextWrapping="Wrap"/>
-                                </StackPanel>
-                            </Grid>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="Email" Width="22" Height="22" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Email}" FontSize="15" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            </StackPanel>
 
-                            <Grid Margin="0,0,0,20">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Kind="Phone" Width="24" Height="24" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Số điện thoại" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
-                                    <TextBlock Text="{Binding Phone}" FontSize="15" Foreground="{DynamicResource PrimaryText}"/>
-                                </StackPanel>
-                            </Grid>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="Phone" Width="22" Height="22" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Phone}" FontSize="15" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                            </StackPanel>
 
-                            <Grid Margin="0,0,0,20">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Kind="GenderMaleFemale" Width="24" Height="24" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Giới tính" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
-                                    <TextBlock Text="{Binding Gender}" FontSize="15" Foreground="{DynamicResource PrimaryText}"/>
-                                </StackPanel>
-                            </Grid>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="GenderMaleFemale" Width="22" Height="22" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Gender}" FontSize="15" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                            </StackPanel>
 
-                            <Grid Margin="0,0,0,20">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Kind="CakeVariant" Width="24" Height="24" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Ngày sinh" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
-                                    <TextBlock Text="{Binding BirthDate, StringFormat=dd/MM/yyyy}" FontSize="15" Foreground="{DynamicResource PrimaryText}"/>
-                                </StackPanel>
-                            </Grid>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="CakeVariant" Width="22" Height="22" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding BirthDate, StringFormat=dd/MM/yyyy}" FontSize="15" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                            </StackPanel>
 
-                            <Grid Margin="0,0,0,20">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Kind="MapMarker" Width="24" Height="24" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Địa chỉ" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
-                                    <TextBlock Text="{Binding Address}" FontSize="15" Foreground="{DynamicResource PrimaryText}" TextWrapping="Wrap"/>
-                                </StackPanel>
-                            </Grid>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Top">
+                                <materialDesign:PackIcon Kind="MapMarker" Width="22" Height="22" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Top"/>
+                                <TextBlock Text="{Binding Address}" FontSize="15" Foreground="{DynamicResource PrimaryText}" TextWrapping="Wrap" MaxWidth="220" VerticalAlignment="Top"/>
+                            </StackPanel>
 
                             <Border Margin="0,10,0,0" Padding="15" CornerRadius="10" 
-                                    Background="{Binding Status, Converter={StaticResource StatusConverter}, ConverterParameter=Background}">
+                                    Background="{Binding Status, Converter={StaticResource StatusConverter}, ConverterParameter=Background}"
+                                    Cursor="Hand" ToolTip="Nhấn để đổi trạng thái">
+
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" 
+                                                  Command="{Binding DataContext.ToggleStatusCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                </Border.InputBindings>
+
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <materialDesign:PackIcon Kind="AccountCheck" Margin="0,0,10,0" 
-                                                             Foreground="{Binding Status, Converter={StaticResource StatusConverter}, ConverterParameter=Foreground}"/>
+                                    <materialDesign:PackIcon Margin="0,0,10,0" 
+                                                             Foreground="{Binding Status, Converter={StaticResource StatusConverter}, ConverterParameter=Foreground}">
+                                        <materialDesign:PackIcon.Style>
+                                            <Style TargetType="materialDesign:PackIcon">
+                                                <Setter Property="Kind" Value="AccountRemove"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status}" Value="True">
+                                                        <Setter Property="Kind" Value="AccountCheck"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </materialDesign:PackIcon.Style>
+                                    </materialDesign:PackIcon>
+
                                     <TextBlock Text="{Binding Status, Converter={StaticResource StatusConverter}}" 
                                                FontWeight="Bold"
                                                Foreground="{Binding Status, Converter={StaticResource StatusConverter}, ConverterParameter=Foreground}"/>
                                 </StackPanel>
                             </Border>
+
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>

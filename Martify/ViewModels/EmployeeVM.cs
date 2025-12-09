@@ -5,7 +5,8 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System;
 using System.Windows;
-// Alias để tránh xung đột tên với View
+// Thêm thư viện này để dùng AsNoTracking
+using Microsoft.EntityFrameworkCore;
 using EmployeeModel = Martify.Models.Employee;
 
 namespace Martify.ViewModels
@@ -34,25 +35,13 @@ namespace Martify.ViewModels
         }
 
         private string _keyword;
-        public string Keyword
-        {
-            get => _keyword;
-            set { _keyword = value; OnPropertyChanged(); LoadList(); }
-        }
+        public string Keyword { get => _keyword; set { _keyword = value; OnPropertyChanged(); LoadList(); } }
 
         private int? _selectedMonth;
-        public int? SelectedMonth
-        {
-            get => _selectedMonth;
-            set { _selectedMonth = value; OnPropertyChanged(); LoadList(); }
-        }
+        public int? SelectedMonth { get => _selectedMonth; set { _selectedMonth = value; OnPropertyChanged(); LoadList(); } }
 
         private int? _selectedYear;
-        public int? SelectedYear
-        {
-            get => _selectedYear;
-            set { _selectedYear = value; OnPropertyChanged(); LoadList(); }
-        }
+        public int? SelectedYear { get => _selectedYear; set { _selectedYear = value; OnPropertyChanged(); LoadList(); } }
 
         public ObservableCollection<int> Months { get; set; } = new ObservableCollection<int>();
         public ObservableCollection<int> Years { get; set; } = new ObservableCollection<int>();
@@ -60,6 +49,7 @@ namespace Martify.ViewModels
         public ICommand AddEmployeeCommand { get; set; }
         public ICommand ClearFilterCommand { get; set; }
         public ICommand OpenDetailsCommand { get; set; }
+        public ICommand ToggleStatusCommand { get; set; } // Command đổi trạng thái
 
         public EmployeeVM()
         {
@@ -74,10 +64,8 @@ namespace Martify.ViewModels
                 LoadList();
             });
 
-            // SỬA LỖI AN TOÀN: Nhận object thay vì ép kiểu cứng ngay từ đầu
             OpenDetailsCommand = new RelayCommand<object>((p) => true, (p) =>
             {
-                // Kiểm tra xem p có đúng là nhân viên không
                 if (p is EmployeeModel emp)
                 {
                     SelectedDetailEmployee = emp;
@@ -90,8 +78,32 @@ namespace Martify.ViewModels
                 Keyword = string.Empty;
                 SelectedMonth = null;
                 SelectedYear = null;
-                IsDetailsPanelOpen = false; // Đóng panel
+                IsDetailsPanelOpen = false;
                 LoadList();
+            });
+
+            // --- LOGIC ĐỔI TRẠNG THÁI (FIX REAL-TIME) ---
+            ToggleStatusCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                if (SelectedDetailEmployee != null)
+                {
+                    string currentId = SelectedDetailEmployee.EmployeeID;
+
+                    // 1. Cập nhật DB
+                    var empInDb = DataProvider.Ins.DB.Employees.FirstOrDefault(x => x.EmployeeID == currentId);
+                    if (empInDb != null)
+                    {
+                        empInDb.Status = !empInDb.Status.GetValueOrDefault(); // Đảo trạng thái
+                        DataProvider.Ins.DB.SaveChanges();
+                    }
+
+                    // 2. Tải lại danh sách (AsNoTracking sẽ lấy dữ liệu mới nhất)
+                    LoadList();
+
+                    // 3. Gán lại SelectedDetailEmployee bằng object MỚI từ danh sách MỚI
+                    // Việc này ép buộc View cập nhật lại màu sắc và text ngay lập tức
+                    SelectedDetailEmployee = Employees.FirstOrDefault(x => x.EmployeeID == currentId);
+                }
             });
         }
 
@@ -99,7 +111,6 @@ namespace Martify.ViewModels
         {
             Months.Clear();
             for (int i = 1; i <= 12; i++) Months.Add(i);
-
             Years.Clear();
             var dbYears = DataProvider.Ins.DB.Employees.Select(x => x.HireDate.Year).Distinct().OrderByDescending(y => y).ToList();
             foreach (var y in dbYears) Years.Add(y);
@@ -107,7 +118,9 @@ namespace Martify.ViewModels
 
         void LoadList()
         {
-            var query = DataProvider.Ins.DB.Employees.AsQueryable();
+            // QUAN TRỌNG: Thêm .AsNoTracking()
+            // Nó giúp tạo ra các object mới hoàn toàn mỗi khi load, tránh việc WPF dùng lại object cũ (bị cache)
+            var query = DataProvider.Ins.DB.Employees.AsNoTracking().AsQueryable();
 
             if (SelectedMonth.HasValue) query = query.Where(x => x.HireDate.Month == SelectedMonth.Value);
             if (SelectedYear.HasValue) query = query.Where(x => x.HireDate.Year == SelectedYear.Value);

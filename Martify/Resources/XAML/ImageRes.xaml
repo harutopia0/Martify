@@ -6,7 +6,8 @@
     
     <BitmapImage x:Key="Martify" UriSource="/Resources/Images/Martify.png" />
     <BitmapImage x:Key="Anonymous" UriSource="/Resources/Images/anonymous.png" />
-    
+    <BitmapImage x:Key="DefaultProduct" UriSource="/Resources/Images/defaultproduct.png" />
+
     <BitmapImage x:Key="LoginBackground" UriSource="/Resources/Images/background.png" />
 
     <BitmapImage x:Key="UploadImage" UriSource="/Resources/Images/upload_image.png" />

@@ -9,14 +9,249 @@
              xmlns:vm="clr-namespace:Martify.ViewModels"
              xmlns:uc="clr-namespace:Martify.Views"
              xmlns:cv="clr-namespace:Martify.Converters" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="720" d:DesignWidth="864"
+             Style="{StaticResource Page_CinematicFocus_Style}"
              d:Style="{x:Null}">
-    
+
     <UserControl.DataContext>
         <vm:ProductSelectionVM />
     </UserControl.DataContext>
-    
+
+    <UserControl.Resources>
+        <cv:ImagePathConverter x:Key="ImgConverter"/>
+
+        <Style x:Key="ProductItemButtonStyle" TargetType="Button">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding StockQuantity}" Value="0">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Opacity" Value="0.5"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2.5*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Margin="0,0,10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Background="{DynamicResource CardBackground}" CornerRadius="20" Height="50" Margin="0,0,0,15" Padding="15,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Kind="Magnify" Width="24" Height="24" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryText}"/>
+                        <TextBox Grid.Column="1" Margin="10,0,0,0"
+                                 materialDesign:HintAssist.Hint="Tìm kiếm sản phẩm..."
+                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                 BorderThickness="0" VerticalAlignment="Center" FontSize="16"
+                                 Text="{Binding Keyword, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                </Border>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding ProductList}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource ProductItemButtonStyle}"
+                                        Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip="Nhấn để thêm vào giỏ"
+                                        Width="175" Height="250">
+                                    <Border Background="{DynamicResource CardBackground}" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="175"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Image Grid.Row="0" Source="{Binding ImagePath, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource DefaultProduct}, FallbackValue={StaticResource Anonymous}}" 
+                                                   Stretch="UniformToFill" Margin="10,10,10,0"
+                                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                                            <StackPanel Grid.Row="1" Margin="10" VerticalAlignment="Bottom">
+                                                <TextBlock Text="{Binding ProductName}" 
+                                                           FontWeight="Bold" FontSize="14" TextWrapping="Wrap" MaxHeight="40" TextTrimming="CharacterEllipsis"
+                                                           Foreground="{DynamicResource PrimaryText}"/>
+                                                <TextBlock Text="{Binding ProductID}" FontSize="11" Foreground="{DynamicResource SecondaryText}"/>
+
+                                                <Grid Margin="0,5,0,0">
+                                                    <TextBlock Text="{Binding Price, StringFormat={}{0:N0} đ}" 
+                                                               FontWeight="Bold" FontSize="16" Foreground="#4CAF50" HorizontalAlignment="Left"/>
+
+                                                    <TextBlock FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+                                                                <Setter Property="Text" Value="{Binding StockQuantity, StringFormat=SL: {0}}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding StockQuantity}" Value="0">
+                                                                        <Setter Property="Text" Value="HẾT HÀNG"/>
+                                                                        <Setter Property="Foreground" Value="Red"/>
+                                                                        <Setter Property="FontWeight" Value="Bold"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+            <Border Grid.Column="1" Background="{DynamicResource CardBackground}" CornerRadius="20" Padding="15">
+                <Border.Effect>
+                    <DropShadowEffect Color="{DynamicResource ShadowColor}" BlurRadius="10" Opacity="0.2" ShadowDepth="2"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <TextBlock Text="Giỏ Hàng" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                        <Button HorizontalAlignment="Right" Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                Command="{Binding ClearCartCommand}" ToolTip="Xóa hết">
+                            <materialDesign:PackIcon Kind="DeleteSweep" Foreground="Red"/>
+                        </Button>
+                    </Grid>
+
+                    <ListView Grid.Row="1" ItemsSource="{Binding CartList}" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              HorizontalContentAlignment="Stretch">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0,0,0,1" Padding="5">
+                                                <ContentPresenter/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="{Binding Product.ProductName}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource PrimaryText}"/>
+
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                            <Button Style="{StaticResource MaterialDesignIconForegroundButton}" 
+                                                    Width="20" Height="20" Padding="0"
+                                                    Command="{Binding DataContext.DecreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}">
+                                                <materialDesign:PackIcon Kind="Minus" Width="12" Height="12" Foreground="{DynamicResource SecondaryText}"/>
+                                            </Button>
+
+                                            <TextBlock Text="{Binding Quantity}" 
+                                                       FontWeight="Bold" 
+                                                       Foreground="{DynamicResource PrimaryText}" 
+                                                       VerticalAlignment="Center" 
+                                                       Margin="10,0"/>
+
+                                            <Button Style="{StaticResource MaterialDesignIconForegroundButton}" 
+                                                    Width="20" Height="20" Padding="0"
+                                                    Command="{Binding DataContext.IncreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}">
+                                                <materialDesign:PackIcon Kind="Plus" Width="12" Height="12" Foreground="{DynamicResource SecondaryText}"/>
+                                            </Button>
+
+                                            <!--<TextBlock Text="{Binding Product.Price, StringFormat={}x {0:N0}}" 
+                                                       Foreground="{DynamicResource SecondaryText}" 
+                                                       VerticalAlignment="Center" Margin="10,0,0,0" FontSize="12"/>-->
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding TotalAmount, StringFormat={}{0:N0}}" 
+                                                   FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" 
+                                                   VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                Height="24" Width="24"
+                                                Command="{Binding DataContext.RemoveFromCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}">
+                                            <materialDesign:PackIcon Kind="Close" Width="16" Height="16" Foreground="Red"/>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <StackPanel Grid.Row="2" Margin="0,15,0,0">
+                        <Grid Margin="0,0,0,15">
+                            <TextBlock Text="Tổng cộng:" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                            <TextBlock Text="{Binding GrandTotal, StringFormat={}{0:N0} VND}" 
+                                       FontSize="20" FontWeight="Bold" Foreground="#4CAF50" 
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <Button Command="{Binding CheckoutCommand}"
+                                Content="XUẤT HÓA ĐƠN"
+                                Height="50"
+                                FontSize="16" FontWeight="Bold"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                materialDesign:ButtonAssist.CornerRadius="10"
+                                Background="#2196F3" BorderBrush="{x:Null}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

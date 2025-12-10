@@ -24,5 +24,14 @@ namespace Martify.Views
         {
             InitializeComponent();
         }
+
+
+
+        // Hàm này chạy mỗi khi DataContext của Detail thay đổi (đổi nhân viên)
+        private void DetailView_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+            // Cuộn lên đầu trang
+            DetailScrollViewer?.ScrollToTop();
+        }
     }
 }

@@ -3,7 +3,9 @@
 
 
     <BitmapImage x:Key="CloseProgram" UriSource="/Resources/Images/close_program.png" />
-    
+
+    <BitmapImage x:Key="MinimizeProgram" UriSource="/Resources/Images/minimize_program.png" />
+
     <BitmapImage x:Key="Martify" UriSource="/Resources/Images/Martify.png" />
     <BitmapImage x:Key="Anonymous" UriSource="/Resources/Images/anonymous.png" />
     <BitmapImage x:Key="DefaultProduct" UriSource="/Resources/Images/defaultproduct.png" />

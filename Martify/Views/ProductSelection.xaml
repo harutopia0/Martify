@@ -67,20 +67,64 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" Background="{DynamicResource CardBackground}" CornerRadius="20" Height="50" Margin="0,0,0,15" Padding="15,0">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <materialDesign:PackIcon Kind="Magnify" Width="24" Height="24" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryText}"/>
-                        <TextBox Grid.Column="1" Margin="10,0,0,0"
-                                 materialDesign:HintAssist.Hint="Tìm kiếm sản phẩm..."
-                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
-                                 BorderThickness="0" VerticalAlignment="Center" FontSize="16"
-                                 Text="{Binding Keyword, UpdateSourceTrigger=PropertyChanged}"/>
-                    </Grid>
-                </Border>
+                <Grid Grid.Row="0" Margin="0,0,0,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="1.2*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="1.2*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Background="{DynamicResource CardBackground}" CornerRadius="10" Height="40" Margin="0,0,5,0" Padding="10,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Kind="Magnify" Width="20" Height="20" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryText}"/>
+                            <TextBox Grid.Column="1" Margin="5,0,0,0"
+                                     materialDesign:HintAssist.Hint="Tìm kiếm..."
+                                     materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                     BorderThickness="0" VerticalAlignment="Center" FontSize="14"
+                                     Text="{Binding Keyword, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                    </Border>
+
+                    <ComboBox Grid.Column="1" Height="40" Margin="5,0,5,0"
+                              ItemsSource="{Binding CategoryList}"
+                              SelectedItem="{Binding SelectedCategory}"
+                              DisplayMemberPath="CategoryName"
+                              materialDesign:HintAssist.Hint="Loại SP"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              Background="{DynamicResource CardBackground}" 
+                              Foreground="{DynamicResource PrimaryText}" Padding="10,0"/>
+
+                    <TextBox Grid.Column="2" Height="40" Margin="5,0,5,0"
+                             materialDesign:HintAssist.Hint="Giá từ"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Background="{DynamicResource CardBackground}"
+                             Foreground="{DynamicResource PrimaryText}"
+                             Text="{Binding PriceFrom, UpdateSourceTrigger=PropertyChanged}"
+                             Padding="10,0" VerticalContentAlignment="Center"/>
+
+                    <TextBlock Grid.Column="3" Text="-" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryText}"/>
+
+                    <TextBox Grid.Column="4" Height="40" Margin="5,0,5,0"
+                             materialDesign:HintAssist.Hint="Giá đến"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Background="{DynamicResource CardBackground}"
+                             Foreground="{DynamicResource PrimaryText}"
+                             Text="{Binding PriceTo, UpdateSourceTrigger=PropertyChanged}"
+                             Padding="10,0" VerticalContentAlignment="Center"/>
+
+                    <Button Grid.Column="5" Style="{StaticResource MaterialDesignToolButton}"
+                            ToolTip="Xóa bộ lọc" Height="40" Width="40"
+                            Command="{Binding ClearFilterCommand}">
+                        <materialDesign:PackIcon Kind="FilterOff" Foreground="Red" />
+                    </Button>
+                </Grid>
 
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding ProductList}">
@@ -97,35 +141,35 @@
                                         CommandParameter="{Binding}"
                                         ToolTip="Nhấn để thêm vào giỏ"
                                         Width="175" Height="250">
-                                    <Border Background="{DynamicResource CardBackground}" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                                    <Border Background="{DynamicResource CardBackground}" CornerRadius="15" BorderBrush="#E0E0E0" BorderThickness="1">
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="175"/>
-                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
 
-                                            <Image Grid.Row="0" Source="{Binding ImagePath, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource DefaultProduct}, FallbackValue={StaticResource Anonymous}}" 
+                                            <Image Grid.Row="0" Source="{Binding ImagePath, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource DefaultProduct}, FallbackValue={StaticResource DefaultProduct}}" 
                                                    Stretch="UniformToFill" Margin="10,10,10,0"
                                                    VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
                                             <StackPanel Grid.Row="1" Margin="10" VerticalAlignment="Bottom">
                                                 <TextBlock Text="{Binding ProductName}" 
-                                                           FontWeight="Bold" FontSize="14" TextWrapping="Wrap" MaxHeight="40" TextTrimming="CharacterEllipsis"
+                                                           FontWeight="Bold" FontSize="12" TextWrapping="NoWrap" MaxHeight="40" TextTrimming="CharacterEllipsis"
                                                            Foreground="{DynamicResource PrimaryText}"/>
                                                 <TextBlock Text="{Binding ProductID}" FontSize="11" Foreground="{DynamicResource SecondaryText}"/>
 
                                                 <Grid Margin="0,5,0,0">
-                                                    <TextBlock Text="{Binding Price, StringFormat={}{0:N0} đ}" 
-                                                               FontWeight="Bold" FontSize="16" Foreground="#4CAF50" HorizontalAlignment="Left"/>
+                                                    <TextBlock Text="{Binding Price, StringFormat={}{0:N0} VND}" 
+                                                               FontWeight="Bold" FontSize="14" Foreground="#4CAF50" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
-                                                    <TextBlock FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                                                    <TextBlock FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center">
                                                         <TextBlock.Style>
                                                             <Style TargetType="TextBlock">
                                                                 <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
                                                                 <Setter Property="Text" Value="{Binding StockQuantity, StringFormat=SL: {0}}"/>
                                                                 <Style.Triggers>
                                                                     <DataTrigger Binding="{Binding StockQuantity}" Value="0">
-                                                                        <Setter Property="Text" Value="HẾT HÀNG"/>
+                                                                        <Setter Property="Text" Value="Đã hết"/>
                                                                         <Setter Property="Foreground" Value="Red"/>
                                                                         <Setter Property="FontWeight" Value="Bold"/>
                                                                     </DataTrigger>
@@ -236,10 +280,10 @@
 
                     <StackPanel Grid.Row="2" Margin="0,15,0,0">
                         <Grid Margin="0,0,0,15">
-                            <TextBlock Text="Tổng cộng:" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                            <TextBlock Text="Tổng:" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                             <TextBlock Text="{Binding GrandTotal, StringFormat={}{0:N0} VND}" 
                                        FontSize="20" FontWeight="Bold" Foreground="#4CAF50" 
-                                       HorizontalAlignment="Right"/>
+                                       HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         </Grid>
 
                         <Button Command="{Binding CheckoutCommand}"

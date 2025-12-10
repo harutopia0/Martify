@@ -49,6 +49,7 @@ namespace Martify.ViewModels
             HideWindowCommand = new RelayCommand<UserControl>((p) => p != null, (p) =>
             {
                 var win = Window.GetWindow(p);
+
                 if (win != null)
                 {
                     win.WindowState = WindowState.Minimized;
@@ -59,6 +60,7 @@ namespace Martify.ViewModels
             DragWindowCommand = new RelayCommand<UserControl>((p) => p != null, (p) =>
             {
                 var win = Window.GetWindow(p);
+
                 if (win != null)
                 {
                     win.DragMove();

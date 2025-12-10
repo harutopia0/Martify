@@ -1,91 +1,76 @@
 ﻿using Martify.Models;
-using Martify.Views;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions; // Cần thêm thư viện này
-using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
+using System;
+using System.Windows;
+// Thêm thư viện này để dùng AsNoTracking
+using Microsoft.EntityFrameworkCore;
+using EmployeeModel = Martify.Models.Employee;
 
 namespace Martify.ViewModels
 {
     public class EmployeeVM : BaseVM
     {
-        // --- DANH SÁCH HIỂN THỊ ---
-        private ObservableCollection<Models.Employee> _Employees;
-        public ObservableCollection<Models.Employee> Employees
+        private ObservableCollection<EmployeeModel> _Employees;
+        public ObservableCollection<EmployeeModel> Employees
         {
             get { return _Employees; }
             set { _Employees = value; OnPropertyChanged(); }
         }
 
-        // --- CÁC BIẾN LỌC (FILTER) ---
+        private EmployeeModel _selectedDetailEmployee;
+        public EmployeeModel SelectedDetailEmployee
+        {
+            get => _selectedDetailEmployee;
+            set { _selectedDetailEmployee = value; OnPropertyChanged(); }
+        }
 
-        // 1. Tìm kiếm theo tên
+        private bool _isDetailsPanelOpen;
+        public bool IsDetailsPanelOpen
+        {
+            get => _isDetailsPanelOpen;
+            set { _isDetailsPanelOpen = value; OnPropertyChanged(); }
+        }
+
         private string _keyword;
-        public string Keyword
-        {
-            get => _keyword;
-            set
-            {
-                _keyword = value;
-                OnPropertyChanged();
-                LoadList(); // Gọi lại hàm load mỗi khi gõ phím
-            }
-        }
+        public string Keyword { get => _keyword; set { _keyword = value; OnPropertyChanged(); LoadList(); } }
 
-        // 2. Lọc theo Tháng
         private int? _selectedMonth;
-        public int? SelectedMonth
-        {
-            get => _selectedMonth;
-            set
-            {
-                _selectedMonth = value;
-                OnPropertyChanged();
-                LoadList(); // Gọi lại hàm load khi chọn tháng
-            }
-        }
+        public int? SelectedMonth { get => _selectedMonth; set { _selectedMonth = value; OnPropertyChanged(); LoadList(); } }
 
-        // 3. Lọc theo Năm
         private int? _selectedYear;
-        public int? SelectedYear
-        {
-            get => _selectedYear;
-            set
-            {
-                _selectedYear = value;
-                OnPropertyChanged();
-                LoadList(); // Gọi lại hàm load khi chọn năm
-            }
-        }
+        public int? SelectedYear { get => _selectedYear; set { _selectedYear = value; OnPropertyChanged(); LoadList(); } }
 
-        // --- NGUỒN DỮ LIỆU CHO COMBOBOX ---
         public ObservableCollection<int> Months { get; set; } = new ObservableCollection<int>();
         public ObservableCollection<int> Years { get; set; } = new ObservableCollection<int>();
 
-        // --- COMMANDS ---
         public ICommand AddEmployeeCommand { get; set; }
         public ICommand ClearFilterCommand { get; set; }
+        public ICommand OpenDetailsCommand { get; set; }
+        public ICommand ToggleStatusCommand { get; set; } // Command đổi trạng thái
 
         public EmployeeVM()
         {
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject())) return;
-
             InitFilterData();
             LoadList();
 
-            AddEmployeeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+            AddEmployeeCommand = new RelayCommand<object>((p) => true, (p) =>
             {
-                Window addEmployeeWindow = new AddEmployee();
+                Martify.Views.AddEmployee addEmployeeWindow = new Martify.Views.AddEmployee();
                 addEmployeeWindow.ShowDialog();
-
                 InitFilterData();
                 LoadList();
+            });
+
+            OpenDetailsCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                if (p is EmployeeModel emp)
+                {
+                    SelectedDetailEmployee = emp;
+                    IsDetailsPanelOpen = true;
+                }
             });
 
             ClearFilterCommand = new RelayCommand<object>((p) => true, (p) =>
@@ -93,7 +78,32 @@ namespace Martify.ViewModels
                 Keyword = string.Empty;
                 SelectedMonth = null;
                 SelectedYear = null;
+                IsDetailsPanelOpen = false;
                 LoadList();
+            });
+
+            // --- LOGIC ĐỔI TRẠNG THÁI (FIX REAL-TIME) ---
+            ToggleStatusCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                if (SelectedDetailEmployee != null)
+                {
+                    string currentId = SelectedDetailEmployee.EmployeeID;
+
+                    // 1. Cập nhật DB
+                    var empInDb = DataProvider.Ins.DB.Employees.FirstOrDefault(x => x.EmployeeID == currentId);
+                    if (empInDb != null)
+                    {
+                        empInDb.Status = !empInDb.Status.GetValueOrDefault(); // Đảo trạng thái
+                        DataProvider.Ins.DB.SaveChanges();
+                    }
+
+                    // 2. Tải lại danh sách (AsNoTracking sẽ lấy dữ liệu mới nhất)
+                    LoadList();
+
+                    // 3. Gán lại SelectedDetailEmployee bằng object MỚI từ danh sách MỚI
+                    // Việc này ép buộc View cập nhật lại màu sắc và text ngay lập tức
+                    SelectedDetailEmployee = Employees.FirstOrDefault(x => x.EmployeeID == currentId);
+                }
             });
         }
 
@@ -101,55 +111,36 @@ namespace Martify.ViewModels
         {
             Months.Clear();
             for (int i = 1; i <= 12; i++) Months.Add(i);
-
             Years.Clear();
-            var dbYears = DataProvider.Ins.DB.Employees
-                            .Select(x => x.HireDate.Year)
-                            .Distinct()
-                            .OrderByDescending(y => y)
-                            .ToList();
-
+            var dbYears = DataProvider.Ins.DB.Employees.Select(x => x.HireDate.Year).Distinct().OrderByDescending(y => y).ToList();
             foreach (var y in dbYears) Years.Add(y);
         }
 
         void LoadList()
         {
-            // B1: Tạo truy vấn cơ bản
-            var query = DataProvider.Ins.DB.Employees.Include(emp => emp.Accounts).AsQueryable();
+            // QUAN TRỌNG: Thêm .AsNoTracking()
+            // Nó giúp tạo ra các object mới hoàn toàn mỗi khi load, tránh việc WPF dùng lại object cũ (bị cache)
+            var query = DataProvider.Ins.DB.Employees.AsNoTracking().AsQueryable();
 
-            // B2: Lọc Tháng/Năm NGAY TẠI DATABASE (Hiệu năng cao)
-            if (SelectedMonth.HasValue)
-            {
-                query = query.Where(x => x.HireDate.Month == SelectedMonth.Value);
-            }
+            if (SelectedMonth.HasValue) query = query.Where(x => x.HireDate.Month == SelectedMonth.Value);
+            if (SelectedYear.HasValue) query = query.Where(x => x.HireDate.Year == SelectedYear.Value);
 
-            if (SelectedYear.HasValue)
-            {
-                query = query.Where(x => x.HireDate.Year == SelectedYear.Value);
-            }
-
-            // B3: Lấy dữ liệu về RAM
             var list = query.ToList();
 
-            // B4: Lọc Tên TẠI RAM (Thông minh: Bỏ dấu, không phân biệt hoa thường)
             if (!string.IsNullOrEmpty(Keyword))
             {
                 string searchKey = ConvertToUnSign(Keyword).ToLower();
-
                 list = list.Where(x => ConvertToUnSign(x.FullName).ToLower().Contains(searchKey)).ToList();
 
             }
-
-            // B5: Hiển thị
-            Employees = new ObservableCollection<Models.Employee>(list);
+            Employees = new ObservableCollection<EmployeeModel>(list);
         }
 
-        // Hàm hỗ trợ: Chuyển tiếng Việt có dấu thành không dấu
         private string ConvertToUnSign(string text)
         {
             if (string.IsNullOrEmpty(text)) return "";
-            Regex regex = new Regex("\\p{IsCombiningDiacriticalMarks}+");
-            string temp = text.Normalize(NormalizationForm.FormD);
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("\\p{IsCombiningDiacriticalMarks}+");
+            string temp = text.Normalize(System.Text.NormalizationForm.FormD);
             return regex.Replace(temp, String.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D');
         }
     }

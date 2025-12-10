@@ -11,6 +11,34 @@ namespace Martify.ViewModels
 {
     public class ProductsVM : BaseVM
     {
+
+        // --- CÁC BIẾN LỌC (FILTER) --
+        private ProductCategory? _selectedCategory;
+        public ProductCategory? SelectedCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                _selectedCategory = value;
+                OnPropertyChanged();
+                LoadProducts();
+            }
+        }
+
+
+
+        // --- NGUỒN DỮ LIỆU CHO COMBOBOX ---
+        public ObservableCollection<ProductCategory> _categories;
+        public ObservableCollection<ProductCategory> Categories
+        {
+            get => _categories;
+            set
+            {
+                _categories = value;
+                OnPropertyChanged();
+            }
+        }
+
         // =================================================================================================
         // THUỘC TÍNH
         // =================================================================================================
@@ -45,7 +73,7 @@ namespace Martify.ViewModels
             {
                 _searchText = value;
                 OnPropertyChanged();
-                FilterProducts();
+                LoadProducts();
             }
         }
 
@@ -66,6 +94,9 @@ namespace Martify.ViewModels
         {
             LoadProducts();
 
+            Categories = new ObservableCollection<ProductCategory>(
+                DataProvider.Ins.DB.ProductCategories.OrderBy(c => c.CategoryName).ToList()
+            );
             // Khởi tạo lệnh
             AddProductCommand = new RelayCommand<object>(
                 (p) => true,
@@ -92,56 +123,46 @@ namespace Martify.ViewModels
         {
             try
             {
-                var productList = DataProvider.Ins.DB.Products
+                var query = DataProvider.Ins.DB.Products
                     .Include("Category")
+f                    .AsQueryable(); 
+
+                // 2. Áp dụng lọc theo Danh mục (SelectedCategory)
+                if (SelectedCategory != null)
+                {
+                    query = query.Where(p => p.CategoryID == SelectedCategory.CategoryID);
+                }
+
+                // 3. Áp dụng tìm kiếm theo Văn bản (SearchText)
+                if (!string.IsNullOrWhiteSpace(SearchText))
+                {
+                    var searchTerm = SearchText.Trim().ToLower();
+                    query = query.Where(p =>
+                        p.ProductID.ToLower().Contains(searchTerm) ||
+                        p.ProductName.ToLower().Contains(searchTerm) ||
+                        p.Unit.ToLower().Contains(searchTerm) ||
+                        (p.Category != null && p.Category.CategoryName.ToLower().Contains(searchTerm))
+                    );
+                }
+
+                // 4. Sắp xếp và thực thi truy vấn
+                var productList = query
                     .OrderBy(p => p.ProductID)
                     .ToList();
 
+                // 5. Cập nhật ObservableCollection
                 Products = new ObservableCollection<Product>(productList);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Lỗi khi tải danh sách sản phẩm: {ex.Message}",
+                    $"Lỗi khi lọc và tìm kiếm sản phẩm: {ex.Message}",
                     "Lỗi",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
         }
 
-        private void FilterProducts()
-        {
-            if (string.IsNullOrWhiteSpace(SearchText))
-            {
-                LoadProducts();
-                return;
-            }
-
-            try
-            {
-                var searchTerm = SearchText.Trim().ToLower();
-                var filteredList = DataProvider.Ins.DB.Products
-                    .Include("Category")
-                    .Include("Supplier")
-                    .Where(p =>
-                        p.ProductID.ToLower().Contains(searchTerm) ||
-                        p.ProductName.ToLower().Contains(searchTerm) ||
-                        p.Unit.ToLower().Contains(searchTerm) ||
-                        p.Category.CategoryName.ToLower().Contains(searchTerm))
-                    .OrderBy(p => p.ProductID)
-                    .ToList();
-
-                Products = new ObservableCollection<Product>(filteredList);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Lỗi khi tìm kiếm: {ex.Message}",
-                    "Lỗi",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-            }
-        }
 
         private void AddProduct()
         {

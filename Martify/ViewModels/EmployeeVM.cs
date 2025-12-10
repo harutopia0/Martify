@@ -137,6 +137,7 @@ namespace Martify.ViewModels
                 string searchKey = ConvertToUnSign(Keyword).ToLower();
 
                 list = list.Where(x => ConvertToUnSign(x.FullName).ToLower().Contains(searchKey)).ToList();
+
             }
 
             // B5: Hiển thị

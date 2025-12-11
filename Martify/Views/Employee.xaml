@@ -22,6 +22,20 @@
         <cv:ImagePathConverter x:Key="ImgConverter"/>
         <cv:StatusConverter x:Key="StatusConverter"/>
 
+        <ControlTemplate x:Key="ErrorTemplate">
+            <StackPanel>
+                <AdornedElementPlaceholder x:Name="placeholder" />
+                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" FontSize="10" Margin="0,2,0,0" HorizontalAlignment="Left" FontStyle="Italic"/>
+            </StackPanel>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="CenterErrorTemplate">
+            <StackPanel>
+                <AdornedElementPlaceholder x:Name="placeholder1" />
+                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" FontSize="10" Margin="0,2,0,0" HorizontalAlignment="Center" FontStyle="Italic" TextAlignment="Center"/>
+            </StackPanel>
+        </ControlTemplate>
+
         <Style x:Key="CustomDataGridCellStyle" TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
             <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
@@ -37,13 +51,31 @@
             </Style.Triggers>
         </Style>
 
+        <Style x:Key="SaveButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="Foreground" Value="#9E9E9E"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsModified}" Value="True">
+                    <Setter Property="Background" Value="#4CAF50"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="#4CAF50" BlurRadius="10" ShadowDepth="2" Opacity="0.4"/>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <Style x:Key="CenterTextColumnStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="FontSize" Value="14"/>
         </Style>
-
         <Style x:Key="LeftTextColumnStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -58,8 +90,7 @@
                     <DataTrigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Width" 
-                                                 To="300" Duration="0:0:0.4">
+                                <DoubleAnimation Storyboard.TargetProperty="Width" To="275" Duration="0:0:0.25">
                                     <DoubleAnimation.EasingFunction>
                                         <QuadraticEase EasingMode="EaseOut"/>
                                     </DoubleAnimation.EasingFunction>
@@ -70,8 +101,7 @@
                     <DataTrigger.ExitActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Width" 
-                                                 To="0" Duration="0:0:0.3">
+                                <DoubleAnimation Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.25">
                                     <DoubleAnimation.EasingFunction>
                                         <QuadraticEase EasingMode="EaseIn"/>
                                     </DoubleAnimation.EasingFunction>
@@ -96,33 +126,20 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                 <Border Background="{DynamicResource CardBackground}" CornerRadius="20" Height="40" Width="220" Margin="0,0,10,0">
                     <Grid>
                         <materialDesign:PackIcon Kind="Magnify" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="{DynamicResource SecondaryText}"/>
-                        <TextBox materialDesign:HintAssist.Hint="Tìm tên nhân viên..."
-                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
-                                 BorderThickness="0" VerticalAlignment="Center" Margin="35,0,10,0"
-                                 FontSize="14" Foreground="{DynamicResource PrimaryText}"
-                                 Text="{Binding Keyword, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox materialDesign:HintAssist.Hint="Tìm tên nhân viên..." materialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0" VerticalAlignment="Center" Margin="35,0,10,0" FontSize="14" Foreground="{DynamicResource PrimaryText}" Text="{Binding Keyword, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Border>
-                <ComboBox Width="90" Height="40" ItemsSource="{Binding Months}" SelectedValue="{Binding SelectedMonth}"
-                          materialDesign:HintAssist.Hint="Tháng" Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                          Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryText}" Margin="0,0,10,0" Padding="10,0"/>
-                <ComboBox Width="90" Height="40" ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}"
-                          materialDesign:HintAssist.Hint="Năm" Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                          Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryText}" Margin="0,0,10,0" Padding="10,0"/>
-
+                <ComboBox Width="90" Height="40" ItemsSource="{Binding Months}" SelectedValue="{Binding SelectedMonth}" materialDesign:HintAssist.Hint="Tháng" Style="{StaticResource MaterialDesignOutlinedComboBox}" Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryText}" Margin="0,0,10,0" Padding="10,0"/>
+                <ComboBox Width="90" Height="40" ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}" materialDesign:HintAssist.Hint="Năm" Style="{StaticResource MaterialDesignOutlinedComboBox}" Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryText}" Margin="0,0,10,0" Padding="10,0"/>
                 <Button Style="{StaticResource MaterialDesignToolButton}" Command="{Binding ClearFilterCommand}" ToolTip="Xóa bộ lọc" Height="40" Width="40">
                     <materialDesign:PackIcon Kind="FilterOff" Foreground="Red" />
                 </Button>
             </StackPanel>
-
-            <Button Grid.Column="1" Width="150" Height="40" materialDesign:ButtonAssist.CornerRadius="10"
-                    Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}" Padding="0"
-                    Command="{Binding AddEmployeeCommand}">
+            <Button Grid.Column="1" Width="150" Height="40" materialDesign:ButtonAssist.CornerRadius="10" Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}" Padding="0" Command="{Binding AddEmployeeCommand}">
                 <Button.Background>
                     <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
                         <GradientStop Color="#FF86E5A0" Offset="0.948"/>
@@ -144,26 +161,10 @@
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" Background="{DynamicResource CardBackground}" CornerRadius="25" Margin="10" Padding="5">
-                <DataGrid Margin="5"
-                          ItemsSource="{Binding Employees}" 
-                          x:Name="membersDataGrid" 
-                          Style="{DynamicResource DataGridStyle}"
-                          CellStyle="{StaticResource CustomDataGridCellStyle}"
-                          AutoGenerateColumns="False"
-                          HorizontalAlignment="Center" 
-                          CanUserReorderColumns="False"  
-                          CanUserResizeColumns="False"
-                          Background="Transparent"
-                          Foreground="{DynamicResource PrimaryText}"
-                          SelectionUnit="FullRow"
-                          CanUserAddRows="False">
-
+                <DataGrid Margin="5" ItemsSource="{Binding Employees}" x:Name="membersDataGrid" Style="{DynamicResource DataGridStyle}" CellStyle="{StaticResource CustomDataGridCellStyle}" AutoGenerateColumns="False" HorizontalAlignment="Center" CanUserReorderColumns="False" CanUserResizeColumns="False" Background="Transparent" Foreground="{DynamicResource PrimaryText}" SelectionUnit="FullRow" CanUserAddRows="False">
                     <DataGrid.InputBindings>
-                        <MouseBinding MouseAction="LeftDoubleClick"
-                                      Command="{Binding OpenDetailsCommand}"
-                                      CommandParameter="{Binding ElementName=membersDataGrid, Path=SelectedItem}"/>
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding OpenDetailsCommand}" CommandParameter="{Binding ElementName=membersDataGrid, Path=SelectedItem}"/>
                     </DataGrid.InputBindings>
-
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
                             <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
@@ -171,7 +172,6 @@
                             <Setter Property="Cursor" Value="Hand"/>
                         </Style>
                     </DataGrid.RowStyle>
-
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
                             <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
@@ -180,10 +180,8 @@
                             <Setter Property="Background" Value="Transparent"/>
                         </Style>
                     </DataGrid.Resources>
-
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Mã" IsReadOnly="True" CanUserResize="False" Width="0.75*" Binding="{Binding EmployeeID}" ElementStyle="{StaticResource CenterTextColumnStyle}"/>
-
                         <DataGridTemplateColumn Header="Nhân viên" SortMemberPath="FullName" IsReadOnly="True" Width="1.6*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -202,10 +200,8 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
                         <DataGridTextColumn Header="Địa chỉ" Binding="{Binding Address}" IsReadOnly="True" Width="1.5*" ElementStyle="{StaticResource LeftTextColumnStyle}"/>
                         <DataGridTextColumn Header="Ngày vào làm" Binding="{Binding HireDate, StringFormat=dd/MM/yyyy}" IsReadOnly="True" Width="1.25*" ElementStyle="{StaticResource CenterTextColumnStyle}"/>
-
                         <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status, Converter={StaticResource StatusConverter}}" IsReadOnly="True" Width="1.15*">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
@@ -224,19 +220,15 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-
                         <DataGridTemplateColumn Header="Công cụ" CanUserSort="False" Width="Auto" CanUserReorder="False" CanUserResize="False" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Button Style="{DynamicResource GridEditButtonStyle}"
-                                                Command="{Binding DataContext.OpenDetailsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}">
-                                            <materialDesign:PackIcon Kind="Wrench" Width="12" Height="12" Foreground="White"/>
+                                        <Button Style="{DynamicResource GridEditButtonStyle}" Command="{Binding DataContext.OpenDetailsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
+                                            <materialDesign:PackIcon Kind="Wrench" Width="14" Height="14" Foreground="White"/>
                                         </Button>
-
                                         <Button Margin="5 0 0 0" Style="{DynamicResource GridRemoveButtonStyle}">
-                                            <materialDesign:PackIcon Kind="Delete" Width="12" Height="12" Foreground="White"/>
+                                            <materialDesign:PackIcon Kind="Delete" Width="14" Height="14" Foreground="White"/>
                                         </Button>
                                     </StackPanel>
                                 </DataTemplate>
@@ -253,84 +245,135 @@
                     BorderThickness="1,0,0,0"
                     Margin="0,10,10,10" CornerRadius="20">
 
-                <Grid Margin="20" DataContext="{Binding SelectedDetailEmployee}">
+                <Grid Margin="20,20,20,0" 
+                      DataContext="{Binding SelectedDetailEmployee, NotifyOnTargetUpdated=True}"
+                      TargetUpdated="DetailView_TargetUpdated">
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,20,0,30">
-                        <Ellipse Width="100" Height="100" Margin="0,0,0,15">
+                    <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,10,0,30">
+                        <Ellipse Width="100" Height="100" Margin="0,0,0,15"
+                                 Cursor="Hand" ToolTip="Nhấn để chọn ảnh">
+                            <Ellipse.InputBindings>
+                                <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.SelectImageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            </Ellipse.InputBindings>
                             <Ellipse.Effect>
                                 <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
                             </Ellipse.Effect>
                             <Ellipse.Fill>
-                                <ImageBrush ImageSource="{Binding ImagePath, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource Anonymous}, FallbackValue={StaticResource Anonymous}}" Stretch="UniformToFill"/>
+                                <ImageBrush ImageSource="{Binding DataContext.EditImagePath, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource Anonymous}, FallbackValue={StaticResource Anonymous}}" Stretch="UniformToFill"/>
                             </Ellipse.Fill>
                         </Ellipse>
-                        <TextBlock Text="{Binding FullName}" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
-                        <TextBlock Text="{Binding EmployeeID}" FontSize="14" Foreground="{DynamicResource SecondaryText}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+
+                        <TextBlock Text="{Binding EmployeeID}" FontSize="14" Foreground="{DynamicResource SecondaryText}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                        <TextBox Text="{Binding DataContext.EditFullName, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                 Validation.ErrorTemplate="{StaticResource CenterErrorTemplate}"
+                                 FontSize="20" FontWeight="Bold" Width="200"
+                                 Foreground="{DynamicResource PrimaryText}" 
+                                 HorizontalAlignment="Center" TextAlignment="Center"
+                                 BorderThickness="0,0,0,1"
+                                 materialDesign:HintAssist.Hint="Tên nhân viên"
+                                 Margin="0,0,0,20"/>
                     </StackPanel>
 
-                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Center">
+                    <ScrollViewer x:Name="DetailScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible" Margin="0,0,0,10">
+                        <StackPanel DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center">
                                 <materialDesign:PackIcon Kind="Email" Width="22" Height="22" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding Email}" FontSize="15" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                <TextBox Text="{Binding EditEmail, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                         Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                                         FontSize="15" Foreground="{DynamicResource PrimaryText}" 
+                                         Width="160" materialDesign:HintAssist.Hint="Email" BorderThickness="0,0,0,1"/>
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center">
                                 <materialDesign:PackIcon Kind="Phone" Width="22" Height="22" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding Phone}" FontSize="15" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                                <TextBox Text="{Binding EditPhone, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                         Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                                         FontSize="15" Foreground="{DynamicResource PrimaryText}"
+                                         Width="160" materialDesign:HintAssist.Hint="Số điện thoại" BorderThickness="0,0,0,1"/>
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center">
                                 <materialDesign:PackIcon Kind="GenderMaleFemale" Width="22" Height="22" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding Gender}" FontSize="15" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                                <ComboBox ItemsSource="{Binding GenderList}" 
+                                          SelectedItem="{Binding EditGender, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                          Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                                          FontSize="15" Foreground="{DynamicResource PrimaryText}"
+                                          Width="160" materialDesign:HintAssist.Hint="Giới tính" BorderThickness="0,0,0,1"/>
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center">
                                 <materialDesign:PackIcon Kind="CakeVariant" Width="22" Height="22" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding BirthDate, StringFormat=dd/MM/yyyy}" FontSize="15" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                                <DatePicker SelectedDate="{Binding EditBirthDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                            Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                                            FontSize="15" Foreground="{DynamicResource PrimaryText}"
+                                            Width="160" materialDesign:HintAssist.Hint="Ngày sinh" BorderThickness="0,0,0,1" Language="vi-VN"/>
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Top">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="CalendarCheck" Width="22" Height="22" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                                <DatePicker SelectedDate="{Binding EditHireDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                            Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                                            FontSize="15" Foreground="{DynamicResource PrimaryText}"
+                                            Width="160" materialDesign:HintAssist.Hint="Ngày vào làm" BorderThickness="0,0,0,1" Language="vi-VN"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,15" VerticalAlignment="Top">
                                 <materialDesign:PackIcon Kind="MapMarker" Width="22" Height="22" Foreground="{DynamicResource SecondaryText}" Margin="0,0,15,0" VerticalAlignment="Top"/>
-                                <TextBlock Text="{Binding Address}" FontSize="15" Foreground="{DynamicResource PrimaryText}" TextWrapping="Wrap" MaxWidth="220" VerticalAlignment="Top"/>
+                                <TextBox Text="{Binding EditAddress, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                         Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                                         FontSize="15" Foreground="{DynamicResource PrimaryText}" 
+                                         TextWrapping="Wrap" Width="160"
+                                         materialDesign:HintAssist.Hint="Địa chỉ" BorderThickness="0,0,0,1" VerticalAlignment="Top"/>
                             </StackPanel>
 
-                            <Border Margin="0,10,0,0" Padding="15" CornerRadius="10" 
-                                    Background="{Binding Status, Converter={StaticResource StatusConverter}, ConverterParameter=Background}"
-                                    Cursor="Hand" ToolTip="Nhấn để đổi trạng thái">
-
-                                <Border.InputBindings>
-                                    <MouseBinding MouseAction="LeftClick" 
-                                                  Command="{Binding DataContext.ToggleStatusCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-                                </Border.InputBindings>
-
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <materialDesign:PackIcon Margin="0,0,10,0" 
-                                                             Foreground="{Binding Status, Converter={StaticResource StatusConverter}, ConverterParameter=Foreground}">
-                                        <materialDesign:PackIcon.Style>
-                                            <Style TargetType="materialDesign:PackIcon">
-                                                <Setter Property="Kind" Value="AccountRemove"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Status}" Value="True">
-                                                        <Setter Property="Kind" Value="AccountCheck"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </materialDesign:PackIcon.Style>
-                                    </materialDesign:PackIcon>
-
-                                    <TextBlock Text="{Binding Status, Converter={StaticResource StatusConverter}}" 
-                                               FontWeight="Bold"
-                                               Foreground="{Binding Status, Converter={StaticResource StatusConverter}, ConverterParameter=Foreground}"/>
-                                </StackPanel>
-                            </Border>
 
                         </StackPanel>
                     </ScrollViewer>
+
+                    <StackPanel Grid.Row="2" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                        <Border Margin="0,10,0,0" Padding="15" CornerRadius="10" 
+                                    Background="{Binding EditStatus, Converter={StaticResource StatusConverter}, ConverterParameter=Background}"
+                                    Cursor="Hand" ToolTip="Nhấn để đổi trạng thái">
+                            <Border.InputBindings>
+                                <MouseBinding MouseAction="LeftClick" Command="{Binding ToggleStatusCommand}"/>
+                            </Border.InputBindings>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <materialDesign:PackIcon Margin="0,0,10,0" Foreground="{Binding EditStatus, Converter={StaticResource StatusConverter}, ConverterParameter=Foreground}">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Kind" Value="AccountRemove"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding EditStatus}" Value="True">
+                                                    <Setter Property="Kind" Value="AccountCheck"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
+                                <TextBlock Text="{Binding EditStatus, Converter={StaticResource StatusConverter}}" FontWeight="Bold" Foreground="{Binding EditStatus, Converter={StaticResource StatusConverter}, ConverterParameter=Foreground}"/>
+                            </StackPanel>
+                        </Border>
+                        <Grid Height="10" IsHitTestVisible="False"></Grid>
+                        <StackPanel>
+                            <Button Content="LƯU THAY ĐỔI"
+                                Height="45"
+                                Style="{StaticResource SaveButtonStyle}"
+                                Command="{Binding SaveChangesCommand}"
+                                IsDefault="{Binding IsDetailsPanelOpen}"/>
+
+                            <TextBlock Text="{Binding SaveMessage}"
+                                   Foreground="#4CAF50"
+                                   FontSize="12" FontStyle="Italic" FontWeight="SemiBold"
+                                   HorizontalAlignment="Center" Margin="0,7.5,0,7.5"
+                                   TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </StackPanel>
                 </Grid>
             </Border>
         </Grid>

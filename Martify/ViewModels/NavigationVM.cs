@@ -24,12 +24,14 @@ namespace Martify.ViewModels
         public ICommand ProductSelectionCommand { get; set; }
         public ICommand ProductsCommand { get; set; }
         public ICommand EmployeesCommand { get; set; }
+        public ICommand InvoicesCommand { get; set; }
         #endregion
         public ICommand SettingsCommand { get; set; }
         private void Dashboard(object obj) => CurrentView = new DashboardVM();
         private void ProductSelection(object obj) => CurrentView = new ProductSelectionVM();
         private void Products(object obj) => CurrentView = new ProductsVM();
         private void Employees(object obj) => CurrentView = new EmployeeVM();
+        private void Invoices(object obj) => CurrentView = new InvoicesVM();
         private void Settings(object obj) => CurrentView = new SettingsVM();
         public NavigationVM()
         {
@@ -37,6 +39,7 @@ namespace Martify.ViewModels
             ProductSelectionCommand = new RelayCommand(ProductSelection);
             ProductsCommand = new RelayCommand(Products);
             EmployeesCommand = new RelayCommand(Employees);
+            InvoicesCommand = new RelayCommand(Invoices);
             SettingsCommand = new RelayCommand(Settings);
             // Startup Page
             CurrentView = new DashboardVM();

@@ -4,4 +4,7 @@
     <FontFamily x:Key="PasseroOne">/Martify;component/Resources/Fonts/PasseroOne-Regular.ttf#Passero One</FontFamily>
     <FontFamily x:Key="BungeeSpice">/Martify;component/Resources/Fonts/BungeeSpice-Regular.ttf#Bungee Spice</FontFamily>
     <FontFamily x:Key="Rubik">/Martify;component/Resources/Fonts/Rubik-Regular.ttf#Rubik</FontFamily>
+    <FontFamily x:Key="FleurDeleah">/Martify;component/Resources/Fonts/FleurDeLeah-Regular.ttf#Fleur De Leah</FontFamily>
+    <FontFamily x:Key="Charm">/Martify;component/Resources/Fonts/Charm-Regular.ttf#Charm</FontFamily>
 </ResourceDictionary>
+

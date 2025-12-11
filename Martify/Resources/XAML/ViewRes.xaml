@@ -20,6 +20,10 @@
     <DataTemplate DataType="{x:Type vm:EmployeeVM}">
         <view:Employee />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:InvoicesVM}">
+        <view:Invoices />
+    </DataTemplate>
+
 
 
 

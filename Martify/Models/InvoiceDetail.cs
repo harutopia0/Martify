@@ -22,6 +22,7 @@ namespace Martify.Models
 
         [Range(0, double.MaxValue, ErrorMessage = "Giá bán không được âm")]
         public decimal SalePrice { get; set; }
+        public decimal Total => SalePrice * Quantity;
 
         [ForeignKey("InvoiceID")]
         public virtual Invoice Invoice { get; set; }

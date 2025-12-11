@@ -287,7 +287,7 @@
                                 <TextBox Text="{Binding EditEmail, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                                          Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
                                          FontSize="15" Foreground="{DynamicResource PrimaryText}" 
-                                         Width="160" materialDesign:HintAssist.Hint="Email" BorderThickness="0,0,0,1"/>
+                                         Width="160" materialDesign:HintAssist.Hint="Email" BorderThickness="0,0,0,1" VerticalAlignment="Center"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center">
@@ -295,7 +295,7 @@
                                 <TextBox Text="{Binding EditPhone, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                                          Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
                                          FontSize="15" Foreground="{DynamicResource PrimaryText}"
-                                         Width="160" materialDesign:HintAssist.Hint="Số điện thoại" BorderThickness="0,0,0,1"/>
+                                         Width="160" materialDesign:HintAssist.Hint="Số điện thoại" BorderThickness="0,0,0,1" VerticalAlignment="Center"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center">
@@ -304,7 +304,7 @@
                                           SelectedItem="{Binding EditGender, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                           Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
                                           FontSize="15" Foreground="{DynamicResource PrimaryText}"
-                                          Width="160" materialDesign:HintAssist.Hint="Giới tính" BorderThickness="0,0,0,1"/>
+                                          Width="160" materialDesign:HintAssist.Hint="Giới tính" BorderThickness="0,0,0,1" VerticalAlignment="Center"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center">
@@ -312,7 +312,7 @@
                                 <DatePicker SelectedDate="{Binding EditBirthDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                                             Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
                                             FontSize="15" Foreground="{DynamicResource PrimaryText}"
-                                            Width="160" materialDesign:HintAssist.Hint="Ngày sinh" BorderThickness="0,0,0,1" Language="vi-VN"/>
+                                            Width="160" materialDesign:HintAssist.Hint="Ngày sinh" BorderThickness="0,0,0,1" Language="vi-VN" VerticalAlignment="Center"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center">
@@ -320,7 +320,7 @@
                                 <DatePicker SelectedDate="{Binding EditHireDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                                             Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
                                             FontSize="15" Foreground="{DynamicResource PrimaryText}"
-                                            Width="160" materialDesign:HintAssist.Hint="Ngày vào làm" BorderThickness="0,0,0,1" Language="vi-VN"/>
+                                            Width="160" materialDesign:HintAssist.Hint="Ngày vào làm" BorderThickness="0,0,0,1" Language="vi-VN" VerticalAlignment="Center"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,15" VerticalAlignment="Top">
@@ -329,7 +329,7 @@
                                          Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
                                          FontSize="15" Foreground="{DynamicResource PrimaryText}" 
                                          TextWrapping="Wrap" Width="160"
-                                         materialDesign:HintAssist.Hint="Địa chỉ" BorderThickness="0,0,0,1" VerticalAlignment="Top"/>
+                                         materialDesign:HintAssist.Hint="Địa chỉ" BorderThickness="0,0,0,1" VerticalAlignment="Center"/>
                             </StackPanel>
 
 

@@ -125,7 +125,7 @@ namespace Martify.ViewModels
             {
                 var query = DataProvider.Ins.DB.Products
                     .Include("Category")
-f                    .AsQueryable(); 
+                    .AsQueryable();
 
                 // 2. Áp dụng lọc theo Danh mục (SelectedCategory)
                 if (SelectedCategory != null)

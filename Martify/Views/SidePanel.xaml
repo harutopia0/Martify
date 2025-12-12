@@ -63,16 +63,13 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Margin="0,0,0,0">
-                                        <!--Border.Effect>
-                                            <DropShadowEffect Color="#80000000" BlurRadius="5" ShadowDepth="1" Direction="270" Opacity="0.2"/>
-                                        </Border.Effect-->
                                     </Border>
-                                    
+
 
                                     <TextBlock x:Name="UpperCase_Text"
                                                Text="{Binding Content, 
-                                                              RelativeSource={RelativeSource FindAncestor,
-                                                              AncestorType={x:Type RadioButton}}}"
+                                                      RelativeSource={RelativeSource FindAncestor,
+                                                      AncestorType={x:Type RadioButton}}}"
                                                FontFamily="{StaticResource Rubik}"
                                                FontSize="17"
                                                Foreground="#3A5EEA"
@@ -87,13 +84,16 @@
                         </Border>
 
                         <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.3"/>
+                            </Trigger>
 
                             <Trigger Property="RadioButton.IsMouseOver" Value="true">
                                 <Setter Property="Background" TargetName="border" Value="Transparent" />
                                 <Setter TargetName="SidePanel_Menu_Image"
                                         Property="Source"
                                         Value="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RadioButton}}}" />
-                                <Setter Property="Background" TargetName="Highlighter" Value="#FFD3D3D3" /> <!-- Grey on hover -->
+                                <Setter Property="Background" TargetName="Highlighter" Value="#FFD3D3D3" />
                             </Trigger>
 
                             <Trigger Property="RadioButton.IsChecked"
@@ -246,7 +246,9 @@
 
     <Grid>
         <StackPanel>
-            <ListBox x:Name="SidePanel_ListBox" Style="{StaticResource SidePanelListBoxStyle}">
+            <ListBox x:Name="SidePanel_ListBox" 
+                     Style="{StaticResource SidePanelListBoxStyle}"
+                     SelectedIndex="{Binding SelectedMenuIndex, Mode=TwoWay}">
 
                 <ListBox.Resources>
 
@@ -257,7 +259,7 @@
                             <Setter.Value>
                                 <ControlTemplate>
                                     <RadioButton IsChecked="{Binding Path=IsSelected, 
-                                                                       RelativeSource={RelativeSource TemplatedParent}}"
+                                                                     RelativeSource={RelativeSource TemplatedParent}}"
                                                  GroupName="SidePanelGroup"
                                                  Command="{Binding DataContext.Navigation.DashboardCommand, ElementName=ucPanel}">
                                         <RadioButton.Style>
@@ -274,13 +276,13 @@
 
                                                 <Setter Property="Image.Source"
                                                         Value="{StaticResource DashboardNormal}" />
-                                                
+
                                                 <Setter Property="Tag"
                                                         Value="{StaticResource DashboardActive}" />
 
                                                 <Setter Property="DataContext"
                                                         Value="{StaticResource DashboardActive}" />
-                                                
+
                                             </Style>
                                         </RadioButton.Style>
                                     </RadioButton>
@@ -336,7 +338,7 @@
                             <Setter.Value>
                                 <ControlTemplate>
                                     <RadioButton IsChecked="{Binding Path=IsSelected, 
-                                                                       RelativeSource={RelativeSource TemplatedParent}}"
+                                                                     RelativeSource={RelativeSource TemplatedParent}}"
                                                  GroupName="SidePanelGroup"
                                                  Command="{Binding DataContext.Navigation.ProductsCommand, ElementName=ucPanel}">
 
@@ -359,7 +361,7 @@
 
                                                 <Setter Property="DataContext"
                                                         Value="{StaticResource ProductsActive}" />
-                                                
+
                                             </Style>
 
                                         </RadioButton.Style>
@@ -451,7 +453,7 @@
                             <Setter.Value>
                                 <ControlTemplate>
                                     <RadioButton IsChecked="{Binding Path=IsSelected, 
-                                                                       RelativeSource={RelativeSource TemplatedParent}}"
+                                                                     RelativeSource={RelativeSource TemplatedParent}}"
                                                  GroupName="SidePanelGroup"
                                                  Command="{Binding DataContext.Navigation.SettingsCommand, ElementName=ucPanel}">
 
@@ -516,7 +518,8 @@
                 <ListBoxItem x:Name="dashboard_sidepanel_listboxitem"
                              Grid.Row="0"
                              Style="{StaticResource dashboard_listboxitem_style}"
-                             IsSelected="True" Width="200"/>
+                             IsEnabled="{Binding DataContext.IsAdmin, ElementName=ucPanel}"
+                             Width="200"/>
 
                 <ListBoxItem x:Name="sellproducts_sidepanel_listboxitem"
                              Grid.Row="1"
@@ -524,14 +527,17 @@
 
                 <ListBoxItem x:Name="products_sidepanel_listboxitem"
                              Grid.Row="2"
+                             IsEnabled="{Binding DataContext.IsAdmin, ElementName=ucPanel}"
                              Style="{StaticResource products_listboxitem_style}" />
 
                 <ListBoxItem x:Name="staff_sidepanel_listboxitem"
                              Grid.Row="3"
+                             IsEnabled="{Binding DataContext.IsAdmin, ElementName=ucPanel}"
                              Style="{StaticResource staff_listboxitem_style}" />
 
                 <ListBoxItem x:Name="invoices_sidepanel_listboxitem"
                              Grid.Row="4"
+                             IsEnabled="{Binding DataContext.IsAdmin, ElementName=ucPanel}"
                              Style="{StaticResource invoices_listboxitem_style}" />
 
                 <ListBoxItem x:Name="settings_sidepanel_listboxitem"

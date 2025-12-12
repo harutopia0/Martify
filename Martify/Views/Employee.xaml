@@ -227,9 +227,6 @@
                                         <Button Style="{DynamicResource GridEditButtonStyle}" Command="{Binding DataContext.OpenDetailsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
                                             <materialDesign:PackIcon Kind="Wrench" Width="14" Height="14" Foreground="White"/>
                                         </Button>
-                                        <Button Margin="5 0 0 0" Style="{DynamicResource GridRemoveButtonStyle}">
-                                            <materialDesign:PackIcon Kind="Delete" Width="14" Height="14" Foreground="White"/>
-                                        </Button>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

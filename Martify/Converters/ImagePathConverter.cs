@@ -36,7 +36,7 @@ namespace Martify.Converters // Nhớ check namespace cho đúng folder
                     bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache; // Tránh cache cũ
 
 
-                    bitmap.DecodePixelWidth = 150;
+                    bitmap.DecodePixelWidth = 300;
 
                     bitmap.EndInit();
 

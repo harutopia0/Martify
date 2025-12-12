@@ -18,7 +18,7 @@ namespace Martify.ViewModels
 {
     public class InvoicesVM : BaseVM
     {
-        // ... (Giữ nguyên các Property cũ: Invoices, SelectedInvoice, Filter...)
+        // ... (Giữ nguyên toàn bộ các khai báo Property và Constructor cũ)
         private ObservableCollection<Invoice> _invoices;
         public ObservableCollection<Invoice> Invoices { get => _invoices; set { _invoices = value; OnPropertyChanged(); } }
 
@@ -46,12 +46,8 @@ namespace Martify.ViewModels
 
         public InvoicesVM()
         {
-            // 1. Cấu hình License
             try { QuestPDF.Settings.License = LicenseType.Community; } catch { }
-
-            // 2. ĐĂNG KÝ FONT TỪ PROJECT (Chỉ đăng ký 2 font tiêu đề bạn dùng)
             RegisterProjectFonts();
-
             InitFilterData();
             LoadList();
 
@@ -83,7 +79,6 @@ namespace Martify.ViewModels
             ExportPDFCommand = new RelayCommand<Invoice>((p) => p != null, (p) => ExportInvoiceToPdf(p));
         }
 
-        // --- ĐĂNG KÝ FONT (Chỉ FleurDeLeah và Charm) ---
         private void RegisterProjectFonts()
         {
             try
@@ -94,8 +89,6 @@ namespace Martify.ViewModels
                     var stream = Application.GetResourceStream(uri).Stream;
                     FontManager.RegisterFont(stream);
                 }
-
-                // BỎ Rubik, chỉ load 2 font này
                 LoadFont("FleurDeLeah-Regular.ttf");
                 LoadFont("Charm-Regular.ttf");
             }
@@ -114,22 +107,18 @@ namespace Martify.ViewModels
         void LoadList()
         {
             var query = DataProvider.Ins.DB.Invoices.Include(x => x.Employee).AsNoTracking().AsQueryable();
-
             if (SelectedMonth.HasValue) query = query.Where(x => x.CreatedDate.Month == SelectedMonth.Value);
             if (SelectedYear.HasValue) query = query.Where(x => x.CreatedDate.Year == SelectedYear.Value);
-
             var list = query.OrderByDescending(x => x.CreatedDate).ToList();
-
             if (!string.IsNullOrEmpty(Keyword))
             {
                 string k = Keyword.ToLower();
-                list = list.Where(x => x.InvoiceID.ToLower().Contains(k) ||
-                                       (x.Employee != null && x.Employee.FullName.ToLower().Contains(k))).ToList();
+                list = list.Where(x => x.InvoiceID.ToLower().Contains(k) || (x.Employee != null && x.Employee.FullName.ToLower().Contains(k))).ToList();
             }
             Invoices = new ObservableCollection<Invoice>(list);
         }
 
-        // --- HÀM XUẤT PDF ---
+        // --- HÀM XUẤT PDF ĐÃ CHỈNH SỬA ---
         private void ExportInvoiceToPdf(Invoice simpleInvoice)
         {
             try
@@ -151,7 +140,6 @@ namespace Martify.ViewModels
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    // Định nghĩa màu sắc giống LightTheme
                     var PrimaryText = "#333333";
                     var SecondaryText = "#666666";
                     var GreenColor = "#4CAF50";
@@ -164,112 +152,111 @@ namespace Martify.ViewModels
                             page.Size(PageSizes.A4);
                             page.Margin(2, QuestPDF.Infrastructure.Unit.Centimetre);
                             page.PageColor(Colors.White);
-
-                            // DÙNG FONT ARIAL CHO NỘI DUNG CHÍNH (Giống mặc định của WPF)
                             page.DefaultTextStyle(x => x.FontSize(13).FontFamily("Arial").FontColor(PrimaryText));
 
-                            // === 1. HEADER ===
-                            page.Header().Column(col =>
+                            // 1. CONTENT (Chứa toàn bộ nội dung, chảy từ trên xuống dưới)
+                            page.Content().Column(col =>
                             {
-                                // Logo "Martify" - Dùng font Fleur De Leah
-                                col.Item().AlignCenter().Text("Martify")
-                                   .FontFamily("Fleur De Leah").FontSize(50).FontColor(PrimaryText);
-
-                                // Tiêu đề "Hóa đơn thanh toán" - Dùng font Charm
-                                col.Item().AlignCenter().Text("Hóa đơn thanh toán")
-                                   .FontFamily("Charm").FontSize(24).FontColor(PrimaryText);
-
-                                // Mã hóa đơn (Arial)
-                                col.Item().PaddingBottom(15).AlignCenter().Text(invoice.InvoiceID)
-                                   .FontSize(12).FontColor(SecondaryText);
-
-                                col.Item().LineHorizontal(1).LineColor(DividerColor);
-
-                                // Thông tin Ngày tạo & Nhân viên
-                                col.Item().PaddingVertical(10).Row(row =>
+                                // --- HEADER (Logo, Info) ---
+                                col.Item().Column(headerCol =>
                                 {
-                                    row.RelativeItem().Column(c =>
+                                    headerCol.Item().AlignCenter().Text("Martify")
+                                       .FontFamily("Fleur De Leah").FontSize(50).FontColor(PrimaryText);
+
+                                    headerCol.Item().AlignCenter().Text("Hóa đơn thanh toán")
+                                       .FontFamily("Charm").FontSize(24).FontColor(PrimaryText);
+
+                                    headerCol.Item().PaddingBottom(15).AlignCenter().Text(invoice.InvoiceID)
+                                       .FontSize(12).FontColor(SecondaryText);
+
+                                    headerCol.Item().LineHorizontal(1).LineColor(DividerColor);
+
+                                    headerCol.Item().PaddingVertical(10).Row(row =>
                                     {
-                                        c.Item().Text("Ngày tạo:").FontSize(10).FontColor(SecondaryText);
-                                        c.Item().Text($"{invoice.CreatedDate:dd/MM/yyyy HH:mm}").FontSize(12);
+                                        row.RelativeItem().Column(c =>
+                                        {
+                                            c.Item().Text("Ngày tạo:").FontSize(10).FontColor(SecondaryText);
+                                            c.Item().Text($"{invoice.CreatedDate:dd/MM/yyyy HH:mm}").FontSize(12);
+                                        });
+
+                                        row.RelativeItem().AlignRight().Column(c =>
+                                        {
+                                            c.Item().AlignRight().Text("Nhân viên:").FontSize(10).FontColor(SecondaryText);
+                                            c.Item().AlignRight().Text(invoice.Employee?.FullName ?? "N/A").FontSize(12);
+                                        });
                                     });
 
-                                    row.RelativeItem().AlignRight().Column(c =>
+                                    headerCol.Item().PaddingBottom(5).LineHorizontal(1).LineColor(DividerColor);
+                                });
+
+                                // --- BẢNG SẢN PHẨM ---
+                                col.Item().PaddingVertical(10).Table(table =>
+                                {
+                                    // Định nghĩa cột
+                                    table.ColumnsDefinition(columns =>
                                     {
-                                        c.Item().AlignRight().Text("Nhân viên:").FontSize(10).FontColor(SecondaryText);
-                                        c.Item().AlignRight().Text(invoice.Employee?.FullName ?? "N/A").FontSize(12);
+                                        columns.RelativeColumn(2f);   // Sản phẩm
+                                        columns.RelativeColumn(1f);   // Đơn giá
+                                        columns.RelativeColumn(0.8f); // SL
+                                        columns.RelativeColumn(1.2f); // Thành tiền
                                     });
-                                });
 
-                                col.Item().PaddingBottom(5).LineHorizontal(1).LineColor(DividerColor);
-                            });
 
-                            // === 2. CONTENT (Bảng sản phẩm) ===
-                            page.Content().PaddingVertical(10).Table(table =>
-                            {
-                                // Tỷ lệ cột giống XAML: 2* - 1* - 0.8* - 1.2*
-                                table.ColumnsDefinition(columns =>
-                                {
-                                    columns.RelativeColumn(2f);
-                                    columns.RelativeColumn(1f);
-                                    columns.RelativeColumn(0.8f);
-                                    columns.RelativeColumn(1.2f);
-                                });
-
-                                // Header Bảng
-                                table.Header(header =>
-                                {
-                                    header.Cell().Element(HeaderStyle).Text("Sản phẩm");
-                                    header.Cell().Element(HeaderStyle).AlignRight().Text("Đơn giá");
-                                    header.Cell().Element(HeaderStyle).AlignCenter().Text("SL"); // SL căn giữa
-                                    header.Cell().Element(HeaderStyle).AlignRight().Text("Thành tiền");
+                                    // Hàng 1: Tiêu đề cột
+                                    table.Cell().Element(HeaderStyle).Text("Sản phẩm");
+                                    table.Cell().Element(HeaderStyle).AlignRight().Text("Đơn giá");
+                                    table.Cell().Element(HeaderStyle).AlignCenter().Text("SL");
+                                    table.Cell().Element(HeaderStyle).AlignRight().Text("Thành tiền");
 
                                     static IContainer HeaderStyle(IContainer container)
                                     {
                                         return container.PaddingVertical(5).DefaultTextStyle(x => x.Bold());
                                     }
+
+                                    // Các hàng tiếp theo: Dữ liệu
+                                    foreach (var item in invoice.InvoiceDetails)
+                                    {
+                                        table.Cell().Element(CellStyle).Column(c =>
+                                        {
+                                            c.Item().Text(item.Product?.ProductName ?? "SP đã xóa").SemiBold().FontColor(PrimaryText);
+                                            c.Item().Text(item.Product?.ProductID ?? "").FontSize(10).FontColor(SecondaryText);
+                                        });
+
+                                        table.Cell().Element(CellStyle).AlignRight().Text($"{item.SalePrice:N0}").FontColor(SecondaryText);
+                                        table.Cell().Element(CellStyle).AlignCenter().Text($"{item.Quantity}").FontColor(SecondaryText);
+                                        table.Cell().Element(CellStyle).AlignRight().Text($"{item.Total:N0}").FontColor(PrimaryText);
+
+                                        static IContainer CellStyle(IContainer container)
+                                        {
+                                            return container.PaddingVertical(8).BorderBottom(1).BorderColor("#F5F5F5");
+                                        }
+                                    }
                                 });
 
-                                // Dữ liệu từng dòng
-                                foreach (var item in invoice.InvoiceDetails)
+                                // --- TỔNG TIỀN (Chỉ hiện 1 lần cuối cùng) ---
+                                // Dùng ShowEntire để không bị ngắt quãng
+                                col.Item().ShowEntire().Column(footerCol =>
                                 {
-                                    // Cột 1: Tên SP (Đậm) + Mã SP (Nhạt)
-                                    table.Cell().Element(CellStyle).Column(c =>
+                                    footerCol.Item().PaddingTop(5).LineHorizontal(1).LineColor(DividerColor);
+
+                                    footerCol.Item().PaddingTop(10).Row(row =>
                                     {
-                                        c.Item().Text(item.Product?.ProductName ?? "SP đã xóa").SemiBold().FontColor(PrimaryText);
-                                        c.Item().Text(item.Product?.ProductID ?? "").FontSize(10).FontColor(SecondaryText);
+                                        row.RelativeItem().Text("Tổng tiền:").FontSize(14).Bold().FontColor(PrimaryText).AlignLeft();
+                                        row.RelativeItem().Text($"{invoice.TotalAmount:N0} VND")
+                                           .FontSize(18).Bold().FontColor(GreenColor).AlignRight();
                                     });
 
-                                    // Cột 2: Đơn giá
-                                    table.Cell().Element(CellStyle).AlignRight().Text($"{item.SalePrice:N0}").FontColor(SecondaryText);
-
-                                    // Cột 3: Số lượng
-                                    table.Cell().Element(CellStyle).AlignCenter().Text($"{item.Quantity}").FontColor(SecondaryText);
-
-                                    // Cột 4: Thành tiền
-                                    table.Cell().Element(CellStyle).AlignRight().Text($"{item.Total:N0}").FontColor(PrimaryText);
-
-                                    static IContainer CellStyle(IContainer container)
-                                    {
-                                        return container.PaddingVertical(8).BorderBottom(1).BorderColor("#F5F5F5");
-                                    }
-                                }
+                                    footerCol.Item().PaddingTop(20).AlignCenter().Text("Cảm ơn quý khách đã mua hàng!").FontSize(10).Italic().FontColor(SecondaryText);
+                                });
                             });
 
-                            // === 3. FOOTER ===
-                            page.Footer().Column(col =>
+                            // Footer thật (chỉ dùng để đánh số trang ở dưới cùng tờ giấy)
+                            page.Footer().AlignCenter().Text(x =>
                             {
-                                col.Item().PaddingTop(5).LineHorizontal(1).LineColor(DividerColor);
-
-                                col.Item().PaddingTop(10).Row(row =>
-                                {
-                                    row.RelativeItem().Text("Tổng tiền:").FontSize(14).Bold().FontColor(PrimaryText).AlignLeft();
-
-                                    row.RelativeItem().Text($"{invoice.TotalAmount:N0} VND")
-                                       .FontSize(18).Bold().FontColor(GreenColor).AlignRight();
-                                });
-
-                                col.Item().PaddingTop(20).AlignCenter().Text("Cảm ơn quý khách đã mua hàng!").FontSize(10).Italic().FontColor(SecondaryText);
+                                x.Span("Trang ");
+                                x.CurrentPageNumber();
+                                x.Span(" / ");
+                                x.TotalPages();
                             });
                         });
                     })

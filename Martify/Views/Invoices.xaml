@@ -10,7 +10,8 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              Background="Transparent"
              mc:Ignorable="d" 
-             d:DesignHeight="720" d:DesignWidth="864"
+             d:DesignHeight="720" 
+             d:DesignWidth="864"
              Style="{StaticResource Page_RadarReveal_Style}"
              d:Style="{x:Null}">
 
@@ -21,43 +22,69 @@
     <UserControl.Resources>
         <cv:ImagePathConverter x:Key="ImgConverter"/>
 
-        <Style x:Key="CustomDataGridCellStyle" TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Background" Value="Transparent"/>
+        <Style x:Key="CustomDataGridCellStyle" 
+               TargetType="DataGridCell" 
+               BasedOn="{StaticResource MaterialDesignDataGridCell}">
+            <Setter Property="Foreground" 
+                    Value="{DynamicResource PrimaryText}" />
+            <Setter Property="FocusVisualStyle" 
+                    Value="{x:Null}"/>
+            <Setter Property="BorderThickness" 
+                    Value="0"/>
+            <Setter Property="BorderBrush" 
+                    Value="Transparent"/>
+            <Setter Property="Background" 
+                    Value="Transparent"/>
             <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Setter Property="Background" Value="Transparent"/>
+                <Trigger Property="IsSelected" 
+                         Value="True">
+                    <Setter Property="BorderThickness" 
+                            Value="0"/>
+                    <Setter Property="BorderBrush" 
+                            Value="Transparent"/>
+                    <Setter Property="Background" 
+                            Value="Transparent"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="CenterTextColumnStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="FontSize" Value="14"/>
+        <Style x:Key="CenterTextColumnStyle" 
+               TargetType="TextBlock">
+            <Setter Property="Foreground" 
+                    Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="VerticalAlignment" 
+                    Value="Center"/>
+            <Setter Property="HorizontalAlignment" 
+                    Value="Left"/>
+            <Setter Property="FontSize" 
+                    Value="14"/>
         </Style>
 
-        <Style x:Key="LeftTextColumnStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="FontSize" Value="14"/>
+        <Style x:Key="LeftTextColumnStyle" 
+               TargetType="TextBlock">
+            <Setter Property="Foreground" 
+                    Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="VerticalAlignment" 
+                    Value="Center"/>
+            <Setter Property="HorizontalAlignment" 
+                    Value="Left"/>
+            <Setter Property="FontSize" 
+                    Value="14"/>
         </Style>
 
-        <Style x:Key="SlidingDetailsPanelStyle" TargetType="Border">
-            <Setter Property="Width" Value="0"/>
+        <Style x:Key="SlidingDetailsPanelStyle" 
+               TargetType="Border">
+            <Setter Property="Width" 
+                    Value="0"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsDetailsPanelOpen}" Value="True">
+                <DataTrigger Binding="{Binding IsDetailsPanelOpen}" 
+                             Value="True">
                     <DataTrigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Width" To="275" Duration="0:0:0.25">
+                                <DoubleAnimation Storyboard.TargetProperty="Width" 
+                                                 To="275" 
+                                                 Duration="0:0:0.25">
                                     <DoubleAnimation.EasingFunction>
                                         <QuadraticEase EasingMode="EaseOut"/>
                                     </DoubleAnimation.EasingFunction>
@@ -68,7 +95,9 @@
                     <DataTrigger.ExitActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.25">
+                                <DoubleAnimation Storyboard.TargetProperty="Width" 
+                                                 To="0" 
+                                                 Duration="0:0:0.25">
                                     <DoubleAnimation.EasingFunction>
                                         <QuadraticEase EasingMode="EaseIn"/>
                                     </DoubleAnimation.EasingFunction>
@@ -99,109 +128,185 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Margin="25,0,25,0">
+                <Grid Grid.Row="0" 
+                      Margin="25,0,25,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Border Background="{DynamicResource CardBackground}" CornerRadius="20" Height="40" Width="250" Margin="0,0,10,0">
+                    <StackPanel Grid.Column="0" 
+                                Orientation="Horizontal" 
+                                VerticalAlignment="Center">
+                        <Border Background="{DynamicResource CardBackground}" 
+                                CornerRadius="20" 
+                                Height="40" 
+                                Width="250" 
+                                Margin="0,0,10,0">
                             <Grid>
-                                <materialDesign:PackIcon Kind="Magnify" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="{DynamicResource SecondaryText}"/>
+                                <materialDesign:PackIcon Kind="Magnify" 
+                                                         VerticalAlignment="Center" 
+                                                         Margin="10,0,0,0" 
+                                                         Foreground="{DynamicResource SecondaryText}"/>
                                 <TextBox materialDesign:HintAssist.Hint="Tìm mã hóa đơn, tên NV..." 
                                          materialDesign:TextFieldAssist.DecorationVisibility="Hidden" 
-                                         BorderThickness="0" VerticalAlignment="Center" Margin="35,0,10,0" 
-                                         FontSize="14" Foreground="{DynamicResource PrimaryText}" 
+                                         BorderThickness="0" 
+                                         VerticalAlignment="Center" 
+                                         Margin="35,0,10,0" 
+                                         FontSize="14" 
+                                         Foreground="{DynamicResource PrimaryText}" 
                                          Text="{Binding Keyword, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                         </Border>
-                        <ComboBox Width="90" Height="40" ItemsSource="{Binding Months}" SelectedValue="{Binding SelectedMonth}" 
-                                  materialDesign:HintAssist.Hint="Tháng" Style="{StaticResource MaterialDesignOutlinedComboBox}" 
-                                  Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryText}" Margin="0,0,10,0" Padding="10,0"/>
-                        <ComboBox Width="90" Height="40" ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}" 
-                                  materialDesign:HintAssist.Hint="Năm" Style="{StaticResource MaterialDesignOutlinedComboBox}" 
-                                  Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryText}" Margin="0,0,10,0" Padding="10,0"/>
+                        <ComboBox Width="90" 
+                                  Height="40" 
+                                  ItemsSource="{Binding Months}" 
+                                  SelectedValue="{Binding SelectedMonth}" 
+                                  materialDesign:HintAssist.Hint="Tháng" 
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}" 
+                                  Background="{DynamicResource CardBackground}" 
+                                  Foreground="{DynamicResource PrimaryText}" 
+                                  Margin="0,0,10,0" 
+                                  Padding="10,0"/>
+                        <ComboBox Width="90" 
+                                  Height="40" 
+                                  ItemsSource="{Binding Years}" 
+                                  SelectedValue="{Binding SelectedYear}" 
+                                  materialDesign:HintAssist.Hint="Năm" 
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}" 
+                                  Background="{DynamicResource CardBackground}" 
+                                  Foreground="{DynamicResource PrimaryText}" 
+                                  Margin="0,0,10,0" 
+                                  Padding="10,0"/>
 
-                        <Button Style="{StaticResource MaterialDesignToolButton}" Command="{Binding ClearFilterCommand}" ToolTip="Xóa bộ lọc" Height="40" Width="40">
-                            <materialDesign:PackIcon Kind="FilterOff" Foreground="Red" />
+                        <Button Style="{StaticResource MaterialDesignToolButton}" 
+                                Command="{Binding ClearFilterCommand}" 
+                                ToolTip="Xóa bộ lọc" 
+                                Height="40" 
+                                Width="40">
+                            <materialDesign:PackIcon Kind="FilterOff" 
+                                                     Foreground="Red" />
                         </Button>
                     </StackPanel>
                 </Grid>
 
-                <Border Grid.Row="1" Background="{DynamicResource CardBackground}" CornerRadius="25" Margin="10" Padding="5">
+                <Border Grid.Row="1" 
+                        Background="{DynamicResource CardBackground}" 
+                        CornerRadius="25" 
+                        Margin="10" 
+                        Padding="5">
                     <DataGrid Margin="5" 
-                              ItemsSource="{Binding Invoices}" x:Name="invoicesDataGrid" 
+                              ItemsSource="{Binding Invoices}" 
+                              x:Name="invoicesDataGrid" 
                               Style="{DynamicResource DataGridStyle}" 
                               CellStyle="{StaticResource CustomDataGridCellStyle}" 
                               AutoGenerateColumns="False" 
                               HorizontalAlignment="Center" 
-                              CanUserReorderColumns="False" CanUserResizeColumns="False" 
-                              Background="Transparent" Foreground="{DynamicResource PrimaryText}" 
-                              SelectionUnit="FullRow" CanUserAddRows="False">
+                              CanUserReorderColumns="False" 
+                              CanUserResizeColumns="False" 
+                              Background="Transparent" 
+                              Foreground="{DynamicResource PrimaryText}" 
+                              SelectionUnit="FullRow" 
+                              CanUserAddRows="False">
 
                         <DataGrid.InputBindings>
-                            <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding OpenDetailsCommand}" CommandParameter="{Binding ElementName=invoicesDataGrid, Path=SelectedItem}"/>
+                            <MouseBinding MouseAction="LeftDoubleClick" 
+                                          Command="{Binding OpenDetailsCommand}" 
+                                          CommandParameter="{Binding ElementName=invoicesDataGrid, Path=SelectedItem}"/>
                         </DataGrid.InputBindings>
 
                         <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
-                                <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-                                <Setter Property="Margin" Value="0,2.5,0,2.5"/>
-                                <Setter Property="Cursor" Value="Hand"/>
+                            <Style TargetType="DataGridRow" 
+                                   BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                                <Setter Property="Foreground" 
+                                        Value="{DynamicResource PrimaryText}"/>
+                                <Setter Property="Margin" 
+                                        Value="0,2.5,0,2.5"/>
+                                <Setter Property="Cursor" 
+                                        Value="Hand"/>
                             </Style>
                         </DataGrid.RowStyle>
 
                         <DataGrid.Resources>
-                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                                <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-                                <Setter Property="FontSize" Value="14"/>
-                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                                <Setter Property="Background" Value="Transparent"/>
+                            <Style TargetType="{x:Type DataGridColumnHeader}" 
+                                   BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                <Setter Property="Foreground" 
+                                        Value="{DynamicResource PrimaryText}"/>
+                                <Setter Property="FontSize" 
+                                        Value="14"/>
+                                <Setter Property="HorizontalContentAlignment" 
+                                        Value="Left"/>
+                                <Setter Property="Background" 
+                                        Value="Transparent"/>
                             </Style>
                         </DataGrid.Resources>
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Mã HĐ" Binding="{Binding InvoiceID}" IsReadOnly="True" Width="0.8*" ElementStyle="{StaticResource CenterTextColumnStyle}"/>
+                            <DataGridTextColumn Header="Mã HĐ" 
+                                                Binding="{Binding InvoiceID}" 
+                                                IsReadOnly="True" 
+                                                Width="0.8*" 
+                                                ElementStyle="{StaticResource CenterTextColumnStyle}"/>
 
                             <DataGridTextColumn Header="Ngày tạo"
                                                 Binding="{Binding CreatedDate, StringFormat='dd/MM/yyyy HH:mm'}"
-                                                IsReadOnly="True" Width="1.2*" 
+                                                IsReadOnly="True" 
+                                                Width="1.2*" 
                                                 ElementStyle="{StaticResource CenterTextColumnStyle}"/>
 
-                            <DataGridTemplateColumn Header="Nhân viên" IsReadOnly="True" Width="1.5*">
+                            <DataGridTemplateColumn Header="Nhân viên" 
+                                                    IsReadOnly="True" 
+                                                    Width="1.5*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Employee.FullName}" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource PrimaryText}"/>
+                                            <TextBlock Text="{Binding Employee.FullName}" 
+                                                       VerticalAlignment="Center" 
+                                                       HorizontalAlignment="Left" 
+                                                       Foreground="{DynamicResource PrimaryText}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTextColumn Header="Tổng tiền" Binding="{Binding TotalAmount, StringFormat={}{0:N0} VND}" IsReadOnly="True" Width="1*">
+                            <DataGridTextColumn Header="Tổng tiền" 
+                                                Binding="{Binding TotalAmount, StringFormat={}{0:N0} VND}" 
+                                                IsReadOnly="True" 
+                                                Width="1*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="HorizontalAlignment" Value="Left"/>
-                                        <Setter Property="VerticalAlignment" Value="Center"/>
-                                        <Setter Property="FontSize" Value="14"/>
-                                        <Setter Property="FontWeight" Value="SemiBold"/>
-                                        <Setter Property="Foreground" Value="#4CAF50"/>
-                                        <Setter Property="Margin" Value="0,0,20,0"/>
+                                        <Setter Property="HorizontalAlignment" 
+                                                Value="Left"/>
+                                        <Setter Property="VerticalAlignment" 
+                                                Value="Center"/>
+                                        <Setter Property="FontSize" 
+                                                Value="14"/>
+                                        <Setter Property="FontWeight" 
+                                                Value="SemiBold"/>
+                                        <Setter Property="Foreground" 
+                                                Value="#4CAF50"/>
+                                        <Setter Property="Margin" 
+                                                Value="0,0,20,0"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <DataGridTemplateColumn Header="Chi tiết" CanUserSort="False" Width="Auto" IsReadOnly="True">
+                            <DataGridTemplateColumn Header="Chi tiết" 
+                                                    CanUserSort="False" 
+                                                    Width="Auto" 
+                                                    IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{DynamicResource GridEditButtonStyle}" 
                                                 Command="{Binding DataContext.OpenDetailsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                                 CommandParameter="{Binding}"
                                                 ToolTip="Xem chi tiết"
-                                                Width="30" Height="30"
-                                                VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            <materialDesign:PackIcon Kind="Eye" Foreground="White"/>
+                                                Width="30" 
+                                                Height="30"
+                                                VerticalAlignment="Center" 
+                                                HorizontalAlignment="Center">
+                                            <materialDesign:PackIcon Kind="Eye" 
+                                                                     Foreground="White"/>
                                         </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -216,20 +321,38 @@
                     Background="{DynamicResource CardBackground}"
                     BorderBrush="{DynamicResource MaterialDesignDivider}"
                     BorderThickness="1,0,0,0"
-                    Margin="0,15,10,10" CornerRadius="20">
-                <Grid Margin="20" DataContext="{Binding SelectedInvoice}">
+                    Margin="0,15,10,10" 
+                    CornerRadius="20">
+                <Grid Margin="20" 
+                      DataContext="{Binding SelectedInvoice}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0" Margin="0,0,0,20">
-                        <TextBlock Text="Martify" FontSize="75" Foreground="{DynamicResource PrimaryText}" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource FleurDeleah}"/>
-                        <TextBlock Text="Hóa đơn thanh toán" FontSize="25" Foreground="{DynamicResource PrimaryText}" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource Charm}"/>
-                        <TextBlock Text="{Binding InvoiceID}" FontSize="14" Foreground="{DynamicResource SecondaryText}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                    <StackPanel Grid.Row="0" 
+                                Margin="0,0,0,20">
+                        <TextBlock Text="Martify" 
+                                   FontSize="75" 
+                                   Foreground="{DynamicResource PrimaryText}" 
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center" 
+                                   FontFamily="{StaticResource FleurDeleah}"/>
+                        <TextBlock Text="Hóa đơn thanh toán" 
+                                   FontSize="25" 
+                                   Foreground="{DynamicResource PrimaryText}" 
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center" 
+                                   FontFamily="{StaticResource Charm}"/>
+                        <TextBlock Text="{Binding InvoiceID}" 
+                                   FontSize="14" 
+                                   Foreground="{DynamicResource SecondaryText}" 
+                                   HorizontalAlignment="Center" 
+                                   Margin="0,5,0,0"/>
 
-                        <Separator Margin="0,15" Background="{DynamicResource MaterialDesignDivider}"/>
+                        <Separator Margin="0,15" 
+                                   Background="{DynamicResource MaterialDesignDivider}"/>
 
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -237,15 +360,27 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel>
-                                <TextBlock Text="Ngày tạo:" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
-                                <TextBlock Text="{Binding CreatedDate, StringFormat='dd/MM/yyyy HH:mm'}" FontSize="14" Foreground="{DynamicResource PrimaryText}"/>
+                                <TextBlock Text="Ngày tạo:" 
+                                           FontSize="12" 
+                                           Foreground="{DynamicResource SecondaryText}"/>
+                                <TextBlock Text="{Binding CreatedDate, StringFormat='dd/MM/yyyy HH:mm'}" 
+                                           FontSize="14" 
+                                           Foreground="{DynamicResource PrimaryText}"/>
                             </StackPanel>
-                            <StackPanel Grid.Column="1" HorizontalAlignment="Right">
-                                <TextBlock Text="Nhân viên:" FontSize="12" Foreground="{DynamicResource SecondaryText}" HorizontalAlignment="Right"/>
-                                <TextBlock Text="{Binding Employee.FullName}" FontSize="14" Foreground="{DynamicResource PrimaryText}" HorizontalAlignment="Right"/>
+                            <StackPanel Grid.Column="1" 
+                                        HorizontalAlignment="Right">
+                                <TextBlock Text="Nhân viên:" 
+                                           FontSize="12" 
+                                           Foreground="{DynamicResource SecondaryText}" 
+                                           HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding Employee.FullName}" 
+                                           FontSize="14" 
+                                           Foreground="{DynamicResource PrimaryText}" 
+                                           HorizontalAlignment="Right"/>
                             </StackPanel>
                         </Grid>
-                        <Separator Margin="0,15,0,-5" Background="{DynamicResource MaterialDesignDivider}"/>
+                        <Separator Margin="0,15,0,-5" 
+                                   Background="{DynamicResource MaterialDesignDivider}"/>
                     </StackPanel>
 
                     <Grid Grid.Row="1">
@@ -254,7 +389,8 @@
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
 
-                        <Grid Grid.Row="0" Width="234">
+                        <Grid Grid.Row="0" 
+                              Width="234">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
                                 <ColumnDefinition Width="1.5*"></ColumnDefinition>
@@ -262,10 +398,22 @@
                                 <ColumnDefinition Width="1.75*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Sản phẩm"></TextBlock>
-                            <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="Đơn giá"></TextBlock>
-                            <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="SL"></TextBlock>
-                            <TextBlock Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" Text="Thành tiền"></TextBlock>
+                            <TextBlock Grid.Column="0" 
+                                       HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center" 
+                                       Text="Sản phẩm"></TextBlock>
+                            <TextBlock Grid.Column="1" 
+                                       HorizontalAlignment="Right" 
+                                       VerticalAlignment="Center" 
+                                       Text="Đơn giá"></TextBlock>
+                            <TextBlock Grid.Column="2" 
+                                       HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center" 
+                                       Text="SL"></TextBlock>
+                            <TextBlock Grid.Column="3" 
+                                       HorizontalAlignment="Right" 
+                                       VerticalAlignment="Center" 
+                                       Text="Thành tiền"></TextBlock>
                         </Grid>
 
                         <Grid Grid.Row="1">
@@ -274,11 +422,17 @@
                                 <RowDefinition></RowDefinition>
                             </Grid.RowDefinitions>
 
-                            <Separator Grid.Row="0" Margin="0,15,0,15" Background="{DynamicResource MaterialDesignDivider}"/>
-                            <ScrollViewer Grid.Row="1" Width="234" VerticalScrollBarVisibility="Hidden" Margin="0,0,0,10">
+                            <Separator Grid.Row="0" 
+                                       Margin="0,15,0,15" 
+                                       Background="{DynamicResource MaterialDesignDivider}"/>
+                            <ScrollViewer Grid.Row="1" 
+                                          Width="234" 
+                                          VerticalScrollBarVisibility="Hidden" 
+                                          Margin="0,0,0,10">
                                 <ScrollViewer.Resources>
                                     <Style TargetType="ScrollBar">
-                                        <Setter Property="Margin" Value="0,0,0,0"/>
+                                        <Setter Property="Margin" 
+                                                Value="0,0,0,0"/>
                                     </Style>
                                 </ScrollViewer.Resources>
                                 <ItemsControl ItemsSource="{Binding InvoiceDetails}">
@@ -290,7 +444,11 @@
                                                     <RowDefinition Height="*"></RowDefinition>
                                                 </Grid.RowDefinitions>
 
-                                                <TextBlock Grid.Column="0" Text="{Binding Product.ProductName}" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" TextWrapping="Wrap"/>
+                                                <TextBlock Grid.Column="0" 
+                                                           Text="{Binding Product.ProductName}" 
+                                                           FontWeight="SemiBold" 
+                                                           Foreground="{DynamicResource PrimaryText}" 
+                                                           TextWrapping="Wrap"/>
 
                                                 <Grid Grid.Row="1">
                                                     <Grid.ColumnDefinitions>
@@ -300,10 +458,23 @@
                                                         <ColumnDefinition Width="1.75*"></ColumnDefinition>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{Binding Product.ProductID}" Foreground="{DynamicResource PrimaryText}" TextTrimming="CharacterEllipsis"/>
-                                                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="{Binding SalePrice, StringFormat={}{0:N0}}" Foreground="{DynamicResource SecondaryText}"/>
-                                                    <TextBlock Grid.Column="2" HorizontalAlignment="Center" Text="{Binding Quantity}" Foreground="{DynamicResource SecondaryText}"/>
-                                                    <TextBlock Grid.Column="3" HorizontalAlignment="Right" Text="{Binding Total, StringFormat={}{0:N0}}" Foreground="{DynamicResource PrimaryText}"/>
+                                                    <TextBlock Grid.Column="0" 
+                                                               HorizontalAlignment="Left" 
+                                                               Text="{Binding Product.ProductID}" 
+                                                               Foreground="{DynamicResource PrimaryText}" 
+                                                               TextTrimming="CharacterEllipsis"/>
+                                                    <TextBlock Grid.Column="1" 
+                                                               HorizontalAlignment="Right" 
+                                                               Text="{Binding SalePrice, StringFormat={}{0:N0}}" 
+                                                               Foreground="{DynamicResource SecondaryText}"/>
+                                                    <TextBlock Grid.Column="2" 
+                                                               HorizontalAlignment="Center" 
+                                                               Text="{Binding Quantity}" 
+                                                               Foreground="{DynamicResource SecondaryText}"/>
+                                                    <TextBlock Grid.Column="3" 
+                                                               HorizontalAlignment="Right" 
+                                                               Text="{Binding Total, StringFormat={}{0:N0}}" 
+                                                               Foreground="{DynamicResource PrimaryText}"/>
                                                 </Grid>
                                             </Grid>
                                         </DataTemplate>
@@ -314,12 +485,20 @@
                     </Grid>
 
                     <StackPanel Grid.Row="2">
-                        <Separator Margin="0,5,0,15" Background="{DynamicResource MaterialDesignDivider}"/>
+                        <Separator Margin="0,5,0,15" 
+                                   Background="{DynamicResource MaterialDesignDivider}"/>
                         <Grid Margin="0,0,0,15">
-                            <TextBlock Text="Tổng tiền:" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                            <TextBlock Text="Tổng tiền:" 
+                                       FontSize="16" 
+                                       FontWeight="Bold" 
+                                       Foreground="{DynamicResource PrimaryText}" 
+                                       VerticalAlignment="Center"/>
                             <TextBlock Text="{Binding TotalAmount, StringFormat={}{0:N0} VND}" 
-                                       FontSize="20" FontWeight="Bold" Foreground="#4CAF50" 
-                                       HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                       FontSize="20" 
+                                       FontWeight="Bold" 
+                                       Foreground="#4CAF50" 
+                                       HorizontalAlignment="Right" 
+                                       VerticalAlignment="Center"/>
                         </Grid>
 
                         <Button Command="{Binding DataContext.ExportPDFCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
@@ -327,11 +506,19 @@
                                 Style="{StaticResource MaterialDesignRaisedButton}"
                                 Height="45"
                                 materialDesign:ButtonAssist.CornerRadius="10"
-                                Background="#FF5722" BorderBrush="{x:Null}"
+                                Background="#FF5722" 
+                                BorderBrush="{x:Null}"
                                 ToolTip="Lưu hóa đơn này thành file PDF">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="FilePdfBox" Width="24" Height="24" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="XUẤT PDF" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="FilePdfBox" 
+                                                         Width="24" 
+                                                         Height="24" 
+                                                         VerticalAlignment="Center" 
+                                                         Margin="0,0,8,0"/>
+                                <TextBlock Text="XUẤT PDF" 
+                                           FontWeight="Bold" 
+                                           FontSize="16" 
+                                           VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

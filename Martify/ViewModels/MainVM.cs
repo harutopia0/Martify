@@ -65,7 +65,7 @@ namespace Martify.ViewModels
             });
         }
 
-        void LoadCurrentUserData()
+        public void LoadCurrentUserData()
         {
             var acc = DataProvider.Ins.CurrentAccount;
 

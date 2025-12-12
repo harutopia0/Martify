@@ -1,0 +1,73 @@
+﻿<Window x:Class="Martify.Views.EditProfileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vm="clr-namespace:Martify.ViewModels"
+        xmlns:cv="clr-namespace:Martify.Converters" 
+        Title="Chỉnh sửa hồ sơ" Height="550" Width="400"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+
+    <Window.Resources>
+        <cv:ImagePathConverter x:Key="ImgCvt" />
+    </Window.Resources>
+
+    <Window.DataContext>
+        <vm:EditProfileVM />
+    </Window.DataContext>
+
+    <Border CornerRadius="20" Background="{DynamicResource CardBackground}" 
+            BorderBrush="#067FF8" BorderThickness="1"
+            MouseLeftButtonDown="Border_MouseDown">
+
+        <Grid Margin="20">
+            <StackPanel>
+                <TextBlock Text="CHỈNH SỬA HỒ SƠ" FontSize="24" FontWeight="Bold" 
+                           Foreground="#067FF8" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                <Grid HorizontalAlignment="Center" Margin="0,0,0,20">
+                    <Ellipse Width="100" Height="100" Stroke="#067FF8" StrokeThickness="2">
+                        <Ellipse.Fill>
+                            <ImageBrush ImageSource="{Binding AvatarPath, Converter={StaticResource ImgCvt}}" 
+                                        Stretch="UniformToFill"/>
+                        </Ellipse.Fill>
+                    </Ellipse>
+
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                            Command="{Binding UploadImageCommand}"
+                            HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-10,0" 
+                            Background="White" BorderBrush="White">
+                        <materialDesign:PackIcon Kind="Camera" Foreground="#067FF8"/>
+                    </Button>
+                </Grid>
+
+                <TextBox materialDesign:HintAssist.Hint="Họ và tên" Text="{Binding FullName}" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,10"/>
+
+                <TextBox materialDesign:HintAssist.Hint="Email" Text="{Binding Email}" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,10"/>
+
+                <TextBlock Text="Đổi mật khẩu (Bỏ trống nếu không đổi)" Margin="0,15,0,0" Opacity="0.6"/>
+
+                <PasswordBox x:Name="txtOldPass" materialDesign:HintAssist.Hint="Mật khẩu cũ" 
+                             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="0,5"/>
+
+                <PasswordBox x:Name="txtNewPass" materialDesign:HintAssist.Hint="Mật khẩu mới" 
+                             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="0,5"/>
+
+                <PasswordBox x:Name="txtConfirmPass" materialDesign:HintAssist.Hint="Nhập lại mật khẩu mới" 
+                             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="0,5"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,30,0,0">
+                    <Button Content="Hủy" Command="{Binding CloseCommand}" 
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,10,0"/>
+
+                    <Button Content="LƯU THAY ĐỔI" Command="{Binding SaveCommand}" 
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                            Background="#067FF8" BorderBrush="#067FF8"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

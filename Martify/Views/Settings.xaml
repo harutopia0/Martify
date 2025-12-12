@@ -50,7 +50,8 @@
                         </StackPanel>
 
                         <Button Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}" 
-                                Content="CHỈNH SỬA" Foreground="#067FF8"/>
+                                Content="CHỈNH SỬA" Foreground="#067FF8"
+                                Command="{Binding OpenEditProfileCommand}"/>
                     </Grid>
                 </Border>
 

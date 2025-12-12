@@ -43,23 +43,8 @@
                         <RowDefinition Height="250"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-
-                    <Border Grid.Row="0" Background="#067FF8" CornerRadius="30,30,0,0"></Border>
-
-                    <Border Grid.Row="1" CornerRadius="0,0,30,30">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="#067FF8"/>
-                                <GradientStop Color="#FF3654F1" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-
-                    <Grid Grid.Row="0" Margin="0" 
-                          Width="200" Height="200"
-                          HorizontalAlignment="Center">
-
+                    <!-- FIX: Move property elements (Width, Height, HorizontalAlignment) to Grid attributes -->
+                    <Grid Grid.Row="0" Margin="0" Width="200" Height="200" HorizontalAlignment="Center">
                         <StackPanel Orientation="Vertical">
                             <Grid Width="120" Height="120">
                                 <Ellipse Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Top">
@@ -95,8 +80,16 @@
                     </Grid>
 
                     <Grid Grid.Row="1">
-                        <uc:SidePanel Margin="0,-25,0,0" HorizontalAlignment="Left"/>
+                        <uc:SidePanel Margin="0,0,0,0" HorizontalAlignment="Left"/>
                     </Grid>
+                    <Border CornerRadius="0,0,30,30" Panel.ZIndex="-1" Grid.RowSpan="2">
+                        <Border.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#067FF8"/>
+                                <GradientStop Color="#FF3654F1" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
                 </Grid>
 
 

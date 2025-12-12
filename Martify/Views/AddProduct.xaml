@@ -239,10 +239,21 @@
                                 <TextBlock Grid.Column="0" 
                                            Text="Đơn vị tính *" 
                                            Style="{StaticResource LabelText}"/>
-                                <TextBox Grid.Column="1"
-                                         Text="{Binding Unit, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                         materialDesign:HintAssist.Hint="Ví dụ: Hộp, Lon, Gói"
-                                         Style="{StaticResource ValidatedTextBox}"/>
+
+                                <ComboBox Grid.Column="1"
+                                          IsEditable="True"
+                                          ItemsSource="{Binding UnitList}"
+                                          SelectedValue="{Binding SelectedUnit, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                          materialDesign:HintAssist.Hint="Ví dụ: Lon, Hộp, Thùng,..."
+                                          Style="{StaticResource ValidatedComboBox}">
+                                    <ComboBox.Text>
+                                        <Binding
+                                             Mode="TwoWay"
+                                             Path="SelectedUnitText"
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        </Binding>
+                                    </ComboBox.Text>
+                                </ComboBox>
                             </Grid>
 
                             <!-- Giá -->

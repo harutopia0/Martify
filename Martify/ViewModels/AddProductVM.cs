@@ -57,6 +57,12 @@ namespace Martify.ViewModels
             get => _categoryList;
             set { _categoryList = value; OnPropertyChanged(); }
         }
+        private List<string> _unitList;
+        public List<string> UnitList
+        {
+            get => _unitList;
+            set { _unitList = value; OnPropertyChanged(); }
+        }
 
         private string _selectedCategoryID;
         public string SelectedCategoryID
@@ -66,6 +72,24 @@ namespace Martify.ViewModels
             {
                 _selectedCategoryID = value;
                 CategoryID = value; // Giữ đồng bộ
+                OnPropertyChanged();
+            }
+        }
+
+        private string _selectedUnit;
+
+        public string SelectedUnit
+        {
+            get => _selectedUnit;
+            set { _selectedUnit = value; OnPropertyChanged(); }
+        }
+
+        public string SelectedUnitText
+        {             get => SelectedUnit;
+            set
+            {
+                SelectedUnit = value;
+                Unit = value; // Giữ đồng bộ
                 OnPropertyChanged();
             }
         }
@@ -176,6 +200,7 @@ namespace Martify.ViewModels
             // Tải dữ liệu
             LoadCategories();
             LoadSuppliers();
+            LoadUnit();
 
             // Khởi tạo lệnh
             SaveCommand = new RelayCommand<Window>(
@@ -220,6 +245,23 @@ namespace Martify.ViewModels
                     "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        private void LoadUnit()
+        {
+            try
+            {
+                // Get distinct units from products and assign to UnitList
+                UnitList = DataProvider.Ins.DB.Products
+                    .Select(p => p.Unit)
+                    .Where(u => !string.IsNullOrWhiteSpace(u))
+                    .Distinct()
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi tải danh sách đơn vị: {ex.Message}",
+                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private void SelectImage()
         {
@@ -254,6 +296,8 @@ namespace Martify.ViewModels
             {
                 // Tạo mã sản phẩm mới
                 string newProductID = GenerateProductID();
+                // Taọ đơn vị tính mới
+                string newUnit = SelectedUnitText.Trim();
 
                 // Xử lý lưu ảnh
                 string dbImagePath = null;
@@ -267,13 +311,25 @@ namespace Martify.ViewModels
                         return;
                     }
                 }
-
-                // Tạo sản phẩm mới
-                var newProduct = new Product
+                if (!string.IsNullOrEmpty(newUnit))
+                {
+                    //  Kiểm tra xem đơn vị này đã có trong danh sách UnitList chưa
+                    bool unitExists = UnitList.Contains(newUnit, StringComparer.OrdinalIgnoreCase);
+                    if (!unitExists)
+                    {
+                        UnitList.Add(newUnit);
+                    }
+                    else
+                    {
+                        newUnit = Unit.Trim();
+                    }
+                }
+                    // Tạo sản phẩm mới
+                    var newProduct = new Product
                 {
                     ProductID = newProductID,
                     ProductName = ProductName.Trim(),
-                    Unit = Unit.Trim(),
+                    Unit = newUnit,
                     Price = Price.Value,
                     StockQuantity = StockQuantity.Value,
                     ImagePath = dbImagePath,

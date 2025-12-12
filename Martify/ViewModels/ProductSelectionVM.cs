@@ -86,7 +86,6 @@ namespace Martify.ViewModels
                 if (item != null)
                 {
                     if (item.Quantity + 1 <= p.StockQuantity) { item.Quantity++; CalculateTotal(); }
-                    else { MessageBox.Show($"Chỉ còn {p.StockQuantity} sản phẩm trong kho!", "Hết hàng", MessageBoxButton.OK, MessageBoxImage.Warning); }
                 }
                 else { CartList.Add(new CartItem { Product = p, Quantity = 1 }); CalculateTotal(); }
             });
@@ -97,7 +96,6 @@ namespace Martify.ViewModels
             IncreaseQuantityCommand = new RelayCommand<CartItem>((p) => p != null, (p) =>
             {
                 if (p.Quantity < p.Product.StockQuantity) { p.Quantity++; CalculateTotal(); }
-                else { MessageBox.Show($"Đã đạt giới hạn tồn kho ({p.Product.StockQuantity})!", "Thông báo"); }
             });
             DecreaseQuantityCommand = new RelayCommand<CartItem>((p) => p != null, (p) =>
             {

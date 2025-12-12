@@ -45,9 +45,9 @@ namespace Martify.Behaviors
             {
                 border.Loaded -= Border_Loaded;
                 
-                // Start animation sooner - reduced from 850ms to 500ms
+                // Start animation sooner - reduced from 850ms to 100ms
                 var delay = new System.Windows.Threading.DispatcherTimer();
-                delay.Interval = TimeSpan.FromMilliseconds(500 + GetBarIndex(border) * 80);
+                delay.Interval = TimeSpan.FromMilliseconds(100 + GetBarIndex(border) * 80);
                 delay.Tick += (s, args) =>
                 {
                     delay.Stop();

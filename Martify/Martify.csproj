@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <None Remove="Resources\Fonts\BungeeSpice-Regular.ttf" />
+    <None Remove="Resources\Fonts\Charm-Regular.ttf" />
+    <None Remove="Resources\Fonts\FleurDeLeah-Regular.ttf" />
     <None Remove="Resources\Fonts\Rubik-Regular.ttf" />
     <None Remove="Resources\Images\anonymous.png" />
     <None Remove="Resources\Images\background.png" />
@@ -55,6 +57,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Fonts\Charm-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\FleurDeLeah-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Fonts\Rubik-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -69,6 +77,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+    <PackageReference Include="QuestPDF" Version="2025.7.4" />
   </ItemGroup>
 
   <ItemGroup>

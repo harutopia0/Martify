@@ -13,15 +13,15 @@
          Style="{StaticResource Page_RadarReveal_Style}"
          d:Style="{x:Null}">
 
-<UserControl.Resources>
-    <converters:RevenueHeightConverter x:Key="RevenueHeightConverter"/>
-</UserControl.Resources>
+    <UserControl.Resources>
+        <converters:RevenueHeightConverter x:Key="RevenueHeightConverter"/>
+    </UserControl.Resources>
 
-<UserControl.DataContext>
-    <vm:DashboardVM />
-</UserControl.DataContext>
+    <UserControl.DataContext>
+        <vm:DashboardVM />
+    </UserControl.DataContext>
 
-    <Grid Background="{DynamicResource MainBackground}">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="250"/>
@@ -32,7 +32,7 @@
             <RowDefinition Height="280"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0" Grid.Row="0" Margin="0,0,0,141">
+        <Grid Grid.Column="0" Grid.Row="0" Margin="0,0,0,160">
             <Border Background="{DynamicResource CardBackground}" 
                     Margin="20,20,15,0"
                     CornerRadius="30">
@@ -61,10 +61,9 @@
                                Foreground="{DynamicResource PrimaryText}"/>
 
                     <!-- Chart Area -->
-                    <ItemsControl Grid.Row="1" 
+                    <ItemsControl 
                                   ItemsSource="{Binding DailyRevenues}"
-                                  Margin="25,0,25,10"
-                                  VerticalAlignment="Stretch">
+                                  Margin="25,49,25,11" Grid.RowSpan="2">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <UniformGrid Rows="1" />
@@ -108,7 +107,7 @@
                                                                    Foreground="{DynamicResource PrimaryText}"
                                                                    TextWrapping="Wrap"
                                                                    Margin="0,0,0,10"/>
-                                                        
+
                                                         <!-- Revenue Amount -->
                                                         <Border Background="#067FF8" 
                                                                 CornerRadius="8"
@@ -231,12 +230,12 @@
                                                 </Border>
                                             </ToolTip>
                                         </Grid.ToolTip>
-                                        
+
                                         <Border Background="#E0E0E0" 
                                                 CornerRadius="5"
                                                 Height="120"
                                                 VerticalAlignment="Bottom"/>
-                                        
+
                                         <Border behaviors:BarAnimationBehavior.AnimateOnLoad="True"
                                                 Background="#067FF8" 
                                                 CornerRadius="5"
@@ -522,8 +521,10 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="261*"/>
+                                    <ColumnDefinition Width="59*"/>
+                                    <ColumnDefinition Width="53.393"/>
+                                    <ColumnDefinition Width="64"/>
                                 </Grid.ColumnDefinitions>
 
                                 <Border Grid.Column="0" 
@@ -540,7 +541,7 @@
                                                VerticalAlignment="Center"/>
                                 </Border>
 
-                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Grid.ColumnSpan="3" Margin="0,0,53,0">
                                     <TextBlock Text="HD001234"
                                                FontSize="16"
                                                FontFamily="Roboto Bold"
@@ -552,12 +553,12 @@
                                                Margin="0,2,0,0"/>
                                 </StackPanel>
 
-                                <TextBlock Grid.Column="2" 
+                                <TextBlock Grid.Column="3" 
                                            Text="15,500,000 VND"
                                            FontSize="16"
                                            FontFamily="Roboto Bold"
                                            Foreground="#067FF8"
-                                           VerticalAlignment="Center"/>
+                                           VerticalAlignment="Center" Grid.ColumnSpan="2"/>
                             </Grid>
                         </Border>
 

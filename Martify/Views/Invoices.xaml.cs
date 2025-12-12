@@ -10,23 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Martify
+namespace Martify.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Invoices.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Invoices : UserControl
     {
-        public MainWindow()
+        public Invoices()
         {
             InitializeComponent();
-        }
-
-        private void WindowControl_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

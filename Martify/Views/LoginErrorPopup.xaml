@@ -6,8 +6,7 @@
              xmlns:local="clr-namespace:Martify.Views"
              mc:Ignorable="d" 
              xmlns:vm="clr-namespace:Martify.ViewModels"
-             d:DesignHeight="100" d:DesignWidth="500"
-             Style="{StaticResource Page_SpiralInOut_Style}"
+             Style="{StaticResource Page_CinematicFocus_Style}"
              d:Style="{x:Null}"
              IsTabStop="False">
     <UserControl.DataContext>
@@ -16,28 +15,14 @@
 
 
     <Grid>
-        <Grid Height="100" Width="500">
-            <TextBlock Text="Login Error" 
-                       FontSize="24" 
-                       FontWeight="Bold" 
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Top"
-                       Margin="0,15,0,0">
-                <TextBlock.Foreground>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FFEBF538"/>
-                        <GradientStop Color="#FF77DAFB" Offset="1"/>
-                    </LinearGradientBrush>
-                </TextBlock.Foreground>
-            </TextBlock>
-            <TextBlock Text="Cái này đang test, đừng động vào (username với pass là admin - admin)" 
+        <Grid Width="200" Height="30">
+            <TextBlock Text="Sai tài khoản hoặc mật khẩu." 
                        FontSize="14" 
                        HorizontalAlignment="Center" 
-                       VerticalAlignment="Top" 
-                       Margin="0,60,0,0"
+                       VerticalAlignment="Center"
                        TextWrapping="Wrap"
                        TextAlignment="Center"
-                       Width="480" Foreground="#FFF87E7E"/>
+                       Foreground="#FFF87E7E"/>
         </Grid>
 
     </Grid>

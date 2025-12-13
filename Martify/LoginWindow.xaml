@@ -39,6 +39,15 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
+            <ContentControl Grid.Column="0" Content="{Binding Status}"
+                            IsTabStop="False"
+                            Width="200" Height="30"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Margin="0,275,0,0">
+
+            </ContentControl>
+
 
             <Grid Grid.Column="0">
                 <Grid Width="250"
@@ -225,11 +234,6 @@
         <uc:WindowControl></uc:WindowControl>
 
 
-        <ContentControl Content="{Binding Status}"
-                        Width="500"
-                        Height="100"
-                        VerticalAlignment="Top"
-                        Margin="0,25,0,0"
-                        IsTabStop="False"></ContentControl>
+
     </Grid>
 </Window>

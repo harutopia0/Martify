@@ -5,13 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:Martify.Views"
-              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              xmlns:ctrl="clr-namespace:Martify.Controls"
              d:DesignHeight="450" d:DesignWidth="800"
              Name="ucWindowControl"
              d:Style="{x:Null}">
-    
+
     <UserControl.Resources>
         <Style x:Key="CompletelyCustomButtonStyle" TargetType="Button">
             <Setter Property="Template">
@@ -27,22 +27,18 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-
             <Setter Property="Background" Value="MediumSeaGreen"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
     </UserControl.Resources>
-    
+
     <Grid>
-        <!-- Hover detection area that contains both dragging zone and buttons -->
         <Grid x:Name="HoverArea" 
               Height="30"
               VerticalAlignment="Top"
               Background="Transparent">
 
-            <!-- Dragging Zone (covers full width) -->
-            <Grid x:Name="Dragging_Zone" 
-                  Background="Transparent">
+            <Grid x:Name="Dragging_Zone" Background="Transparent">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
                         <i:InvokeCommandAction Command="{Binding DragWindowCommand}"
@@ -50,13 +46,12 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Grid>
-
         </Grid>
 
         <StackPanel HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    Margin="0,10,10,0" Orientation="Horizontal">
-            
+                    Margin="0,10,10,0" Orientation="Horizontal"
+                    Panel.ZIndex="1">
             <Button Background="Transparent" 
                     BorderBrush="Transparent" 
                     Foreground="Transparent"
@@ -84,8 +79,7 @@
                     </Image.Style>
                 </Image>
             </Button>
-            
-            
+
             <Button Background="Transparent" 
                     BorderBrush="Transparent" 
                     Foreground="Transparent"
@@ -97,7 +91,7 @@
                     Style="{StaticResource CompletelyCustomButtonStyle}"
                     Command="{Binding CloseWindowCommand}"
                     CommandParameter="{Binding ElementName=ucWindowControl}">
-                <Image Source="../Resources/images/close_program.png"
+                <Image Source="{StaticResource CloseProgram}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Cursor="Hand">
@@ -113,8 +107,11 @@
                     </Image.Style>
                 </Image>
             </Button>
-
         </StackPanel>
-        
+
+        <local:CloseAlert Visibility="{Binding IsAlertVisible}" 
+                          Panel.ZIndex="999"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"/>
     </Grid>
 </UserControl>

@@ -12,55 +12,66 @@ namespace Martify.ViewModels
 {
     public class WindowControlVM : BaseVM
     {
-        #region commands
+        #region Commands
         public ICommand CloseWindowCommand { get; set; }
         public ICommand HideWindowCommand { get; set; }
         public ICommand DragWindowCommand { get; set; }
+
+
+        public ICommand ConfirmExitCommand { get; set; }
+        public ICommand CancelExitCommand { get; set; }
         #endregion
 
-        #region properties
+        #region Properties
         private Visibility _controlButtonsVisibility = Visibility.Collapsed;
         public Visibility ControlButtonsVisibility
         {
             get => _controlButtonsVisibility;
-            set
-            {
-                if (_controlButtonsVisibility != value)
-                {
-                    _controlButtonsVisibility = value;
-                    OnPropertyChanged();
-                }
-            }
+            set { _controlButtonsVisibility = value; OnPropertyChanged(); }
+        }
+
+
+        private Visibility _isAlertVisible = Visibility.Collapsed;
+        public Visibility IsAlertVisible
+        {
+            get => _isAlertVisible;
+            set { _isAlertVisible = value; OnPropertyChanged(); }
         }
         #endregion
 
         public WindowControlVM()
         {
-            CloseWindowCommand = new RelayCommand<UserControl>((p) => { return p != null; }, (p) =>
-            {
-                var win = Window.GetWindow(p);
 
-                if (win != null)
-                {
-                    win.Close();
-                }
+            CloseWindowCommand = new RelayCommand<UserControl>((p) => { return true; }, (p) =>
+            {
+                IsAlertVisible = Visibility.Visible;
             });
+
+
+            ConfirmExitCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                Application.Current.Shutdown();
+            });
+
+
+            CancelExitCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                IsAlertVisible = Visibility.Collapsed;
+            });
+
 
             HideWindowCommand = new RelayCommand<UserControl>((p) => p != null, (p) =>
             {
                 var win = Window.GetWindow(p);
-
                 if (win != null)
                 {
                     win.WindowState = WindowState.Minimized;
                 }
             });
 
-
             DragWindowCommand = new RelayCommand<UserControl>((p) => p != null, (p) =>
             {
                 var win = Window.GetWindow(p);
-
                 if (win != null)
                 {
                     win.DragMove();

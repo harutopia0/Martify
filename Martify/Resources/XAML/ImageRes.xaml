@@ -14,6 +14,8 @@
 
     <BitmapImage x:Key="UploadImage" UriSource="/Resources/Images/upload_image.png" />
 
+    <BitmapImage x:Key="CuteCat" UriSource="/Resources/Images/cute_cat.png" />
+
 
 
 

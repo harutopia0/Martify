@@ -24,6 +24,7 @@
     <None Remove="Resources\Images\anonymous.png" />
     <None Remove="Resources\Images\background.png" />
     <None Remove="Resources\Images\close_program.png" />
+    <None Remove="Resources\Images\cute_cat.png" />
     <None Remove="Resources\Images\dashboard_active.png" />
     <None Remove="Resources\Images\dashboard_hover.png" />
     <None Remove="Resources\Images\dashboard_hover2.png" />
@@ -94,6 +95,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\close_program.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\cute_cat.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\dashboard_active.png">

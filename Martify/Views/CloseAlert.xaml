@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="Martify.Views.CloseAlert"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="425" d:DesignWidth="425">
+
+    <Border Background="#7F000000" CornerRadius="30">
+        <Border Background="{DynamicResource CardBackground}" 
+                CornerRadius="15" 
+                Width="400" Height="400"
+                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.4"/>
+            </Border.Effect>
+
+            <Grid Margin="20,20,20,10">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"></RowDefinition>
+                    <RowDefinition Height="1.25*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Image Grid.Row="0" 
+                       Source="/Resources/Images/cute_cat.png" 
+                       Width="300"
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"/>
+
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="AlertCircleOutline" Width="30" Height="30" Foreground="#F44336" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="Xác nhận thoát" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <TextBlock Grid.Row="1" 
+                               Text="Bạn có chắc chắn muốn thoát chương trình?" 
+                               TextWrapping="Wrap" 
+                               TextAlignment="Center"
+                               FontSize="18"
+                               Foreground="{DynamicResource SecondaryText}"
+                               VerticalAlignment="Center"/>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0">
+                        <Button Content="Không"
+                                Command="{Binding CancelExitCommand}"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Width="100" Height="40"
+                                Margin="0,0,10,0"
+                                BorderBrush="#067FF8"
+                                Foreground="#067FF8"/>
+
+                        <Button Content="Có"
+                                Command="{Binding ConfirmExitCommand}"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Width="100" Height="40"
+                                Background="#F44336"
+                                BorderBrush="{x:Null}"
+                                Foreground="White"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+    </Border>
+</UserControl>

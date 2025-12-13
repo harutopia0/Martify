@@ -445,11 +445,13 @@ namespace Martify.ViewModels
 
             var list = query.ToList();
 
+            // --- CẬP NHẬT LOGIC TÌM KIẾM Ở ĐÂY ---
             if (!string.IsNullOrEmpty(Keyword))
             {
                 string k = ConvertToUnSign(Keyword).ToLower();
                 list = list.Where(x =>
-                        ConvertToUnSign(x.FullName).ToLower().Contains(k))
+                        ConvertToUnSign(x.FullName).ToLower().Contains(k) || // Tìm theo Tên
+                        x.EmployeeID.ToLower().Contains(k))                  // Tìm theo Mã NV
                     .ToList();
             }
 

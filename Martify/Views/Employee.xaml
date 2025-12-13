@@ -130,7 +130,7 @@
                 <Border Background="{DynamicResource CardBackground}" CornerRadius="20" Height="40" Width="220" Margin="0,0,10,0">
                     <Grid>
                         <materialDesign:PackIcon Kind="Magnify" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="{DynamicResource SecondaryText}"/>
-                        <TextBox materialDesign:HintAssist.Hint="Tìm tên nhân viên..." materialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0" VerticalAlignment="Center" Margin="35,0,10,0" FontSize="14" Foreground="{DynamicResource PrimaryText}" Text="{Binding Keyword, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox materialDesign:HintAssist.Hint="Tìm theo mã, tên nhân viên..." materialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0" VerticalAlignment="Center" Margin="35,0,10,0" FontSize="12" Foreground="{DynamicResource PrimaryText}" Text="{Binding Keyword, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Border>
                 <ComboBox Width="90" Height="40" ItemsSource="{Binding Months}" SelectedValue="{Binding SelectedMonth}" materialDesign:HintAssist.Hint="Tháng" Style="{StaticResource MaterialDesignOutlinedComboBox}" Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryText}" Margin="0,0,10,0" Padding="10,0"/>

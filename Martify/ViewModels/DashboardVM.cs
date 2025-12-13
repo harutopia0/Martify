@@ -113,11 +113,48 @@ namespace Martify.ViewModels
             }
         }
 
+        // Số sản phẩm sắp hết hàng (Low Stock Alert)
+        private int _soSanPhamSapHet;
+        public int SoSanPhamSapHet
+        {
+            get => _soSanPhamSapHet;
+            set
+            {
+                _soSanPhamSapHet = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // Số sản phẩm hết hàng (Out of Stock)
+        private int _soSanPhamHetHang;
+        public int SoSanPhamHetHang
+        {
+            get => _soSanPhamHetHang;
+            set
+            {
+                _soSanPhamHetHang = value;
+                OnPropertyChanged();
+            }
+        }
+
         public DashboardVM()
         {
             _dbContext = new MartifyDbContext();
             DailyRevenues = new ObservableCollection<DailyRevenueViewModel>();
             LoadDashboardData();
+        }
+
+        /// <summary>
+        /// Điều hướng đến trang Products với bộ lọc cảnh báo tồn kho
+        /// </summary>
+        public void NavigateToInventoryAlert(InventoryAlertType alertType)
+        {
+            // Lấy NavigationVM từ MainVM
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow?.DataContext is MainVM mainVM)
+            {
+                mainVM.Navigation.NavigateToProductsWithAlert(alertType);
+            }
         }
 
         private void LoadDashboardData()
@@ -231,11 +268,21 @@ namespace Martify.ViewModels
 
         private void LoadQuickOverview()
         {
-            // Create separate DbContext instances for each query to avoid threading issues
+            // Tổng số lượng
             TongSoSanPham = _dbContext.Products.Count();
             TongSoDonHang = _dbContext.Invoices.Count();
             TongSoNhanVien = _dbContext.Employees.Count();
             SoSanPhamConLai = _dbContext.Products.AsEnumerable().Sum(p => p.StockQuantity);
+
+            // Cảnh báo sắp hết hàng (Low Stock Alert)
+            // Logic: Sản phẩm có số lượng tồn <= 10 (hoặc bạn có thể thêm trường MinStockLevel vào Product)
+            const int MIN_STOCK_THRESHOLD = 10;
+            SoSanPhamSapHet = _dbContext.Products.Count(p => p.StockQuantity > 0 && p.StockQuantity <= MIN_STOCK_THRESHOLD);
+
+            // Cảnh báo hết hàng (Out of Stock)
+            // Logic: Sản phẩm có số lượng tồn kho = 0
+            SoSanPhamHetHang = _dbContext.Products
+                .Count(p => p.StockQuantity == 0);
         }
 
         public void RefreshData()

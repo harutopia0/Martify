@@ -360,7 +360,9 @@
                 <Border Background="{DynamicResource ItemBackground}" 
                         CornerRadius="15" 
                         Padding="15" 
-                        Margin="0,0,0,15">
+                        Margin="0,0,0,15"
+                        Cursor="Hand"
+                        MouseLeftButtonDown="ProductsCard_Click">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <materialDesign:PackIcon Kind="Package" 
@@ -387,7 +389,9 @@
                 <Border Background="{DynamicResource ItemBackground}" 
                         CornerRadius="15" 
                         Padding="15" 
-                        Margin="0,0,0,15">
+                        Margin="0,0,0,15"
+                        Cursor="Hand"
+                        MouseLeftButtonDown="InvoicesCard_Click">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <materialDesign:PackIcon Kind="Receipt" 
@@ -414,7 +418,9 @@
                 <Border Background="{DynamicResource ItemBackground}" 
                         CornerRadius="15" 
                         Padding="15" 
-                        Margin="0,0,0,15">
+                        Margin="0,0,0,15"
+                        Cursor="Hand"
+                        MouseLeftButtonDown="EmployeesCard_Click">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <materialDesign:PackIcon Kind="AccountGroup" 
@@ -438,12 +444,15 @@
                     </StackPanel>
                 </Border>
 
-                <Border Background="{DynamicResource AlertBackground}" 
+                <!-- Thẻ Cảnh Báo Tồn Kho -->
+                <Border Background="{DynamicResource ItemBackground}" 
                         CornerRadius="15" 
                         Padding="15" 
-                        Margin="0,0,0,0">
+                        Margin="0,0,0,0"
+                        Cursor="Hand">
                     <StackPanel>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <!-- Header -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                             <materialDesign:PackIcon Kind="AlertCircle" 
                                                      Width="24" 
                                                      Height="24" 
@@ -456,18 +465,84 @@
                                        VerticalAlignment="Center"
                                        Foreground="{DynamicResource PrimaryText}"/>
                         </StackPanel>
-                        <TextBlock Text="{Binding SoSanPhamConLai, StringFormat={}{0:N0}}"
-                                   FontSize="28"
-                                   FontFamily="Roboto Bold"
-                                   Foreground="#F44336"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,5,0,0"/>
-                        <TextBlock Text="Sản phẩm còn lại"
-                                   FontSize="12"
-                                   FontFamily="Roboto"
-                                   Foreground="{DynamicResource SecondaryText}"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,2,0,0"/>
+
+                        <!-- Cảnh báo sắp hết hàng (Vàng/Cam) -->
+                        <Border Background="#FFF3E0" 
+                                CornerRadius="8" 
+                                Padding="10,8"
+                                Margin="0,0,0,8"
+                                Cursor="Hand"
+                                MouseLeftButtonDown="LowStockAlert_Click">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <materialDesign:PackIcon Grid.Column="0"
+                                                         Kind="TrendingDown" 
+                                                         Width="18" 
+                                                         Height="18" 
+                                                         Foreground="#FF9800"
+                                                         VerticalAlignment="Center"
+                                                         Margin="0,0,8,0"/>
+                                
+                                <TextBlock Grid.Column="1"
+                                           Text="Sắp hết hàng"
+                                           FontSize="12"
+                                           FontFamily="Roboto Medium"
+                                           Foreground="#F57C00"
+                                           VerticalAlignment="Center"/>
+                                
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding SoSanPhamSapHet, StringFormat={}{0:N0}}"
+                                           FontSize="16"
+                                           FontFamily="Roboto Bold"
+                                           Foreground="#FF9800"
+                                           VerticalAlignment="Center"
+                                           Margin="8,0,0,0"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Cảnh báo hết hàng (Đỏ) -->
+                        <Border Background="#FFEBEE" 
+                                CornerRadius="8" 
+                                Padding="10,8"
+                                Cursor="Hand"
+                                MouseLeftButtonDown="OutOfStockAlert_Click">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <materialDesign:PackIcon Grid.Column="0"
+                                                         Kind="PackageVariantClosed" 
+                                                         Width="18" 
+                                                         Height="18" 
+                                                         Foreground="#F44336"
+                                                         VerticalAlignment="Center"
+                                                         Margin="0,0,8,0"/>
+                                
+                                <TextBlock Grid.Column="1"
+                                           Text="Hết hàng"
+                                           FontSize="12"
+                                           FontFamily="Roboto Medium"
+                                           Foreground="#D32F2F"
+                                           VerticalAlignment="Center"/>
+                                
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding SoSanPhamHetHang, StringFormat={}{0:N0}}"
+                                           FontSize="16"
+                                           FontFamily="Roboto Bold"
+                                           Foreground="#F44336"
+                                           VerticalAlignment="Center"
+                                           Margin="8,0,0,0"/>
+                            </Grid>
+                        </Border>
+
                     </StackPanel>
                 </Border>
             </StackPanel>

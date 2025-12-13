@@ -33,6 +33,18 @@ namespace Martify.ViewModels
         private void Employees(object obj) => CurrentView = new EmployeeVM();
         private void Invoices(object obj) => CurrentView = new InvoicesVM();
         private void Settings(object obj) => CurrentView = new SettingsVM();
+
+        /// <summary>
+        /// Điều hướng đến Products với bộ lọc cảnh báo tồn kho
+        /// </summary>
+        /// <param name="alertType">Loại cảnh báo (LowStock hoặc SlowMoving)</param>
+        public void NavigateToProductsWithAlert(Models.InventoryAlertType alertType)
+        {
+            var productsVM = new ProductsVM();
+            productsVM.SetInventoryAlertFilter(alertType);
+            CurrentView = productsVM;
+        }
+
         public NavigationVM()
         {
             DashboardCommand = new RelayCommand(Dashboard);

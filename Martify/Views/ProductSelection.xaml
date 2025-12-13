@@ -188,7 +188,7 @@
                 </ScrollViewer>
             </Grid>
 
-            <Border Grid.Column="1" Background="{DynamicResource CardBackground}" CornerRadius="20" Padding="12.5">
+            <Border Grid.Column="1" Background="{DynamicResource CardBackground}" CornerRadius="20" Padding="12.5" Margin="0,5,0,0">
                 <Border.Effect>
                     <DropShadowEffect Color="{DynamicResource ShadowColor}" BlurRadius="10" Opacity="0.2" ShadowDepth="2"/>
                 </Border.Effect>

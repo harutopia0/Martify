@@ -48,6 +48,18 @@ namespace Martify.ViewModels
             }
         }
 
+        private InventoryAlertType _inventoryAlertFilter;
+        public InventoryAlertType InventoryAlertFilter
+        {
+            get => _inventoryAlertFilter;
+            set
+            {
+                _inventoryAlertFilter = value;
+                OnPropertyChanged();
+                FilterProducts();
+            }
+        }
+
         // --- COMBO SOURCE ---
         private ObservableCollection<ProductCategory> _categories;
         public ObservableCollection<ProductCategory> Categories
@@ -134,6 +146,23 @@ namespace Martify.ViewModels
                 });
         }
 
+        /// <summary>
+        /// Đặt bộ lọc cảnh báo tồn kho và tải lại sản phẩm
+        /// </summary>
+        public void SetInventoryAlertFilter(InventoryAlertType alertType)
+        {
+            // Clear other filters
+            SearchText = string.Empty;
+            SelectedCategory = null;
+            SelectedUnit = null;
+
+            // Set alert filter
+            InventoryAlertFilter = alertType;
+
+            // Reload products with alert filter
+            FilterProducts();
+        }
+
         private void LoadCategories()
         {
             try
@@ -191,15 +220,18 @@ namespace Martify.ViewModels
                     .Include(p => p.Category)
                     .AsQueryable();
 
+                // Filter by category
                 if (SelectedCategory != null)
                     query = query.Where(p => p.CategoryID == SelectedCategory.CategoryID);
 
+                // Filter by unit
                 if (!string.IsNullOrWhiteSpace(SelectedUnit))
                 {
                     var unitLower = SelectedUnit.Trim().ToLower();
                     query = query.Where(p => p.Unit != null && p.Unit.ToLower() == unitLower);
                 }
 
+                // Filter by search text
                 if (!string.IsNullOrWhiteSpace(SearchText))
                 {
                     var search = SearchText.Trim().ToLower();
@@ -208,6 +240,22 @@ namespace Martify.ViewModels
                         p.ProductName.ToLower().Contains(search) ||
                         (p.Unit != null && p.Unit.ToLower().Contains(search)) ||
                         (p.Category != null && p.Category.CategoryName.ToLower().Contains(search)));
+                }
+
+                // Filter by inventory alert type
+                if (InventoryAlertFilter != InventoryAlertType.None)
+                {
+                    if (InventoryAlertFilter == InventoryAlertType.LowStock)
+                    {
+                        // Low stock: StockQuantity > 0 AND StockQuantity <= 10
+                        const int MIN_STOCK_THRESHOLD = 10;
+                        query = query.Where(p => p.StockQuantity > 0 && p.StockQuantity <= MIN_STOCK_THRESHOLD);
+                    }
+                    else if (InventoryAlertFilter == InventoryAlertType.OutOfStock)
+                    {
+                        // Out of stock: StockQuantity = 0
+                        query = query.Where(p => p.StockQuantity == 0);
+                    }
                 }
 
                 var result = query.OrderBy(p => p.ProductID).ToList();

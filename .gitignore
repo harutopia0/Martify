@@ -75,5 +75,5 @@ _ReSharper*/
 *.DotSettings.user
 
 #SQLite
-.db-shm
-.db-wal
+*.db-shm
+*.db-wal

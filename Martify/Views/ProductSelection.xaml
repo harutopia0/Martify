@@ -120,7 +120,7 @@
                              Padding="10,0" VerticalContentAlignment="Center"/>
 
                     <Button Grid.Column="5" Style="{StaticResource MaterialDesignToolButton}"
-                            ToolTip="Xóa bộ lọc" Height="40" Width="40"
+                            ToolTip="Xóa bộ lọc" Height="45" Width="45"
                             Command="{Binding ClearFilterCommand}">
                         <materialDesign:PackIcon Kind="FilterOff" Foreground="Red" />
                     </Button>

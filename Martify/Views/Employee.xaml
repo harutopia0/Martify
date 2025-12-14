@@ -152,39 +152,19 @@
                     <materialDesign:PackIcon Kind="FilterOff" Foreground="Red" />
                 </Button>
             </StackPanel>
-            
-            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                        Command="{Binding ImportExcelCommand}"
-                        ToolTip="Nhập từ Excel"
-                        Background="#4CAF50" BorderBrush="{x:Null}"
-                        Width="40" Height="40" Margin="0,0,10,0">
-                    <materialDesign:PackIcon Kind="FileImport" Width="22" Height="22" Foreground="White"/>
-                </Button>
-
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                        Command="{Binding ExportExcelCommand}"
-                        ToolTip="Xuất ra Excel"
-                        Background="#FF9800" BorderBrush="{x:Null}"
-                        Width="40" Height="40" Margin="0,0,10,0">
-                    <materialDesign:PackIcon Kind="FileExport" Width="22" Height="22" Foreground="White"/>
-                </Button>
-
-                <Button Width="150" Height="40" materialDesign:ButtonAssist.CornerRadius="10" Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}" Padding="0" Command="{Binding AddEmployeeCommand}">
-                    <Button.Background>
-                        <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
-                            <GradientStop Color="#FF86E5A0" Offset="0.948"/>
-                            <GradientStop Color="#FF84E1A9" Offset="0.147"/>
-                            <GradientStop Color="#FF66E7AF" Offset="0.514"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <materialDesign:PackIcon Kind="AccountPlusOutline" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Text="Thêm nhân viên" FontFamily="Times New Roman" FontSize="16" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
+            <Button Grid.Column="1" Width="150" Height="40" materialDesign:ButtonAssist.CornerRadius="10" Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}" Padding="0" Command="{Binding AddEmployeeCommand}">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
+                        <GradientStop Color="#FF86E5A0" Offset="0.948"/>
+                        <GradientStop Color="#FF84E1A9" Offset="0.147"/>
+                        <GradientStop Color="#FF66E7AF" Offset="0.514"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="AccountPlusOutline" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Text="Thêm nhân viên" FontFamily="Times New Roman" FontSize="16" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Button>
         </Grid>
 
         <Grid Grid.Row="2">

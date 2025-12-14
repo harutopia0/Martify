@@ -447,4 +447,33 @@
         </Style.Triggers>
     </Style>
 
+    <!-- ====================================== -->
+    <!-- Global Font Styles for Roboto -->
+    <!-- ====================================== -->
+
+    <!-- Global TextBlock Style -->
+    <Style TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource FontMain}"/>
+    </Style>
+
+    <!-- Global Button Style -->
+    <Style TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource FontMain}"/>
+    </Style>
+
+    <!-- Global TextBox Style -->
+    <Style TargetType="TextBox">
+        <Setter Property="FontFamily" Value="{StaticResource FontMain}"/>
+    </Style>
+
+    <!-- Global ComboBox Style -->
+    <Style TargetType="ComboBox">
+        <Setter Property="FontFamily" Value="{StaticResource FontMain}"/>
+    </Style>
+
+    <!-- Global Label Style -->
+    <Style TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource FontMain}"/>
+    </Style>
+
 </ResourceDictionary>

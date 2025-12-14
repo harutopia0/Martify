@@ -1,16 +1,20 @@
-﻿using Martify.Helpers; // Sử dụng Helper
+﻿using ClosedXML.Excel;
+using Martify.Helpers; // Sử dụng Helper
 using Martify.Models;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Data;
-using System.Windows.Input;
-using System;
-using System.Windows;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using System.Security.Cryptography;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Data;
+using System.Windows.Input;
 using EmployeeModel = Martify.Models.Employee;
 
 namespace Martify.ViewModels
@@ -163,6 +167,10 @@ namespace Martify.ViewModels
         public ICommand ToggleStatusCommand { get; set; }
         public ICommand SaveChangesCommand { get; set; }
         public ICommand SelectImageCommand { get; set; }
+
+        // --- COMMAND MỚI ---
+        public ICommand ExportExcelCommand { get; set; }
+        public ICommand ImportExcelCommand { get; set; }
 
         // VALIDATION
         public string Error => null;
@@ -350,7 +358,284 @@ namespace Martify.ViewModels
                     if (SaveMessage == "Đã lưu thay đổi thành công!") SaveMessage = "";
                 }
             });
+
+            // 1. Lệnh Xuất Excel (ClosedXML)
+            ExportExcelCommand = new RelayCommand<object>((p) => true, (p) => ExportToExcel());
+
+            // 2. Lệnh Nhập Excel (ClosedXML)
+            ImportExcelCommand = new RelayCommand<object>((p) => true, (p) => ImportFromExcel());
         }
+
+
+        // --- LOGIC XUẤT EXCEL VỚI CLOSEDXML ---
+        private void ExportToExcel()
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Excel Files|*.xlsx",
+                    FileName = $"DanhSachNhanVien_{DateTime.Now:ddMMyyyy}.xlsx"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    using (var workbook = new XLWorkbook())
+                    {
+                        var worksheet = workbook.Worksheets.Add("Employees");
+
+                        // 1. Tạo Header
+                        string[] headers = { "Mã NV", "Họ Tên", "Ngày Sinh", "SĐT", "Giới Tính", "Email", "Ngày Vào Làm", "Địa Chỉ", "Trạng Thái" };
+                        for (int i = 0; i < headers.Length; i++)
+                        {
+                            var cell = worksheet.Cell(1, i + 1);
+                            cell.Value = headers[i];
+                            cell.Style.Font.Bold = true;
+                            cell.Style.Fill.BackgroundColor = XLColor.LightBlue;
+                            cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        }
+
+                        // 2. Đổ dữ liệu
+                        var listExport = Employees ?? new ObservableCollection<EmployeeModel>();
+                        int row = 2;
+                        foreach (var emp in listExport)
+                        {
+                            worksheet.Cell(row, 1).Value = emp.EmployeeID;
+                            worksheet.Cell(row, 2).Value = emp.FullName;
+                            worksheet.Cell(row, 3).Value = emp.BirthDate; // ClosedXML tự xử lý format Date
+                            worksheet.Cell(row, 4).Value = emp.Phone;
+                            worksheet.Cell(row, 5).Value = emp.Gender;
+                            worksheet.Cell(row, 6).Value = emp.Email;
+                            worksheet.Cell(row, 7).Value = emp.HireDate;
+                            worksheet.Cell(row, 8).Value = emp.Address;
+                            worksheet.Cell(row, 9).Value = (emp.Status == true) ? "Đang làm việc" : "Đã nghỉ việc";
+
+                            // Format cột ngày tháng
+                            worksheet.Cell(row, 3).Style.DateFormat.Format = "dd/MM/yyyy";
+                            worksheet.Cell(row, 7).Style.DateFormat.Format = "dd/MM/yyyy";
+
+                            row++;
+                        }
+
+                        worksheet.Columns().AdjustToContents();
+                        workbook.SaveAs(saveFileDialog.FileName);
+                    }
+                    MessageBox.Show("Xuất file Excel thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi xuất file: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // --- LOGIC NHẬP EXCEL (PHIÊN BẢN SỬA LỖI & BÁO CỤ THỂ LÝ DO) ---
+        private void ImportFromExcel()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Excel Files|*.xlsx;*.xls"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    using (var workbook = new XLWorkbook(openFileDialog.FileName))
+                    {
+                        var worksheet = workbook.Worksheet(1);
+                        var rows = worksheet.RangeUsed().RowsUsed().Skip(1); // Bỏ qua dòng tiêu đề
+
+                        int successCount = 0;
+                        int errorCount = 0;
+                        StringBuilder errorLog = new StringBuilder(); // Dùng để ghi lại lỗi chi tiết
+
+                        int rowIndex = 2; // Bắt đầu từ dòng 2 (vì dòng 1 là header)
+
+                        foreach (var row in rows)
+                        {
+                            try
+                            {
+                                // --- BƯỚC 1: ĐỌC DỮ LIỆU ---
+                                // Giả định cấu trúc cột:
+                                // Col 1: Họ Tên | Col 2: Ngày Sinh | Col 3: SĐT | Col 4: Giới Tính | Col 5: Email | Col 6: Ngày Vào | Col 7: Địa Chỉ
+
+                                string fullName = row.Cell(1).GetValue<string>().Trim();
+
+                                // Nếu tên trống -> Coi như dòng rác hoặc do lệch cột -> Ghi lỗi để kiểm tra
+                                if (string.IsNullOrWhiteSpace(fullName))
+                                {
+                                    errorCount++;
+                                    errorLog.AppendLine($"Dòng {rowIndex}: Họ tên bị trống (Kiểm tra lại thứ tự cột).");
+                                    rowIndex++;
+                                    continue;
+                                }
+
+                                DateTime? parsedDob = ParseExcelDate(row.Cell(2));
+                                string phone = row.Cell(3).GetValue<string>().Trim();
+                                string gender = row.Cell(4).GetValue<string>().Trim();
+                                string email = row.Cell(5).GetValue<string>().Trim();
+                                DateTime? parsedHireDate = ParseExcelDate(row.Cell(6));
+                                string address = row.Cell(7).GetValue<string>().Trim();
+
+                                // --- BƯỚC 2: VALIDATION (KIỂM TRA HỢP LỆ) ---
+                                bool isValid = true;
+                                string rowError = "";
+
+                                // 1. Check Tên
+                                string nameErr = EmployeeValidator.CheckFullName(fullName);
+                                if (nameErr != null) { isValid = false; rowError += $"Tên lỗi ({nameErr}); "; }
+
+                                // 2. Check Ngày sinh
+                                if (parsedDob == null) { isValid = false; rowError += "Ngày sinh sai định dạng; "; }
+                                else if (EmployeeValidator.CheckBirthDate(parsedDob, null) != null) { isValid = false; rowError += "Ngày sinh không hợp lệ; "; }
+
+                                // 3. Check SĐT
+                                string phoneErr = EmployeeValidator.CheckPhone(phone, null);
+                                if (phoneErr != null) { isValid = false; rowError += $"SĐT lỗi ({phoneErr}); "; }
+
+                                // 4. Check Email
+                                string emailErr = EmployeeValidator.CheckEmail(email, null);
+                                if (emailErr != null) { isValid = false; rowError += $"Email lỗi ({emailErr}); "; }
+
+                                // 5. Check Giới tính
+                                if (string.IsNullOrEmpty(gender) || (gender != "Nam" && gender != "Nữ"))
+                                {
+                                    isValid = false;
+                                    rowError += "Giới tính phải là 'Nam' hoặc 'Nữ'; ";
+                                }
+
+                                // 6. Check Ngày vào làm
+                                DateTime hireDate = parsedHireDate ?? DateTime.Now;
+                                if (parsedDob != null && EmployeeValidator.CheckHireDate(hireDate, parsedDob) != null)
+                                {
+                                    isValid = false;
+                                    rowError += "Ngày vào làm không hợp lệ (hoặc chưa đủ 18 tuổi); ";
+                                }
+
+                                // NẾU CÓ LỖI -> GHI LẠI VÀ BỎ QUA
+                                if (!isValid)
+                                {
+                                    errorCount++;
+                                    if (errorCount <= 5) // Chỉ ghi chi tiết 5 lỗi đầu tiên để tránh spam
+                                        errorLog.AppendLine($"Dòng {rowIndex}: {rowError}");
+                                    rowIndex++;
+                                    continue;
+                                }
+
+                                // --- BƯỚC 3: THÊM VÀO DB ---
+                                string newID = GenerateEmployeeID();
+
+                                var newEmp = new EmployeeModel
+                                {
+                                    EmployeeID = newID,
+                                    FullName = fullName,
+                                    BirthDate = parsedDob.Value,
+                                    Phone = phone,
+                                    Gender = gender,
+                                    Email = email,
+                                    Address = address,
+                                    HireDate = hireDate,
+                                    Status = true,
+                                    ImagePath = null
+                                };
+
+                                string firstName = GetFirstName(fullName);
+                                string username = (ConvertToUnSign(firstName) + newID).ToLower().Replace(" ", "");
+                                string rawPass = parsedDob.Value.ToString("ddMMyyyy");
+                                string hashPass = CalculateSHA256(rawPass);
+
+                                var newAcc = new Account
+                                {
+                                    Username = username,
+                                    HashPassword = hashPass,
+                                    Role = 1,
+                                    EmployeeID = newID
+                                };
+                                newEmp.Accounts = new List<Account> { newAcc };
+
+                                DataProvider.Ins.DB.Employees.Add(newEmp);
+                                DataProvider.Ins.DB.SaveChanges();
+                                successCount++;
+                            }
+                            catch (Exception ex)
+                            {
+                                errorCount++;
+                                errorLog.AppendLine($"Dòng {rowIndex}: Lỗi hệ thống ({ex.Message})");
+                            }
+
+                            rowIndex++;
+                        }
+
+                        LoadList();
+
+                        // Hiển thị thông báo chi tiết
+                        string msg = $"Thành công: {successCount}\nThất bại: {errorCount}";
+                        if (errorCount > 0)
+                        {
+                            msg += "\n\nChi tiết lỗi (5 dòng đầu):\n" + errorLog.ToString();
+                        }
+
+                        MessageBox.Show(msg, "Kết quả Import", MessageBoxButton.OK,
+                            errorCount == 0 ? MessageBoxImage.Information : MessageBoxImage.Warning);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Không thể đọc file Excel. Hãy đảm bảo file không bị khóa.\n" + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        // Hàm xử lý ngày tháng mạnh mẽ hơn (Chấp nhận cả Date, Number, String)
+        private DateTime? ParseExcelDate(IXLCell cell)
+        {
+            if (cell.IsEmpty()) return null;
+
+            try
+            {
+                // Trường hợp 1: Excel nhận diện đúng là Ngày tháng
+                if (cell.DataType == XLDataType.DateTime)
+                {
+                    return cell.GetDateTime();
+                }
+
+                // Trường hợp 2: Excel lưu dưới dạng số (Number)
+                if (cell.DataType == XLDataType.Number)
+                {
+                    return DateTime.FromOADate(cell.GetDouble());
+                }
+
+                // Trường hợp 3: Excel lưu dạng Text ("15/02/1990")
+                string text = cell.GetString().Trim();
+                if (DateTime.TryParseExact(text, new[] { "dd/MM/yyyy", "d/M/yyyy", "yyyy-MM-dd" },
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None, out DateTime result))
+                {
+                    return result;
+                }
+
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        // --- CÁC HÀM HELPER ---
+        private string GenerateEmployeeID()
+        {
+            var empIds = DataProvider.Ins.DB.Employees.Where(x => x.EmployeeID.StartsWith("NV")).Select(x => x.EmployeeID).ToList();
+            if (empIds.Count == 0) return "NV001";
+            int maxId = 0;
+            foreach (var id in empIds) { if (id.Length > 2 && int.TryParse(id.Substring(2), out int num)) if (num > maxId) maxId = num; }
+            return "NV" + (maxId + 1).ToString("D3");
+        }
+        private string GetFirstName(string fullName) { if (string.IsNullOrWhiteSpace(fullName)) return ""; return fullName.Trim().Split(' ').Last(); }
+        // Hàm ConvertToUnSign đã có sẵn trong class (như code bạn gửi trước đó)
+        private string CalculateSHA256(string rawData) { using (SHA256 sha256Hash = SHA256.Create()) { byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData)); StringBuilder builder = new StringBuilder(); for (int i = 0; i < bytes.Length; i++) builder.Append(bytes[i].ToString("x2")); return builder.ToString(); } }
+
 
         private string HandleImageSave(string empId, string sourceFile)
         {

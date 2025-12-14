@@ -157,9 +157,16 @@
 
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                         Command="{Binding ImportExcelCommand}"
-                        ToolTip="Nhập từ Excel"
                         Background="#4CAF50" BorderBrush="{x:Null}"
-                        Width="40" Height="40" Margin="0,0,10,0">
+                        Width="40" Height="40" Margin="0,0,10,0"
+                        ToolTipService.InitialShowDelay="0">
+                    
+                    <Button.ToolTip>
+                        <ToolTip Background="Transparent" BorderThickness="0" Padding="0" HasDropShadow="True">
+                            <local:ImportExcelSample />
+                        </ToolTip>
+                    </Button.ToolTip>
+
                     <materialDesign:PackIcon Kind="FileImport" Width="22" Height="22" Foreground="White"/>
                 </Button>
 

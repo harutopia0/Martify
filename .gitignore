@@ -73,3 +73,7 @@ MemoryCaptures/
 # Optional: if you use Resharper
 _ReSharper*/
 *.DotSettings.user
+
+#SQLite
+.db-shm
+.db-wal

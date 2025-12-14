@@ -10,9 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Docs\**" />
     <Compile Remove="Model\**" />
+    <EmbeddedResource Remove="Docs\**" />
     <EmbeddedResource Remove="Model\**" />
+    <None Remove="Docs\**" />
     <None Remove="Model\**" />
+    <Page Remove="Docs\**" />
     <Page Remove="Model\**" />
   </ItemGroup>
 
@@ -175,13 +179,6 @@
 	  <None Update="Assets\administrator.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </None>
-	</ItemGroup>
-
-
-
-
-	<ItemGroup>
-	  <Folder Include="Docs\" />
 	</ItemGroup>
 
 

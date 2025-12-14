@@ -89,7 +89,7 @@ namespace Martify.ViewModels
                     var stream = Application.GetResourceStream(uri).Stream;
                     FontManager.RegisterFont(stream);
                 }
-                LoadFont("FleurDeLeah-Regular.ttf");
+                LoadFont("FleurDeleah-Regular.ttf");
                 LoadFont("Charm-Regular.ttf");
             }
             catch { }
@@ -107,6 +107,21 @@ namespace Martify.ViewModels
         void LoadList()
         {
             var query = DataProvider.Ins.DB.Invoices.Include(x => x.Employee).AsNoTracking().AsQueryable();
+
+            // --- THỰC HIỆN LOGIC PHÂN QUYỀN ---
+            // Lấy tài khoản hiện tại
+            var currentAcc = DataProvider.Ins.CurrentAccount;
+            if (currentAcc != null)
+            {
+                // Nếu Role = 1 (Nhân viên), chỉ hiển thị hóa đơn của chính nhân viên đó
+                if (currentAcc.Role == 1)
+                {
+                    query = query.Where(x => x.EmployeeID == currentAcc.EmployeeID);
+                }
+                // Nếu Role = 0 (Admin), giữ nguyên query (xem tất cả)
+            }
+            // -----------------------------------
+
             if (SelectedMonth.HasValue) query = query.Where(x => x.CreatedDate.Month == SelectedMonth.Value);
             if (SelectedYear.HasValue) query = query.Where(x => x.CreatedDate.Year == SelectedYear.Value);
             var list = query.OrderByDescending(x => x.CreatedDate).ToList();
@@ -118,7 +133,7 @@ namespace Martify.ViewModels
             Invoices = new ObservableCollection<Invoice>(list);
         }
 
-        // --- HÀM XUẤT PDF ĐÃ CHỈNH SỬA ---
+        // --- HÀM XUẤT PDF GIỮ NGUYÊN ---
         private void ExportInvoiceToPdf(Invoice simpleInvoice)
         {
             try

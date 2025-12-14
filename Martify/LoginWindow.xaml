@@ -20,22 +20,6 @@
         Background="Transparent"
         Name="loginWindow">
 
-    <Window.Resources>
-        <!-- Override global font styles for LoginWindow only -->
-        <Style TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="FontFamily" Value="Times New Roman"/>
-        </Style>
-        <Style TargetType="PasswordBox">
-            <Setter Property="FontFamily" Value="Times New Roman"/>
-        </Style>
-        <Style TargetType="Label">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-        </Style>
-    </Window.Resources>
-
     <Grid>
 
 

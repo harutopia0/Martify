@@ -137,10 +137,36 @@ namespace Martify.ViewModels
             }
         }
 
+        // Top 5 high-value invoices
+        private ObservableCollection<HighValueInvoiceViewModel> _topInvoices;
+        public ObservableCollection<HighValueInvoiceViewModel> TopInvoices
+        {
+            get => _topInvoices;
+            set
+            {
+                _topInvoices = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // Top 5 best selling products
+        private ObservableCollection<TopProductViewModel> _topProducts;
+        public ObservableCollection<TopProductViewModel> TopProducts
+        {
+            get => _topProducts;
+            set
+            {
+                _topProducts = value;
+                OnPropertyChanged();
+            }
+        }
+
         public DashboardVM()
         {
             _dbContext = new MartifyDbContext();
             DailyRevenues = new ObservableCollection<DailyRevenueViewModel>();
+            TopInvoices = new ObservableCollection<HighValueInvoiceViewModel>();
+            TopProducts = new ObservableCollection<TopProductViewModel>();
             LoadDashboardData();
         }
 
@@ -163,6 +189,8 @@ namespace Martify.ViewModels
             {
                 CalculateWeeklyRevenue();
                 LoadQuickOverview();
+                LoadTopInvoices();
+                LoadTopProducts();
             }
             catch (Exception ex)
             {
@@ -285,6 +313,94 @@ namespace Martify.ViewModels
                 .Count(p => p.StockQuantity == 0);
         }
 
+        private void LoadTopInvoices()
+        {
+            var today = DateTime.Today;
+            var weekStart = today.AddDays(-6); // Last 7 days including today
+
+            // Get top 5 invoices from the last 7 days
+            // First get all invoices, then order and take in memory to avoid SQLite decimal ordering issue
+            var topInvoices = _dbContext.Invoices
+                .Include(i => i.Employee)
+                .Where(i => i.CreatedDate >= weekStart && i.CreatedDate <= today.AddDays(1))
+                .AsEnumerable() // Execute query and bring to memory
+                .OrderByDescending(i => i.TotalAmount)
+                .Take(5)
+                .Select(i => new HighValueInvoiceViewModel
+                {
+                    Rank = 0, // Will be set later
+                    InvoiceID = i.InvoiceID,
+                    EmployeeName = i.Employee != null ? i.Employee.FullName : "N/A",
+                    CreatedDate = i.CreatedDate,
+                    TotalAmount = i.TotalAmount
+                })
+                .ToList();
+
+            // Fill with default values if less than 5
+            for (int i = topInvoices.Count; i < 5; i++)
+            {
+                topInvoices.Add(new HighValueInvoiceViewModel
+                {
+                    Rank = i + 1,
+                    InvoiceID = "HD00000",
+                    EmployeeName = "Tên",
+                    CreatedDate = DateTime.MinValue,
+                    TotalAmount = 0,
+                    IsDefault = true
+                });
+            }
+
+            // Set ranks
+            for (int i = 0; i < topInvoices.Count; i++)
+            {
+                topInvoices[i].Rank = i + 1;
+            }
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                TopInvoices.Clear();
+                foreach (var invoice in topInvoices)
+                {
+                    TopInvoices.Add(invoice);
+                }
+            });
+        }
+
+        private void LoadTopProducts()
+        {
+            // Get top 5 best selling products based on total quantity sold
+            var topProducts = _dbContext.InvoiceDetails
+                .Include(id => id.Product)
+                .GroupBy(id => new { id.ProductID, id.Product.ProductName, id.Product.ImagePath })
+                .Select(g => new
+                {
+                    ProductID = g.Key.ProductID,
+                    ProductName = g.Key.ProductName,
+                    ImagePath = g.Key.ImagePath,
+                    TotalQuantity = g.Sum(id => id.Quantity)
+                })
+                .AsEnumerable() // Execute query and bring to memory
+                .OrderByDescending(p => p.TotalQuantity)
+                .Take(5)
+                .Select(p => new TopProductViewModel
+                {
+                    ProductID = p.ProductID,
+                    ProductName = p.ProductName,
+                    QuantitySold = p.TotalQuantity,
+                    ImagePath = p.ImagePath
+                })
+                .ToList();
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                TopProducts.Clear();
+                foreach (var product in topProducts)
+                {
+                    TopProducts.Add(product);
+                }
+            });
+        }
+
         public void RefreshData()
         {
             LoadDashboardData();
@@ -374,6 +490,98 @@ namespace Martify.ViewModels
                 if (MaxRevenue == 0) return 0;
                 var percentage = (double)(Revenue / MaxRevenue);
                 return percentage * 100;
+            }
+        }
+    }
+
+    public class HighValueInvoiceViewModel
+    {
+        public int Rank { get; set; }
+        public string InvoiceID { get; set; }
+        public string EmployeeName { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public decimal TotalAmount { get; set; }
+        public bool IsDefault { get; set; }
+
+        public string FormattedDate => IsDefault ? "xx/xx/xxxx" : CreatedDate.ToString("dd/MM/yyyy");
+        public string FullFormattedDate => IsDefault ? "xx/xx/xxxx" : CreatedDate.ToString("dddd, dd/MM/yyyy HH:mm", new System.Globalization.CultureInfo("vi-VN"));
+        public string FormattedAmount => IsDefault ? "0 VND" : $"{TotalAmount:N0} VND";
+        
+        public string RankText
+        {
+            get
+            {
+                return Rank switch
+                {
+                    1 => "🥇 Hạng 1",
+                    2 => "🥈 Hạng 2",
+                    3 => "🥉 Hạng 3",
+                    4 => "#4",
+                    5 => "#5",
+                    _ => $"#{Rank}"
+                };
+            }
+        }
+        
+        public string RankColor
+        {
+            get
+            {
+                return Rank switch
+                {
+                    1 => "#067FF8",
+                    2 => "#4CAF50",
+                    3 => "#FF9800",
+                    _ => "#B0BEC5"
+                };
+            }
+        }
+    }
+
+    public class TopProductViewModel
+    {
+        public string ProductID { get; set; }
+        public string ProductName { get; set; }
+        public int QuantitySold { get; set; }
+        public string ImagePath { get; set; }
+
+        public string FormattedQuantitySold => $"Đã bán: {QuantitySold:N0}";
+        public string FormattedQuantityOnly => $"{QuantitySold:N0} sản phẩm";
+        
+        public string PerformanceLevel
+        {
+            get
+            {
+                if (QuantitySold >= 1000) return "🔥 Siêu Hot";
+                if (QuantitySold >= 800) return "⭐ Rất Hot";
+                if (QuantitySold >= 600) return "✨ Hot";
+                if (QuantitySold >= 400) return "📈 Bán Tốt";
+                return "📊 Ổn Định";
+            }
+        }
+        
+        public string BackgroundColor
+        {
+            get
+            {
+                // Assign different colors based on sales performance
+                if (QuantitySold >= 1000) return "#FFE0B2";
+                if (QuantitySold >= 800) return "#E3F2FD";
+                if (QuantitySold >= 600) return "#F3E5F5";
+                if (QuantitySold >= 400) return "#FFF3E0";
+                return "#E8F5E9";
+            }
+        }
+
+        public string IconColor
+        {
+            get
+            {
+                if (QuantitySold >= 1000) return "#FF9800";
+                if (QuantitySold >= 800) return "#2196F3";
+                if (QuantitySold >= 600) return "#9C27B0";
+                if (QuantitySold >= 400) return "#FF6F00";
+                return "#388E3C";
             }
         }
     }

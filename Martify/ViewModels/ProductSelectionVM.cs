@@ -216,8 +216,8 @@ namespace Martify.ViewModels
 
                     // 3. Hiển thị View In Hóa Đơn (Animation)
                     // (Thay thế cho MessageBox cũ)
-                    var printWindow = new Martify.Views.ReceiptPrinterWindow();
-                    printWindow.DataContext = new ReceiptPrinterVM(fullInvoice);
+                    var printWindow = new Martify.Views.PrinterWindow();
+                    printWindow.DataContext = new PrinterVM(fullInvoice);
                     printWindow.ShowDialog();
 
                     // 4. Dọn dẹp sau khi thanh toán xong

@@ -1,17 +1,18 @@
 ﻿<UserControl x:Class="Martify.Views.Dashboard"
-         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-         xmlns:local="clr-namespace:Martify.Views"
-         xmlns:vm="clr-namespace:Martify.ViewModels" 
-         xmlns:converters="clr-namespace:Martify.Converters"
-         xmlns:behaviors="clr-namespace:Martify.Behaviors"
-         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-         mc:Ignorable="d" 
-         d:DesignHeight="720" d:DesignWidth="864"
-         Style="{StaticResource Page_RadarReveal_Style}"
-         d:Style="{x:Null}">
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+xmlns:local="clr-namespace:Martify.Views"
+xmlns:vm="clr-namespace:Martify.ViewModels" 
+xmlns:converters="clr-namespace:Martify.Converters"
+xmlns:behaviors="clr-namespace:Martify.Behaviors"
+xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+mc:Ignorable="d" 
+d:DesignHeight="720" d:DesignWidth="864"
+Style="{StaticResource Page_RadarReveal_Style}"
+d:Style="{x:Null}">
 
     <UserControl.Resources>
         <converters:RevenueHeightConverter x:Key="RevenueHeightConverter"/>
@@ -375,8 +376,12 @@
                         CornerRadius="15" 
                         Padding="15" 
                         Margin="0,0,0,15"
-                        Cursor="Hand"
-                        MouseLeftButtonDown="ProductsCard_Click">
+                        Cursor="Hand">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding NavigateToProductsCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <materialDesign:PackIcon Kind="Package" 
@@ -404,8 +409,12 @@
                         CornerRadius="15" 
                         Padding="15" 
                         Margin="0,0,0,15"
-                        Cursor="Hand"
-                        MouseLeftButtonDown="InvoicesCard_Click">
+                        Cursor="Hand">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding NavigateToInvoicesCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <materialDesign:PackIcon Kind="Receipt" 
@@ -433,8 +442,12 @@
                         CornerRadius="15" 
                         Padding="15" 
                         Margin="0,0,0,15"
-                        Cursor="Hand"
-                        MouseLeftButtonDown="EmployeesCard_Click">
+                        Cursor="Hand">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding NavigateToEmployeesCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <materialDesign:PackIcon Kind="AccountGroup" 
@@ -484,8 +497,12 @@
                                 CornerRadius="8" 
                                 Padding="10,8"
                                 Margin="0,0,0,8"
-                                Cursor="Hand"
-                                MouseLeftButtonDown="LowStockAlert_Click">
+                                Cursor="Hand">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding LowStockAlertCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -522,8 +539,12 @@
                         <Border Background="#FFEBEE" 
                                 CornerRadius="8" 
                                 Padding="10,8"
-                                Cursor="Hand"
-                                MouseLeftButtonDown="OutOfStockAlert_Click">
+                                Cursor="Hand">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding OutOfStockAlertCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -584,6 +605,11 @@
                         Margin="0,0,10,0"
                         Padding="15,12"
                         Cursor="Hand">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding NavigateToProductSelectionCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Border.Style>
                         <Style TargetType="Border">
                             <Style.Triggers>
@@ -619,6 +645,11 @@
                         Margin="0,0,10,0"
                         Padding="15,12"
                         Cursor="Hand">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding ImportGoodsCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Border.Style>
                         <Style TargetType="Border">
                             <Style.Triggers>
@@ -689,6 +720,11 @@
                         Margin="0,0,0,0"
                         Padding="15,12"
                         Cursor="Hand">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding OpenAddEmployeeCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Border.Style>
                         <Style TargetType="Border">
                             <Style.Triggers>

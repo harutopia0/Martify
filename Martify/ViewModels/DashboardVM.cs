@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Martify.ViewModels
 {
@@ -161,13 +162,144 @@ namespace Martify.ViewModels
             }
         }
 
+        // Commands
+        public ICommand OpenAddEmployeeCommand { get; }
+        public ICommand LowStockAlertCommand { get; }
+        public ICommand OutOfStockAlertCommand { get; }
+        public ICommand NavigateToProductsCommand { get; }
+        public ICommand NavigateToInvoicesCommand { get; }
+        public ICommand NavigateToEmployeesCommand { get; }
+        public ICommand NavigateToProductSelectionCommand { get; }
+        public ICommand ImportGoodsCommand { get; }
+
         public DashboardVM()
         {
             _dbContext = new MartifyDbContext();
             DailyRevenues = new ObservableCollection<DailyRevenueViewModel>();
             TopInvoices = new ObservableCollection<HighValueInvoiceViewModel>();
             TopProducts = new ObservableCollection<TopProductViewModel>();
+            
+            // Initialize commands
+            OpenAddEmployeeCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => OpenAddEmployeeWindow()
+            );
+            LowStockAlertCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => ShowInventoryAlertWindow(Models.InventoryAlertType.LowStock)
+            );
+            OutOfStockAlertCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => ShowInventoryAlertWindow(Models.InventoryAlertType.OutOfStock)
+            );
+            NavigateToProductsCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => NavigateToPage(2)
+            );
+            NavigateToInvoicesCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => NavigateToPage(4)
+            );
+            NavigateToEmployeesCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => NavigateToPage(3)
+            );
+            NavigateToProductSelectionCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => NavigateToPage(1)
+            );
+            ImportGoodsCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => ShowImportChoiceDialog()
+            );
+            
             LoadDashboardData();
+        }
+
+        /// <summary>
+        /// Mở cửa sổ thêm nhân viên
+        /// </summary>
+        private void OpenAddEmployeeWindow()
+        {
+            var addEmployeeWindow = new Views.AddEmployee
+            {
+                Owner = Application.Current.MainWindow
+            };
+            addEmployeeWindow.ShowDialog();
+        }
+
+        /// <summary>
+        /// Hiển thị popup window với danh sách sản phẩm cảnh báo
+        /// </summary>
+        private void ShowInventoryAlertWindow(Models.InventoryAlertType alertType)
+        {
+            var window = new Views.InventoryAlertWindow
+            {
+                DataContext = new InventoryAlertWindowVM(alertType),
+                Owner = Application.Current.MainWindow
+            };
+            window.ShowDialog();
+        }
+
+        /// <summary>
+        /// Điều hướng đến trang tương ứng và cập nhật SidePanel với animation
+        /// </summary>
+        private void NavigateToPage(int menuIndex)
+        {
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow?.DataContext is MainVM mainVM)
+            {
+                mainVM.SelectedMenuIndex = menuIndex;
+
+                switch (menuIndex)
+                {
+                    case 1:
+                        mainVM.Navigation.ProductSelectionCommand.Execute(null);
+                        break;
+                    case 2:
+                        mainVM.Navigation.ProductsCommand.Execute(null);
+                        break;
+                    case 3:
+                        mainVM.Navigation.EmployeesCommand.Execute(null);
+                        break;
+                    case 4:
+                        mainVM.Navigation.InvoicesCommand.Execute(null);
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Hiển thị dialog chọn hành động nhập hàng
+        /// </summary>
+        private void ShowImportChoiceDialog()
+        {
+            var choiceDialog = new Views.ImportChoiceDialog
+            {
+                Owner = Application.Current.MainWindow
+            };
+
+            if (choiceDialog.ShowDialog() == true)
+            {
+                switch (choiceDialog.SelectedChoice)
+                {
+                    case Views.ImportChoiceDialog.ImportChoice.AddNewProduct:
+                        var addProductWindow = new Views.AddProduct
+                        {
+                            Owner = Application.Current.MainWindow
+                        };
+                        addProductWindow.ShowDialog();
+                        break;
+
+                    case Views.ImportChoiceDialog.ImportChoice.ImportProducts:
+                        var importProductsWindow = new Views.ImportProducts
+                        {
+                            Owner = Application.Current.MainWindow
+                        };
+                        importProductsWindow.ShowDialog();
+                        break;
+                }
+            }
         }
 
         /// <summary>

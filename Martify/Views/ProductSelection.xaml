@@ -13,7 +13,8 @@
              d:DesignHeight="720"
              d:DesignWidth="864"
              Style="{StaticResource Page_CinematicFocus_Style}"
-             d:Style="{x:Null}">
+             d:Style="{x:Null}"
+             Unloaded="UserControl_Unloaded">
 
     <UserControl.DataContext>
         <vm:ProductSelectionVM />
@@ -21,6 +22,7 @@
 
     <UserControl.Resources>
         <cv:ImagePathConverter x:Key="ImgConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
         <Style x:Key="ProductItemButtonStyle"
                TargetType="Button">
@@ -88,6 +90,7 @@
                         <ColumnDefinition Width="1.2*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="1.2*"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
@@ -165,6 +168,18 @@
                             Command="{Binding ClearFilterCommand}">
                         <materialDesign:PackIcon Kind="FilterOff"
                                                  Foreground="Red" />
+                    </Button>
+
+                    <Button Grid.Column="6"
+                            Style="{StaticResource MaterialDesignToolButton}"
+                            ToolTip="Quét mã QR (Bật/Tắt Camera)"
+                            Height="45"
+                            Width="45"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            Command="{Binding ToggleCameraCommand}">
+                        <materialDesign:PackIcon Kind="QrcodeScan"
+                                                 Foreground="#067FF8" />
                     </Button>
                 </Grid>
 
@@ -256,6 +271,103 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
+
+                <Border Grid.Row="1"
+                        Background="#CC000000"
+                        CornerRadius="15"
+                        Visibility="{Binding IsCameraOpen, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Panel.ZIndex="10">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0"
+                                Background="{DynamicResource CardBackground}"
+                                CornerRadius="10"
+                                Margin="20,20,20,5"
+                                Padding="10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <materialDesign:PackIcon Kind="Camera"
+                                                         VerticalAlignment="Center"
+                                                         Foreground="#067FF8"
+                                                         Margin="0,0,10,0"/>
+
+                                <ComboBox Grid.Column="1"
+                                          ItemsSource="{Binding Cameras}"
+                                          SelectedItem="{Binding SelectedCamera}"
+                                          DisplayMemberPath="Name"
+                                          materialDesign:HintAssist.Hint="Chọn Camera"
+                                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                          FontSize="13"
+                                          Height="35"
+                                          Padding="8,5"/>
+
+                                <Button Grid.Column="2"
+                                        Command="{Binding RefreshCamerasCommand}"
+                                        Style="{StaticResource MaterialDesignIconButton}"
+                                        ToolTip="Làm mới danh sách"
+                                        Margin="5,0,0,0">
+                                    <materialDesign:PackIcon Kind="Refresh"
+                                                             Foreground="{DynamicResource SecondaryText}"/>
+                                </Button>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="1"
+                                Margin="20"
+                                BorderBrush="#067FF8"
+                                BorderThickness="2"
+                                CornerRadius="10"
+                                Background="Black">
+                            <Grid>
+                                <Image Source="{Binding CameraFrame}"
+                                       Stretch="Uniform"/>
+                                <Border Height="2"
+                                        Background="Red"
+                                        VerticalAlignment="Top">
+                                    <Border.Triggers>
+                                        <EventTrigger RoutedEvent="Loaded">
+                                            <BeginStoryboard>
+                                                <Storyboard RepeatBehavior="Forever"
+                                                            AutoReverse="True">
+                                                    <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                                                        From="0,0,0,0"
+                                                                        To="0,300,0,0"
+                                                                        Duration="0:0:1.5"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Border.Triggers>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <StackPanel Grid.Row="2"
+                                    Margin="0,0,0,20"
+                                    HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding ScanStatus}"
+                                       Foreground="White"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,10"/>
+                            <Button Content="Đóng Camera"
+                                    Command="{Binding ToggleCameraCommand}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Background="#F44336"
+                                    BorderBrush="Transparent"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
             </Grid>
 
             <Border Grid.Column="1"
@@ -369,7 +481,6 @@
                                                                          Height="12"
                                                                          Foreground="{DynamicResource SecondaryText}"/>
                                             </Button>
-
                                         </StackPanel>
                                     </Grid>
 
@@ -399,7 +510,6 @@
                                             </Button>
                                         </StackPanel>
                                     </Grid>
-
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>

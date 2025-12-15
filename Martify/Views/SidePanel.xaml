@@ -39,7 +39,8 @@
                                       HorizontalAlignment="Left">
 
                                     <TextBlock Text="{TemplateBinding TextBlock.Text}"
-                                               FontFamily="{StaticResource Rubik}"
+                                               FontFamily="Roboto"
+                                               FontWeight="SemiBold"
                                                FontSize="17"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Left"
@@ -70,7 +71,8 @@
                                                Text="{Binding Content, 
                                                       RelativeSource={RelativeSource FindAncestor,
                                                       AncestorType={x:Type RadioButton}}}"
-                                               FontFamily="{StaticResource Rubik}"
+                                               FontFamily="Roboto"
+                                               FontWeight="Bold"
                                                FontSize="17"
                                                Foreground="#3A5EEA"
                                                Margin="10,0,0,0"
@@ -139,6 +141,10 @@
                                                              From="0"
                                                              To="200"
                                                              Duration="0:0:0.75" />
+                                            <ColorAnimation Storyboard.TargetName="Highlighter"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#FFD3D3D3"
+                                                            Duration="0:0:0.3" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                     <RemoveStoryboard BeginStoryboardName="Stop_Indicator" />
@@ -153,6 +159,10 @@
                                                              From="200"
                                                              To="0"
                                                              Duration="0:0:0.75" />
+                                            <ColorAnimation Storyboard.TargetName="Highlighter"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#FFD3D3D3"
+                                                            Duration="0:0:0.3" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                     <RemoveStoryboard BeginStoryboardName="Release_Indicator" />
@@ -176,6 +186,10 @@
                                                              From="200"
                                                              To="200"
                                                              Duration="0:0:0.3" />
+                                            <ColorAnimation Storyboard.TargetName="Highlighter"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#FFFFFF"
+                                                            Duration="0:0:0.3" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </MultiTrigger.EnterActions>
@@ -268,10 +282,10 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Dashboard" />
+                                                        Value="Trang Chủ" />
 
                                                 <Setter Property="Content"
-                                                        Value="DASHBOARD" />
+                                                        Value="TRANG CHỦ" />
 
 
                                                 <Setter Property="Image.Source"
@@ -308,9 +322,9 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Sell" />
+                                                        Value="Bán Hàng" />
                                                 <Setter Property="Content"
-                                                        Value="SELL" />
+                                                        Value="BÁN HÀNG" />
 
 
                                                 <Setter Property="Image.Source"
@@ -348,9 +362,9 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Products" />
+                                                        Value="Sản Phẩm" />
                                                 <Setter Property="Content"
-                                                        Value="PRODUCTS" />
+                                                        Value="SẢN PHẨM" />
 
 
                                                 <Setter Property="Image.Source"
@@ -388,9 +402,9 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Staff" />
+                                                        Value="Nhân Viên" />
                                                 <Setter Property="Content"
-                                                        Value="STAFF" />
+                                                        Value="NHÂN VIÊN" />
 
                                                 <Setter Property="Tag"
                                                         Value="{StaticResource StaffActive}" />
@@ -426,9 +440,9 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Invoices" />
+                                                        Value="Hóa Đơn" />
                                                 <Setter Property="Content"
-                                                        Value="INVOICES" />
+                                                        Value="HÓA ĐƠN" />
 
                                                 <Setter Property="Tag"
                                                         Value="{StaticResource ReceiptActive}" />
@@ -463,9 +477,9 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Settings" />
+                                                        Value="Cài Đặt" />
                                                 <Setter Property="Content"
-                                                        Value="SETTINGS" />
+                                                        Value="CÀI ĐẶT" />
 
                                                 <Setter Property="Tag"
                                                         Value="{StaticResource SettingsActive}" />

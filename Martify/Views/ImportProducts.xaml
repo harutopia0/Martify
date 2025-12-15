@@ -1,0 +1,490 @@
+﻿<Window x:Class="Martify.Views.ImportProducts"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vm="clr-namespace:Martify.ViewModels"
+        xmlns:cv="clr-namespace:Martify.Converters"
+        mc:Ignorable="d"
+        Name="importProductsWindow"
+        Title="Nhập hàng vào kho" 
+        Height="700" 
+        Width="1100"
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+
+    <Window.DataContext>
+        <vm:ImportProductsVM />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <cv:ImagePathConverter x:Key="ImgConverter"/>
+
+        <Style x:Key="LabelText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#424242" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0,0,10,0"/>
+        </Style>
+
+        <ControlTemplate x:Key="ErrorTemplate">
+            <StackPanel>
+                <AdornedElementPlaceholder x:Name="placeholder" />
+                <TextBlock Text="{Binding [0].ErrorContent}" 
+                           Foreground="#F44336" 
+                           FontSize="11" 
+                           Margin="5,3,0,0"
+                           FontStyle="Italic"/>
+            </StackPanel>
+        </ControlTemplate>
+
+        <Style x:Key="ValidatedTextBox" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplate}" />
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+
+        <Style x:Key="ValidatedComboBox" TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplate}" />
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="#F5F5F5" CornerRadius="15">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" 
+                    Background="#2196F3" 
+                    CornerRadius="15,15,0,0"
+                    MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="25,0,0,0">
+                        <materialDesign:PackIcon Kind="Import" 
+                                               Width="28" 
+                                               Height="28"
+                                               Foreground="White"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,15,0"/>
+                        <TextBlock Text="Nhập hàng vào kho" 
+                                   FontSize="22" 
+                                   FontWeight="SemiBold"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Main Content -->
+            <Grid Grid.Row="1" Margin="15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="350"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left Panel - Product Selection -->
+                <Border Grid.Column="0" 
+                        Background="White" 
+                        Padding="20"
+                        Margin="0,0,7.5,0"
+                        CornerRadius="10">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.1"/>
+                    </Border.Effect>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Title -->
+                        <TextBlock Grid.Row="0"
+                                   Text="Danh sách sản phẩm"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="#424242"
+                                   Margin="0,0,0,15"/>
+
+                        <!-- Search Box -->
+                        <Border Grid.Row="1"
+                                Background="#F5F5F5"
+                                CornerRadius="20"
+                                Margin="0,0,0,15">
+                            <Grid>
+                                <materialDesign:PackIcon Kind="Magnify"
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Left"
+                                                       Width="20" 
+                                                       Height="20" 
+                                                       Margin="15,0,0,0"
+                                                       Opacity="0.6"/>
+
+                                <TextBox materialDesign:HintAssist.Hint="Tìm sản phẩm..."
+                                         materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                         BorderThickness="0"
+                                         VerticalAlignment="Center"
+                                         Margin="45,0,15,0"
+                                         FontSize="13"
+                                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                         Background="Transparent"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Products List -->
+                        <ListBox Grid.Row="2"
+                                 ItemsSource="{Binding FilteredProducts}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="Transparent"
+                                            Padding="10"
+                                            Margin="0,2.5"
+                                            CornerRadius="8"
+                                            Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick"
+                                                        Command="{Binding DataContext.AddProductCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}"/>
+                                        </Border.InputBindings>
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#E3F2FD"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Ellipse Grid.Column="0" 
+                                                     Width="40" 
+                                                     Height="40">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush Stretch="UniformToFill"
+                                                              ImageSource="{Binding ImagePath, Converter={StaticResource ImgConverter}, FallbackValue='/Assets/placeholder-product.png'}"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+
+                                            <StackPanel Grid.Column="1" 
+                                                        VerticalAlignment="Center"
+                                                        Margin="10,0,0,0">
+                                                <TextBlock Text="{Binding ProductName}"
+                                                           FontSize="13"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#424242"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                                <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                                                    <TextBlock Text="{Binding ProductID}"
+                                                               FontSize="11"
+                                                               Foreground="#9E9E9E"
+                                                               Margin="0,0,10,0"/>
+                                                    <TextBlock Text="{Binding Price, StringFormat='N0'}"
+                                                               FontSize="11"
+                                                               Foreground="#2196F3"
+                                                               FontWeight="SemiBold"/>
+                                                    <TextBlock Text=" VNĐ"
+                                                               FontSize="11"
+                                                               Foreground="#2196F3"
+                                                               FontWeight="SemiBold"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+
+                <!-- Right Panel - Import Details -->
+                <Border Grid.Column="1" 
+                        Background="White" 
+                        Padding="20"
+                        Margin="7.5,0,0,0"
+                        CornerRadius="10">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.1"/>
+                    </Border.Effect>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Title -->
+                        <TextBlock Grid.Row="0"
+                                   Text="Chi tiết phiếu nhập"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="#424242"
+                                   Margin="0,0,0,15"/>
+
+                        <!-- Supplier Selection -->
+                        <Grid Grid.Row="1" Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Nhà cung cấp *" 
+                                       Style="{StaticResource LabelText}"/>
+                            <ComboBox Grid.Column="1"
+                                      ItemsSource="{Binding SupplierList}"
+                                      DisplayMemberPath="SupplierName"
+                                      SelectedValuePath="SupplierID"
+                                      SelectedValue="{Binding SelectedSupplierID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                      materialDesign:HintAssist.Hint="Chọn nhà cung cấp"
+                                      Style="{StaticResource ValidatedComboBox}"/>
+                        </Grid>
+
+                        <!-- Import Items DataGrid -->
+                        <DataGrid Grid.Row="2"
+                                  ItemsSource="{Binding ImportItems}"
+                                  SelectedItem="{Binding SelectedImportItem}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  CanUserReorderColumns="False"
+                                  CanUserSortColumns="False"
+                                  SelectionMode="Single"
+                                  GridLinesVisibility="Horizontal"
+                                  HorizontalGridLinesBrush="#E0E0E0"
+                                  RowHeight="45"
+                                  ColumnHeaderHeight="40"
+                                  Margin="0,0,0,15">
+
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type DataGridColumnHeader}" 
+                                       BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                    <Setter Property="FontSize" Value="13"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Foreground" Value="#424242"/>
+                                </Style>
+                            </DataGrid.Resources>
+
+                            <DataGrid.Columns>
+                                <!-- Product Name -->
+                                <DataGridTextColumn Header="Sản phẩm"
+                                                    Binding="{Binding ProductName}"
+                                                    Width="*"
+                                                    MinWidth="150"
+                                                    IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="FontSize" Value="13"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <!-- Unit -->
+                                <DataGridTextColumn Header="ĐVT"
+                                                    Binding="{Binding Unit}"
+                                                    Width="70"
+                                                    IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="FontSize" Value="13"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <!-- Unit Price -->
+                                <DataGridTextColumn Header="Đơn giá"
+                                                    Binding="{Binding UnitPrice, StringFormat='N0', UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                                    Width="110">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                                            <Setter Property="FontSize" Value="13"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <!-- Quantity with Buttons -->
+                                <DataGridTemplateColumn Header="Số lượng" Width="140">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-30 0 0 0">
+                                                <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                        Command="{Binding DataContext.DecreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}"
+                                                        Width="28" Height="28"
+                                                        Padding="0"
+                                                        ToolTip="Giảm số lượng">
+                                                    <materialDesign:PackIcon Kind="Minus" Width="16" Height="16"/>
+                                                </Button>
+
+                                                <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                                         Width="50"
+                                                         Height="28"
+                                                         Margin="5,0"
+                                                         VerticalContentAlignment="Center"
+                                                         HorizontalContentAlignment="Center"
+                                                         FontSize="13"
+                                                         BorderThickness="1"
+                                                         BorderBrush="#E0E0E0"/>
+
+                                                <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                        Command="{Binding DataContext.IncreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}"
+                                                        Width="28" Height="28"
+                                                        Padding="0"
+                                                        ToolTip="Tăng số lượng">
+                                                    <materialDesign:PackIcon Kind="Plus" Width="16" Height="16"/>
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <!-- Subtotal -->
+                                <DataGridTextColumn Header="Thành tiền"
+                                                    Binding="{Binding Subtotal, StringFormat='N0'}"
+                                                    Width="120"
+                                                    IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                                            <Setter Property="FontSize" Value="13"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Foreground" Value="#2196F3"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <!-- Remove Button -->
+                                <DataGridTemplateColumn Width="50">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Margin="-15 0 0 0"
+                                                    Style="{StaticResource MaterialDesignIconButton}"
+                                                    ToolTip="Xóa"
+                                                    Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    CommandParameter="{Binding}"
+                                                    Width="30"
+                                                    Height="30"
+                                                    Foreground="#F44336">
+                                                <materialDesign:PackIcon Kind="Delete" 
+                                                                       Width="16" 
+                                                                       Height="16"/>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <!-- Total Amount -->
+                        <Border Grid.Row="3"
+                                Background="#E3F2FD"
+                                CornerRadius="8"
+                                Padding="20,15"
+                                Margin="0,0,0,15">
+                            <Grid>
+                                <TextBlock Text="Tổng tiền:"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Foreground="#424242"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"/>
+
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding TotalAmount, StringFormat='N0'}"
+                                               FontSize="24"
+                                               FontWeight="Bold"
+                                               Foreground="#2196F3"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text=" VNĐ"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="#2196F3"
+                                               VerticalAlignment="Center"
+                                               Margin="5,0,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Action Buttons -->
+                        <StackPanel Grid.Row="4" 
+                                    Orientation="Horizontal" 
+                                    HorizontalAlignment="Right">
+                            <Button Height="45" 
+                                    Width="130"
+                                    Margin="0,0,10,0"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Command="{Binding CloseCommand}"
+                                    CommandParameter="{Binding ElementName=importProductsWindow}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Close" 
+                                                            Width="20" 
+                                                            Height="20"
+                                                            VerticalAlignment="Center"
+                                                            Margin="0,0,8,0"/>
+                                    <TextBlock Text="Hủy bỏ" 
+                                               FontSize="14"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Height="45" 
+                                    Width="150"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Background="#4CAF50"
+                                    BorderBrush="{x:Null}"
+                                    Command="{Binding SaveImportCommand}"
+                                    CommandParameter="{Binding ElementName=importProductsWindow}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Check" 
+                                                            Width="20" 
+                                                            Height="20"
+                                                            VerticalAlignment="Center"
+                                                            Margin="0,0,8,0"/>
+                                    <TextBlock Text="Xác nhận nhập" 
+                                               FontSize="14"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

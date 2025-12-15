@@ -70,8 +70,30 @@ namespace Martify.ViewModels
             get => _selectedCategoryID;
             set
             {
+                if (_selectedCategoryID == value) return;
                 _selectedCategoryID = value;
                 CategoryID = value; // Giữ đồng bộ
+
+                // When an existing category is selected, update the displayed text to its name (no recursion)
+                if (!string.IsNullOrWhiteSpace(_selectedCategoryID) && CategoryList != null)
+                {
+                    var cat = CategoryList.FirstOrDefault(c => c.CategoryID == _selectedCategoryID);
+                    var catName = cat?.CategoryName;
+                    if (!string.Equals(SelectedCategoryText, catName, StringComparison.Ordinal))
+                    {
+                        _selectedCategoryText = catName; // set backing field to avoid setter logic
+                        OnPropertyChanged(nameof(SelectedCategoryText));
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(SelectedCategoryText))
+                    {
+                        _selectedCategoryText = null;
+                        OnPropertyChanged(nameof(SelectedCategoryText));
+                    }
+                }
+
                 OnPropertyChanged();
             }
         }
@@ -85,11 +107,49 @@ namespace Martify.ViewModels
         }
 
         public string SelectedUnitText
-        {             get => SelectedUnit;
+        {   get => SelectedUnit;
             set
             {
                 SelectedUnit = value;
                 Unit = value; // Giữ đồng bộ
+                OnPropertyChanged();
+            }
+        }
+
+        // backing field for editable category text
+        private string _selectedCategoryText;
+        public string SelectedCategoryText
+        {
+            get => _selectedCategoryText;
+            set
+            {
+                if (_selectedCategoryText == value) return;
+                _selectedCategoryText = value;
+
+                // if typed text matches an existing CategoryName, sync SelectedCategoryID
+                if (!string.IsNullOrWhiteSpace(_selectedCategoryText) && CategoryList != null)
+                {
+                    var match = CategoryList
+                        .FirstOrDefault(c => string.Equals(c.CategoryName?.Trim(), _selectedCategoryText.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                    if (match != null)
+                    {
+                        if (!string.Equals(SelectedCategoryID, match.CategoryID, StringComparison.Ordinal))
+                            SelectedCategoryID = match.CategoryID;
+                    }
+                    else
+                    {
+                        // user typed a new category name -> clear SelectedCategoryID so SaveProduct will create it
+                        if (!string.IsNullOrEmpty(SelectedCategoryID))
+                            SelectedCategoryID = null;
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(SelectedCategoryID))
+                        SelectedCategoryID = null;
+                }
+
                 OnPropertyChanged();
             }
         }
@@ -173,8 +233,10 @@ namespace Martify.ViewModels
 
                 case nameof(CategoryID):
                 case nameof(SelectedCategoryID):
-                    if (string.IsNullOrWhiteSpace(SelectedCategoryID))
-                        result = "Vui lòng chọn danh mục.";
+                case nameof(SelectedCategoryText):
+                    // require either an existing selected category id OR a typed category name
+                    if (string.IsNullOrWhiteSpace(SelectedCategoryID) && string.IsNullOrWhiteSpace(SelectedCategoryText))
+                        result = "Vui lòng chọn hoặc nhập danh mục.";
                     break;
             }
             return result;
@@ -224,7 +286,9 @@ namespace Martify.ViewModels
         {
             try
             {
-                CategoryList = DataProvider.Ins.DB.ProductCategories.ToList();
+                CategoryList = DataProvider.Ins.DB.ProductCategories
+                    .OrderBy(c => c.CategoryName)
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -296,8 +360,12 @@ namespace Martify.ViewModels
             {
                 // Tạo mã sản phẩm mới
                 string newProductID = GenerateProductID();
-                // Taọ đơn vị tính mới
-                string newUnit = SelectedUnitText.Trim();
+                // Tạo đơn vị tính mới
+                string newUnit = SelectedUnitText?.Trim() ?? string.Empty;
+
+                // Category logic: user can type new category name or select existing category
+                string typedCategory = SelectedCategoryText?.Trim();
+                string chosenCategoryID = SelectedCategoryID; // may be null if user typed new category
 
                 // Xử lý lưu ảnh
                 string dbImagePath = null;
@@ -311,21 +379,55 @@ namespace Martify.ViewModels
                         return;
                     }
                 }
+
+                // Unit handling (add new if typed)
                 if (!string.IsNullOrEmpty(newUnit))
                 {
-                    //  Kiểm tra xem đơn vị này đã có trong danh sách UnitList chưa
-                    bool unitExists = UnitList.Contains(newUnit, StringComparer.OrdinalIgnoreCase);
+                    bool unitExists = UnitList.Any(u => string.Equals(u?.Trim(), newUnit, StringComparison.OrdinalIgnoreCase));
                     if (!unitExists)
                     {
                         UnitList.Add(newUnit);
                     }
                     else
                     {
-                        newUnit = Unit.Trim();
+                        newUnit = Unit?.Trim() ?? newUnit;
                     }
                 }
-                    // Tạo sản phẩm mới
-                    var newProduct = new Product
+
+                // Category handling: if user typed a category name that doesn't exist, create it
+                if (!string.IsNullOrWhiteSpace(typedCategory) && string.IsNullOrWhiteSpace(chosenCategoryID))
+                {
+                    // check by name
+                    var existing = DataProvider.Ins.DB.ProductCategories
+                        .FirstOrDefault(c => c.CategoryName.Trim().Equals(typedCategory, StringComparison.OrdinalIgnoreCase));
+                    if (existing != null)
+                    {
+                        chosenCategoryID = existing.CategoryID;
+                    }
+                    else
+                    {
+                        // create new category
+                        string newCatId = GenerateCategoryID();
+                        var newCat = new ProductCategory
+                        {
+                            CategoryID = newCatId,
+                            CategoryName = typedCategory
+                        };
+                        DataProvider.Ins.DB.ProductCategories.Add(newCat);
+                        DataProvider.Ins.DB.SaveChanges();
+
+                        // update local list & chosen id
+                        LoadCategories(); // reload to keep view consistent
+                        chosenCategoryID = newCatId;
+                    }
+                }
+
+                // If user selected existing category, ensure chosenCategoryID is set
+                if (string.IsNullOrWhiteSpace(chosenCategoryID) && !string.IsNullOrWhiteSpace(SelectedCategoryID))
+                    chosenCategoryID = SelectedCategoryID;
+
+                // Tạo sản phẩm mới
+                var newProduct = new Product
                 {
                     ProductID = newProductID,
                     ProductName = ProductName.Trim(),
@@ -333,7 +435,7 @@ namespace Martify.ViewModels
                     Price = Price.Value,
                     StockQuantity = StockQuantity.Value,
                     ImagePath = dbImagePath,
-                    CategoryID = SelectedCategoryID,
+                    CategoryID = chosenCategoryID,
                 };
 
                 // Lưu vào cơ sở dữ liệu
@@ -368,7 +470,8 @@ namespace Martify.ViewModels
                 nameof(Unit),
                 nameof(Price),
                 nameof(StockQuantity),
-                nameof(SelectedCategoryID)
+                nameof(SelectedCategoryID),
+                nameof(SelectedCategoryText)
             };
 
             foreach (var prop in properties)
@@ -416,7 +519,7 @@ namespace Martify.ViewModels
                 // Thử sao chép vào thư mục nguồn (tùy chọn)
                 try
                 {
-                    string projectFolder = Path.GetFullPath(Path.Combine(binFolder, @"..\..\..\"));
+                    string projectFolder = Path.GetFullPath(Path.Combine(binFolder, @"..\..\..\")); 
                     string sourcePath = Path.Combine(projectFolder, "Assets", "Product");
 
                     if (Directory.Exists(Path.Combine(projectFolder, "Assets")))
@@ -470,6 +573,34 @@ namespace Martify.ViewModels
             catch
             {
                 return "SP001";
+            }
+        }
+
+        // new helper to generate category id
+        private string GenerateCategoryID()
+        {
+            try
+            {
+                var ids = DataProvider.Ins.DB.ProductCategories
+                    .Select(x => x.CategoryID)
+                    .ToList();
+
+                int max = 0;
+                foreach (var id in ids)
+                {
+                    // extract trailing digits
+                    var digits = new string(id?.SkipWhile(c => !char.IsDigit(c)).ToArray());
+                    if (int.TryParse(digits, out int n))
+                    {
+                        if (n > max) max = n;
+                    }
+                }
+
+                return "C" + (max + 1).ToString("D3");
+            }
+            catch
+            {
+                return "C001";
             }
         }
     }

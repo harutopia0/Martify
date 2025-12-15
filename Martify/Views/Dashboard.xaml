@@ -15,6 +15,7 @@
 
     <UserControl.Resources>
         <converters:RevenueHeightConverter x:Key="RevenueHeightConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
     <UserControl.DataContext>
@@ -798,112 +799,241 @@
                                                                           Direction="270"
                                                                           Opacity="0.4"/>
                                                     </Border.Effect>
-                                                    <StackPanel Width="280">
-                                                        <!-- Invoice ID Header -->
-                                                        <TextBlock Text="{Binding InvoiceID}"
-                                                                   FontSize="16"
-                                                                   FontFamily="Roboto Bold"
-                                                                   Foreground="{DynamicResource PrimaryText}"
-                                                                   TextWrapping="Wrap"
-                                                                   Margin="0,0,0,10"/>
-
-                                                        <!-- Total Amount -->
-                                                        <Border Background="#067FF8" 
-                                                                CornerRadius="8"
-                                                                Padding="10"
-                                                                Margin="0,0,0,10">
-                                                            <StackPanel>
-                                                                <TextBlock Text="Tổng giá trị"
-                                                                           FontSize="11"
-                                                                           FontFamily="Roboto Medium"
-                                                                           Foreground="White"
-                                                                           Opacity="0.9"/>
-                                                                <TextBlock Text="{Binding FormattedAmount}"
-                                                                           FontSize="18"
-                                                                           FontFamily="Roboto Bold"
-                                                                           Foreground="White"
-                                                                           Margin="0,2,0,0"/>
-                                                            </StackPanel>
-                                                        </Border>
-
-                                                        <!-- Rank Information -->
-                                                        <Grid Margin="0,0,0,8">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="Auto"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <TextBlock Grid.Column="0"
-                                                                       Text="Xếp hạng"
-                                                                       FontSize="12"
-                                                                       FontFamily="Roboto Medium"
-                                                                       Foreground="{DynamicResource SecondaryText}"
-                                                                       VerticalAlignment="Center"/>
-                                                            <TextBlock Grid.Column="1"
-                                                                       Text="{Binding RankText}"
-                                                                       FontSize="13"
+                                                    <StackPanel Width="280" Margin="5">
+                                                            <!-- Invoice ID Header -->
+                                                            <TextBlock Text="{Binding InvoiceID}"
+                                                                       FontSize="16"
                                                                        FontFamily="Roboto Bold"
-                                                                       Foreground="{Binding RankColor}"
-                                                                       VerticalAlignment="Center"/>
-                                                        </Grid>
+                                                                       Foreground="{DynamicResource PrimaryText}"
+                                                                       TextWrapping="Wrap"
+                                                                       Margin="0,0,0,10"/>
 
-                                                        <!-- Separator -->
-                                                        <Border Height="1" 
-                                                                Background="{DynamicResource SecondaryText}"
-                                                                Opacity="0.2"
-                                                                Margin="0,5,0,10"/>
+                                                            <!-- Total Amount -->
+                                                            <Border Background="#067FF8" 
+                                                                    CornerRadius="8"
+                                                                    Padding="10"
+                                                                    Margin="0,0,0,10">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="Tổng giá trị"
+                                                                               FontSize="11"
+                                                                               FontFamily="Roboto Medium"
+                                                                               Foreground="White"
+                                                                               Opacity="0.9"/>
+                                                                    <TextBlock Text="{Binding FormattedAmount}"
+                                                                               FontSize="18"
+                                                                               FontFamily="Roboto Bold"
+                                                                               Foreground="White"
+                                                                               Margin="0,2,0,0"/>
+                                                                </StackPanel>
+                                                            </Border>
 
-                                                        <!-- Employee Information -->
-                                                        <Grid Margin="0,0,0,6">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="Auto"/>
-                                                                <ColumnDefinition Width="*"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <materialDesign:PackIcon Grid.Column="0"
-                                                                                   Kind="Account"
-                                                                                   Width="14"
-                                                                                   Height="14"
-                                                                                   Foreground="{DynamicResource SecondaryText}"
-                                                                                   VerticalAlignment="Center"
-                                                                                   Margin="0,0,8,0"/>
-                                                            <StackPanel Grid.Column="1">
-                                                                <TextBlock Text="Nhân viên"
-                                                                           FontSize="10"
-                                                                           FontFamily="Roboto"
-                                                                           Foreground="{DynamicResource SecondaryText}"/>
-                                                                <TextBlock Text="{Binding EmployeeName}"
+                                                            <!-- Rank Information -->
+                                                            <Grid Margin="0,0,0,8">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock Grid.Column="0"
+                                                                           Text="Xếp hạng"
                                                                            FontSize="12"
-                                                                           FontFamily="Roboto Bold"
-                                                                           Foreground="{DynamicResource PrimaryText}"
-                                                                           Margin="0,2,0,0"/>
-                                                            </StackPanel>
-                                                        </Grid>
-
-                                                        <!-- Date and Time Information -->
-                                                        <Grid Margin="0,0,0,6">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="Auto"/>
-                                                                <ColumnDefinition Width="*"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <materialDesign:PackIcon Grid.Column="0"
-                                                                                   Kind="Calendar"
-                                                                                   Width="14"
-                                                                                   Height="14"
-                                                                                   Foreground="{DynamicResource SecondaryText}"
-                                                                                   VerticalAlignment="Center"
-                                                                                   Margin="0,0,8,0"/>
-                                                            <StackPanel Grid.Column="1">
-                                                                <TextBlock Text="Ngày tạo"
-                                                                           FontSize="10"
-                                                                           FontFamily="Roboto"
-                                                                           Foreground="{DynamicResource SecondaryText}"/>
-                                                                <TextBlock Text="{Binding FullFormattedDate}"
-                                                                           FontSize="11"
                                                                            FontFamily="Roboto Medium"
-                                                                           Foreground="{DynamicResource PrimaryText}"
-                                                                           TextWrapping="Wrap"
-                                                                           Margin="0,2,0,0"/>
-                                                            </StackPanel>
-                                                        </Grid>
+                                                                           Foreground="{DynamicResource SecondaryText}"
+                                                                           VerticalAlignment="Center"/>
+                                                                <TextBlock Grid.Column="1"
+                                                                           Text="{Binding RankText}"
+                                                                           FontSize="13"
+                                                                           FontFamily="Roboto Bold"
+                                                                           Foreground="{Binding RankColor}"
+                                                                           VerticalAlignment="Center"/>
+                                                            </Grid>
+
+                                                            <!-- Separator -->
+                                                            <Border Height="1" 
+                                                                    Background="{DynamicResource SecondaryText}"
+                                                                    Opacity="0.2"
+                                                                    Margin="0,5,0,10"/>
+
+                                                            <!-- Invoice Details Section -->
+                                                            <TextBlock Text="Chi tiết hóa đơn"
+                                                                       FontSize="12"
+                                                                       FontFamily="Roboto Bold"
+                                                                       Foreground="{DynamicResource PrimaryText}"
+                                                                       Margin="0,0,0,8"/>
+
+                                                            <!-- Invoice Details Header -->
+                                                            <Grid Margin="0,0,0,5">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="2*"/>
+                                                                    <ColumnDefinition Width="1.5*"/>
+                                                                    <ColumnDefinition Width="1.5*"/>
+                                                                    <ColumnDefinition Width="1.25*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock Grid.Column="0"
+                                                                           Text="Sản phẩm"
+                                                                           FontSize="10"
+                                                                           FontFamily="Roboto Medium"
+                                                                           Foreground="{DynamicResource SecondaryText}"
+                                                                           HorizontalAlignment="Left"/>
+                                                                <TextBlock Grid.Column="1"
+                                                                           Text="Đơn giá"
+                                                                           FontSize="10"
+                                                                           FontFamily="Roboto Medium"
+                                                                           Foreground="{DynamicResource SecondaryText}"
+                                                                           HorizontalAlignment="Right"/>
+                                                                <TextBlock Grid.Column="2"
+                                                                           Text="SL"
+                                                                           FontSize="10"
+                                                                           FontFamily="Roboto Medium"
+                                                                           Foreground="{DynamicResource SecondaryText}"
+                                                                           HorizontalAlignment="Center"/>
+                                                                <TextBlock Grid.Column="3"
+                                                                           Text="Thành tiền"
+                                                                           FontSize="10"
+                                                                           FontFamily="Roboto Medium"
+                                                                           Foreground="{DynamicResource SecondaryText}"
+                                                                           HorizontalAlignment="Right"/>
+                                                            </Grid>
+
+                                                            <!-- Invoice Details List (Top 5 Most Valuable) -->
+                                                            <ItemsControl ItemsSource="{Binding Top5InvoiceDetails}"
+                                                                          Margin="0,0,0,8">
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Grid Margin="0,0,0,8">
+                                                                            <Grid.RowDefinitions>
+                                                                                <RowDefinition Height="Auto"/>
+                                                                                <RowDefinition Height="Auto"/>
+                                                                            </Grid.RowDefinitions>
+
+                                                                            <!-- Product Name -->
+                                                                            <TextBlock Grid.Row="0"
+                                                                                       Text="{Binding Product.ProductName}"
+                                                                                       FontSize="10"
+                                                                                       FontFamily="Roboto Bold"
+                                                                                       Foreground="{DynamicResource PrimaryText}"
+                                                                                       TextWrapping="Wrap"
+                                                                                       Margin="0,0,0,2"/>
+
+                                                                            <!-- Details Row -->
+                                                                            <Grid Grid.Row="1">
+                                                                                <Grid.ColumnDefinitions>
+                                                                                    <ColumnDefinition Width="2*"/>
+                                                                                    <ColumnDefinition Width="1.5*"/>
+                                                                                    <ColumnDefinition Width="1.5*"/>
+                                                                                    <ColumnDefinition Width="1.25*"/>
+                                                                                </Grid.ColumnDefinitions>
+
+                                                                                <TextBlock Grid.Column="0"
+                                                                                           Text="{Binding Product.ProductID}"
+                                                                                           FontSize="9"
+                                                                                           FontFamily="Roboto"
+                                                                                           Foreground="{DynamicResource SecondaryText}"
+                                                                                           HorizontalAlignment="Left"
+                                                                                           TextTrimming="CharacterEllipsis"/>
+                                                                                <TextBlock Grid.Column="1"
+                                                                                           Text="{Binding SalePrice, StringFormat={}{0:N0}}"
+                                                                                           FontSize="9"
+                                                                                           FontFamily="Roboto"
+                                                                                           Foreground="{DynamicResource SecondaryText}"
+                                                                                           HorizontalAlignment="Right"/>
+                                                                                <TextBlock Grid.Column="2"
+                                                                                           Text="{Binding Quantity}"
+                                                                                           FontSize="9"
+                                                                                           FontFamily="Roboto"
+                                                                                           Foreground="{DynamicResource SecondaryText}"
+                                                                                           HorizontalAlignment="Center"/>
+                                                                                <TextBlock Grid.Column="3"
+                                                                                           Text="{Binding Total, StringFormat={}{0:N0}}"
+                                                                                           FontSize="9"
+                                                                                           FontFamily="Roboto Bold"
+                                                                                           Foreground="{DynamicResource PrimaryText}"
+                                                                                           HorizontalAlignment="Right"/>
+                                                                            </Grid>
+                                                                        </Grid>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+
+                                                            <!-- Show remaining products count if more than 5 -->
+                                                            <Border Background="#E3F2FD"
+                                                                    CornerRadius="8"
+                                                                    Padding="8,5"
+                                                                    Margin="0,0,0,10"
+                                                                    Visibility="{Binding HasMoreProducts, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                                <StackPanel Orientation="Horizontal"
+                                                                            HorizontalAlignment="Center">
+                                                                    <materialDesign:PackIcon Kind="InformationOutline"
+                                                                                           Width="14"
+                                                                                           Height="14"
+                                                                                           Foreground="#1976D2"
+                                                                                           VerticalAlignment="Center"
+                                                                                           Margin="0,0,5,0"/>
+                                                                    <TextBlock Text="{Binding RemainingProductsText}"
+                                                                               FontSize="10"
+                                                                               FontFamily="Roboto Medium"
+                                                                               Foreground="#1976D2"
+                                                                               VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </Border>
+
+                                                            <!-- Separator -->
+                                                            <Border Height="1" 
+                                                                    Background="{DynamicResource SecondaryText}"
+                                                                    Opacity="0.2"
+                                                                    Margin="0,5,0,10"/>
+
+                                                            <!-- Employee Information -->
+                                                            <Grid Margin="0,0,0,6">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <materialDesign:PackIcon Grid.Column="0"
+                                                                                       Kind="Account"
+                                                                                       Width="14"
+                                                                                       Height="14"
+                                                                                       Foreground="{DynamicResource SecondaryText}"
+                                                                                       VerticalAlignment="Center"
+                                                                                       Margin="0,0,8,0"/>
+                                                                <StackPanel Grid.Column="1">
+                                                                    <TextBlock Text="Nhân viên"
+                                                                               FontSize="10"
+                                                                               FontFamily="Roboto"
+                                                                               Foreground="{DynamicResource SecondaryText}"/>
+                                                                    <TextBlock Text="{Binding EmployeeName}"
+                                                                               FontSize="12"
+                                                                               FontFamily="Roboto Bold"
+                                                                               Foreground="{DynamicResource PrimaryText}"
+                                                                               Margin="0,2,0,0"/>
+                                                                </StackPanel>
+                                                            </Grid>
+
+                                                            <!-- Date and Time Information -->
+                                                            <Grid Margin="0,0,0,0">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <materialDesign:PackIcon Grid.Column="0"
+                                                                                       Kind="Calendar"
+                                                                                       Width="14"
+                                                                                       Height="14"
+                                                                                       Foreground="{DynamicResource SecondaryText}"
+                                                                                       VerticalAlignment="Center"
+                                                                                       Margin="0,0,8,0"/>
+                                                                <StackPanel Grid.Column="1">
+                                                                    <TextBlock Text="Ngày tạo"
+                                                                               FontSize="10"
+                                                                               FontFamily="Roboto"
+                                                                               Foreground="{DynamicResource SecondaryText}"/>
+                                                                    <TextBlock Text="{Binding FullFormattedDate}"
+                                                                               FontSize="11"
+                                                                               FontFamily="Roboto Medium"
+                                                                               Foreground="{DynamicResource PrimaryText}"
+                                                                               TextWrapping="Wrap"
+                                                                               Margin="0,2,0,0"/>
+                                                                </StackPanel>
+                                                            </Grid>
                                                     </StackPanel>
                                                 </Border>
                                             </ToolTip>
@@ -1029,106 +1159,247 @@
                                                                           Direction="270"
                                                                           Opacity="0.4"/>
                                                     </Border.Effect>
-                                                    <StackPanel Width="280">
+                                                    <StackPanel Width="300">
                                                         <!-- Product Name Header -->
                                                         <TextBlock Text="{Binding ProductName}"
-                                                                   FontSize="14"
+                                                                   FontSize="15"
                                                                    FontFamily="Roboto Bold"
                                                                    Foreground="{DynamicResource PrimaryText}"
                                                                    TextWrapping="Wrap"
-                                                                   Margin="0,0,0,10"/>
+                                                                   Margin="0,0,0,12"/>
 
-                                                        <!-- Quantity Sold -->
+                                                        <!-- Quantity Sold - Main Highlight -->
                                                         <Border Background="#067FF8" 
-                                                                CornerRadius="8"
-                                                                Padding="10"
-                                                                Margin="0,0,0,10">
-                                                            <StackPanel>
-                                                                <TextBlock Text="Số lượng đã bán"
-                                                                           FontSize="11"
-                                                                           FontFamily="Roboto Medium"
-                                                                           Foreground="White"
-                                                                           Opacity="0.9"/>
-                                                                <TextBlock Text="{Binding FormattedQuantityOnly}"
-                                                                           FontSize="18"
-                                                                           FontFamily="Roboto Bold"
-                                                                           Foreground="White"
-                                                                           Margin="0,2,0,0"/>
-                                                            </StackPanel>
-                                                        </Border>
+                                                                CornerRadius="10"
+                                                                Padding="12"
+                                                                Margin="0,0,0,12">
+                                                            <Grid>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="Auto"/>
+                                                                    <RowDefinition Height="Auto"/>
+                                                                </Grid.RowDefinitions>
 
-                                                        <!-- Performance Level -->
-                                                        <Grid Margin="0,0,0,8">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="Auto"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <TextBlock Grid.Column="0"
-                                                                       Text="Hiệu suất bán hàng"
-                                                                       FontSize="12"
-                                                                       FontFamily="Roboto Medium"
-                                                                       Foreground="{DynamicResource SecondaryText}"
-                                                                       VerticalAlignment="Center"/>
-                                                            <TextBlock Grid.Column="1"
-                                                                       Text="{Binding PerformanceLevel}"
-                                                                       FontSize="13"
-                                                                       FontFamily="Roboto Bold"
-                                                                       Foreground="{Binding IconColor}"
-                                                                       VerticalAlignment="Center"/>
-                                                        </Grid>
+                                                                <!-- Header with Performance Badge -->
+                                                                <Grid Grid.Row="0" Margin="0,0,0,8">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <TextBlock Grid.Column="0"
+                                                                               Text="Số lượng đã bán"
+                                                                               FontSize="11"
+                                                                               FontFamily="Roboto Medium"
+                                                                               Foreground="White"
+                                                                               Opacity="0.9"
+                                                                               VerticalAlignment="Center"/>
+                                                                    <Border Grid.Column="1"
+                                                                            Background="White"
+                                                                            CornerRadius="6"
+                                                                            Padding="8,4"
+                                                                            Margin="8,0,0,0">
+                                                                        <TextBlock Text="{Binding PerformanceLevel}"
+                                                                                       FontSize="10"
+                                                                                       FontFamily="Roboto Bold"
+                                                                                       Foreground="{Binding IconColor}"
+                                                                                       VerticalAlignment="Center"/>
+                                                                    </Border>
+                                                                </Grid>
+
+                                                                <!-- Quantity Value with Icon -->
+                                                                <Grid Grid.Row="1">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <TextBlock Grid.Column="0"
+                                                                               Text="{Binding FormattedQuantityOnly}"
+                                                                               FontSize="20"
+                                                                               FontFamily="Roboto Bold"
+                                                                               Foreground="White"
+                                                                               VerticalAlignment="Center"/>
+                                                                    <materialDesign:PackIcon Grid.Column="1"
+                                                                                           Kind="TrendingUp"
+                                                                                           Width="28"
+                                                                                           Height="28"
+                                                                                           Foreground="White"
+                                                                                           Opacity="0.3"
+                                                                                           VerticalAlignment="Center"
+                                                                                           Margin="10,0,0,0"/>
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Border>
 
                                                         <!-- Separator -->
                                                         <Border Height="1" 
                                                                 Background="{DynamicResource SecondaryText}"
                                                                 Opacity="0.2"
-                                                                Margin="0,5,0,10"/>
+                                                                Margin="0,0,0,12"/>
 
-                                                        <!-- Product ID -->
-                                                        <Grid Margin="0,0,0,6">
+                                                        <!-- Product Information Section -->
+                                                        <TextBlock Text="Thông tin sản phẩm"
+                                                                   FontSize="11"
+                                                                   FontFamily="Roboto Bold"
+                                                                   Foreground="{DynamicResource SecondaryText}"
+                                                                   Margin="0,0,0,8"/>
+
+                                                        <!-- Product ID & Unit - 2 Column Grid -->
+                                                        <Grid Margin="0,0,0,8">
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <materialDesign:PackIcon Grid.Column="0"
-                                                                                   Kind="Barcode"
-                                                                                   Width="14"
-                                                                                   Height="14"
+
+                                                            <!-- Product ID -->
+                                                            <Border Grid.Column="0"
+                                                                    Background="{DynamicResource ItemBackground}"
+                                                                    CornerRadius="8"
+                                                                    Padding="8"
+                                                                    Margin="0,0,4,0">
+                                                                <StackPanel>
+                                                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                                        <materialDesign:PackIcon Kind="Barcode"
+                                                                                               Width="12"
+                                                                                               Height="12"
+                                                                                               Foreground="{DynamicResource SecondaryText}"
+                                                                                               VerticalAlignment="Center"
+                                                                                               Margin="0,0,4,0"/>
+                                                                        <TextBlock Text="Mã SP"
+                                                                                   FontSize="9"
+                                                                                   FontFamily="Roboto Medium"
                                                                                    Foreground="{DynamicResource SecondaryText}"
-                                                                                   VerticalAlignment="Center"
-                                                                                   Margin="0,0,8,0"/>
-                                                            <StackPanel Grid.Column="1">
-                                                                <TextBlock Text="Mã sản phẩm"
-                                                                           FontSize="10"
-                                                                           FontFamily="Roboto"
-                                                                           Foreground="{DynamicResource SecondaryText}"/>
-                                                                <TextBlock Text="{Binding ProductID}"
-                                                                           FontSize="12"
-                                                                           FontFamily="Roboto Bold"
-                                                                           Foreground="{DynamicResource PrimaryText}"
-                                                                           Margin="0,2,0,0"/>
-                                                            </StackPanel>
+                                                                                   VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                    <TextBlock Text="{Binding ProductID}"
+                                                                               FontSize="11"
+                                                                               FontFamily="Roboto Bold"
+                                                                               Foreground="{DynamicResource PrimaryText}"
+                                                                               TextTrimming="CharacterEllipsis"/>
+                                                                </StackPanel>
+                                                            </Border>
+
+                                                            <!-- Unit -->
+                                                            <Border Grid.Column="1"
+                                                                    Background="{DynamicResource ItemBackground}"
+                                                                    CornerRadius="8"
+                                                                    Padding="8"
+                                                                    Margin="4,0,0,0">
+                                                                <StackPanel>
+                                                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                                        <materialDesign:PackIcon Kind="WeightKilogram"
+                                                                                               Width="12"
+                                                                                               Height="12"
+                                                                                               Foreground="{DynamicResource SecondaryText}"
+                                                                                               VerticalAlignment="Center"
+                                                                                               Margin="0,0,4,0"/>
+                                                                        <TextBlock Text="Đơn vị"
+                                                                                   FontSize="9"
+                                                                                   FontFamily="Roboto Medium"
+                                                                                   Foreground="{DynamicResource SecondaryText}"
+                                                                                   VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                    <TextBlock Text="{Binding Unit}"
+                                                                               FontSize="11"
+                                                                               FontFamily="Roboto Bold"
+                                                                               Foreground="{DynamicResource PrimaryText}"
+                                                                               TextTrimming="CharacterEllipsis"/>
+                                                                </StackPanel>
+                                                            </Border>
                                                         </Grid>
 
-                                                        <!-- Product Category/Level Indicator -->
-                                                        <Grid Margin="0,0,0,0">
+                                                        <!-- Price & Stock - 2 Column Grid -->
+                                                        <Grid Margin="0,0,0,8">
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <materialDesign:PackIcon Grid.Column="0"
-                                                                                   Kind="Fire"
-                                                                                   Width="14"
-                                                                                   Height="14"
-                                                                                   Foreground="#FF5722"
-                                                                                   VerticalAlignment="Center"
-                                                                                   Margin="0,0,8,0"/>
-                                                            <TextBlock Grid.Column="1"
-                                                                       Text="Sản phẩm bán chạy trong tuần"
-                                                                       FontSize="11"
-                                                                       FontFamily="Roboto Medium"
-                                                                       Foreground="#FF5722"
-                                                                       VerticalAlignment="Center"/>
+
+                                                            <!-- Price -->
+                                                            <Border Grid.Column="0"
+                                                                    Background="{DynamicResource ItemBackground}"
+                                                                    CornerRadius="8"
+                                                                    Padding="8"
+                                                                    Margin="0,0,4,0">
+                                                                <StackPanel>
+                                                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                                        <materialDesign:PackIcon Kind="CurrencyUsd"
+                                                                                               Width="12"
+                                                                                               Height="12"
+                                                                                               Foreground="{DynamicResource SecondaryText}"
+                                                                                               VerticalAlignment="Center"
+                                                                                               Margin="0,0,4,0"/>
+                                                                        <TextBlock Text="Giá bán"
+                                                                                   FontSize="9"
+                                                                                   FontFamily="Roboto Medium"
+                                                                                   Foreground="{DynamicResource SecondaryText}"
+                                                                                   VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                    <TextBlock Text="{Binding FormattedPrice}"
+                                                                               FontSize="11"
+                                                                               FontFamily="Roboto Bold"
+                                                                               Foreground="#4CAF50"
+                                                                               TextTrimming="CharacterEllipsis"/>
+                                                                </StackPanel>
+                                                            </Border>
+
+                                                            <!-- Stock -->
+                                                            <Border Grid.Column="1"
+                                                                    Background="{DynamicResource ItemBackground}"
+                                                                    CornerRadius="8"
+                                                                    Padding="8"
+                                                                    Margin="4,0,0,0">
+                                                                <StackPanel>
+                                                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                                        <materialDesign:PackIcon Kind="PackageVariant"
+                                                                                               Width="12"
+                                                                                               Height="12"
+                                                                                               Foreground="{DynamicResource SecondaryText}"
+                                                                                               VerticalAlignment="Center"
+                                                                                               Margin="0,0,4,0"/>
+                                                                        <TextBlock Text="Tồn kho"
+                                                                                   FontSize="9"
+                                                                                   FontFamily="Roboto Medium"
+                                                                                   Foreground="{DynamicResource SecondaryText}"
+                                                                                   VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                    <TextBlock Text="{Binding FormattedStockQuantity}"
+                                                                               FontSize="11"
+                                                                               FontFamily="Roboto Bold"
+                                                                               Foreground="{DynamicResource PrimaryText}"
+                                                                               TextTrimming="CharacterEllipsis"/>
+                                                                </StackPanel>
+                                                            </Border>
                                                         </Grid>
+
+                                                        <!-- Category -->
+                                                        <Border Background="{DynamicResource ItemBackground}"
+                                                                CornerRadius="8"
+                                                                Padding="10,8"
+                                                                Margin="0,0,0,0">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <materialDesign:PackIcon Grid.Column="0"
+                                                                                       Kind="Tag"
+                                                                                       Width="14"
+                                                                                       Height="14"
+                                                                                       Foreground="{DynamicResource SecondaryText}"
+                                                                                       VerticalAlignment="Center"
+                                                                                       Margin="0,0,8,0"/>
+                                                                <StackPanel Grid.Column="1">
+                                                                    <TextBlock Text="Danh mục"
+                                                                               FontSize="9"
+                                                                               FontFamily="Roboto Medium"
+                                                                               Foreground="{DynamicResource SecondaryText}"/>
+                                                                    <TextBlock Text="{Binding CategoryName}"
+                                                                               FontSize="12"
+                                                                               FontFamily="Roboto Bold"
+                                                                               Foreground="{DynamicResource PrimaryText}"
+                                                                               Margin="0,2,0,0"/>
+                                                                </StackPanel>
+                                                            </Grid>
+                                                        </Border>
                                                     </StackPanel>
                                                 </Border>
                                             </ToolTip>

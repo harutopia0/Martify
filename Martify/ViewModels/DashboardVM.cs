@@ -322,17 +322,31 @@ namespace Martify.ViewModels
             // First get all invoices, then order and take in memory to avoid SQLite decimal ordering issue
             var topInvoices = _dbContext.Invoices
                 .Include(i => i.Employee)
+                .Include(i => i.InvoiceDetails)
+                    .ThenInclude(id => id.Product)
                 .Where(i => i.CreatedDate >= weekStart && i.CreatedDate <= today.AddDays(1))
                 .AsEnumerable() // Execute query and bring to memory
                 .OrderByDescending(i => i.TotalAmount)
                 .Take(5)
-                .Select(i => new HighValueInvoiceViewModel
+                .Select(i =>
                 {
-                    Rank = 0, // Will be set later
-                    InvoiceID = i.InvoiceID,
-                    EmployeeName = i.Employee != null ? i.Employee.FullName : "N/A",
-                    CreatedDate = i.CreatedDate,
-                    TotalAmount = i.TotalAmount
+                    var allDetails = i.InvoiceDetails.ToList();
+                    var top5Details = allDetails
+                        .OrderByDescending(d => d.Total)
+                        .Take(5)
+                        .ToList();
+
+                    return new HighValueInvoiceViewModel
+                    {
+                        Rank = 0, // Will be set later
+                        InvoiceID = i.InvoiceID,
+                        EmployeeName = i.Employee != null ? i.Employee.FullName : "N/A",
+                        CreatedDate = i.CreatedDate,
+                        TotalAmount = i.TotalAmount,
+                        InvoiceDetails = new ObservableCollection<InvoiceDetail>(allDetails),
+                        Top5InvoiceDetails = new ObservableCollection<InvoiceDetail>(top5Details),
+                        TotalProductCount = allDetails.Count
+                    };
                 })
                 .ToList();
 
@@ -346,7 +360,10 @@ namespace Martify.ViewModels
                     EmployeeName = "Tên",
                     CreatedDate = DateTime.MinValue,
                     TotalAmount = 0,
-                    IsDefault = true
+                    IsDefault = true,
+                    InvoiceDetails = new ObservableCollection<InvoiceDetail>(),
+                    Top5InvoiceDetails = new ObservableCollection<InvoiceDetail>(),
+                    TotalProductCount = 0
                 });
             }
 
@@ -371,12 +388,12 @@ namespace Martify.ViewModels
             // Get top 5 best selling products based on total quantity sold
             var topProducts = _dbContext.InvoiceDetails
                 .Include(id => id.Product)
-                .GroupBy(id => new { id.ProductID, id.Product.ProductName, id.Product.ImagePath })
+                    .ThenInclude(p => p.Category)
+                .GroupBy(id => id.ProductID)
                 .Select(g => new
                 {
-                    ProductID = g.Key.ProductID,
-                    ProductName = g.Key.ProductName,
-                    ImagePath = g.Key.ImagePath,
+                    ProductID = g.Key,
+                    Product = g.First().Product,
                     TotalQuantity = g.Sum(id => id.Quantity)
                 })
                 .AsEnumerable() // Execute query and bring to memory
@@ -385,9 +402,10 @@ namespace Martify.ViewModels
                 .Select(p => new TopProductViewModel
                 {
                     ProductID = p.ProductID,
-                    ProductName = p.ProductName,
+                    ProductName = p.Product.ProductName,
                     QuantitySold = p.TotalQuantity,
-                    ImagePath = p.ImagePath
+                    ImagePath = p.Product.ImagePath,
+                    Product = p.Product
                 })
                 .ToList();
 
@@ -502,10 +520,15 @@ namespace Martify.ViewModels
         public DateTime CreatedDate { get; set; }
         public decimal TotalAmount { get; set; }
         public bool IsDefault { get; set; }
+        public ObservableCollection<InvoiceDetail> InvoiceDetails { get; set; }
+        public ObservableCollection<InvoiceDetail> Top5InvoiceDetails { get; set; }
+        public int TotalProductCount { get; set; }
+        public bool HasMoreProducts => TotalProductCount > 5;
 
         public string FormattedDate => IsDefault ? "xx/xx/xxxx" : CreatedDate.ToString("dd/MM/yyyy");
         public string FullFormattedDate => IsDefault ? "xx/xx/xxxx" : CreatedDate.ToString("dddd, dd/MM/yyyy HH:mm", new System.Globalization.CultureInfo("vi-VN"));
         public string FormattedAmount => IsDefault ? "0 VND" : $"{TotalAmount:N0} VND";
+        public string RemainingProductsText => $"+ {TotalProductCount - 5} sản phẩm khác";
         
         public string RankText
         {
@@ -544,18 +567,23 @@ namespace Martify.ViewModels
         public string ProductName { get; set; }
         public int QuantitySold { get; set; }
         public string ImagePath { get; set; }
+        public Product Product { get; set; }
 
         public string FormattedQuantitySold => $"Đã bán: {QuantitySold:N0}";
         public string FormattedQuantityOnly => $"{QuantitySold:N0} sản phẩm";
+        public string FormattedPrice => $"{Product?.Price:N0} VND";
+        public string FormattedStockQuantity => $"{Product?.StockQuantity:N0}";
+        public string CategoryName => Product?.Category?.CategoryName ?? "N/A";
+        public string Unit => Product?.Unit ?? "N/A";
         
         public string PerformanceLevel
         {
             get
             {
-                if (QuantitySold >= 1000) return "🔥 Siêu Hot";
-                if (QuantitySold >= 800) return "⭐ Rất Hot";
-                if (QuantitySold >= 600) return "✨ Hot";
-                if (QuantitySold >= 400) return "📈 Bán Tốt";
+                if (QuantitySold >= 100) return "🔥 Siêu Hot";
+                if (QuantitySold >= 80) return "⭐ Rất Hot";
+                if (QuantitySold >= 60) return "✨ Hot";
+                if (QuantitySold >= 40) return "📈 Bán Tốt";
                 return "📊 Ổn Định";
             }
         }
@@ -565,10 +593,10 @@ namespace Martify.ViewModels
             get
             {
                 // Assign different colors based on sales performance
-                if (QuantitySold >= 1000) return "#FFE0B2";
-                if (QuantitySold >= 800) return "#E3F2FD";
-                if (QuantitySold >= 600) return "#F3E5F5";
-                if (QuantitySold >= 400) return "#FFF3E0";
+                if (QuantitySold >= 100) return "#FFE0B2";
+                if (QuantitySold >= 80) return "#E3F2FD";
+                if (QuantitySold >= 60) return "#F3E5F5";
+                if (QuantitySold >= 40) return "#FFF3E0";
                 return "#E8F5E9";
             }
         }
@@ -577,10 +605,10 @@ namespace Martify.ViewModels
         {
             get
             {
-                if (QuantitySold >= 1000) return "#FF9800";
-                if (QuantitySold >= 800) return "#2196F3";
-                if (QuantitySold >= 600) return "#9C27B0";
-                if (QuantitySold >= 400) return "#FF6F00";
+                if (QuantitySold >= 100) return "#FF9800";
+                if (QuantitySold >= 80) return "#2196F3";
+                if (QuantitySold >= 60) return "#9C27B0";
+                if (QuantitySold >= 40) return "#FF6F00";
                 return "#388E3C";
             }
         }

@@ -388,6 +388,8 @@ namespace Martify.ViewModels
                 {
                     item.Quantity++;
                     CalculateTotal();
+                    // [FIX]: Cập nhật trạng thái nút bấm (Clear/Checkout) ngay lập tức
+                    CommandManager.InvalidateRequerySuggested();
                     return true;
                 }
                 else
@@ -400,6 +402,8 @@ namespace Martify.ViewModels
             {
                 CartList.Add(new CartItem { Product = p, Quantity = 1 });
                 CalculateTotal();
+                // [FIX]: Cập nhật trạng thái nút bấm (Clear/Checkout) ngay lập tức
+                CommandManager.InvalidateRequerySuggested();
                 return true;
             }
         }

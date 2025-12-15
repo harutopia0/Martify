@@ -137,10 +137,23 @@ namespace Martify.ViewModels
             }
         }
 
+        // Top 5 high-value invoices
+        private ObservableCollection<HighValueInvoiceViewModel> _topInvoices;
+        public ObservableCollection<HighValueInvoiceViewModel> TopInvoices
+        {
+            get => _topInvoices;
+            set
+            {
+                _topInvoices = value;
+                OnPropertyChanged();
+            }
+        }
+
         public DashboardVM()
         {
             _dbContext = new MartifyDbContext();
             DailyRevenues = new ObservableCollection<DailyRevenueViewModel>();
+            TopInvoices = new ObservableCollection<HighValueInvoiceViewModel>();
             LoadDashboardData();
         }
 
@@ -163,6 +176,7 @@ namespace Martify.ViewModels
             {
                 CalculateWeeklyRevenue();
                 LoadQuickOverview();
+                LoadTopInvoices();
             }
             catch (Exception ex)
             {
@@ -285,6 +299,59 @@ namespace Martify.ViewModels
                 .Count(p => p.StockQuantity == 0);
         }
 
+        private void LoadTopInvoices()
+        {
+            var today = DateTime.Today;
+            var weekStart = today.AddDays(-6); // Last 7 days including today
+
+            // Get top 5 invoices from the last 7 days
+            // First get all invoices, then order and take in memory to avoid SQLite decimal ordering issue
+            var topInvoices = _dbContext.Invoices
+                .Include(i => i.Employee)
+                .Where(i => i.CreatedDate >= weekStart && i.CreatedDate <= today.AddDays(1))
+                .AsEnumerable() // Execute query and bring to memory
+                .OrderByDescending(i => i.TotalAmount)
+                .Take(5)
+                .Select(i => new HighValueInvoiceViewModel
+                {
+                    Rank = 0, // Will be set later
+                    InvoiceID = i.InvoiceID,
+                    EmployeeName = i.Employee != null ? i.Employee.FullName : "N/A",
+                    CreatedDate = i.CreatedDate,
+                    TotalAmount = i.TotalAmount
+                })
+                .ToList();
+
+            // Fill with default values if less than 5
+            for (int i = topInvoices.Count; i < 5; i++)
+            {
+                topInvoices.Add(new HighValueInvoiceViewModel
+                {
+                    Rank = i + 1,
+                    InvoiceID = "HD00000",
+                    EmployeeName = "Tên",
+                    CreatedDate = DateTime.MinValue,
+                    TotalAmount = 0,
+                    IsDefault = true
+                });
+            }
+
+            // Set ranks
+            for (int i = 0; i < topInvoices.Count; i++)
+            {
+                topInvoices[i].Rank = i + 1;
+            }
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                TopInvoices.Clear();
+                foreach (var invoice in topInvoices)
+                {
+                    TopInvoices.Add(invoice);
+                }
+            });
+        }
+
         public void RefreshData()
         {
             LoadDashboardData();
@@ -374,6 +441,33 @@ namespace Martify.ViewModels
                 if (MaxRevenue == 0) return 0;
                 var percentage = (double)(Revenue / MaxRevenue);
                 return percentage * 100;
+            }
+        }
+    }
+
+    public class HighValueInvoiceViewModel
+    {
+        public int Rank { get; set; }
+        public string InvoiceID { get; set; }
+        public string EmployeeName { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public decimal TotalAmount { get; set; }
+        public bool IsDefault { get; set; }
+
+        public string FormattedDate => IsDefault ? "xx/xx/xxxx" : CreatedDate.ToString("dd/MM/yyyy");
+        public string FormattedAmount => IsDefault ? "0 VND" : $"{TotalAmount:N0} VND";
+        
+        public string RankColor
+        {
+            get
+            {
+                return Rank switch
+                {
+                    1 => "#067FF8",
+                    2 => "#4CAF50",
+                    3 => "#FF9800",
+                    _ => "#B0BEC5"
+                };
             }
         }
     }

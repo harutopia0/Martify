@@ -770,262 +770,62 @@
                                   VerticalScrollBarVisibility="Auto"
                                   HorizontalScrollBarVisibility="Disabled"
                                   Margin="15,0,15,15">
-                        <StackPanel>
-                            <Border Background="{DynamicResource ItemBackground}" 
-                                    CornerRadius="15" 
-                                    Padding="15" 
-                                    Margin="5,5,5,10">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+                        <ItemsControl ItemsSource="{Binding TopInvoices}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{DynamicResource ItemBackground}" 
+                                            CornerRadius="15" 
+                                            Padding="15" 
+                                            Margin="5,5,5,10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
 
-                                    <Border Grid.Column="0" 
-                                            Background="#067FF8" 
-                                            CornerRadius="10" 
-                                            Width="40" 
-                                            Height="40"
-                                            Margin="0,0,7,0">
-                                        <TextBlock Text="1" 
-                                                   FontSize="20" 
-                                                   FontFamily="Roboto Bold"
-                                                   Foreground="White"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
+                                            <Border Grid.Column="0" 
+                                                    Background="{Binding RankColor}" 
+                                                    CornerRadius="10" 
+                                                    Width="40" 
+                                                    Height="40"
+                                                    Margin="0,0,7,0">
+                                                <TextBlock Text="{Binding Rank}" 
+                                                           FontSize="20" 
+                                                           FontFamily="Roboto Bold"
+                                                           Foreground="White"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding InvoiceID}"
+                                                           FontSize="16"
+                                                           FontFamily="Roboto Bold"
+                                                           Foreground="{DynamicResource PrimaryText}"/>
+                                                <TextBlock Text="{Binding EmployeeName}"
+                                                           FontSize="12"
+                                                           FontFamily="Roboto"
+                                                           Foreground="{DynamicResource SecondaryText}"
+                                                           Margin="0,2,0,0"/>
+                                                <TextBlock Text="{Binding FormattedDate}"
+                                                           FontSize="10"
+                                                           FontFamily="Roboto Light"
+                                                           Foreground="{DynamicResource SecondaryText}"
+                                                           Margin="0,2,0,0"/>
+                                            </StackPanel>
+
+                                            <TextBlock Grid.Column="2" 
+                                                       Text="{Binding FormattedAmount}"
+                                                       FontSize="16"
+                                                       FontFamily="Roboto Bold"
+                                                       Foreground="{Binding RankColor}"
+                                                       VerticalAlignment="Center"/>
+                                        </Grid>
                                     </Border>
-
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock Text="HD001234"
-                                                   FontSize="16"
-                                                   FontFamily="Roboto Bold"
-                                                   Foreground="{DynamicResource PrimaryText}"/>
-                                        <TextBlock Text="Nguyễn Văn A"
-                                                   FontSize="12"
-                                                   FontFamily="Roboto"
-                                                   Foreground="{DynamicResource SecondaryText}"
-                                                   Margin="0,2,0,0"/>
-                                        <TextBlock Text="15/11/2024"
-                                                   FontSize="10"
-                                                   FontFamily="Roboto Light"
-                                                   Foreground="{DynamicResource SecondaryText}"
-                                                   Margin="0,2,0,0"/>
-                                    </StackPanel>
-
-                                    <TextBlock Grid.Column="2" 
-                                               Text="15,500,000 VND"
-                                               FontSize="16"
-                                               FontFamily="Roboto Bold"
-                                               Foreground="#067FF8"
-                                               VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
-
-                            <Border Background="{DynamicResource ItemBackground}" 
-                                    CornerRadius="15" 
-                                    Padding="15" 
-                                    Margin="5,0,5,10">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Border Grid.Column="0" 
-                                            Background="#4CAF50" 
-                                            CornerRadius="10" 
-                                            Width="40" 
-                                            Height="40"
-                                            Margin="0,0,7,0">
-                                        <TextBlock Text="2" 
-                                                   FontSize="20" 
-                                                   FontFamily="Roboto Bold"
-                                                   Foreground="White"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
-                                    </Border>
-
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock Text="HD001235"
-                                                   FontSize="16"
-                                                   FontFamily="Roboto Bold"
-                                                   Foreground="{DynamicResource PrimaryText}"/>
-                                        <TextBlock Text="Trần Thị B"
-                                                   FontSize="12"
-                                                   FontFamily="Roboto"
-                                                   Foreground="{DynamicResource SecondaryText}"
-                                                   Margin="0,2,0,0"/>
-                                        <TextBlock Text="15/11/2024"
-                                                   FontSize="10"
-                                                   FontFamily="Roboto Light"
-                                                   Foreground="{DynamicResource SecondaryText}"
-                                                   Margin="0,2,0,0"/>
-                                    </StackPanel>
-
-                                    <TextBlock Grid.Column="2" 
-                                               Text="12,800,000 VND"
-                                               FontSize="16"
-                                               FontFamily="Roboto Bold"
-                                               Foreground="#4CAF50"
-                                               VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
-
-                            <Border Background="{DynamicResource ItemBackground}" 
-                                    CornerRadius="15" 
-                                    Padding="15" 
-                                    Margin="5,0,5,5">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Border Grid.Column="0" 
-                                            Background="#FF9800" 
-                                            CornerRadius="10" 
-                                            Width="40" 
-                                            Height="40"
-                                            Margin="0,0,7,0">
-                                        <TextBlock Text="3" 
-                                                   FontSize="20" 
-                                                   FontFamily="Roboto Bold"
-                                                   Foreground="White"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
-                                    </Border>
-
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock Text="HD001236"
-                                                   FontSize="16"
-                                                   FontFamily="Roboto Bold"
-                                                   Foreground="{DynamicResource PrimaryText}"/>
-                                        <TextBlock Text="Lê Văn C"
-                                                   FontSize="12"
-                                                   FontFamily="Roboto"
-                                                   Foreground="{DynamicResource SecondaryText}"
-                                                   Margin="0,2,0,0"/>
-                                        <TextBlock Text="15/11/2024"
-                                                   FontSize="10"
-                                                   FontFamily="Roboto Light"
-                                                   Foreground="{DynamicResource SecondaryText}"
-                                                   Margin="0,2,0,0"/>
-                                    </StackPanel>
-
-                                    <TextBlock Grid.Column="2" 
-                                               Text="10,200,000 VND"
-                                               FontSize="16"
-                                               FontFamily="Roboto Bold"
-                                               Foreground="#FF9800"
-                                               VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
-
-                            <Border Background="{DynamicResource ItemBackground}" 
-                                    CornerRadius="15" 
-                                    Padding="15" 
-                                    Margin="5,0,5,5">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Border Grid.Column="0" 
-                                            Background="#B0BEC5" 
-                                            CornerRadius="10" 
-                                            Width="40" 
-                                            Height="40"
-                                            Margin="0,0,7,0">
-                                        <TextBlock Text="3" 
-                                                   FontSize="20" 
-                                                   FontFamily="Roboto Bold"
-                                                   Foreground="White"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
-                                    </Border>
-
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock Text="HD001236"
-                                                   FontSize="16"
-                                                   FontFamily="Roboto Bold"
-                                                   Foreground="{DynamicResource PrimaryText}"/>
-                                        <TextBlock Text="Lê Văn C"
-                                                   FontSize="12"
-                                                   FontFamily="Roboto"
-                                                   Foreground="{DynamicResource SecondaryText}"
-                                                   Margin="0,2,0,0"/>
-                                        <TextBlock Text="15/11/2024"
-                                                   FontSize="10"
-                                                   FontFamily="Roboto Light"
-                                                   Foreground="{DynamicResource SecondaryText}"
-                                                   Margin="0,2,0,0"/>
-                                    </StackPanel>
-
-                                    <TextBlock Grid.Column="2" 
-                                               Text="10,200,000 VND"
-                                               FontSize="16"
-                                               FontFamily="Roboto Bold"
-                                               Foreground="#B0BEC5"
-                                               VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
-
-                            <Border Background="{DynamicResource ItemBackground}" 
-                                    CornerRadius="15" 
-                                    Padding="15" 
-                                    Margin="5,0,5,5">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Border Grid.Column="0" 
-                                            Background="#B0BEC5" 
-                                            CornerRadius="10" 
-                                            Width="40" 
-                                            Height="40"
-                                            Margin="0,0,7,0">
-                                        <TextBlock Text="4" 
-                                                   FontSize="20" 
-                                                   FontFamily="Roboto Bold"
-                                                   Foreground="White"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
-                                    </Border>
-
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock Text="HD001236"
-                                                   FontSize="16"
-                                                   FontFamily="Roboto Bold"
-                                                   Foreground="{DynamicResource PrimaryText}"/>
-                                        <TextBlock Text="Lê Văn C"
-                                                   FontSize="12"
-                                                   FontFamily="Roboto"
-                                                   Foreground="{DynamicResource SecondaryText}"
-                                                   Margin="0,2,0,0"/>
-                                        <TextBlock Text="15/11/2024"
-                                                   FontSize="10"
-                                                   FontFamily="Roboto Light"
-                                                   Foreground="{DynamicResource SecondaryText}"
-                                                   Margin="0,2,0,0"/>
-                                    </StackPanel>
-
-                                    <TextBlock Grid.Column="5" 
-                                               Text="10,200,000 VND"
-                                               FontSize="16"
-                                               FontFamily="Roboto Bold"
-                                               Foreground="#B0BEC5"
-                                               VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </ScrollViewer>
                 </Grid>
             </Border>

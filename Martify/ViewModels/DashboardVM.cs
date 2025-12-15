@@ -149,11 +149,24 @@ namespace Martify.ViewModels
             }
         }
 
+        // Top 5 best selling products
+        private ObservableCollection<TopProductViewModel> _topProducts;
+        public ObservableCollection<TopProductViewModel> TopProducts
+        {
+            get => _topProducts;
+            set
+            {
+                _topProducts = value;
+                OnPropertyChanged();
+            }
+        }
+
         public DashboardVM()
         {
             _dbContext = new MartifyDbContext();
             DailyRevenues = new ObservableCollection<DailyRevenueViewModel>();
             TopInvoices = new ObservableCollection<HighValueInvoiceViewModel>();
+            TopProducts = new ObservableCollection<TopProductViewModel>();
             LoadDashboardData();
         }
 
@@ -177,6 +190,7 @@ namespace Martify.ViewModels
                 CalculateWeeklyRevenue();
                 LoadQuickOverview();
                 LoadTopInvoices();
+                LoadTopProducts();
             }
             catch (Exception ex)
             {
@@ -352,6 +366,41 @@ namespace Martify.ViewModels
             });
         }
 
+        private void LoadTopProducts()
+        {
+            // Get top 5 best selling products based on total quantity sold
+            var topProducts = _dbContext.InvoiceDetails
+                .Include(id => id.Product)
+                .GroupBy(id => new { id.ProductID, id.Product.ProductName, id.Product.ImagePath })
+                .Select(g => new
+                {
+                    ProductID = g.Key.ProductID,
+                    ProductName = g.Key.ProductName,
+                    ImagePath = g.Key.ImagePath,
+                    TotalQuantity = g.Sum(id => id.Quantity)
+                })
+                .AsEnumerable() // Execute query and bring to memory
+                .OrderByDescending(p => p.TotalQuantity)
+                .Take(5)
+                .Select(p => new TopProductViewModel
+                {
+                    ProductID = p.ProductID,
+                    ProductName = p.ProductName,
+                    QuantitySold = p.TotalQuantity,
+                    ImagePath = p.ImagePath
+                })
+                .ToList();
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                TopProducts.Clear();
+                foreach (var product in topProducts)
+                {
+                    TopProducts.Add(product);
+                }
+            });
+        }
+
         public void RefreshData()
         {
             LoadDashboardData();
@@ -455,7 +504,24 @@ namespace Martify.ViewModels
         public bool IsDefault { get; set; }
 
         public string FormattedDate => IsDefault ? "xx/xx/xxxx" : CreatedDate.ToString("dd/MM/yyyy");
+        public string FullFormattedDate => IsDefault ? "xx/xx/xxxx" : CreatedDate.ToString("dddd, dd/MM/yyyy HH:mm", new System.Globalization.CultureInfo("vi-VN"));
         public string FormattedAmount => IsDefault ? "0 VND" : $"{TotalAmount:N0} VND";
+        
+        public string RankText
+        {
+            get
+            {
+                return Rank switch
+                {
+                    1 => "🥇 Hạng 1",
+                    2 => "🥈 Hạng 2",
+                    3 => "🥉 Hạng 3",
+                    4 => "#4",
+                    5 => "#5",
+                    _ => $"#{Rank}"
+                };
+            }
+        }
         
         public string RankColor
         {
@@ -468,6 +534,54 @@ namespace Martify.ViewModels
                     3 => "#FF9800",
                     _ => "#B0BEC5"
                 };
+            }
+        }
+    }
+
+    public class TopProductViewModel
+    {
+        public string ProductID { get; set; }
+        public string ProductName { get; set; }
+        public int QuantitySold { get; set; }
+        public string ImagePath { get; set; }
+
+        public string FormattedQuantitySold => $"Đã bán: {QuantitySold:N0}";
+        public string FormattedQuantityOnly => $"{QuantitySold:N0} sản phẩm";
+        
+        public string PerformanceLevel
+        {
+            get
+            {
+                if (QuantitySold >= 1000) return "🔥 Siêu Hot";
+                if (QuantitySold >= 800) return "⭐ Rất Hot";
+                if (QuantitySold >= 600) return "✨ Hot";
+                if (QuantitySold >= 400) return "📈 Bán Tốt";
+                return "📊 Ổn Định";
+            }
+        }
+        
+        public string BackgroundColor
+        {
+            get
+            {
+                // Assign different colors based on sales performance
+                if (QuantitySold >= 1000) return "#FFE0B2";
+                if (QuantitySold >= 800) return "#E3F2FD";
+                if (QuantitySold >= 600) return "#F3E5F5";
+                if (QuantitySold >= 400) return "#FFF3E0";
+                return "#E8F5E9";
+            }
+        }
+
+        public string IconColor
+        {
+            get
+            {
+                if (QuantitySold >= 1000) return "#FF9800";
+                if (QuantitySold >= 800) return "#2196F3";
+                if (QuantitySold >= 600) return "#9C27B0";
+                if (QuantitySold >= 400) return "#FF6F00";
+                return "#388E3C";
             }
         }
     }

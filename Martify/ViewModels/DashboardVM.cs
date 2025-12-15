@@ -171,6 +171,7 @@ namespace Martify.ViewModels
         public ICommand NavigateToEmployeesCommand { get; }
         public ICommand NavigateToProductSelectionCommand { get; }
         public ICommand ImportGoodsCommand { get; }
+        public ICommand PriceCheckCommand { get; }
 
         public DashboardVM()
         {
@@ -211,6 +212,10 @@ namespace Martify.ViewModels
             ImportGoodsCommand = new RelayCommand<object>(
                 canExecute: _ => true,
                 execute: _ => ShowImportChoiceDialog()
+            );
+            PriceCheckCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => ShowPriceCheckDialog()
             );
             
             LoadDashboardData();
@@ -300,6 +305,18 @@ namespace Martify.ViewModels
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Hiển thị dialog tra cứu giá sản phẩm bằng camera QR/Barcode
+        /// </summary>
+        private void ShowPriceCheckDialog()
+        {
+            var priceCheckDialog = new Views.PriceCheckDialog
+            {
+                Owner = Application.Current.MainWindow
+            };
+            priceCheckDialog.ShowDialog();
         }
 
         /// <summary>

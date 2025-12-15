@@ -1,0 +1,565 @@
+<Window x:Class="Martify.Views.PriceCheckDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vm="clr-namespace:Martify.ViewModels"
+        mc:Ignorable="d"
+        Title="Tra Cuu Gia" 
+        Height="650" 
+        Width="900"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Closing="Window_Closing">
+
+    <Window.DataContext>
+        <vm:PriceCheckVM/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Border Background="{DynamicResource CardBackground}" 
+            CornerRadius="20"
+            Margin="10">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000"
+                              BlurRadius="25"
+                              ShadowDepth="8"
+                              Direction="270"
+                              Opacity="0.4"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" 
+                    Background="#067FF8"
+                    CornerRadius="20,20,0,0"
+                    Padding="25,20">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Barcode"
+                                             Width="36"
+                                             Height="36"
+                                             Foreground="White"
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,15,0"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Tra Cứu Giá Sản Phẩm"
+                                   FontSize="24"
+                                   FontFamily="Roboto Bold"
+                                   Foreground="White"/>
+                        <TextBlock Text="Quét mã QR hoặc Barcode để xem thông tin"
+                                   FontSize="13"
+                                   FontFamily="Roboto"
+                                   Foreground="White"
+                                   Opacity="0.85"
+                                   Margin="0,3,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Main Content -->
+            <Grid Grid.Row="1" Margin="25,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left: Camera View -->
+                <Border Grid.Column="0" 
+                        Background="{DynamicResource ItemBackground}"
+                        CornerRadius="15"
+                        Margin="0,0,15,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Camera Selection -->
+                        <Border Grid.Row="0" 
+                                Background="{DynamicResource CardBackground}"
+                                CornerRadius="15,15,0,0"
+                                Padding="15">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <materialDesign:PackIcon Grid.Column="0"
+                                                         Kind="Camera"
+                                                         Width="22"
+                                                         Height="22"
+                                                         Foreground="#067FF8"
+                                                         VerticalAlignment="Center"
+                                                         Margin="0,0,10,0"/>
+
+                                <ComboBox Grid.Column="1"
+                                          ItemsSource="{Binding Cameras}"
+                                          SelectedItem="{Binding SelectedCamera}"
+                                          DisplayMemberPath="Name"
+                                          materialDesign:HintAssist.Hint="Chọn Camera"
+                                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                          FontFamily="Roboto"
+                                          FontSize="13"/>
+
+                                <Button Grid.Column="2"
+                                        Style="{StaticResource MaterialDesignIconButton}"
+                                        Command="{Binding RefreshCamerasCommand}"
+                                        ToolTip="Làm mới danh sách camera"
+                                        Margin="10,0,0,0">
+                                    <materialDesign:PackIcon Kind="Refresh"
+                                                             Width="20"
+                                                             Height="20"
+                                                             Foreground="{DynamicResource SecondaryText}"/>
+                                </Button>
+                            </Grid>
+                        </Border>
+
+                        <!-- Camera Feed with Viewfinder -->
+                        <Border Grid.Row="1" 
+                                Background="#1A1A1A"
+                                Margin="15,10,15,15"
+                                CornerRadius="10">
+                            <Grid>
+                                <!-- Camera Frame -->
+                                <Image Source="{Binding CameraFrame}"
+                                       Stretch="Uniform"
+                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+
+                                <!-- Viewfinder Overlay - Corner brackets -->
+                                <Grid Margin="40">
+                                    <!-- Top Left Corner -->
+                                    <Border HorizontalAlignment="Left" VerticalAlignment="Top"
+                                            Width="40" Height="40"
+                                            BorderThickness="4,4,0,0"
+                                            BorderBrush="#067FF8"/>
+                                    <!-- Top Right Corner -->
+                                    <Border HorizontalAlignment="Right" VerticalAlignment="Top"
+                                            Width="40" Height="40"
+                                            BorderThickness="0,4,4,0"
+                                            BorderBrush="#067FF8"/>
+                                    <!-- Bottom Left Corner -->
+                                    <Border HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                                            Width="40" Height="40"
+                                            BorderThickness="4,0,0,4"
+                                            BorderBrush="#067FF8"/>
+                                    <!-- Bottom Right Corner -->
+                                    <Border HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                            Width="40" Height="40"
+                                            BorderThickness="0,0,4,4"
+                                            BorderBrush="#067FF8"/>
+                                </Grid>
+
+                                <!-- Scanning animation line -->
+                                <Border Height="3" 
+                                        Background="#067FF8"
+                                        Opacity="0.7"
+                                        VerticalAlignment="Center"
+                                        Margin="60,0"
+                                        Visibility="{Binding IsCameraActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Border.Triggers>
+                                        <EventTrigger RoutedEvent="Loaded">
+                                            <BeginStoryboard>
+                                                <Storyboard RepeatBehavior="Forever">
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                     From="0.3" To="1" Duration="0:0:0.8"
+                                                                     AutoReverse="True"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Border.Triggers>
+                                </Border>
+
+                                <!-- No Camera Placeholder -->
+                                <StackPanel VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsCameraActive}" Value="False">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <materialDesign:PackIcon Kind="CameraOff"
+                                                             Width="64"
+                                                             Height="64"
+                                                             Foreground="#555555"
+                                                             HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Camera chưa được kích hoạt"
+                                               FontSize="14"
+                                               FontFamily="Roboto"
+                                               Foreground="#888888"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,10,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Status Bar -->
+                        <Border Grid.Row="2"
+                                Background="{DynamicResource CardBackground}"
+                                CornerRadius="0,0,15,15"
+                                Padding="15,10">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <materialDesign:PackIcon Kind="InformationOutline"
+                                                         Width="18"
+                                                         Height="18"
+                                                         Foreground="#067FF8"
+                                                         VerticalAlignment="Center"
+                                                         Margin="0,0,8,0"/>
+                                <TextBlock Text="{Binding StatusMessage}"
+                                           FontSize="13"
+                                           FontFamily="Roboto Medium"
+                                           Foreground="{DynamicResource SecondaryText}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Right: Product Result -->
+                <Border Grid.Column="1"
+                        Background="{DynamicResource ItemBackground}"
+                        CornerRadius="15">
+                    <Grid>
+                        <!-- Waiting State -->
+                        <StackPanel VerticalAlignment="Center"
+                                    HorizontalAlignment="Center">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsProductFound}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsProductNotFound}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                            <Border Background="#E3F2FD"
+                                    CornerRadius="50"
+                                    Width="100"
+                                    Height="100"
+                                    HorizontalAlignment="Center">
+                                <materialDesign:PackIcon Kind="QrcodeScan"
+                                                         Width="50"
+                                                         Height="50"
+                                                         Foreground="#067FF8"
+                                                         HorizontalAlignment="Center"
+                                                         VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="Đang chờ quét..."
+                                       FontSize="18"
+                                       FontFamily="Roboto Medium"
+                                       Foreground="{DynamicResource SecondaryText}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,20,0,0"/>
+                            <TextBlock Text="Đặt mã QR hoặc Barcode trong khung hình camera"
+                                       FontSize="13"
+                                       FontFamily="Roboto"
+                                       Foreground="{DynamicResource SecondaryText}"
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       Opacity="0.7"
+                                       Margin="0,8,0,0"/>
+                        </StackPanel>
+
+                        <!-- Product Not Found State -->
+                        <StackPanel VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    Margin="20"
+                                    Visibility="{Binding IsProductNotFound, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Border Background="#FFEBEE"
+                                    CornerRadius="50"
+                                    Width="100"
+                                    Height="100"
+                                    HorizontalAlignment="Center">
+                                <materialDesign:PackIcon Kind="PackageVariantClosedRemove"
+                                                         Width="50"
+                                                         Height="50"
+                                                         Foreground="#F44336"
+                                                         HorizontalAlignment="Center"
+                                                         VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="Không tìm thấy sản phẩm"
+                                       FontSize="18"
+                                       FontFamily="Roboto Bold"
+                                       Foreground="#F44336"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,20,0,0"/>
+                            <TextBlock Text="{Binding LastScannedCode, StringFormat='Code: {0}'}"
+                                       FontSize="13"
+                                       FontFamily="Roboto"
+                                       Foreground="{DynamicResource SecondaryText}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,8,0,0"/>
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                    Command="{Binding ResetScanCommand}"
+                                    Foreground="#067FF8"
+                                    Margin="0,20,0,0"
+                                    HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Refresh" 
+                                                             VerticalAlignment="Center"
+                                                             Margin="0,0,8,0"/>
+                                    <TextBlock Text="Quét lại"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+
+                        <!-- Product Found State -->
+                        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                      Visibility="{Binding IsProductFound, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Margin="20">
+                                <!-- Success Badge -->
+                                <Border Background="#E8F5E9"
+                                        CornerRadius="20"
+                                        Padding="12,6"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,0,0,15">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="CheckCircle"
+                                                                 Width="18"
+                                                                 Height="18"
+                                                                 Foreground="#4CAF50"
+                                                                 VerticalAlignment="Center"
+                                                                 Margin="0,0,6,0"/>
+                                        <TextBlock Text="Đã tìm thấy sản phẩm"
+                                                   FontSize="12"
+                                                   FontFamily="Roboto Medium"
+                                                   Foreground="#4CAF50"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Product Name -->
+                                <TextBlock Text="{Binding ProductName}"
+                                           FontSize="22"
+                                           FontFamily="Roboto Bold"
+                                           Foreground="{DynamicResource PrimaryText}"
+                                           TextWrapping="Wrap"
+                                           TextAlignment="Center"
+                                           Margin="0,0,0,5"/>
+
+                                <!-- Product ID -->
+                                <TextBlock Text="{Binding ProductId, StringFormat='ID: {0}'}"
+                                           FontSize="13"
+                                           FontFamily="Roboto"
+                                           Foreground="{DynamicResource SecondaryText}"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,20"/>
+
+                                <!-- Price Card -->
+                                <Border Background="#067FF8"
+                                        CornerRadius="15"
+                                        Padding="20"
+                                        Margin="0,0,0,15">
+                                    <StackPanel>
+                                        <TextBlock Text="GIÁ"
+                                                   FontSize="12"
+                                                   FontFamily="Roboto Medium"
+                                                   Foreground="White"
+                                                   Opacity="0.85"
+                                                   HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding FormattedPrice}"
+                                                   FontSize="36"
+                                                   FontFamily="Roboto Bold"
+                                                   Foreground="White"
+                                                   HorizontalAlignment="Center"
+                                                   Margin="0,5,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Stock Status Chip -->
+                                <Border CornerRadius="20"
+                                        Padding="15,8"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,0,0,15">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#E8F5E9"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding StockStatus}" Value="OutOfStock">
+                                                    <Setter Property="Background" Value="#FFEBEE"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding StockStatus}" Value="LowStock">
+                                                    <Setter Property="Background" Value="#FFF3E0"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Width="20" Height="20"
+                                                                 VerticalAlignment="Center"
+                                                                 Margin="0,0,8,0">
+                                            <materialDesign:PackIcon.Style>
+                                                <Style TargetType="materialDesign:PackIcon">
+                                                    <Setter Property="Kind" Value="CheckCircle"/>
+                                                    <Setter Property="Foreground" Value="#4CAF50"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding StockStatus}" Value="OutOfStock">
+                                                            <Setter Property="Kind" Value="CloseCircle"/>
+                                                            <Setter Property="Foreground" Value="#F44336"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding StockStatus}" Value="LowStock">
+                                                            <Setter Property="Kind" Value="AlertCircle"/>
+                                                            <Setter Property="Foreground" Value="#FF9800"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </materialDesign:PackIcon.Style>
+                                        </materialDesign:PackIcon>
+                                        <TextBlock VerticalAlignment="Center"
+                                                   FontSize="14"
+                                                   FontFamily="Roboto Bold">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#4CAF50"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding StockStatus}" Value="OutOfStock">
+                                                            <Setter Property="Foreground" Value="#F44336"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding StockStatus}" Value="LowStock">
+                                                            <Setter Property="Foreground" Value="#FF9800"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                            <Run Text="{Binding StockStatusDisplay, Mode=OneWay}"/>
+                                            <Run Text=" - "/>
+                                            <Run Text="{Binding StockQuantity, Mode=OneWay, StringFormat='{}{0:N0}'}"/>
+                                            <Run Text=" "/>
+                                            <Run Text="{Binding ProductUnit, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Category -->
+                                <Border Background="{DynamicResource CardBackground}"
+                                        CornerRadius="10"
+                                        Padding="12"
+                                        Margin="0,0,0,20">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <materialDesign:PackIcon Grid.Column="0"
+                                                                 Kind="Tag"
+                                                                 Width="20"
+                                                                 Height="20"
+                                                                 Foreground="{DynamicResource SecondaryText}"
+                                                                 VerticalAlignment="Center"
+                                                                 Margin="0,0,10,0"/>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Danh mục"
+                                                       FontSize="11"
+                                                       FontFamily="Roboto"
+                                                       Foreground="{DynamicResource SecondaryText}"/>
+                                            <TextBlock Text="{Binding CategoryName}"
+                                                       FontSize="14"
+                                                       FontFamily="Roboto Bold"
+                                                       Foreground="{DynamicResource PrimaryText}"
+                                                       Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Scan Again Button -->
+                                <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Command="{Binding ResetScanCommand}"
+                                        Background="#067FF8"
+                                        Foreground="White"
+                                        Padding="20,10"
+                                        materialDesign:ButtonAssist.CornerRadius="10"
+                                        HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="QrcodeScan"
+                                                                 Width="20"
+                                                                 Height="20"
+                                                                 VerticalAlignment="Center"
+                                                                 Margin="0,0,10,0"/>
+                                        <TextBlock Text="Quét sản phẩm khác"
+                                                   FontSize="14"
+                                                   FontFamily="Roboto Medium"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Footer -->
+            <Border Grid.Row="2"
+                    Background="{DynamicResource ItemBackground}"
+                    CornerRadius="0,0,20,20"
+                    Padding="20,15">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Supported Formats -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="InformationOutline"
+                                                 Width="18"
+                                                 Height="18"
+                                                 Foreground="{DynamicResource SecondaryText}"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,8,0"/>
+                        <TextBlock Text="Hỗ trợ: QR Code, EAN-13, EAN-8, Code 128, Code 39"
+                                   FontSize="12"
+                                   FontFamily="Roboto"
+                                   Foreground="{DynamicResource SecondaryText}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Cancel Button -->
+                    <Button Grid.Column="1"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                            Foreground="{DynamicResource SecondaryText}"
+                            BorderBrush="{DynamicResource SecondaryText}"
+                            Padding="20,8"
+                            materialDesign:ButtonAssist.CornerRadius="10">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Close"
+                                                     Width="18"
+                                                     Height="18"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,8,0"/>
+                            <TextBlock Text="Đóng"
+                                       FontSize="13"
+                                       FontFamily="Roboto Medium"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

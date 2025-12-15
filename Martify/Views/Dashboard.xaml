@@ -685,6 +685,11 @@ d:Style="{x:Null}">
                         Margin="0,0,10,0"
                         Padding="15,12"
                         Cursor="Hand">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding PriceCheckCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Border.Style>
                         <Style TargetType="Border">
                             <Style.Triggers>

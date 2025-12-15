@@ -1,7 +1,7 @@
 ﻿using Martify.Models;
 using Microsoft.Win32;
 using System;
-using System.IO;
+using System.IO; // Cần để xử lý file
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,7 +10,9 @@ namespace Martify.ViewModels
 {
     public class EditProfileVM : BaseVM
     {
-        // Các biến lưu thông tin
+        private string _username;
+        public string Username { get => _username; set { _username = value; OnPropertyChanged(); } }
+
         private string _fullName;
         public string FullName { get => _fullName; set { _fullName = value; OnPropertyChanged(); } }
 
@@ -27,7 +29,6 @@ namespace Martify.ViewModels
         public EditProfileVM()
         {
             LoadCurrentData();
-
             UploadImageCommand = new RelayCommand(UploadImage);
             CloseCommand = new RelayCommand<Window>((w) => w != null, (w) => w.Close());
             SaveCommand = new RelayCommand<Window>((w) => true, (w) => SaveChanges(w));
@@ -38,6 +39,7 @@ namespace Martify.ViewModels
             var acc = DataProvider.Ins.CurrentAccount;
             if (acc == null || acc.Employee == null) return;
 
+            Username = acc.Username; // Load tên đăng nhập
             FullName = acc.Employee.FullName;
             Email = acc.Employee.Email;
             AvatarPath = acc.Employee.ImagePath;
@@ -49,7 +51,7 @@ namespace Martify.ViewModels
             openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png";
             if (openFileDialog.ShowDialog() == true)
             {
-                AvatarPath = openFileDialog.FileName;
+                AvatarPath = openFileDialog.FileName; // Lưu tạm đường dẫn tuyệt đối để hiển thị
             }
         }
 
@@ -58,25 +60,46 @@ namespace Martify.ViewModels
             var acc = DataProvider.Ins.CurrentAccount;
             if (acc == null) return;
 
-            // 1. Cập nhật thông tin cơ bản
-            acc.Employee.FullName = FullName;
-            acc.Employee.Email = Email;
-
-            // 2. Xử lý lưu ảnh
-            if (!string.IsNullOrEmpty(AvatarPath) && AvatarPath != acc.Employee.ImagePath)
+           
+            if (!string.IsNullOrEmpty(AvatarPath) && Path.IsPathRooted(AvatarPath))
             {
-                acc.Employee.ImagePath = AvatarPath;
+                try
+                {
+                    // Tạo tên file mới: MãNV_ThờiGian.png (để tránh trùng tên)
+                    string extension = Path.GetExtension(AvatarPath);
+                    string newFileName = $"{acc.Employee.EmployeeID}_{DateTime.Now:yyyyMMddHHmmss}{extension}";
+
+                    // Xác định thư mục đích: .../bin/Debug/.../Assets/Employee
+                    string projectDir = AppDomain.CurrentDomain.BaseDirectory;
+                    string destFolder = Path.Combine(projectDir, "Assets", "Employee");
+
+                    // Tạo thư mục nếu chưa có
+                    if (!Directory.Exists(destFolder)) Directory.CreateDirectory(destFolder);
+
+                    // Copy file từ nguồn vào thư mục đích
+                    string destPath = Path.Combine(destFolder, newFileName);
+                    File.Copy(AvatarPath, destPath, true);
+           
+                    acc.Employee.ImagePath = Path.Combine("Assets", "Employee", newFileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi lưu ảnh: {ex.Message}");
+                }
             }
 
-            // 3. Xử lý đổi mật khẩu
+         
             var passwordBox = w.FindName("txtNewPass") as PasswordBox;
             var confirmBox = w.FindName("txtConfirmPass") as PasswordBox;
             var oldPassBox = w.FindName("txtOldPass") as PasswordBox;
 
+            
             if (passwordBox != null && !string.IsNullOrEmpty(passwordBox.Password))
             {
-                // So sánh với HashPassword trong Database
-                if (oldPassBox.Password != acc.HashPassword)
+                
+                string inputOldPassHash = LoginVM.ConvertToSHA256(oldPassBox.Password);
+
+                if (inputOldPassHash != acc.HashPassword)
                 {
                     MessageBox.Show("Mật khẩu cũ không đúng!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
@@ -88,21 +111,21 @@ namespace Martify.ViewModels
                     return;
                 }
 
-                // Cập nhật HashPassword mới
-                acc.HashPassword = passwordBox.Password;
+                acc.HashPassword = LoginVM.ConvertToSHA256(passwordBox.Password);
             }
 
-            // 4. Lưu xuống DB
+            acc.Employee.FullName = FullName;
+            acc.Employee.Email = Email;
+
             DataProvider.Ins.DB.SaveChanges();
 
-            // 5. Cập nhật lại giao diện chính (LoadCurrentUserData phải là Public)
-            var mainVM = Application.Current.MainWindow.DataContext as MainVM;
-            if (mainVM != null)
+            // Cập nhật lại giao diện chính
+            if (Application.Current.MainWindow.DataContext is MainVM mainVM)
             {
                 mainVM.LoadCurrentUserData();
             }
 
-            MessageBox.Show("Cập nhật thông tin thành công!", "Thông báo");
+            MessageBox.Show($"Cập nhật thành công!\nTên đăng nhập của bạn là: {acc.Username}", "Thông báo");
             w.Close();
         }
     }

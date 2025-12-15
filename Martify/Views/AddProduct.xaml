@@ -6,6 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:vm="clr-namespace:Martify.ViewModels"
+        xmlns:uc="clr-namespace:Martify.Views"
         mc:Ignorable="d"
         Name="addProductWindow"
         Title="Thêm sản phẩm mới" 
@@ -63,7 +64,7 @@
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -79,18 +80,8 @@
                                Foreground="White"
                                VerticalAlignment="Center"
                                Margin="25,0,0,0"/>
-
-                    <Button HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Margin="0,0,15,0"
-                            Width="35"
-                            Height="35"
-                            Style="{StaticResource MaterialDesignIconButton}"
-                            Foreground="White"
-                            Command="{Binding CloseCommand}"
-                            CommandParameter="{Binding ElementName=addProductWindow}">
-                        <materialDesign:PackIcon Kind="Close" Width="24" Height="24"/>
-                    </Button>
+                    
+                    
                 </Grid>
             </Border>
 
@@ -136,7 +127,7 @@
                                                         Width="190" 
                                                         Height="190"
                                                         Foreground="#BDBDBD"
-                                                        Visibility="{Binding SelectedImagePath}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        Visibility="{Binding SelectedImagePath}" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="-1"/>
                             </Grid>
                         </Border>
 
@@ -296,12 +287,20 @@
                                            Text="Danh mục *" 
                                            Style="{StaticResource LabelText}"/>
                                 <ComboBox Grid.Column="1"
+                                          IsEditable="True"
                                           ItemsSource="{Binding CategoryList}"
                                           DisplayMemberPath="CategoryName"
                                           SelectedValuePath="CategoryID"
-                                          SelectedValue="{Binding SelectedCategoryID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                          materialDesign:HintAssist.Hint="Chọn danh mục"
-                                          Style="{StaticResource ValidatedComboBox}"/>
+                                          SelectedValue="{Binding SelectedCategoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                          materialDesign:HintAssist.Hint="Danh mục"
+                                          Style="{StaticResource ValidatedComboBox}">
+                                    <ComboBox.Text>
+                                        <Binding
+                                              Mode="TwoWay"
+                                              Path="SelectedCategoryText"
+                                              UpdateSourceTrigger="PropertyChanged"/>
+                                    </ComboBox.Text>
+                                </ComboBox>
                             </Grid>
 
                             <!-- Nhà cung cấp -->

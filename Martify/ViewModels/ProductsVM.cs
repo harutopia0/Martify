@@ -112,6 +112,7 @@ namespace Martify.ViewModels
         public ICommand EditProductCommand { get; set; }
         public ICommand DeleteProductCommand { get; set; }
         public ICommand RefreshCommand { get; set; }
+        public ICommand ImportProductCommand { get; set; }
 
         // Commands used by XAML
         public ICommand OpenDetailsCommand { get; set; }
@@ -124,7 +125,6 @@ namespace Martify.ViewModels
             LoadProducts();
 
             AddProductCommand = new RelayCommand<object>((p) => true, (p) => AddProduct());
-            EditProductCommand = new RelayCommand<Product>((p) => p != null, (p) => EditProduct(p));
             DeleteProductCommand = new RelayCommand<Product>((p) => p != null, (p) => DeleteProduct(p));
             RefreshCommand = new RelayCommand<object>((p) => true, (p) => { LoadCategories(); LoadProducts(); });
 
@@ -271,6 +271,8 @@ namespace Martify.ViewModels
         {
             if (product == null) return;
 
+            SelectedProduct = product;
+
             // Toggle behavior: if same product double-clicked, toggle panel; otherwise open for the new product
             if (SelectedDetailProduct != null && SelectedDetailProduct.ProductID == product.ProductID)
             {
@@ -295,18 +297,6 @@ namespace Martify.ViewModels
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi khi mở cửa sổ thêm sản phẩm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void EditProduct(Product product)
-        {
-            try
-            {
-                MessageBox.Show($"Chức năng chỉnh sửa sản phẩm: {product.ProductName}\nTính năng đang được phát triển.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

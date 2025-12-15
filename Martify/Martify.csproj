@@ -184,6 +184,12 @@
 	  <None Update="Assets\administrator.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </None>
+	  <None Update="Resources\Sounds\store-scanner-beep.mp3">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\Sounds\store-scanner-beep.wav">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 

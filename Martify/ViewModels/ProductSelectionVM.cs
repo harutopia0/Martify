@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Media; // [MỚI]: Thêm thư viện âm thanh
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -509,18 +510,46 @@ namespace Martify.ViewModels
                 if (isAdded)
                 {
                     ScanStatus = $"Đã thêm: {product.ProductName}";
+                    // [Update]: Phát tiếng bíp thành công
+                    PlaySound("store-scanner-beep.wav");
                 }
                 else
                 {
                     ScanStatus = $"HẾT HÀNG: {product.ProductName}";
+                    // [Update]: Phát tiếng cảnh báo (Hết hàng)
+                    SystemSounds.Exclamation.Play();
                 }
             }
             else
             {
                 ScanStatus = $"Không tìm thấy SP: {code}";
+                // [Update]: Phát tiếng lỗi (Không tìm thấy)
+                SystemSounds.Hand.Play();
             }
 
             ResetScanStatus();
+        }
+
+        private void PlaySound(string fileName)
+        {
+            try
+            {
+                // Đường dẫn đến file âm thanh trong thư mục bin/Debug/Resources/Sounds
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Sounds", fileName);
+
+                if (File.Exists(path))
+                {
+                    // SoundPlayer chỉ chơi được file .wav
+                    using (var player = new SoundPlayer(path))
+                    {
+                        player.Play(); // Phát không chặn luồng chính (Asynchronous)
+                    }
+                }
+            }
+            catch
+            {
+                // Bỏ qua lỗi nếu không tìm thấy file hoặc lỗi phát
+            }
         }
 
         private async void ResetScanStatus()

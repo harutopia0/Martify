@@ -162,26 +162,73 @@ namespace Martify.ViewModels
 
         void CalculateTotal() { GrandTotal = CartList.Sum(x => x.TotalAmount); }
 
+        // --- CẬP NHẬT HÀM CHECKOUT ---
         void Checkout()
         {
-            if (MessageBox.Show($"Xác nhận thanh toán hóa đơn trị giá {GrandTotal:N0} VND?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show($"Xác nhận thanh toán hóa đơn trị giá {GrandTotal:N0} VND?",
+                "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 try
                 {
-                    var invoice = new Invoice { InvoiceID = GenerateInvoiceID(), CreatedDate = DateTime.Now, EmployeeID = DataProvider.Ins.CurrentAccount.EmployeeID, TotalAmount = GrandTotal };
+                    // 1. Tạo và Lưu Hóa Đơn vào Database
+                    var currentEmpID = DataProvider.Ins.CurrentAccount?.EmployeeID;
+                    if (string.IsNullOrEmpty(currentEmpID))
+                    {
+                        // Fallback nếu không lấy được User hiện tại (tránh crash)
+                        currentEmpID = DataProvider.Ins.DB.Employees.FirstOrDefault()?.EmployeeID;
+                    }
+
+                    var invoice = new Invoice
+                    {
+                        InvoiceID = GenerateInvoiceID(),
+                        CreatedDate = DateTime.Now,
+                        EmployeeID = currentEmpID,
+                        TotalAmount = GrandTotal
+                    };
+
                     DataProvider.Ins.DB.Invoices.Add(invoice);
+
                     foreach (var item in CartList)
                     {
-                        var detail = new InvoiceDetail { InvoiceID = invoice.InvoiceID, ProductID = item.Product.ProductID, Quantity = item.Quantity, SalePrice = item.Product.Price };
+                        var detail = new InvoiceDetail
+                        {
+                            InvoiceID = invoice.InvoiceID,
+                            ProductID = item.Product.ProductID,
+                            Quantity = item.Quantity,
+                            SalePrice = item.Product.Price
+                        };
                         DataProvider.Ins.DB.InvoiceDetails.Add(detail);
+
+                        // Trừ tồn kho
                         var prodInDb = DataProvider.Ins.DB.Products.Find(item.Product.ProductID);
                         if (prodInDb != null) prodInDb.StockQuantity -= item.Quantity;
                     }
+
                     DataProvider.Ins.DB.SaveChanges();
-                    MessageBox.Show($"Xuất hóa đơn thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-                    CartList.Clear(); CalculateTotal(); LoadData();
+
+                    // 2. Lấy lại thông tin đầy đủ của Hóa Đơn vừa tạo (để hiển thị lên View in)
+                    // Cần Include để lấy Tên Nhân Viên và Tên Sản Phẩm
+                    var fullInvoice = DataProvider.Ins.DB.Invoices
+                        .Include(x => x.Employee)
+                        .Include(x => x.InvoiceDetails)
+                        .ThenInclude(d => d.Product)
+                        .FirstOrDefault(x => x.InvoiceID == invoice.InvoiceID);
+
+                    // 3. Hiển thị View In Hóa Đơn (Animation)
+                    // (Thay thế cho MessageBox cũ)
+                    var printWindow = new Martify.Views.ReceiptPrinterWindow();
+                    printWindow.DataContext = new ReceiptPrinterVM(fullInvoice);
+                    printWindow.ShowDialog();
+
+                    // 4. Dọn dẹp sau khi thanh toán xong
+                    CartList.Clear();
+                    CalculateTotal();
+                    LoadData(); // Load lại để cập nhật số lượng tồn kho mới nhất lên giao diện
                 }
-                catch (Exception ex) { MessageBox.Show("Lỗi thanh toán: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error); }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi thanh toán: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
         private string GenerateInvoiceID() { return $"HD{DateTime.Now:yyyyMMddHHmmss}"; }

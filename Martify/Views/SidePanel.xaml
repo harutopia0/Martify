@@ -537,7 +537,6 @@
 
                 <ListBoxItem x:Name="invoices_sidepanel_listboxitem"
                              Grid.Row="4"
-                             IsEnabled="{Binding DataContext.IsAdmin, ElementName=ucPanel}"
                              Style="{StaticResource invoices_listboxitem_style}" />
 
                 <ListBoxItem x:Name="settings_sidepanel_listboxitem"

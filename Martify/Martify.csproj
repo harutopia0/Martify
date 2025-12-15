@@ -10,9 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Docs\**" />
     <Compile Remove="Model\**" />
+    <EmbeddedResource Remove="Docs\**" />
     <EmbeddedResource Remove="Model\**" />
+    <None Remove="Docs\**" />
     <None Remove="Model\**" />
+    <Page Remove="Docs\**" />
     <Page Remove="Model\**" />
   </ItemGroup>
 
@@ -70,6 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="MaterialDesignColors" Version="5.3.0" />
     <PackageReference Include="MaterialDesignThemes" Version="5.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.22" />

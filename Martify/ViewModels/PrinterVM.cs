@@ -1,84 +1,39 @@
 ﻿using Martify.Models;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Data;
-using System.Windows.Input;
-using System;
-using System.Windows;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using Microsoft.Win32;
-// Thư viện QuestPDF
+using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-using QuestPDF.Drawing;
+using System;
+using System.IO;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 
 namespace Martify.ViewModels
 {
-    public class InvoicesVM : BaseVM
+    public class PrinterVM : BaseVM
     {
-        // ... (Giữ nguyên toàn bộ các khai báo Property cũ)
-        private ObservableCollection<Invoice> _invoices;
-        public ObservableCollection<Invoice> Invoices { get => _invoices; set { _invoices = value; OnPropertyChanged(); } }
-
-        private Invoice _selectedInvoice;
-        public Invoice SelectedInvoice { get => _selectedInvoice; set { _selectedInvoice = value; OnPropertyChanged(); } }
-
-        private bool _isDetailsPanelOpen;
-        public bool IsDetailsPanelOpen { get => _isDetailsPanelOpen; set { _isDetailsPanelOpen = value; OnPropertyChanged(); } }
-
-        private string _keyword;
-        public string Keyword { get => _keyword; set { _keyword = value; OnPropertyChanged(); LoadList(); } }
-
-        private int? _selectedMonth;
-        public int? SelectedMonth { get => _selectedMonth; set { _selectedMonth = value; OnPropertyChanged(); LoadList(); } }
-
-        private int? _selectedYear;
-        public int? SelectedYear { get => _selectedYear; set { _selectedYear = value; OnPropertyChanged(); LoadList(); } }
-
-        public ObservableCollection<int> Months { get; set; } = new ObservableCollection<int>();
-        public ObservableCollection<int> Years { get; set; } = new ObservableCollection<int>();
-
-        public ICommand ClearFilterCommand { get; set; }
-        public ICommand OpenDetailsCommand { get; set; }
-        public ICommand ExportPDFCommand { get; set; }
-
-        public InvoicesVM()
+        private Invoice _invoice;
+        public Invoice CurrentInvoice
         {
-            // Cấu hình License QuestPDF (Community)
+            get => _invoice;
+            set { _invoice = value; OnPropertyChanged(); }
+        }
+
+        public ICommand CloseCommand { get; set; }
+        public ICommand SavePdfCommand { get; set; }
+
+        public PrinterVM(Invoice invoice)
+        {
             try { QuestPDF.Settings.License = LicenseType.Community; } catch { }
 
             RegisterProjectFonts();
-            InitFilterData();
-            LoadList();
 
-            OpenDetailsCommand = new RelayCommand<object>((p) => true, (p) =>
-            {
-                if (p is Invoice inv)
-                {
-                    var fullInvoice = DataProvider.Ins.DB.Invoices
-                        .Include(x => x.Employee)
-                        .Include(x => x.InvoiceDetails)
-                        .ThenInclude(d => d.Product)
-                        .AsNoTracking()
-                        .FirstOrDefault(x => x.InvoiceID == inv.InvoiceID);
-
-                    SelectedInvoice = fullInvoice;
-                    IsDetailsPanelOpen = true;
-                }
-            });
-
-            ClearFilterCommand = new RelayCommand<object>((p) => true, (p) =>
-            {
-                Keyword = string.Empty;
-                SelectedMonth = null;
-                SelectedYear = null;
-                IsDetailsPanelOpen = false;
-                LoadList();
-            });
-
-            ExportPDFCommand = new RelayCommand<Invoice>((p) => p != null, (p) => ExportInvoiceToPdf(p));
+            CurrentInvoice = invoice;
+            CloseCommand = new RelayCommand<Window>((w) => w != null, (w) => w.Close());
+            SavePdfCommand = new RelayCommand<object>((p) => true, (p) => ExportToPdf());
         }
 
         private void RegisterProjectFonts()
@@ -91,45 +46,13 @@ namespace Martify.ViewModels
                     var stream = Application.GetResourceStream(uri).Stream;
                     FontManager.RegisterFont(stream);
                 }
-                LoadFont("FleurDeleah-Regular.ttf");
+                LoadFont("FleurDeLeah-Regular.ttf");
                 LoadFont("Charm-Regular.ttf");
             }
             catch { }
         }
 
-        void InitFilterData()
-        {
-            Months.Clear(); for (int i = 1; i <= 12; i++) Months.Add(i);
-            Years.Clear();
-            var dbYears = DataProvider.Ins.DB.Invoices.Select(x => x.CreatedDate.Year).Distinct().OrderByDescending(y => y).ToList();
-            foreach (var y in dbYears) Years.Add(y);
-            if (Years.Count == 0) Years.Add(DateTime.Now.Year);
-        }
-
-        void LoadList()
-        {
-            var query = DataProvider.Ins.DB.Invoices.Include(x => x.Employee).AsNoTracking().AsQueryable();
-
-            // Logic phân quyền
-            var currentAcc = DataProvider.Ins.CurrentAccount;
-            if (currentAcc != null && currentAcc.Role == 1)
-            {
-                query = query.Where(x => x.EmployeeID == currentAcc.EmployeeID);
-            }
-
-            if (SelectedMonth.HasValue) query = query.Where(x => x.CreatedDate.Month == SelectedMonth.Value);
-            if (SelectedYear.HasValue) query = query.Where(x => x.CreatedDate.Year == SelectedYear.Value);
-            var list = query.OrderByDescending(x => x.CreatedDate).ToList();
-            if (!string.IsNullOrEmpty(Keyword))
-            {
-                string k = Keyword.ToLower();
-                list = list.Where(x => x.InvoiceID.ToLower().Contains(k) || (x.Employee != null && x.Employee.FullName.ToLower().Contains(k))).ToList();
-            }
-            Invoices = new ObservableCollection<Invoice>(list);
-        }
-
-        // --- HÀM XUẤT PDF (ĐÃ CẬP NHẬT THEO FORMAT 80MM LIÊN TỤC CỦA PRINTERVM) ---
-        private void ExportInvoiceToPdf(Invoice simpleInvoice)
+        private void ExportToPdf()
         {
             try
             {
@@ -138,14 +61,14 @@ namespace Martify.ViewModels
                     .Include(x => x.InvoiceDetails)
                     .ThenInclude(d => d.Product)
                     .AsNoTracking()
-                    .FirstOrDefault(x => x.InvoiceID == simpleInvoice.InvoiceID);
+                    .FirstOrDefault(x => x.InvoiceID == CurrentInvoice.InvoiceID);
 
                 if (invoice == null) return;
 
                 SaveFileDialog saveFileDialog = new SaveFileDialog
                 {
                     Filter = "PDF Files|*.pdf",
-                    FileName = $"HoaDon_{invoice.InvoiceID}_{DateTime.Now:ddMMyyyy}.pdf"
+                    FileName = $"HoaDon_{invoice.InvoiceID}_{DateTime.Now:yyyyMMddHHmmss}.pdf"
                 };
 
                 if (saveFileDialog.ShowDialog() == true)
@@ -159,9 +82,12 @@ namespace Martify.ViewModels
                     {
                         container.Page(page =>
                         {
-                            // --- CẤU HÌNH KHỔ GIẤY 80mm LIÊN TỤC (Giống PrinterVM) ---
-                            // Dùng ContinuousSize để không bị ngắt trang
+                            // --- THAY ĐỔI QUAN TRỌNG Ở ĐÂY ---
+                            // Sử dụng ContinuousSize thay vì Size
+                            // Tham số: Chiều rộng (80mm), Đơn vị
+                            // PDF sẽ tự động dài ra theo nội dung, không bao giờ ngắt trang
                             page.ContinuousSize(80, Unit.Millimetre);
+
                             page.Margin(5, Unit.Millimetre);
                             page.PageColor(Colors.White);
                             page.DefaultTextStyle(x => x.FontSize(9).FontFamily("Arial").FontColor(PrimaryText));
@@ -201,10 +127,9 @@ namespace Martify.ViewModels
                                     headerCol.Item().PaddingBottom(5).LineHorizontal(1).LineColor(DividerColor);
                                 });
 
-                                // --- BẢNG SẢN PHẨM (4 Cột) ---
+                                // --- BẢNG SẢN PHẨM ---
                                 col.Item().PaddingVertical(5).Table(table =>
                                 {
-                                    // Định nghĩa cột: Tên (Rộng) | Giá | SL | Thành tiền
                                     table.ColumnsDefinition(columns =>
                                     {
                                         columns.RelativeColumn(2f);   // Sản phẩm
@@ -213,7 +138,7 @@ namespace Martify.ViewModels
                                         columns.RelativeColumn(1.3f); // Thành tiền
                                     });
 
-                                    // Header bảng
+                                    // Header
                                     table.Cell().Element(HeaderStyle).Text("Sản phẩm");
                                     table.Cell().Element(HeaderStyle).AlignRight().Text("Đơn giá");
                                     table.Cell().Element(HeaderStyle).AlignCenter().Text("SL");
@@ -224,13 +149,13 @@ namespace Martify.ViewModels
                                         return container.PaddingVertical(2).DefaultTextStyle(x => x);
                                     }
 
-                                    // Dữ liệu
+                                    // Rows
                                     foreach (var item in invoice.InvoiceDetails)
                                     {
-                                        // Dòng 1: Tên sản phẩm (Gộp cột để hiển thị đầy đủ)
+                                        // Tên SP
                                         table.Cell().ColumnSpan(4).Element(NameCellStyle).Text(item.Product?.ProductName ?? "SP đã xóa").SemiBold().FontColor(PrimaryText);
 
-                                        // Dòng 2: Mã - Giá - SL - Tổng
+                                        // Chi tiết
                                         table.Cell().Element(CellStyle).Text(item.Product?.ProductID ?? "").FontSize(7).FontColor(SecondaryText);
                                         table.Cell().Element(CellStyle).AlignRight().Text($"{item.SalePrice:N0}").FontColor(SecondaryText);
                                         table.Cell().Element(CellStyle).AlignCenter().Text($"{item.Quantity}").FontColor(SecondaryText);
@@ -255,17 +180,19 @@ namespace Martify.ViewModels
 
                                     footerCol.Item().PaddingTop(5).Row(row =>
                                     {
-                                        row.RelativeItem().Text("Tổng tiền: ").FontSize(10).Bold().FontColor(PrimaryText).AlignLeft();
+                                        row.RelativeItem().Text("Tổng tiền:").FontSize(10).Bold().FontColor(PrimaryText).AlignLeft();
                                         row.RelativeItem().Text($"{invoice.TotalAmount:N0} VND")
                                            .FontSize(12).Bold().FontColor(GreenColor).AlignRight();
                                     });
 
                                     footerCol.Item().PaddingTop(15).AlignCenter().Text("Cảm ơn quý khách!").FontSize(8).Italic().FontColor(SecondaryText);
 
-                                    // Footer nằm luôn trong luồng nội dung vì dùng ContinuousSize
+                                    // Footer nằm luôn trong luồng nội dung (vì trang là vô tận)
                                     footerCol.Item().PaddingTop(2).AlignCenter().Text("Hẹn gặp lại").FontSize(8).Italic().FontColor(SecondaryText);
                                 });
                             });
+
+                            // KHÔNG CẦN page.Footer() VÌ LÀ CONTINUOUS ROLL
                         });
                     })
                     .GeneratePdf(saveFileDialog.FileName);

@@ -133,25 +133,65 @@
                         <TextBox materialDesign:HintAssist.Hint="Tìm theo mã, tên nhân viên..." materialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0" VerticalAlignment="Center" Margin="35,0,10,0" FontSize="12" Foreground="{DynamicResource PrimaryText}" Text="{Binding Keyword, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Border>
-                <ComboBox Width="90" Height="40" ItemsSource="{Binding Months}" SelectedValue="{Binding SelectedMonth}" materialDesign:HintAssist.Hint="Tháng" Style="{StaticResource MaterialDesignOutlinedComboBox}" Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryText}" Margin="0,0,10,0" Padding="10,0"/>
-                <ComboBox Width="90" Height="40" ItemsSource="{Binding Years}" SelectedValue="{Binding SelectedYear}" materialDesign:HintAssist.Hint="Năm" Style="{StaticResource MaterialDesignOutlinedComboBox}" Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryText}" Margin="0,0,10,0" Padding="10,0"/>
+                <ComboBox Width="90" Height="40" ItemsSource="{Binding Months}" 
+                          SelectedValue="{Binding SelectedMonth}" 
+                          materialDesign:HintAssist.Hint="Tháng"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}" 
+                          Background="{DynamicResource CardBackground}" 
+                          Foreground="{DynamicResource PrimaryText}" 
+                          Margin="0,0,10,0" Padding="10,0"/>
+                <ComboBox Width="90" Height="40" 
+                          ItemsSource="{Binding Years}" 
+                          SelectedValue="{Binding SelectedYear}" 
+                          materialDesign:HintAssist.Hint="Năm"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}" 
+                          Background="{DynamicResource CardBackground}" 
+                          Foreground="{DynamicResource PrimaryText}" 
+                          Margin="0,0,10,0" Padding="10,0"/>
                 <Button Style="{StaticResource MaterialDesignToolButton}" Command="{Binding ClearFilterCommand}" ToolTip="Xóa bộ lọc" Height="40" Width="40">
                     <materialDesign:PackIcon Kind="FilterOff" Foreground="Red" />
                 </Button>
             </StackPanel>
-            <Button Grid.Column="1" Width="150" Height="40" materialDesign:ButtonAssist.CornerRadius="10" Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}" Padding="0" Command="{Binding AddEmployeeCommand}">
-                <Button.Background>
-                    <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
-                        <GradientStop Color="#FF86E5A0" Offset="0.948"/>
-                        <GradientStop Color="#FF84E1A9" Offset="0.147"/>
-                        <GradientStop Color="#FF66E7AF" Offset="0.514"/>
-                    </LinearGradientBrush>
-                </Button.Background>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="AccountPlusOutline" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock Text="Thêm nhân viên" FontFamily="Times New Roman" FontSize="16" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </StackPanel>
-            </Button>
+            
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                        Command="{Binding ImportExcelCommand}"
+                        Background="#4CAF50" BorderBrush="{x:Null}"
+                        Width="40" Height="40" Margin="0,0,10,0"
+                        ToolTipService.InitialShowDelay="0">
+                    
+                    <Button.ToolTip>
+                        <ToolTip Background="Transparent" BorderThickness="0" Padding="0" HasDropShadow="True">
+                            <local:ImportExcelSample />
+                        </ToolTip>
+                    </Button.ToolTip>
+
+                    <materialDesign:PackIcon Kind="FileImport" Width="22" Height="22" Foreground="White"/>
+                </Button>
+
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                        Command="{Binding ExportExcelCommand}"
+                        ToolTip="Xuất ra Excel"
+                        Background="#FF9800" BorderBrush="{x:Null}"
+                        Width="40" Height="40" Margin="0,0,10,0">
+                    <materialDesign:PackIcon Kind="FileExport" Width="22" Height="22" Foreground="White"/>
+                </Button>
+
+                <Button Width="150" Height="40" materialDesign:ButtonAssist.CornerRadius="10" Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}" Padding="0" Command="{Binding AddEmployeeCommand}">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
+                            <GradientStop Color="#FF86E5A0" Offset="0.948"/>
+                            <GradientStop Color="#FF84E1A9" Offset="0.147"/>
+                            <GradientStop Color="#FF66E7AF" Offset="0.514"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="AccountPlusOutline" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="Thêm nhân viên" FontFamily="Times New Roman" FontSize="16" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
         </Grid>
 
         <Grid Grid.Row="2">

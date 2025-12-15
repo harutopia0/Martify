@@ -18,6 +18,35 @@ namespace Martify.ViewModels
 {
     public class AddEmployeeVM : BaseVM, IDataErrorInfo
     {
+        // --- CÁC PROPERTY MỚI CHO POPUP ---
+        private Visibility _isSuccessVisible = Visibility.Collapsed;
+        public Visibility IsSuccessVisible
+        {
+            get => _isSuccessVisible;
+            set { _isSuccessVisible = value; OnPropertyChanged(); }
+        }
+
+        private string _newEmployeeID;
+        public string NewEmployeeID
+        {
+            get => _newEmployeeID;
+            set { _newEmployeeID = value; OnPropertyChanged(); }
+        }
+
+        private string _newUsername;
+        public string NewUsername
+        {
+            get => _newUsername;
+            set { _newUsername = value; OnPropertyChanged(); }
+        }
+
+        private string _newPassword;
+        public string NewPassword
+        {
+            get => _newPassword;
+            set { _newPassword = value; OnPropertyChanged(); }
+        }
+
         // ... (Giữ nguyên phần khai báo Properties: FullName, Address, v.v...)
         private string _fullName; public string FullName { get => _fullName; set { _fullName = value; OnPropertyChanged(); } }
         private string _address; public string Address { get => _address; set { _address = value; OnPropertyChanged(); } }
@@ -33,6 +62,10 @@ namespace Martify.ViewModels
 
         private string _selectedImagePath; public string SelectedImagePath { get => _selectedImagePath; set { _selectedImagePath = value; OnPropertyChanged(); } }
         private string _sourceImageFile;
+
+
+        // --- COMMAND MỚI ---
+        public ICommand CloseSuccessAlertCommand { get; set; }
 
         // --- VALIDATION SỬ DỤNG HELPER ---
         private bool _isSaveClicked = false;
@@ -96,6 +129,12 @@ namespace Martify.ViewModels
             });
             DragWindowCommand = new RelayCommand<Window>((p) => p != null, (p) => { try { p.DragMove(); } catch { } });
             SelectImageCommand = new RelayCommand<object>((p) => true, (p) => SelectImage());
+
+            // Command đóng popup và đóng luôn window AddEmployee
+            CloseSuccessAlertCommand = new RelayCommand<Window>((p) => true, (p) =>
+            {
+                p?.Close();
+            });
         }
 
         void SelectImage()
@@ -112,11 +151,10 @@ namespace Martify.ViewModels
         void SaveEmployee(Window p)
         {
             _isSaveClicked = true;
-            OnPropertyChanged(null); // Refresh UI để hiện lỗi
+            OnPropertyChanged(null);
 
-            if (!IsValid()) return; // Dừng nếu có lỗi
+            if (!IsValid()) return;
 
-            // ... (Logic lưu DB giữ nguyên như cũ) ...
             string newEmpId = GenerateEmployeeID();
             string dbPath = null;
 
@@ -160,9 +198,15 @@ namespace Martify.ViewModels
                 DataProvider.Ins.DB.Employees.Add(newEmployee);
                 DataProvider.Ins.DB.SaveChanges();
 
-                MessageBox.Show($"Thêm thành công!\n\n- Mã NV: {newEmpId}\n- Tài khoản: {username}\n- Mật khẩu: {rawPassword}",
-                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                p?.Close();
+                // --- THAY ĐỔI: KHÔNG DÙNG MESSAGEBOX ---
+                // Gán dữ liệu để hiện lên Popup
+                NewEmployeeID = newEmpId;
+                NewUsername = username;
+                NewPassword = rawPassword;
+
+                // Bật Popup lên
+                IsSuccessVisible = Visibility.Visible;
+                // -------------------------------------
             }
             catch (Exception ex)
             {

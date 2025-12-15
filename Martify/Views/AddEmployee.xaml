@@ -280,7 +280,15 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Grid>
+
+
+            <uc:AddEmployeeSuccessAlert Visibility="{Binding IsSuccessVisible}" 
+                                        Panel.ZIndex="999"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"/>
+
         </Grid>
-        
+
+
     </Border>
 </Window>

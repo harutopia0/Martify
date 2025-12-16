@@ -1,22 +1,22 @@
 namespace Martify.Models
 {
     /// <summary>
-    /// �?nh ngh?a c�c lo?i c?nh b�o t?n kho
+    /// Enum định nghĩa các loại cảnh báo tồn kho
     /// </summary>
     public enum InventoryAlertType
     {
         /// <summary>
-        /// Kh�ng c� b? l?c c?nh b�o
+        /// Không có cảnh báo (hiển thị tất cả sản phẩm)
         /// </summary>
         None = 0,
 
         /// <summary>
-        /// S?n ph?m s?p h?t h�ng (Low Stock)
+        /// Sắp hết hàng (Low Stock): Số lượng > 0 và <= 10
         /// </summary>
         LowStock = 1,
 
         /// <summary>
-        /// S?n ph?m h?t h�ng (Out of Stock)
+        /// Hết hàng (Out of Stock): Số lượng = 0
         /// </summary>
         OutOfStock = 2
     }

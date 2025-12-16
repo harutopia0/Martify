@@ -148,6 +148,7 @@
 
                         <!-- Nút chọn ảnh -->
                         <Button Height="45"
+                                
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource MaterialDesignRaisedButton}"
                                 Command="{Binding SelectImageCommand}"

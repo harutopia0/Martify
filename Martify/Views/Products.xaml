@@ -37,7 +37,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation Storyboard.TargetProperty="Width" 
-                                         To="320" Duration="0:0:0.4">
+                                         To="300" Duration="0:0:0.4">
                                     <DoubleAnimation.EasingFunction>
                                         <CubicEase EasingMode="EaseOut"/>
                                     </DoubleAnimation.EasingFunction>
@@ -537,7 +537,7 @@
                                         </Ellipse.Fill>
                                     </Ellipse>
 
-                                <TextBlock Text="{Binding EditProductName}" 
+                                <TextBlock Text="{Binding DataContext.EditProductName, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                            FontSize="18" 
                                            FontWeight="Bold" 
                                            Foreground="White" 
@@ -567,7 +567,7 @@
                                            Margin="0,0,0,8"/>
                                 <ComboBox ItemsSource="{Binding DataContext.Categories, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                           SelectedValuePath="CategoryID"
-                                          SelectedValue="{Binding EditCategoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          SelectedValue="{Binding DataContext.EditCategoryID, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           DisplayMemberPath="CategoryName"
                                           Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                           Margin="0,0,0,5"
@@ -579,7 +579,7 @@
                                            FontWeight="SemiBold"
                                            Foreground="{DynamicResource SecondaryText}"
                                            Margin="0,0,0,8"/>
-                                <TextBox Text="{Binding EditUnit, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Text="{Binding DataContext.EditUnit, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                          Margin="0,0,0,5"/>
 
@@ -589,17 +589,16 @@
                                            FontWeight="SemiBold"
                                            Foreground="{DynamicResource SecondaryText}"
                                            Margin="0,0,0,8"/>
-                                <TextBox Text="{Binding EditPrice, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Text="{Binding DataContext.EditPrice, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                          Margin="0,0,0,5"/>
-
                                 <!-- Stock -->
                                 <TextBlock Text="SỐ LƯỢNG TỒN KHO" 
                                            FontSize="11" 
                                            FontWeight="SemiBold"
                                            Foreground="{DynamicResource SecondaryText}"
                                            Margin="0,0,0,8"/>
-                                <TextBox Text="{Binding EditStockQuantity, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Text="{Binding DataContext.EditStockQuantity, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                          Margin="0,0,0,5"/>
 

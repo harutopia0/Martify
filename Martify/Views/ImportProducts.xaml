@@ -276,7 +276,9 @@
                                   CanUserDeleteRows="False"
                                   CanUserReorderColumns="False"
                                   CanUserSortColumns="False"
+                                  IsReadOnly="True"
                                   SelectionMode="Single"
+                                  SelectionUnit="FullRow"
                                   GridLinesVisibility="Horizontal"
                                   HorizontalGridLinesBrush="#E0E0E0"
                                   RowHeight="45"
@@ -289,6 +291,7 @@
                                     <Setter Property="FontSize" Value="13"/>
                                     <Setter Property="FontWeight" Value="SemiBold"/>
                                     <Setter Property="Foreground" Value="#424242"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
                                 </Style>
                             </DataGrid.Resources>
 
@@ -323,22 +326,22 @@
 
                                 <!-- Unit Price -->
                                 <DataGridTextColumn Header="Đơn giá"
-                                                    Binding="{Binding UnitPrice, StringFormat='N0', UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                                    Binding="{Binding UnitPrice, StringFormat='{}{0:N0} đ', UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                                     Width="110">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="VerticalAlignment" Value="Center"/>
-                                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
                                             <Setter Property="FontSize" Value="13"/>
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
 
                                 <!-- Quantity with Buttons -->
-                                <DataGridTemplateColumn Header="Số lượng" Width="140">
+                                <DataGridTemplateColumn Header="Số lượng" Width="150">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-30 0 0 0">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin=  "0 0 0 0">
                                                 <Button Style="{StaticResource MaterialDesignIconButton}"
                                                         Command="{Binding DataContext.DecreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                         CommandParameter="{Binding}"
@@ -372,20 +375,21 @@
                                 </DataGridTemplateColumn>
 
                                 <!-- Subtotal -->
-                                <DataGridTextColumn Header="Thành tiền"
-                                                    Binding="{Binding Subtotal, StringFormat='N0'}"
+                                <DataGridTemplateColumn Header="Thành tiền"
                                                     Width="120"
                                                     IsReadOnly="True">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                            <Setter Property="HorizontalAlignment" Value="Left"/>
-                                            <Setter Property="FontSize" Value="13"/>
-                                            <Setter Property="FontWeight" Value="SemiBold"/>
-                                            <Setter Property="Foreground" Value="#2196F3"/>
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <TextBlock FontSize="12" FontWeight="Bold" Foreground="#2196F3" VerticalAlignment="Center">
+                                                     <Run Text="{Binding Subtotal, StringFormat='N0'}"/>
+                                                     <Run Text="₫" FontSize="13"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                   
+                                </DataGridTemplateColumn>
 
                                 <!-- Remove Button -->
                                 <DataGridTemplateColumn Width="50">
@@ -432,7 +436,7 @@
                                                Foreground="#2196F3"
                                                VerticalAlignment="Center"/>
                                     <TextBlock Text=" VNĐ"
-                                               FontSize="16"
+                                               FontSize="24"
                                                FontWeight="SemiBold"
                                                Foreground="#2196F3"
                                                VerticalAlignment="Center"

@@ -292,7 +292,7 @@
                                                         Value="{StaticResource DashboardNormal}" />
 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource DashboardActive}" />
+                                                        Value="{StaticResource DashboardHover}" />
 
                                                 <Setter Property="DataContext"
                                                         Value="{StaticResource DashboardActive}" />
@@ -328,13 +328,13 @@
 
 
                                                 <Setter Property="Image.Source"
-                                                        Value="{StaticResource ProductsNormal}" />
+                                                        Value="{StaticResource CartNormal}" />
 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource ProductsActive}" />
+                                                        Value="{StaticResource CartHover}" />
 
                                                 <Setter Property="DataContext"
-                                                        Value="{StaticResource ProductsActive}" />
+                                                        Value="{StaticResource CartActive}" />
 
                                             </Style>
 
@@ -371,7 +371,7 @@
                                                         Value="{StaticResource ProductsNormal}" />
 
                                                 <Setter Property="Tag"
-                                                        Value="{StaticResource ProductsActive}" />
+                                                        Value="{StaticResource ProductsHover}" />
 
                                                 <Setter Property="DataContext"
                                                         Value="{StaticResource ProductsActive}" />

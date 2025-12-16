@@ -88,14 +88,14 @@
                                            Foreground="White" 
                                            VerticalAlignment="Bottom"
                                            HorizontalAlignment="Center"
-                                           Margin="0,7.5,0,0"/>
+                                           Margin="0,7.5,0,0" FontFamily="Roboto"/>
 
                                 <TextBlock Text="{Binding Email}"
                                            Margin="0,0,0,0"
                                            FontSize="12"
                                            Foreground="White"
                                            VerticalAlignment="Bottom"
-                                           HorizontalAlignment="Center"/>
+                                           HorizontalAlignment="Center" FontFamily="Roboto Medium"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>

@@ -7,12 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Martify.ViewModels
 {
     class DashboardVM : BaseVM
     {
-        private MartifyDbContext _dbContext;
+        // [SỬA LỖI]: Sử dụng DataProvider.Ins.DB thay vì tạo mới để đảm bảo DB đã được khởi tạo
+        // private MartifyDbContext _dbContext; 
+        private MartifyDbContext _dbContext => DataProvider.Ins.DB;
 
         private decimal _giaTriDoanhThu;
         public decimal GiaTriDoanhThu
@@ -161,13 +164,169 @@ namespace Martify.ViewModels
             }
         }
 
+        // Commands
+        public ICommand OpenAddEmployeeCommand { get; }
+        public ICommand LowStockAlertCommand { get; }
+        public ICommand OutOfStockAlertCommand { get; }
+        public ICommand NavigateToProductsCommand { get; }
+        public ICommand NavigateToInvoicesCommand { get; }
+        public ICommand NavigateToEmployeesCommand { get; }
+        public ICommand NavigateToProductSelectionCommand { get; }
+        public ICommand ImportGoodsCommand { get; }
+        public ICommand PriceCheckCommand { get; }
+        public ICommand RefreshDataCommand { get; }
+
         public DashboardVM()
         {
-            _dbContext = new MartifyDbContext();
+            // [SỬA LỖI]: Bỏ dòng tạo mới DB context, truy cập DataProvider.Ins để kích hoạt khởi tạo DB
+            // _dbContext = new MartifyDbContext();
+            var ensureDbInit = DataProvider.Ins;
+
             DailyRevenues = new ObservableCollection<DailyRevenueViewModel>();
             TopInvoices = new ObservableCollection<HighValueInvoiceViewModel>();
             TopProducts = new ObservableCollection<TopProductViewModel>();
+
+            // Initialize commands
+            OpenAddEmployeeCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => OpenAddEmployeeWindow()
+            );
+            LowStockAlertCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => ShowInventoryAlertWindow(Models.InventoryAlertType.LowStock)
+            );
+            OutOfStockAlertCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => ShowInventoryAlertWindow(Models.InventoryAlertType.OutOfStock)
+            );
+            NavigateToProductsCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => NavigateToPage(2)
+            );
+            NavigateToInvoicesCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => NavigateToPage(4)
+            );
+            NavigateToEmployeesCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => NavigateToPage(3)
+            );
+            NavigateToProductSelectionCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => NavigateToPage(1)
+            );
+            ImportGoodsCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => ShowImportChoiceDialog()
+            );
+            PriceCheckCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => ShowPriceCheckDialog()
+            );
+            RefreshDataCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => LoadDashboardData()
+            );
+
             LoadDashboardData();
+        }
+
+        /// <summary>
+        /// Mở cửa sổ thêm nhân viên
+        /// </summary>
+        private void OpenAddEmployeeWindow()
+        {
+            var addEmployeeWindow = new Views.AddEmployee
+            {
+                Owner = Application.Current.MainWindow
+            };
+            addEmployeeWindow.ShowDialog();
+        }
+
+        /// <summary>
+        /// Hiển thị popup window với danh sách sản phẩm cảnh báo
+        /// </summary>
+        private void ShowInventoryAlertWindow(Models.InventoryAlertType alertType)
+        {
+            var window = new Views.InventoryAlertWindow
+            {
+                DataContext = new InventoryAlertWindowVM(alertType),
+                Owner = Application.Current.MainWindow
+            };
+            window.ShowDialog();
+        }
+
+        /// <summary>
+        /// Điều hướng đến trang tương ứng và cập nhật SidePanel với animation
+        /// </summary>
+        private void NavigateToPage(int menuIndex)
+        {
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow?.DataContext is MainVM mainVM)
+            {
+                mainVM.SelectedMenuIndex = menuIndex;
+
+                switch (menuIndex)
+                {
+                    case 1:
+                        mainVM.Navigation.ProductSelectionCommand.Execute(null);
+                        break;
+                    case 2:
+                        mainVM.Navigation.ProductsCommand.Execute(null);
+                        break;
+                    case 3:
+                        mainVM.Navigation.EmployeesCommand.Execute(null);
+                        break;
+                    case 4:
+                        mainVM.Navigation.InvoicesCommand.Execute(null);
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Hiển thị dialog chọn hành động nhập hàng
+        /// </summary>
+        private void ShowImportChoiceDialog()
+        {
+            var choiceDialog = new Views.ImportChoiceDialog
+            {
+                Owner = Application.Current.MainWindow
+            };
+
+            if (choiceDialog.ShowDialog() == true)
+            {
+                switch (choiceDialog.SelectedChoice)
+                {
+                    case Views.ImportChoiceDialog.ImportChoice.AddNewProduct:
+                        var addProductWindow = new Views.AddProduct
+                        {
+                            Owner = Application.Current.MainWindow
+                        };
+                        addProductWindow.ShowDialog();
+                        break;
+
+                    case Views.ImportChoiceDialog.ImportChoice.ImportProducts:
+                        var importProductsWindow = new Views.ImportProducts
+                        {
+                            Owner = Application.Current.MainWindow
+                        };
+                        importProductsWindow.ShowDialog();
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Hiển thị dialog tra cứu giá sản phẩm bằng camera QR/Barcode
+        /// </summary>
+        private void ShowPriceCheckDialog()
+        {
+            var priceCheckDialog = new Views.PriceCheckDialog
+            {
+                Owner = Application.Current.MainWindow
+            };
+            priceCheckDialog.ShowDialog();
         }
 
         /// <summary>
@@ -185,27 +344,30 @@ namespace Martify.ViewModels
 
         private void LoadDashboardData()
         {
+            System.Diagnostics.Debug.WriteLine($"[Dashboard] LoadDashboardData called at {DateTime.Now:HH:mm:ss.fff}");
             try
             {
                 CalculateWeeklyRevenue();
                 LoadQuickOverview();
                 LoadTopInvoices();
                 LoadTopProducts();
+                System.Diagnostics.Debug.WriteLine($"[Dashboard] Data loaded successfully. Products: {TongSoSanPham}, Invoices: {TongSoDonHang}");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi tải dữ liệu dashboard: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                // [SỬA LỖI]: Dùng Debug.WriteLine thay vì MessageBox để tránh lỗi chặn UI khi khởi động
+                System.Diagnostics.Debug.WriteLine($"Lỗi tải Dashboard: {ex.Message}");
             }
         }
 
         private void CalculateWeeklyRevenue()
         {
             var today = DateTime.Today;
-            
+
             // Get all invoices from the last 14 days in a single query for better performance
             var startDate = today.AddDays(-13);
             var endDate = today.AddDays(1);
-            
+
             var allInvoices = _dbContext.Invoices
                 .Where(inv => inv.CreatedDate >= startDate && inv.CreatedDate < endDate)
                 .Select(inv => new { inv.CreatedDate, inv.TotalAmount })
@@ -322,17 +484,31 @@ namespace Martify.ViewModels
             // First get all invoices, then order and take in memory to avoid SQLite decimal ordering issue
             var topInvoices = _dbContext.Invoices
                 .Include(i => i.Employee)
+                .Include(i => i.InvoiceDetails)
+                    .ThenInclude(id => id.Product)
                 .Where(i => i.CreatedDate >= weekStart && i.CreatedDate <= today.AddDays(1))
                 .AsEnumerable() // Execute query and bring to memory
                 .OrderByDescending(i => i.TotalAmount)
                 .Take(5)
-                .Select(i => new HighValueInvoiceViewModel
+                .Select(i =>
                 {
-                    Rank = 0, // Will be set later
-                    InvoiceID = i.InvoiceID,
-                    EmployeeName = i.Employee != null ? i.Employee.FullName : "N/A",
-                    CreatedDate = i.CreatedDate,
-                    TotalAmount = i.TotalAmount
+                    var allDetails = i.InvoiceDetails.ToList();
+                    var top5Details = allDetails
+                        .OrderByDescending(d => d.Total)
+                        .Take(5)
+                        .ToList();
+
+                    return new HighValueInvoiceViewModel
+                    {
+                        Rank = 0, // Will be set later
+                        InvoiceID = i.InvoiceID,
+                        EmployeeName = i.Employee != null ? i.Employee.FullName : "N/A",
+                        CreatedDate = i.CreatedDate,
+                        TotalAmount = i.TotalAmount,
+                        InvoiceDetails = new ObservableCollection<InvoiceDetail>(allDetails),
+                        Top5InvoiceDetails = new ObservableCollection<InvoiceDetail>(top5Details),
+                        TotalProductCount = allDetails.Count
+                    };
                 })
                 .ToList();
 
@@ -346,7 +522,10 @@ namespace Martify.ViewModels
                     EmployeeName = "Tên",
                     CreatedDate = DateTime.MinValue,
                     TotalAmount = 0,
-                    IsDefault = true
+                    IsDefault = true,
+                    InvoiceDetails = new ObservableCollection<InvoiceDetail>(),
+                    Top5InvoiceDetails = new ObservableCollection<InvoiceDetail>(),
+                    TotalProductCount = 0
                 });
             }
 
@@ -371,12 +550,12 @@ namespace Martify.ViewModels
             // Get top 5 best selling products based on total quantity sold
             var topProducts = _dbContext.InvoiceDetails
                 .Include(id => id.Product)
-                .GroupBy(id => new { id.ProductID, id.Product.ProductName, id.Product.ImagePath })
+                    .ThenInclude(p => p.Category)
+                .GroupBy(id => id.ProductID)
                 .Select(g => new
                 {
-                    ProductID = g.Key.ProductID,
-                    ProductName = g.Key.ProductName,
-                    ImagePath = g.Key.ImagePath,
+                    ProductID = g.Key,
+                    Product = g.First().Product,
                     TotalQuantity = g.Sum(id => id.Quantity)
                 })
                 .AsEnumerable() // Execute query and bring to memory
@@ -385,9 +564,10 @@ namespace Martify.ViewModels
                 .Select(p => new TopProductViewModel
                 {
                     ProductID = p.ProductID,
-                    ProductName = p.ProductName,
+                    ProductName = p.Product.ProductName,
                     QuantitySold = p.TotalQuantity,
-                    ImagePath = p.ImagePath
+                    ImagePath = p.Product.ImagePath,
+                    Product = p.Product
                 })
                 .ToList();
 
@@ -422,7 +602,7 @@ namespace Martify.ViewModels
         public string DayOfWeek => Date.ToString("ddd", new System.Globalization.CultureInfo("vi-VN"));
         public string FormattedRevenue => $"{Revenue:N0} VND";
         public string FullDate => Date.ToString("dddd, dd/MM/yyyy", new System.Globalization.CultureInfo("vi-VN"));
-        
+
         public double PercentageOfWeek
         {
             get
@@ -502,11 +682,16 @@ namespace Martify.ViewModels
         public DateTime CreatedDate { get; set; }
         public decimal TotalAmount { get; set; }
         public bool IsDefault { get; set; }
+        public ObservableCollection<InvoiceDetail> InvoiceDetails { get; set; }
+        public ObservableCollection<InvoiceDetail> Top5InvoiceDetails { get; set; }
+        public int TotalProductCount { get; set; }
+        public bool HasMoreProducts => TotalProductCount > 5;
 
         public string FormattedDate => IsDefault ? "xx/xx/xxxx" : CreatedDate.ToString("dd/MM/yyyy");
         public string FullFormattedDate => IsDefault ? "xx/xx/xxxx" : CreatedDate.ToString("dddd, dd/MM/yyyy HH:mm", new System.Globalization.CultureInfo("vi-VN"));
         public string FormattedAmount => IsDefault ? "0 VND" : $"{TotalAmount:N0} VND";
-        
+        public string RemainingProductsText => $"+ {TotalProductCount - 5} sản phẩm khác";
+
         public string RankText
         {
             get
@@ -522,7 +707,7 @@ namespace Martify.ViewModels
                 };
             }
         }
-        
+
         public string RankColor
         {
             get
@@ -544,31 +729,36 @@ namespace Martify.ViewModels
         public string ProductName { get; set; }
         public int QuantitySold { get; set; }
         public string ImagePath { get; set; }
+        public Product Product { get; set; }
 
         public string FormattedQuantitySold => $"Đã bán: {QuantitySold:N0}";
         public string FormattedQuantityOnly => $"{QuantitySold:N0} sản phẩm";
-        
+        public string FormattedPrice => $"{Product?.Price:N0} VND";
+        public string FormattedStockQuantity => $"{Product?.StockQuantity:N0}";
+        public string CategoryName => Product?.Category?.CategoryName ?? "N/A";
+        public string Unit => Product?.Unit ?? "N/A";
+
         public string PerformanceLevel
         {
             get
             {
-                if (QuantitySold >= 1000) return "🔥 Siêu Hot";
-                if (QuantitySold >= 800) return "⭐ Rất Hot";
-                if (QuantitySold >= 600) return "✨ Hot";
-                if (QuantitySold >= 400) return "📈 Bán Tốt";
+                if (QuantitySold >= 100) return "🔥 Siêu Hot";
+                if (QuantitySold >= 80) return "⭐ Rất Hot";
+                if (QuantitySold >= 60) return "✨ Hot";
+                if (QuantitySold >= 40) return "📈 Bán Tốt";
                 return "📊 Ổn Định";
             }
         }
-        
+
         public string BackgroundColor
         {
             get
             {
                 // Assign different colors based on sales performance
-                if (QuantitySold >= 1000) return "#FFE0B2";
-                if (QuantitySold >= 800) return "#E3F2FD";
-                if (QuantitySold >= 600) return "#F3E5F5";
-                if (QuantitySold >= 400) return "#FFF3E0";
+                if (QuantitySold >= 100) return "#FFE0B2";
+                if (QuantitySold >= 80) return "#E3F2FD";
+                if (QuantitySold >= 60) return "#F3E5F5";
+                if (QuantitySold >= 40) return "#FFF3E0";
                 return "#E8F5E9";
             }
         }
@@ -577,10 +767,10 @@ namespace Martify.ViewModels
         {
             get
             {
-                if (QuantitySold >= 1000) return "#FF9800";
-                if (QuantitySold >= 800) return "#2196F3";
-                if (QuantitySold >= 600) return "#9C27B0";
-                if (QuantitySold >= 400) return "#FF6F00";
+                if (QuantitySold >= 100) return "#FF9800";
+                if (QuantitySold >= 80) return "#2196F3";
+                if (QuantitySold >= 60) return "#9C27B0";
+                if (QuantitySold >= 40) return "#FF6F00";
                 return "#388E3C";
             }
         }

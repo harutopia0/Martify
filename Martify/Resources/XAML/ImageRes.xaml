@@ -23,21 +23,31 @@
 
     <!--Dashboard-->
     <BitmapImage x:Key="DashboardNormal" UriSource="/Resources/Images/dashboard_normal.png"></BitmapImage>
+    <BitmapImage x:Key="DashboardHover" UriSource="/Resources/Images/dashboard_hover.png"></BitmapImage>
     <BitmapImage x:Key="DashboardActive" UriSource="/Resources/Images/dashboard_active.png"></BitmapImage>
    
+    <!--Cart / ProductSelection-->
+    <BitmapImage x:Key="CartNormal" UriSource="/Resources/Images/cart_normal.png"></BitmapImage>
+    <BitmapImage x:Key="CartHover" UriSource="/Resources/Images/cart_hover.png"></BitmapImage>
+    <BitmapImage x:Key="CartActive" UriSource="/Resources/Images/cart_active.png"></BitmapImage>
+    
     <!--Products-->
-    <BitmapImage x:Key="ProductsNormal" UriSource="/Resources/Images/products_normal.png"></BitmapImage>
-    <BitmapImage x:Key="ProductsActive" UriSource="/Resources/Images/products_active.png"></BitmapImage>
+    <BitmapImage x:Key="ProductsNormal" UriSource="/Resources/Images/product_normal.png"></BitmapImage>
+    <BitmapImage x:Key="ProductsHover" UriSource="/Resources/Images/product_hover.png"></BitmapImage>
+    <BitmapImage x:Key="ProductsActive" UriSource="/Resources/Images/product_active.png"></BitmapImage>
     
     <!--Staff-->
     <BitmapImage x:Key="StaffNormal" UriSource="/Resources/Images/staff_normal.png"></BitmapImage>
+    <BitmapImage x:Key="StaffHover" UriSource="/Resources/Images/staff_hover.png"></BitmapImage>
     <BitmapImage x:Key="StaffActive" UriSource="/Resources/Images/staff_active.png"></BitmapImage>
 
     <!--Receipt-->
     <BitmapImage x:Key="ReceiptNormal" UriSource="/Resources/Images/receipt_normal.png"></BitmapImage>
+    <BitmapImage x:Key="ReceiptHover" UriSource="/Resources/Images/receipt_hover.png"></BitmapImage>
     <BitmapImage x:Key="ReceiptActive" UriSource="/Resources/Images/receipt_active.png"></BitmapImage>
 
     <!--Settings-->
     <BitmapImage x:Key="SettingsNormal" UriSource="/Resources/Images/settings_normal.png"></BitmapImage>
+    <BitmapImage x:Key="SettingsHover" UriSource="/Resources/Images/settings_hover.png"></BitmapImage>
     <BitmapImage x:Key="SettingsActive" UriSource="/Resources/Images/settings_active.png"></BitmapImage>
 </ResourceDictionary>

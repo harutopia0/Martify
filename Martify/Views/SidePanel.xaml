@@ -259,7 +259,12 @@
     </UserControl.Resources>
 
     <Grid>
-        <StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0">
             <ListBox x:Name="SidePanel_ListBox" 
                      Style="{StaticResource SidePanelListBoxStyle}"
                      SelectedIndex="{Binding SelectedMenuIndex, Mode=TwoWay}">
@@ -567,5 +572,28 @@
                              Style="{StaticResource settings_listboxitem_style}" />
             </ListBox>
         </StackPanel>
+        
+        <!-- Martify Logo at Bottom -->
+        <Border Grid.Row="1" 
+                Background="Transparent"
+                Padding="20,15,20,20"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom">
+            <Image Source="{StaticResource Martify}"
+                   Width="120"
+                   Height="120"
+                   Stretch="Uniform"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Opacity="0.9">
+                <Image.Effect>
+                    <DropShadowEffect Color="Black" 
+                                      BlurRadius="10" 
+                                      ShadowDepth="2" 
+                                      Direction="270" 
+                                      Opacity="0.3"/>
+                </Image.Effect>
+            </Image>
+        </Border>
     </Grid>
 </UserControl>

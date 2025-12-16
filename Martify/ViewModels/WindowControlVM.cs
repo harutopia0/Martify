@@ -1,4 +1,5 @@
 ﻿using Martify.ViewModels;
+using Martify.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,6 @@ namespace Martify.ViewModels
         public ICommand HideWindowCommand { get; set; }
         public ICommand DragWindowCommand { get; set; }
 
-
         public ICommand ConfirmExitCommand { get; set; }
         public ICommand CancelExitCommand { get; set; }
         #endregion
@@ -30,7 +30,6 @@ namespace Martify.ViewModels
             set { _controlButtonsVisibility = value; OnPropertyChanged(); }
         }
 
-
         private Visibility _isAlertVisible = Visibility.Collapsed;
         public Visibility IsAlertVisible
         {
@@ -41,24 +40,31 @@ namespace Martify.ViewModels
 
         public WindowControlVM()
         {
-
-            CloseWindowCommand = new RelayCommand<UserControl>((p) => { return true; }, (p) =>
+            CloseWindowCommand = new RelayCommand<UserControl>((p) => { return p != null; }, (p) =>
             {
-                IsAlertVisible = Visibility.Visible;
+                Window parentWindow = Window.GetWindow(p);
+                if (parentWindow != null)
+                {
+                    if (parentWindow is LoginWindow)
+                    {
+                        parentWindow.Close();
+                    }
+                    else
+                    {
+                        IsAlertVisible = Visibility.Visible;
+                    }
+                }
             });
-
 
             ConfirmExitCommand = new RelayCommand<object>((p) => true, (p) =>
             {
-                Application.Current.Shutdown();
+                System.Environment.Exit(0);
             });
-
 
             CancelExitCommand = new RelayCommand<object>((p) => true, (p) =>
             {
                 IsAlertVisible = Visibility.Collapsed;
             });
-
 
             HideWindowCommand = new RelayCommand<UserControl>((p) => p != null, (p) =>
             {

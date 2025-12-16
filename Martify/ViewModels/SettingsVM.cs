@@ -1,13 +1,14 @@
 ﻿using Martify.Models;
-using Martify.Views; // Để gọi EditProfileWindow
+using Martify.Views;
 using System.Windows;
 using System.Windows.Input;
-using Martify; // [QUAN TRỌNG 1] Thêm dòng này để nhận diện LoginWindow và App
+using Martify;
 
 namespace Martify.ViewModels
 {
     public class SettingsVM : BaseVM
     {
+       
         private static bool _globalDarkModeState = false;
 
         private Visibility _configVisibility = Visibility.Collapsed;
@@ -26,10 +27,7 @@ namespace Martify.ViewModels
         {
             OpenConfigCommand = new RelayCommand(o => ConfigVisibility = Visibility.Visible);
             CloseConfigCommand = new RelayCommand(o => ConfigVisibility = Visibility.Collapsed);
-
-            // Command mở cửa sổ chỉnh sửa
             OpenEditProfileCommand = new RelayCommand(OpenEditProfile);
-
             LogoutCommand = new RelayCommand(Logout);
 
             _isDarkMode = _globalDarkModeState;
@@ -38,48 +36,57 @@ namespace Martify.ViewModels
         void OpenEditProfile(object obj)
         {
             EditProfileWindow editWindow = new EditProfileWindow();
-            // [QUAN TRỌNG 2] Phải có dòng này cửa sổ mới hiện lên
             editWindow.ShowDialog();
         }
 
         private void Logout(object obj)
         {
+          
             DataProvider.Ins.CurrentAccount = null;
-            var mainWindow = Application.Current?.MainWindow;
-            if (mainWindow == null) return;
+            ConfigVisibility = Visibility.Collapsed;
 
-            mainWindow.Hide();
+         
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow == null)
+            {
+                foreach (Window w in Application.Current.Windows)
+                {
+                    if (w.DataContext is MainVM) { mainWindow = w; break; }
+                }
+            }
+            if (mainWindow != null) mainWindow.Hide();
 
-            // Cần 'using Martify;' để dùng được LoginWindow
+           
             LoginWindow loginWindow = new LoginWindow();
+
+            if (loginWindow.DataContext is LoginVM vm)
+            {
+                vm.isLogin = false;
+                vm.Username = ""; 
+                vm.Password = ""; 
+            }
+
+            // 4. Hiện màn hình đăng nhập
             loginWindow.ShowDialog();
 
+            // 5. Kiểm tra kết quả sau khi đóng form Login
             if (loginWindow.DataContext is LoginVM loginVM && loginVM.isLogin)
             {
-                if (mainWindow.DataContext is MainVM mainVM)
+                // Chỉ khi đăng nhập thành công (isLogin = true) mới hiện lại Main
+                if (mainWindow != null && mainWindow.DataContext is MainVM mainVM)
                 {
-                    var acc = DataProvider.Ins.CurrentAccount;
-                    if (acc != null && acc.Employee != null)
-                    {
-                        mainVM.FullName = acc.Employee.FullName;
-                        mainVM.Email = acc.Employee.Email;
-                        mainVM.ImagePath = acc.Employee.ImagePath;
-                    }
-                    else
-                    {
-                        mainVM.FullName = "N/A";
-                        mainVM.Email = "Chưa cập nhật";
-                        mainVM.ImagePath = null;
-                    }
+                    mainVM.LoadCurrentUserData();
                 }
-                mainWindow.Show();
+                mainWindow?.Show();
             }
             else
             {
-                mainWindow.Close();
+                // Nếu tắt form Login (isLogin = false) -> Tắt App
+                System.Environment.Exit(0);
             }
         }
 
+     
         private bool _isDarkMode;
         public bool IsDarkMode
         {
@@ -90,10 +97,7 @@ namespace Martify.ViewModels
                 {
                     _isDarkMode = value;
                     OnPropertyChanged();
-
                     _globalDarkModeState = value;
-
-                    // Cần 'using Martify;' để ép kiểu về class App
                     var app = Application.Current as App;
                     app?.SetTheme(_isDarkMode);
                 }

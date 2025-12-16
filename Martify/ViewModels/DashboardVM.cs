@@ -13,7 +13,9 @@ namespace Martify.ViewModels
 {
     class DashboardVM : BaseVM
     {
-        private MartifyDbContext _dbContext;
+        // [SỬA LỖI]: Sử dụng DataProvider.Ins.DB thay vì tạo mới để đảm bảo DB đã được khởi tạo
+        // private MartifyDbContext _dbContext; 
+        private MartifyDbContext _dbContext => DataProvider.Ins.DB;
 
         private decimal _giaTriDoanhThu;
         public decimal GiaTriDoanhThu
@@ -175,11 +177,14 @@ namespace Martify.ViewModels
 
         public DashboardVM()
         {
-            _dbContext = new MartifyDbContext();
+            // [SỬA LỖI]: Bỏ dòng tạo mới DB context, truy cập DataProvider.Ins để kích hoạt khởi tạo DB
+            // _dbContext = new MartifyDbContext();
+            var ensureDbInit = DataProvider.Ins;
+
             DailyRevenues = new ObservableCollection<DailyRevenueViewModel>();
             TopInvoices = new ObservableCollection<HighValueInvoiceViewModel>();
             TopProducts = new ObservableCollection<TopProductViewModel>();
-            
+
             // Initialize commands
             OpenAddEmployeeCommand = new RelayCommand<object>(
                 canExecute: _ => true,
@@ -217,7 +222,7 @@ namespace Martify.ViewModels
                 canExecute: _ => true,
                 execute: _ => ShowPriceCheckDialog()
             );
-            
+
             LoadDashboardData();
         }
 
@@ -343,18 +348,19 @@ namespace Martify.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi tải dữ liệu dashboard: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                // [SỬA LỖI]: Dùng Debug.WriteLine thay vì MessageBox để tránh lỗi chặn UI khi khởi động
+                System.Diagnostics.Debug.WriteLine($"Lỗi tải Dashboard: {ex.Message}");
             }
         }
 
         private void CalculateWeeklyRevenue()
         {
             var today = DateTime.Today;
-            
+
             // Get all invoices from the last 14 days in a single query for better performance
             var startDate = today.AddDays(-13);
             var endDate = today.AddDays(1);
-            
+
             var allInvoices = _dbContext.Invoices
                 .Where(inv => inv.CreatedDate >= startDate && inv.CreatedDate < endDate)
                 .Select(inv => new { inv.CreatedDate, inv.TotalAmount })
@@ -589,7 +595,7 @@ namespace Martify.ViewModels
         public string DayOfWeek => Date.ToString("ddd", new System.Globalization.CultureInfo("vi-VN"));
         public string FormattedRevenue => $"{Revenue:N0} VND";
         public string FullDate => Date.ToString("dddd, dd/MM/yyyy", new System.Globalization.CultureInfo("vi-VN"));
-        
+
         public double PercentageOfWeek
         {
             get
@@ -678,7 +684,7 @@ namespace Martify.ViewModels
         public string FullFormattedDate => IsDefault ? "xx/xx/xxxx" : CreatedDate.ToString("dddd, dd/MM/yyyy HH:mm", new System.Globalization.CultureInfo("vi-VN"));
         public string FormattedAmount => IsDefault ? "0 VND" : $"{TotalAmount:N0} VND";
         public string RemainingProductsText => $"+ {TotalProductCount - 5} sản phẩm khác";
-        
+
         public string RankText
         {
             get
@@ -694,7 +700,7 @@ namespace Martify.ViewModels
                 };
             }
         }
-        
+
         public string RankColor
         {
             get
@@ -724,7 +730,7 @@ namespace Martify.ViewModels
         public string FormattedStockQuantity => $"{Product?.StockQuantity:N0}";
         public string CategoryName => Product?.Category?.CategoryName ?? "N/A";
         public string Unit => Product?.Unit ?? "N/A";
-        
+
         public string PerformanceLevel
         {
             get
@@ -736,7 +742,7 @@ namespace Martify.ViewModels
                 return "📊 Ổn Định";
             }
         }
-        
+
         public string BackgroundColor
         {
             get

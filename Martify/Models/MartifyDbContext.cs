@@ -22,24 +22,11 @@ namespace Martify.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // 1. Lấy đường dẫn nơi file .exe đang chạy (thường là .../bin/Debug/net8.0-windows)
+            // [SỬA LỖI]: Luôn lấy đường dẫn tại thư mục chứa file .exe đang chạy (dù là Debug hay Release)
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string dbPath = Path.Combine(baseDir, "Martify.db");
 
-            // 2. Lùi lại 3 cấp thư mục để về folder Project (Martify)
-            // Cấu trúc: Martify/bin/Debug/net... -> Lùi 3 lần sẽ về Martify/
-            string projectPath = Path.GetFullPath(Path.Combine(baseDir, @"..\..\..\"));
-
-            // 3. Trỏ vào folder Models
-            string dbPath = Path.Combine(projectPath, "Models", "Martify.db");
-
-            // Kiểm tra folder Models, nếu chưa có thì tạo (đề phòng)
-            string modelsDir = Path.GetDirectoryName(dbPath);
-            if (!Directory.Exists(modelsDir))
-            {
-                Directory.CreateDirectory(modelsDir);
-            }
-
-            // 4. Kết nối SQLite
+            // Kết nối SQLite
             optionsBuilder.UseSqlite($"Data Source={dbPath}");
         }
 
@@ -52,14 +39,11 @@ namespace Martify.Models
             modelBuilder.Entity<InvoiceDetail>()
                 .HasKey(id => new { id.InvoiceID, id.ProductID });
 
-
-
             // Thêm ràng buộc CHECK
             modelBuilder.Entity<Employee>(e =>
             {
                 e.ToTable(t => t.HasCheckConstraint("CK_Employee_Gender", "Gender IS NULL OR Gender IN ('Nam', 'Nữ')"));
             });
         }
-
     }
 }

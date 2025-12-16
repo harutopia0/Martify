@@ -104,11 +104,11 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel>
                                     <TextBlock Text="Ngày tạo:" FontSize="11" Foreground="{DynamicResource SecondaryText}"/>
-                                    <TextBlock Text="{Binding CreatedDate, StringFormat='dd/MM/yyyy HH:mm'}" FontSize="13" Foreground="{DynamicResource PrimaryText}" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding CreatedDate, StringFormat='dd/MM/yyyy HH:mm'}" FontSize="13" Foreground="{DynamicResource PrimaryText}"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1" HorizontalAlignment="Right">
                                     <TextBlock Text="Nhân viên:" FontSize="11" Foreground="{DynamicResource SecondaryText}" HorizontalAlignment="Right"/>
-                                    <TextBlock Text="{Binding Employee.FullName}" FontSize="13" Foreground="{DynamicResource PrimaryText}" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                                    <TextBlock Text="{Binding Employee.FullName}" FontSize="13" Foreground="{DynamicResource PrimaryText}" HorizontalAlignment="Right"/>
                                 </StackPanel>
                             </Grid>
 

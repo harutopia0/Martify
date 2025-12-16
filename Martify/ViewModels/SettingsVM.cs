@@ -41,7 +41,9 @@ namespace Martify.ViewModels
 
         private void Logout(object obj)
         {
-          
+            // [MỚI] Xóa sạch các đơn hàng đang treo khi đăng xuất
+            ProductSelectionVM.ClearStaticData();
+
             DataProvider.Ins.CurrentAccount = null;
             ConfigVisibility = Visibility.Collapsed;
 

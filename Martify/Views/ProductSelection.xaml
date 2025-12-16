@@ -395,16 +395,30 @@
                                    FontWeight="Bold"
                                    Foreground="{DynamicResource PrimaryText}"
                                    VerticalAlignment="Center"/>
-                        <Button HorizontalAlignment="Right"
-                                Style="{StaticResource MaterialDesignIconForegroundButton}"
-                                Command="{Binding ClearCartCommand}"
-                                ToolTip="Xóa hết"
-                                Width="40"
-                                Height="40">
-                            <materialDesign:PackIcon Kind="DeleteSweep"
-                                                     Foreground="Red"
-                                                     VerticalAlignment="Center"/>
-                        </Button>
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right">
+                            <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                    Command="{Binding ToggleHeldListCommand}"
+                                    ToolTip="Đơn hàng treo"
+                                    Width="40"
+                                    Height="40"
+                                    Margin="0,0,5,0">
+                                <materialDesign:PackIcon Kind="ClipboardList"
+                                                         Foreground="#FF9800"
+                                                         VerticalAlignment="Center"/>
+                            </Button>
+
+                            <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                    Command="{Binding ClearCartCommand}"
+                                    ToolTip="Xóa hết"
+                                    Width="40"
+                                    Height="40">
+                                <materialDesign:PackIcon Kind="DeleteSweep"
+                                                         Foreground="Red"
+                                                         VerticalAlignment="Center"/>
+                            </Button>
+                        </StackPanel>
                     </Grid>
 
                     <ListView Grid.Row="1"
@@ -532,16 +546,113 @@
                                        VerticalAlignment="Center"/>
                         </Grid>
 
-                        <Button Command="{Binding CheckoutCommand}"
-                                Content="XUẤT HÓA ĐƠN"
-                                Height="50"
-                                FontSize="16"
-                                FontWeight="Bold"
-                                Style="{StaticResource MaterialDesignRaisedButton}"
-                                materialDesign:ButtonAssist.CornerRadius="10"
-                                Background="#2196F3"
-                                BorderBrush="{x:Null}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0"
+                                    Command="{Binding ParkOrderCommand}"
+                                    ToolTip="Tạm giữ đơn hàng"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    BorderBrush="#FF9800"
+                                    Foreground="#FF9800"
+                                    Height="50"
+                                    Width="50"
+                                    Margin="0,0,10,0"
+                                    Padding="0">
+                                <materialDesign:PackIcon Kind="Pause"
+                                                         Width="30"
+                                                         Height="30"/>
+                            </Button>
+
+                            <Button Grid.Column="1"
+                                    Command="{Binding CheckoutCommand}"
+                                    Content="XUẤT HÓA ĐƠN"
+                                    Height="50"
+                                    FontSize="16"
+                                    FontWeight="Bold"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    materialDesign:ButtonAssist.CornerRadius="10"
+                                    Background="#2196F3"
+                                    BorderBrush="{x:Null}"/>
+                        </Grid>
                     </StackPanel>
+
+                    <Grid Grid.RowSpan="3"
+                          Background="{DynamicResource CardBackground}"
+                          Visibility="{Binding IsHeldListVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <DockPanel Grid.Row="0"
+                                   Margin="0,0,0,10"
+                                   LastChildFill="False">
+                            <TextBlock Text="Đơn đang giữ"
+                                       FontWeight="Bold"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       Foreground="#FF9800"/>
+                            <Button DockPanel.Dock="Right"
+                                    Command="{Binding ToggleHeldListCommand}"
+                                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                    Height="40"
+                                    Width="40"
+                                    Margin="0,0,5,0">
+                                <materialDesign:PackIcon Kind="Close"/>
+                            </Button>
+                        </DockPanel>
+
+                        <ScrollViewer Grid.Row="1"
+                                      VerticalScrollBarVisibility="Hidden">
+                            <ItemsControl ItemsSource="{Binding HeldOrders}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{DynamicResource MainBackground}"
+                                                CornerRadius="5"
+                                                Margin="0,0,0,10"
+                                                Padding="10">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding DisplayInfo}"
+                                                               FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding DisplayTotal, StringFormat={}{0} VND}"
+                                                               Foreground="#4CAF50"/>
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="1"
+                                                            Orientation="Horizontal">
+                                                    <Button Command="{Binding DataContext.RestoreHeldOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}"
+                                                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                            Height="30"
+                                                            Padding="10,0"
+                                                            Content="Lấy lại"
+                                                            Margin="0,0,5,0"/>
+                                                    <Button Command="{Binding DataContext.DeleteHeldOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}"
+                                                            Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                                            Height="30"
+                                                            Width="30">
+                                                        <materialDesign:PackIcon Kind="TrashCan"
+                                                                                 Foreground="Red"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
                 </Grid>
             </Border>
         </Grid>

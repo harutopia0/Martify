@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Media; // [MỚI]: Thêm thư viện âm thanh
+using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -21,6 +21,28 @@ using ZXing.Windows.Compatibility;
 
 namespace Martify.ViewModels
 {
+    // Class lưu trữ đơn hàng tạm giữ
+    public class HeldOrder
+    {
+        public DateTime SavedTime
+        {
+            get;
+            set;
+        } = DateTime.Now;
+        public List<CartItem> Items
+        {
+            get;
+            set;
+        }
+        public decimal TotalAmount
+        {
+            get;
+            set;
+        }
+        public string DisplayInfo => $"{SavedTime:HH:mm} - {Items.Count} SP";
+        public string DisplayTotal => $"{TotalAmount:N0}";
+    }
+
     public class CartItem : BaseVM
     {
         public Product Product
@@ -44,6 +66,12 @@ namespace Martify.ViewModels
 
     public class ProductSelectionVM : BaseVM, IDisposable
     {
+        // [MỚI] Hàm Static để xóa dữ liệu khi Logout (Gọi từ SettingsVM)
+        public static void ClearStaticData()
+        {
+            _staticHeldOrders.Clear();
+        }
+
         private ObservableCollection<Product> _productList;
         public ObservableCollection<Product> ProductList
         {
@@ -211,6 +239,31 @@ namespace Martify.ViewModels
             }
         }
 
+        // --- [MỚI] PROPERTIES CHO TẠM GIỮ ĐƠN HÀNG ---
+        // [QUAN TRỌNG]: Static để giữ dữ liệu khi chuyển Tab
+        private static ObservableCollection<HeldOrder> _staticHeldOrders = new ObservableCollection<HeldOrder>();
+
+        public ObservableCollection<HeldOrder> HeldOrders
+        {
+            get => _staticHeldOrders;
+            set
+            {
+                _staticHeldOrders = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isHeldListVisible;
+        public bool IsHeldListVisible
+        {
+            get => _isHeldListVisible;
+            set
+            {
+                _isHeldListVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
         // --- COMMANDS ---
         public ICommand AddToCartCommand
         {
@@ -258,6 +311,28 @@ namespace Martify.ViewModels
             set;
         }
 
+        // [MỚI] Commands Tạm giữ
+        public ICommand ParkOrderCommand
+        {
+            get;
+            set;
+        }
+        public ICommand ToggleHeldListCommand
+        {
+            get;
+            set;
+        }
+        public ICommand RestoreHeldOrderCommand
+        {
+            get;
+            set;
+        }
+        public ICommand DeleteHeldOrderCommand
+        {
+            get;
+            set;
+        }
+
         public ProductSelectionVM()
         {
             CartList = new ObservableCollection<CartItem>();
@@ -266,7 +341,7 @@ namespace Martify.ViewModels
             Cameras = new ObservableCollection<CameraDevice>();
             LoadCameras();
 
-            // [FIX QUAN TRỌNG]: Đăng ký sự kiện tắt App để giết Camera
+            // Đăng ký sự kiện tắt App để giết Camera
             if (Application.Current != null)
             {
                 Application.Current.Exit += (s, e) => Dispose();
@@ -288,35 +363,35 @@ namespace Martify.ViewModels
             {
                 CartList.Remove(p);
                 CalculateTotal();
+                CommandManager.InvalidateRequerySuggested();
             });
             ClearCartCommand = new RelayCommand<object>((p) => CartList.Count > 0, (p) =>
             {
                 CartList.Clear();
                 CalculateTotal();
+                CommandManager.InvalidateRequerySuggested();
             });
             CheckoutCommand = new RelayCommand<object>((p) => CartList.Count > 0, (p) => Checkout());
 
             IncreaseQuantityCommand = new RelayCommand<CartItem>((p) => p != null, (p) =>
             {
-                if (p.Quantity < p.Product.StockQuantity)
+                int reservedInHeld = GetReservedQuantity(p.Product.ProductID);
+                int actualAvailable = p.Product.StockQuantity - reservedInHeld;
+
+                if (p.Quantity + 1 <= actualAvailable)
                 {
                     p.Quantity++;
                     CalculateTotal();
+                    CommandManager.InvalidateRequerySuggested();
                 }
             });
 
             DecreaseQuantityCommand = new RelayCommand<CartItem>((p) => p != null, (p) =>
             {
-                if (p.Quantity > 1)
-                {
-                    p.Quantity--;
-                    CalculateTotal();
-                }
-                else if (p.Quantity == 1)
-                {
-                    CartList.Remove(p);
-                    CalculateTotal();
-                }
+                if (p.Quantity > 1) p.Quantity--;
+                else if (p.Quantity == 1) CartList.Remove(p);
+                CalculateTotal();
+                CommandManager.InvalidateRequerySuggested();
             });
 
             ClearFilterCommand = new RelayCommand<object>((p) => true, (p) =>
@@ -329,19 +404,73 @@ namespace Martify.ViewModels
 
             ToggleCameraCommand = new RelayCommand<object>((p) => true, (p) =>
             {
-                if (IsCameraOpen)
-                {
-                    IsCameraOpen = false;
-                }
+                if (IsCameraOpen) IsCameraOpen = false;
                 else
                 {
                     IsCameraOpen = true;
                     StartCamera();
                 }
             });
-
             RefreshCamerasCommand = new RelayCommand<object>((p) => true, (p) => LoadCameras());
+
+            // --- COMMANDS TẠM GIỮ ---
+            ParkOrderCommand = new RelayCommand<object>((p) => CartList.Count > 0, (p) => ParkOrder());
+
+            // [FIX] Chỉ cho phép bật danh sách nếu có đơn hàng đang giữ
+            ToggleHeldListCommand = new RelayCommand<object>(
+                (p) => HeldOrders != null && HeldOrders.Count > 0,
+                (p) => IsHeldListVisible = !IsHeldListVisible
+            );
+
+            RestoreHeldOrderCommand = new RelayCommand<HeldOrder>((p) => p != null, RestoreHeldOrder);
+
+            // Xóa đơn treo -> Cập nhật trạng thái nút
+            DeleteHeldOrderCommand = new RelayCommand<HeldOrder>((p) => p != null, (p) =>
+            {
+                HeldOrders.Remove(p);
+                if (HeldOrders.Count == 0) IsHeldListVisible = false;
+
+                // [QUAN TRỌNG]: Bắt buộc gọi lệnh này để nút ToggleHeldListCommand tự disable đi
+                CommandManager.InvalidateRequerySuggested();
+            });
         }
+
+        // [MỚI] Helper tính số lượng đang bị treo
+        private int GetReservedQuantity(string productId)
+        {
+            if (HeldOrders == null) return 0;
+            return HeldOrders.Sum(order => order.Items
+                .Where(item => item.Product.ProductID == productId)
+                .Sum(item => item.Quantity));
+        }
+
+        // [MỚI] Logic Park Order
+        private void ParkOrder()
+        {
+            var snapshot = new List<CartItem>(CartList);
+            HeldOrders.Add(new HeldOrder
+            {
+                Items = snapshot,
+                TotalAmount = GrandTotal
+            });
+            CartList.Clear();
+            CalculateTotal();
+
+            // [QUAN TRỌNG]: Cập nhật UI để nút "Đơn treo" sáng lên
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void RestoreHeldOrder(HeldOrder order)
+        {
+            CartList = new ObservableCollection<CartItem>(order.Items);
+            CalculateTotal();
+            HeldOrders.Remove(order);
+            IsHeldListVisible = false;
+
+            // [QUAN TRỌNG]: Cập nhật UI để nút "Đơn treo" mờ đi nếu hết đơn
+            CommandManager.InvalidateRequerySuggested();
+        }
+        // --- End Logic Park Order ---
 
         private void LoadCameras()
         {
@@ -376,36 +505,40 @@ namespace Martify.ViewModels
 
         private bool AddToCart(Product p)
         {
-            if (p.StockQuantity <= 0)
+            // Tính toán số lượng thực tế
+            int reservedInHeld = GetReservedQuantity(p.ProductID);
+            int actualAvailable = p.StockQuantity - reservedInHeld;
+
+            if (actualAvailable <= 0)
             {
-                //if (!IsCameraOpen) MessageBox.Show("Sản phẩm này đã hết hàng!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
             var item = CartList.FirstOrDefault(x => x.Product.ProductID == p.ProductID);
             if (item != null)
             {
-                if (item.Quantity + 1 <= p.StockQuantity)
+                if (item.Quantity + 1 <= actualAvailable)
                 {
                     item.Quantity++;
                     CalculateTotal();
-                    // [FIX]: Cập nhật trạng thái nút bấm (Clear/Checkout) ngay lập tức
                     CommandManager.InvalidateRequerySuggested();
                     return true;
                 }
                 else
                 {
-                    //if (!IsCameraOpen) MessageBox.Show("Số lượng tồn kho không đủ!", "Thông báo");
                     return false;
                 }
             }
             else
             {
-                CartList.Add(new CartItem { Product = p, Quantity = 1 });
-                CalculateTotal();
-                // [FIX]: Cập nhật trạng thái nút bấm (Clear/Checkout) ngay lập tức
-                CommandManager.InvalidateRequerySuggested();
-                return true;
+                if (actualAvailable >= 1)
+                {
+                    CartList.Add(new CartItem { Product = p, Quantity = 1 });
+                    CalculateTotal();
+                    CommandManager.InvalidateRequerySuggested();
+                    return true;
+                }
+                return false;
             }
         }
 
@@ -443,19 +576,17 @@ namespace Martify.ViewModels
         {
             if (_videoSource != null)
             {
-                // [FIX QUAN TRỌNG]: Ngắt sự kiện trước khi dừng
                 _videoSource.NewFrame -= VideoSource_NewFrame;
 
                 if (_videoSource.IsRunning)
                 {
                     _videoSource.SignalToStop();
-                    // Không dùng WaitForStop() để tránh treo UI, để nó tự tắt ngầm
                 }
                 _videoSource = null;
             }
 
             CameraFrame = null;
-            if (IsCameraOpen) ScanStatus = "Camera đã tắt"; // Chỉ hiện nếu đang bật mà bị tắt
+            if (IsCameraOpen) ScanStatus = "Camera đã tắt";
         }
 
         private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
@@ -510,20 +641,17 @@ namespace Martify.ViewModels
                 if (isAdded)
                 {
                     ScanStatus = $"Đã thêm: {product.ProductName}";
-                    // [Update]: Phát tiếng bíp thành công
                     PlaySound("store-scanner-beep.wav");
                 }
                 else
                 {
                     ScanStatus = $"HẾT HÀNG: {product.ProductName}";
-                    // [Update]: Phát tiếng cảnh báo (Hết hàng)
                     SystemSounds.Exclamation.Play();
                 }
             }
             else
             {
                 ScanStatus = $"Không tìm thấy SP: {code}";
-                // [Update]: Phát tiếng lỗi (Không tìm thấy)
                 SystemSounds.Hand.Play();
             }
 
@@ -534,21 +662,17 @@ namespace Martify.ViewModels
         {
             try
             {
-                // Đường dẫn đến file âm thanh trong thư mục bin/Debug/Resources/Sounds
                 string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Sounds", fileName);
-
                 if (File.Exists(path))
                 {
-                    // SoundPlayer chỉ chơi được file .wav
                     using (var player = new SoundPlayer(path))
                     {
-                        player.Play(); // Phát không chặn luồng chính (Asynchronous)
+                        player.Play();
                     }
                 }
             }
             catch
             {
-                // Bỏ qua lỗi nếu không tìm thấy file hoặc lỗi phát
             }
         }
 
@@ -659,7 +783,14 @@ namespace Martify.ViewModels
                         DataProvider.Ins.DB.InvoiceDetails.Add(detail);
 
                         var prodInDb = DataProvider.Ins.DB.Products.Find(item.Product.ProductID);
-                        if (prodInDb != null) prodInDb.StockQuantity -= item.Quantity;
+                        if (prodInDb != null)
+                        {
+                            if (prodInDb.StockQuantity < item.Quantity)
+                            {
+                                throw new Exception($"Sản phẩm {prodInDb.ProductName} không đủ tồn kho (Còn {prodInDb.StockQuantity}).");
+                            }
+                            prodInDb.StockQuantity -= item.Quantity;
+                        }
                     }
 
                     DataProvider.Ins.DB.SaveChanges();
@@ -680,6 +811,7 @@ namespace Martify.ViewModels
                 }
                 catch (Exception ex)
                 {
+                    LoadData();
                     MessageBox.Show("Lỗi thanh toán: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }

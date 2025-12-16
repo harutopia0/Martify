@@ -12,16 +12,19 @@ xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 mc:Ignorable="d" 
 d:DesignHeight="720" d:DesignWidth="864"
 Style="{StaticResource Page_RadarReveal_Style}"
-d:Style="{x:Null}">
+d:Style="{x:Null}"
+d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True}">
 
     <UserControl.Resources>
         <converters:RevenueHeightConverter x:Key="RevenueHeightConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
-    <UserControl.DataContext>
-        <vm:DashboardVM />
-    </UserControl.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding RefreshDataCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Grid>
         <Grid.ColumnDefinitions>

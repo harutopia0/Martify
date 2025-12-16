@@ -174,6 +174,7 @@ namespace Martify.ViewModels
         public ICommand NavigateToProductSelectionCommand { get; }
         public ICommand ImportGoodsCommand { get; }
         public ICommand PriceCheckCommand { get; }
+        public ICommand RefreshDataCommand { get; }
 
         public DashboardVM()
         {
@@ -221,6 +222,10 @@ namespace Martify.ViewModels
             PriceCheckCommand = new RelayCommand<object>(
                 canExecute: _ => true,
                 execute: _ => ShowPriceCheckDialog()
+            );
+            RefreshDataCommand = new RelayCommand<object>(
+                canExecute: _ => true,
+                execute: _ => LoadDashboardData()
             );
 
             LoadDashboardData();
@@ -339,12 +344,14 @@ namespace Martify.ViewModels
 
         private void LoadDashboardData()
         {
+            System.Diagnostics.Debug.WriteLine($"[Dashboard] LoadDashboardData called at {DateTime.Now:HH:mm:ss.fff}");
             try
             {
                 CalculateWeeklyRevenue();
                 LoadQuickOverview();
                 LoadTopInvoices();
                 LoadTopProducts();
+                System.Diagnostics.Debug.WriteLine($"[Dashboard] Data loaded successfully. Products: {TongSoSanPham}, Invoices: {TongSoDonHang}");
             }
             catch (Exception ex)
             {

@@ -33,6 +33,9 @@
     <None Remove="Resources\Fonts\YanoneKaffeesatz-Regular.ttf" />
     <None Remove="Resources\Fonts\YanoneKaffeesatz-SemiBold.ttf" />
     <None Remove="Resources\Fonts\YanoneKaffeesatz-VariableFont_wght.ttf" />
+    <None Remove="Resources\Images\receipt_hover.png" />
+    <None Remove="Resources\Images\settings_hover.png" />
+    <None Remove="Resources\Images\staff_hover.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -131,16 +134,25 @@
     <Resource Include="Resources\Images\receipt_active.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\receipt_hover.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\receipt_normal.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\settings_active.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\settings_hover.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\settings_normal.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\staff_active.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\staff_hover.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\staff_normal.png">

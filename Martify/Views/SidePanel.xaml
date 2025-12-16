@@ -405,12 +405,14 @@
                                                         Value="Nhân Viên" />
                                                 <Setter Property="Content"
                                                         Value="NHÂN VIÊN" />
-
-                                                <Setter Property="Tag"
-                                                        Value="{StaticResource StaffActive}" />
-
                                                 <Setter Property="Image.Source"
                                                         Value="{StaticResource StaffNormal}" />
+                                                
+                                                
+                                                <Setter Property="Tag"
+                                                        Value="{StaticResource StaffHover}" />
+
+
 
                                                 <Setter Property="DataContext"
                                                         Value="{StaticResource StaffActive}" />
@@ -444,11 +446,14 @@
                                                 <Setter Property="Content"
                                                         Value="HÓA ĐƠN" />
 
-                                                <Setter Property="Tag"
-                                                        Value="{StaticResource ReceiptActive}" />
+
 
                                                 <Setter Property="Image.Source"
                                                         Value="{StaticResource ReceiptNormal}" />
+
+                                                
+                                                <Setter Property="Tag"
+                                                        Value="{StaticResource ReceiptHover}" />
 
                                                 <Setter Property="DataContext"
                                                         Value="{StaticResource ReceiptActive}" />
@@ -481,11 +486,14 @@
                                                 <Setter Property="Content"
                                                         Value="CÀI ĐẶT" />
 
-                                                <Setter Property="Tag"
-                                                        Value="{StaticResource SettingsActive}" />
 
                                                 <Setter Property="Image.Source"
                                                         Value="{StaticResource SettingsNormal}" />
+                                                
+                                                <Setter Property="Tag"
+                                                        Value="{StaticResource SettingsHover}" />
+
+
 
                                                 <Setter Property="DataContext"
                                                         Value="{StaticResource SettingsActive}" />

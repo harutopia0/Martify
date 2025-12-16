@@ -38,13 +38,16 @@
     
     <!--Staff-->
     <BitmapImage x:Key="StaffNormal" UriSource="/Resources/Images/staff_normal.png"></BitmapImage>
+    <BitmapImage x:Key="StaffHover" UriSource="/Resources/Images/staff_hover.png"></BitmapImage>
     <BitmapImage x:Key="StaffActive" UriSource="/Resources/Images/staff_active.png"></BitmapImage>
 
     <!--Receipt-->
     <BitmapImage x:Key="ReceiptNormal" UriSource="/Resources/Images/receipt_normal.png"></BitmapImage>
+    <BitmapImage x:Key="ReceiptHover" UriSource="/Resources/Images/receipt_hover.png"></BitmapImage>
     <BitmapImage x:Key="ReceiptActive" UriSource="/Resources/Images/receipt_active.png"></BitmapImage>
 
     <!--Settings-->
     <BitmapImage x:Key="SettingsNormal" UriSource="/Resources/Images/settings_normal.png"></BitmapImage>
+    <BitmapImage x:Key="SettingsHover" UriSource="/Resources/Images/settings_hover.png"></BitmapImage>
     <BitmapImage x:Key="SettingsActive" UriSource="/Resources/Images/settings_active.png"></BitmapImage>
 </ResourceDictionary>

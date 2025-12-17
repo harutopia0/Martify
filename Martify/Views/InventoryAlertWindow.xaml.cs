@@ -12,6 +12,13 @@ namespace Martify.Views
         public InventoryAlertWindow()
         {
             InitializeComponent();
+
+            // Allow window dragging from header
+            MouseLeftButtonDown += (s, e) =>
+            {
+                if (e.ButtonState == MouseButtonState.Pressed)
+                    DragMove();
+            };
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

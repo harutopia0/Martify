@@ -66,7 +66,6 @@
             <Setter Property="Background" Value="#E0E0E0"/>
             <Setter Property="Foreground" Value="#9E9E9E"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Cursor" Value="Arrow"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsModified}" Value="True">
                     <Setter Property="Background" Value="#4CAF50"/>
@@ -109,7 +108,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="60"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="75"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <!-- HEADER TITLE -->
@@ -118,19 +117,17 @@
         </StackPanel>
 
         <!-- SEARCH & FILTER BAR -->
-        <Border Grid.Row="1" 
-                Style="{StaticResource CardStyle}"
-                Margin="20,0,20, 0"
-                Padding="20,15">
-            <Grid>
-                <Border Background="#F8F9FA"
+            <Border Grid.Row="1" 
+                        Style="{StaticResource CardStyle}"
+                        Margin="20,0,20, 0"
+                        Padding="20,0"
+                        Background="#F8F9FA"
                         CornerRadius="22"
                         BorderBrush="#E0E0E0"
                         BorderThickness="1"
                         Height="40"
-                        VerticalAlignment="Center"
-                        Margin="0,0,15,0">
-                    <Grid>
+                        VerticalAlignment="Center">
+                <Grid>
                         <materialDesign:PackIcon Kind="Magnify"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Left"
@@ -151,12 +148,6 @@
                                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Border>
-
-
-                
-            </Grid>
-        </Border>
-
         <!-- HEADER SECTION -->
         <Grid Grid.Row="2" Margin="20,20,20,10">
             <Grid.ColumnDefinitions>
@@ -289,8 +280,12 @@
                           HeadersVisibility="Column"
                           RowHeight="50"
                           ColumnHeaderHeight="50"
-                          BorderThickness="0">
-
+                          BorderThickness="0"
+                          VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingPanel.VirtualizationMode="Recycling"
+                          EnableColumnVirtualization="True"
+                          EnableRowVirtualization="True">
+    
                     <DataGrid.InputBindings>
                         <MouseBinding MouseAction="LeftDoubleClick"
                                     Command="{Binding OpenDetailsCommand}"
@@ -307,7 +302,7 @@
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="#F5F7FA"/>
                                 </Trigger>
-                                <Trigger Property="IsSelected" Value="True">
+                                <Trigger Property="IsSelected" Value="True">    
                                     <Setter Property="Background" Value="#E3F2FD"/>
                                 </Trigger>
                                 <DataTrigger Binding="{Binding StockQuantity}" Value="0">
@@ -361,7 +356,7 @@
                                             </Border.Effect>
                                             <Border CornerRadius="10" ClipToBounds="True">
                                                 <Image Stretch="UniformToFill"
-                                                       Source="{Binding ImagePath, Converter={StaticResource ImgConverter}, FallbackValue='/Assets/placeholder-product.png'}"/>
+                                                       Source="{Binding ImagePath, Converter={StaticResource ImgConverter}, FallbackValue='Resources\Images\defaultproduct.png'}"/>
                                             </Border>
                                         </Border>
 

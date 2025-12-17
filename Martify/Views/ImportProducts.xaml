@@ -276,9 +276,7 @@
                                   CanUserDeleteRows="False"
                                   CanUserReorderColumns="False"
                                   CanUserSortColumns="False"
-                                  IsReadOnly="True"
                                   SelectionMode="Single"
-                                  SelectionUnit="FullRow"
                                   GridLinesVisibility="Horizontal"
                                   HorizontalGridLinesBrush="#E0E0E0"
                                   RowHeight="45"
@@ -291,7 +289,6 @@
                                     <Setter Property="FontSize" Value="13"/>
                                     <Setter Property="FontWeight" Value="SemiBold"/>
                                     <Setter Property="Foreground" Value="#424242"/>
-                                    <Setter Property="HorizontalAlignment" Value="Center"/>
                                 </Style>
                             </DataGrid.Resources>
 
@@ -300,7 +297,7 @@
                                 <DataGridTextColumn Header="Sản phẩm"
                                                     Binding="{Binding ProductName}"
                                                     Width="*"
-                                                    MinWidth="150"
+                                                    MinWidth="180"
                                                     IsReadOnly="True">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock">
@@ -326,22 +323,22 @@
 
                                 <!-- Unit Price -->
                                 <DataGridTextColumn Header="Đơn giá"
-                                                    Binding="{Binding UnitPrice, StringFormat='{}{0:N0} đ', UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                                    Binding="{Binding UnitPrice, StringFormat='N0', UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                                     Width="110">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="VerticalAlignment" Value="Center"/>
-                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Right"/>
                                             <Setter Property="FontSize" Value="13"/>
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
 
                                 <!-- Quantity with Buttons -->
-                                <DataGridTemplateColumn Header="Số lượng" Width="150">
+                                <DataGridTemplateColumn Header="Số lượng" Width="140">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin=  "0 0 0 0">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                 <Button Style="{StaticResource MaterialDesignIconButton}"
                                                         Command="{Binding DataContext.DecreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                         CommandParameter="{Binding}"
@@ -375,28 +372,26 @@
                                 </DataGridTemplateColumn>
 
                                 <!-- Subtotal -->
-                                <DataGridTemplateColumn Header="Thành tiền"
+                                <DataGridTextColumn Header="Thành tiền"
+                                                    Binding="{Binding Subtotal, StringFormat='N0'}"
                                                     Width="120"
                                                     IsReadOnly="True">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                                <TextBlock FontSize="12" FontWeight="Bold" Foreground="#2196F3" VerticalAlignment="Center">
-                                                     <Run Text="{Binding Subtotal, StringFormat='N0'}"/>
-                                                     <Run Text="₫" FontSize="13"/>
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                   
-                                </DataGridTemplateColumn>
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                                            <Setter Property="FontSize" Value="13"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Foreground" Value="#2196F3"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
 
                                 <!-- Remove Button -->
                                 <DataGridTemplateColumn Width="50">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Margin="-15 0 0 0"
-                                                    Style="{StaticResource MaterialDesignIconButton}"
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
                                                     ToolTip="Xóa"
                                                     Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                     CommandParameter="{Binding}"
@@ -436,7 +431,7 @@
                                                Foreground="#2196F3"
                                                VerticalAlignment="Center"/>
                                     <TextBlock Text=" VNĐ"
-                                               FontSize="24"
+                                               FontSize="16"
                                                FontWeight="SemiBold"
                                                Foreground="#2196F3"
                                                VerticalAlignment="Center"

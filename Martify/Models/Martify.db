@@ -1,0 +1,159 @@
+<UserControl x:Class="Martify.Views.Products"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Martify.Views"
+             xmlns:vm="clr-namespace:Martify.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:uc="clr-namespace:Martify.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="864"
+             Style="{StaticResource Page_CinematicFocus_Style}"
+             d:Style="{x:Null}">
+
+    <UserControl.DataContext>
+        <vm:ProductsVM />
+    </UserControl.DataContext>
+
+    <Grid Background="{DynamicResource MainBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+        </Grid>
+
+        <Grid Grid.Row="1"
+              VerticalAlignment="Top"
+              Background="Transparent"
+              Height="50">
+
+            <Border Background="{DynamicResource CardBackground}"
+                    CornerRadius="5"
+                    Margin="0 1 0 1">
+            </Border>
+
+            <TextBox VerticalAlignment="Center"
+                     materialDesign:HintAssist.Hint="Search..."
+                     Margin="50 0 140 5"
+                     Height="50"
+                     FontSize="18"
+                     Foreground="{DynamicResource PrimaryText}"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+            <materialDesign:PackIcon Kind="Magnify"
+                                     VerticalAlignment="Center"
+                                     Height="30" Width="30" Margin="15,0,0,0"
+                                     Opacity="0.5"
+                                     Foreground="{DynamicResource PrimaryText}"/>
+
+            <Grid VerticalAlignment="Top"
+                  HorizontalAlignment="Right"
+                  Margin="0 0 10 0"
+                  Width="120"
+                  Height="50">
+                <Button Content="Add Product"
+                        HorizontalContentAlignment="Right"
+                        VerticalContentAlignment="Center"
+                        Padding="0 0 12 0"
+                        Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}"
+                        Command="{Binding AddProductCommand}"
+                        Background="#633FCE" Foreground="White"
+                        BorderThickness ="0"
+                        ToolTip="Add new product">
+                </Button>
+                <materialDesign:PackIcon Kind="Plus" Margin="3 0 0 0" VerticalAlignment="Center"
+                                         Width="20" Height="20" HorizontalAlignment="Left"
+                                         Foreground="White"/>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <DataGrid Background="{DynamicResource CardBackground}"
+                      Margin="0 1 0 1"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      HeadersVisibility="All">
+
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type DataGridColumnHeader}" 
+                           BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                        <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                        <Setter Property="FontSize" Value="14"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}"
+                                            ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}">
+                        <DataGridCheckBoxColumn.Header>
+                            <Border Background="Transparent">
+                                <CheckBox/>
+                            </Border>
+                        </DataGridCheckBoxColumn.Header>
+                        <DataGridCheckBoxColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}"
+                                   BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridCheckBoxColumn.HeaderStyle>
+                    </DataGridCheckBoxColumn>
+
+                    <DataGridTextColumn Binding="{Binding Code}"
+                                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                        Header="ProductID"/>
+
+                    <materialDesign:DataGridTextColumn EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                                       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                                       Header="Name">
+                        <materialDesign:DataGridTextColumn.Binding>
+                            <Binding Path="Name"/>
+                        </materialDesign:DataGridTextColumn.Binding>
+                    </materialDesign:DataGridTextColumn>
+
+                    <materialDesign:DataGridComboBoxColumn Width="80"
+                                                           Header="Unit"
+                                                           IsEditable="True"
+                                                           ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Foods}"
+                                                           SelectedValueBinding="{Binding Unit}">
+                    </materialDesign:DataGridComboBoxColumn>
+
+                    <DataGridTextColumn Width="100"
+                                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                        Header="Price">
+                        <DataGridTextColumn.Binding>
+                            <Binding Path="Description"/>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Width="80"
+                                        Binding="{Binding StockQuantity}"
+                                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                        Header="Stock" />
+
+                    <materialDesign:DataGridTextColumn Width="120"
+                                                       Binding="{Binding Numeric}"
+                                                       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                                       Header="CategoryID">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}"
+                                   BasedOn="{StaticResource MaterialDesignDataGridTextColumnStyle}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </materialDesign:DataGridTextColumn>
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</UserControl>

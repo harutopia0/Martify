@@ -14,11 +14,13 @@
         Width="850"
         WindowStyle="None"
         Background="Transparent"
+        Foreground="Transparent"
+        BorderThickness="0"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
 
-    <Window.DataContext>
+        <Window.DataContext>
         <vm:AddProductVM />
     </Window.DataContext>
 
@@ -111,16 +113,19 @@
                                 BorderThickness="2"
                                 Background="#FAFAFA">
                             <Grid>
-                                <Ellipse Width="190" Height="190">
-                                    <Ellipse.Fill>
+                                <Rectangle Width="190" Height="190"
+                                           RadiusX="8" RadiusY="8"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center">
+                                    <Rectangle.Fill>
                                         <ImageBrush Stretch="UniformToFill">
                                             <ImageBrush.ImageSource>
-                                                <Binding Path="SelectedImagePath" 
+                                                <Binding Path="SelectedImagePath"
                                                          FallbackValue="/Assets/placeholder-product.png"/>
                                             </ImageBrush.ImageSource>
                                         </ImageBrush>
-                                    </Ellipse.Fill>
-                                </Ellipse>
+                                    </Rectangle.Fill>
+                                </Rectangle>
 
                                 <!-- Biểu tượng giữ chỗ khi không có ảnh -->
                                 <materialDesign:PackIcon Kind="Image" 

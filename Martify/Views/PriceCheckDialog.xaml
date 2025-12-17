@@ -17,7 +17,7 @@
         Closing="Window_Closing">
 
     <Window.DataContext>
-        <vm:PriceCheckVM/>
+        <vm:PriceCheckVM StatusMessage="Đưa mã QR/Barcode vào khung hình để quét..."/>
     </Window.DataContext>
 
     <Window.Resources>
@@ -26,7 +26,7 @@
 
     <Border Background="{DynamicResource CardBackground}" 
             CornerRadius="20"
-            Margin="10">
+            Margin="30">
         <Border.Effect>
             <DropShadowEffect Color="#000000"
                               BlurRadius="25"

@@ -2,16 +2,16 @@
 using Martify.Views;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace Martify.ViewModels
 {
-
-
     public class ProductsVM : BaseVM
     {
         private string _searchText;
@@ -22,7 +22,7 @@ namespace Martify.ViewModels
             {
                 _searchText = value;
                 OnPropertyChanged();
-                FilterProducts();
+                FilterProductsInMemory();
             }
         }
 
@@ -34,7 +34,7 @@ namespace Martify.ViewModels
             {
                 _selectedCategory = value;
                 OnPropertyChanged();
-                FilterProducts();
+                FilterProductsInMemory();
             }
         }
 
@@ -46,8 +46,15 @@ namespace Martify.ViewModels
             {
                 _selectedUnit = value;
                 OnPropertyChanged();
-                FilterProducts();
+                FilterProductsInMemory();
             }
+        }
+
+        private string _supplierName;
+        public string SupplierName
+        {
+            get => _supplierName;
+            set { _supplierName = value; OnPropertyChanged(); }
         }
 
         private string _saveMessage;
@@ -65,7 +72,7 @@ namespace Martify.ViewModels
             {
                 _inventoryAlertFilter = value;
                 OnPropertyChanged();
-                FilterProducts();
+                FilterProductsInMemory();
             }
         }
 
@@ -164,6 +171,13 @@ namespace Martify.ViewModels
             set { _isDetailsPanelOpen = value; OnPropertyChanged(); }
         }
 
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set { _isLoading = value; OnPropertyChanged(); }
+        }
+
         public ICommand AddProductCommand { get; set; }
         public ICommand DeleteProductCommand { get; set; }
         public ICommand RefreshCommand { get; set; }
@@ -173,18 +187,22 @@ namespace Martify.ViewModels
         public ICommand ClearFilterCommand { get; set; }
         public ICommand SelectImageCommand { get; set; }
 
+        // Cache toàn bộ products trong memory
+        private List<Product> _allProductsList;
+
         public ProductsVM()
         {
             // Initialize collections
             Products = new ObservableCollection<Product>();
             Categories = new ObservableCollection<ProductCategory>();
             UnitList = new ObservableCollection<string>();
+            _allProductsList = new List<Product>();
             InventoryAlertFilter = InventoryAlertType.None;
 
             // Initialize commands
             AddProductCommand = new RelayCommand<object>((p) => true, (p) => AddProduct());
             DeleteProductCommand = new RelayCommand<Product>((p) => p != null, (p) => DeleteProduct(p));
-            RefreshCommand = new RelayCommand<object>((p) => true, (p) => { LoadCategories(); LoadProducts(); });
+            RefreshCommand = new RelayCommand<object>((p) => true, (p) => LoadData());
             ImportProductCommand = new RelayCommand<object>((p) => true, (p) => ImportProducts());
             SelectImageCommand = new RelayCommand<object>((p) => true, (p) => { });
 
@@ -200,7 +218,6 @@ namespace Martify.ViewModels
                     SelectedCategory = null;
                     SelectedUnit = null;
                     InventoryAlertFilter = InventoryAlertType.None;
-                    FilterProducts();
                     IsDetailsPanelOpen = false;
                     SelectedDetailProduct = null;
                 });
@@ -210,6 +227,11 @@ namespace Martify.ViewModels
                 async (p) => await SaveChangesAsync());
 
             // Load data
+            LoadData();
+        }
+
+        private void LoadData()
+        {
             LoadCategories();
             LoadUnit();
             LoadProducts();
@@ -278,26 +300,30 @@ namespace Martify.ViewModels
         {
             if (product == null) return;
 
-            SelectedProduct = product;
-
-            if (SelectedDetailProduct != null && SelectedDetailProduct.ProductID == product.ProductID)
+            if (IsDetailsPanelOpen && SelectedDetailProduct != null && SelectedDetailProduct.ProductID == product.ProductID)
             {
-                IsDetailsPanelOpen = !IsDetailsPanelOpen;
+                IsDetailsPanelOpen = false;
+                return;
             }
-            else
-            {
-                EditProductName = product.ProductName;
-                EditPrice = product.Price;
-                EditStockQuantity = product.StockQuantity;
-                EditUnit = product.Unit;
-                EditCategoryID = product.CategoryID;
-                EditImagePath = product.ImagePath;
 
-                SelectedDetailProduct = product;
-                IsModified = false;
-                SaveMessage = string.Empty;
-                IsDetailsPanelOpen = true;
-            }
+            EditProductName = product.ProductName;
+            EditPrice = product.Price;
+            EditStockQuantity = product.StockQuantity;
+            EditUnit = product.Unit;
+            EditCategoryID = product.CategoryID;
+            EditImagePath = product.ImagePath;
+
+            var lastImport = product.ImportReceiptDetails?
+                            .OrderByDescending(d => d.ImportReceipt.ImportDate)
+                            .FirstOrDefault();
+
+            SupplierName = lastImport?.ImportReceipt?.Supplier?.SupplierName ?? "Chưa có đợt nhập hàng";
+
+            SelectedDetailProduct = product;
+
+            IsModified = false;
+            SaveMessage = string.Empty;
+            IsDetailsPanelOpen = true;
         }
 
         public void SetInventoryAlertFilter(InventoryAlertType alertType)
@@ -306,7 +332,6 @@ namespace Martify.ViewModels
             SelectedCategory = null;
             SelectedUnit = null;
             InventoryAlertFilter = alertType;
-            FilterProducts();
         }
 
         private void LoadCategories()
@@ -351,10 +376,12 @@ namespace Martify.ViewModels
                 var productList = DataProvider.Ins.DB.Products
                     .AsNoTracking()
                     .Include(p => p.Category)
+                    .Include(p => p.ImportReceiptDetails).ThenInclude(ir => ir.ImportReceipt).ThenInclude(sp => sp.Supplier)
                     .OrderBy(p => p.ProductID)
                     .ToList();
 
-                Products = new ObservableCollection<Product>(productList);
+                _allProductsList = productList;
+                FilterProductsInMemory();
             }
             catch (Exception ex)
             {
@@ -362,32 +389,29 @@ namespace Martify.ViewModels
             }
         }
 
-        private void FilterProducts()
+        private void FilterProductsInMemory()
         {
             try
             {
-                var query = DataProvider.Ins.DB.Products
-                    .AsNoTracking()
-                    .Include(p => p.Category)
-                    .AsQueryable();
+                var filtered = _allProductsList.AsEnumerable();
 
                 if (SelectedCategory != null)
-                    query = query.Where(p => p.CategoryID == SelectedCategory.CategoryID);
+                    filtered = filtered.Where(p => p.CategoryID == SelectedCategory.CategoryID);
 
                 if (!string.IsNullOrWhiteSpace(SelectedUnit))
                 {
                     var unitLower = SelectedUnit.Trim().ToLower();
-                    query = query.Where(p => p.Unit != null && p.Unit.ToLower() == unitLower);
+                    filtered = filtered.Where(p => p.Unit != null && p.Unit.ToLower() == unitLower);
                 }
 
                 if (!string.IsNullOrWhiteSpace(SearchText))
                 {
-                    var search = SearchText.Trim().ToLower();
-                    query = query.Where(p =>
-                        p.ProductID.ToLower().Contains(search) ||
-                        p.ProductName.ToLower().Contains(search) ||
-                        (p.Unit != null && p.Unit.ToLower().Contains(search)) ||
-                        (p.Category != null && p.Category.CategoryName.ToLower().Contains(search)));
+                    var search = ConvertToUnSign(SearchText).ToLower();
+                    filtered = filtered.Where(p =>
+                        ConvertToUnSign(p.ProductID).ToLower().Contains(search) ||
+                        ConvertToUnSign(p.ProductName).ToLower().Contains(search) ||
+                        (p.Unit != null && ConvertToUnSign(p.Unit).ToLower().Contains(search)) ||
+                        (p.Category != null && ConvertToUnSign(p.Category.CategoryName).ToLower().Contains(search)));
                 }
 
                 if (InventoryAlertFilter != InventoryAlertType.None)
@@ -395,15 +419,15 @@ namespace Martify.ViewModels
                     if (InventoryAlertFilter == InventoryAlertType.LowStock)
                     {
                         const int MIN_STOCK_THRESHOLD = 10;
-                        query = query.Where(p => p.StockQuantity > 0 && p.StockQuantity <= MIN_STOCK_THRESHOLD);
+                        filtered = filtered.Where(p => p.StockQuantity > 0 && p.StockQuantity <= MIN_STOCK_THRESHOLD);
                     }
                     else if (InventoryAlertFilter == InventoryAlertType.OutOfStock)
                     {
-                        query = query.Where(p => p.StockQuantity == 0);
+                        filtered = filtered.Where(p => p.StockQuantity == 0);
                     }
                 }
 
-                var result = query.OrderBy(p => p.ProductID).ToList();
+                var result = filtered.OrderBy(p => p.ProductID).ToList();
                 Products = new ObservableCollection<Product>(result);
             }
             catch (Exception ex)
@@ -412,14 +436,26 @@ namespace Martify.ViewModels
             }
         }
 
+        private string ConvertToUnSign(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return "";
+
+            Regex regex = new Regex("\\p{IsCombiningDiacriticalMarks}+");
+            string temp = text.Normalize(System.Text.NormalizationForm.FormD);
+
+            return regex
+                .Replace(temp, string.Empty)
+                .Replace('\u0111', 'd')
+                .Replace('\u0110', 'D');
+        }
+
         private void AddProduct()
         {
             try
             {
                 var addWindow = new AddProduct();
                 addWindow.ShowDialog();
-                LoadCategories();
-                LoadProducts();
+                LoadData();
             }
             catch (Exception ex)
             {
@@ -433,7 +469,7 @@ namespace Martify.ViewModels
             {
                 var importWindow = new ImportProducts();
                 importWindow.ShowDialog();
-                LoadProducts();
+                LoadData();
             }
             catch (Exception ex)
             {
@@ -469,7 +505,7 @@ namespace Martify.ViewModels
                     MessageBox.Show("Đã xóa sản phẩm!", "Thành công",
                         MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    LoadProducts();
+                    LoadData();
                 }
             }
             catch (Exception ex)

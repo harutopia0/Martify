@@ -29,17 +29,21 @@
         </ControlTemplate>
 
         <!-- Sliding Details Panel Style -->
-        <Style x:Key="SlidingDetailsPanelStyle" TargetType="Border">
-            <Setter Property="Width" Value="0"/>
+        <Style x:Key="SlidingDetailsPanelStyle"
+       TargetType="Border">
+            <Setter Property="Width"
+            Value="0"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsDetailsPanelOpen}" Value="True">
+                <DataTrigger Binding="{Binding IsDetailsPanelOpen}"
+                     Value="True">
                     <DataTrigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Width" 
-                                         To="300" Duration="0:0:0.4">
+                                <DoubleAnimation Storyboard.TargetProperty="Width"
+                                         To="275"
+                                         Duration="0:0:0.25">
                                     <DoubleAnimation.EasingFunction>
-                                        <CubicEase EasingMode="EaseOut"/>
+                                        <QuadraticEase EasingMode="EaseOut"/>
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
                             </Storyboard>
@@ -48,10 +52,11 @@
                     <DataTrigger.ExitActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Width" 
-                                         To="0" Duration="0:0:0.3">
+                                <DoubleAnimation Storyboard.TargetProperty="Width"
+                                         To="0"
+                                         Duration="0:0:0.25">
                                     <DoubleAnimation.EasingFunction>
-                                        <CubicEase EasingMode="EaseIn"/>
+                                        <QuadraticEase EasingMode="EaseIn"/>
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
                             </Storyboard>
@@ -101,6 +106,26 @@
             <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
             <Setter Property="BorderBrush" Value="#E0E0E0"/>
             <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style x:Key="HeaderLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style x:Key="FieldIconStyle" TargetType="materialDesign:PackIcon">
+            <Setter Property="Width" Value="22"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+            <Setter Property="Margin" Value="0,0,15,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="FieldRowStyle" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </UserControl.Resources>
 
@@ -255,7 +280,7 @@
         <!-- MAIN CONTENT AREA -->
         <Grid Grid.Row="3" Margin="20,0,20,20">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
@@ -335,7 +360,7 @@
 
                     <DataGrid.Columns>
                         <!-- Product Name with Image -->
-                        <DataGridTemplateColumn Header="SẢN PHẨM" Width="2*" MinWidth="230" >
+                        <DataGridTemplateColumn Header="SẢN PHẨM" Width="2*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -356,7 +381,7 @@
                                             </Border.Effect>
                                             <Border CornerRadius="10" ClipToBounds="True">
                                                 <Image Stretch="UniformToFill"
-                                                       Source="{Binding ImagePath, Converter={StaticResource ImgConverter}, FallbackValue='Resources\Images\defaultproduct.png'}"/>
+                                                       Source="{Binding ImagePath, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource DefaultProduct} ,FallbackValue={StaticResource DefaultProduct}}"/>
                                             </Border>
                                         </Border>
 
@@ -380,18 +405,16 @@
                         </DataGridTemplateColumn>
 
                         <!-- Category -->
-                        <DataGridTemplateColumn Header="DANH MỤC" Width="*" MinWidth="160">
+                        <DataGridTemplateColumn Header="DANH MỤC" Width="1.5*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Border Background="#F0F4FF"
                                             CornerRadius="6"
                                             Padding="10,5"
                                             Height="35"
-                                            MinWidth="130"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Left">
                                         <TextBlock Text="{Binding Category.CategoryName}"
-                                                   MinWidth="100"
                                                    FontSize="12"
                                                    FontWeight="SemiBold"
                                                    Foreground="#5B7EF4"
@@ -406,7 +429,7 @@
                         <!-- Unit -->
                         <DataGridTextColumn Header="ĐVT" 
                                             Binding="{Binding Unit}" 
-                                            Width="80">
+                                            Width="*">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="FontSize" Value="13"/>
@@ -416,7 +439,7 @@
                         </DataGridTextColumn>
 
                         <!-- Price -->
-                        <DataGridTemplateColumn Header="GIÁ BÁN" Width="100">
+                        <DataGridTemplateColumn Header="GIÁ BÁN" Width="*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel VerticalAlignment="Center">
@@ -430,7 +453,7 @@
                         </DataGridTemplateColumn>
 
                         <!-- Stock -->
-                        <DataGridTemplateColumn Header="TỒN KHO" Width="120">
+                        <DataGridTemplateColumn Header="TỒN KHO" Width="*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Border CornerRadius="6" 
@@ -467,7 +490,7 @@
                         </DataGridTemplateColumn>
 
                         <!-- Actions -->
-                        <DataGridTemplateColumn Header="THAO TÁC" Width="110">
+                        <DataGridTemplateColumn Header="THAO TÁC" Width="*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
@@ -505,7 +528,7 @@
             <Border Grid.Column="1"
                     Style="{StaticResource SlidingDetailsPanelStyle}"
                     Margin="5,0,0,0">
-                <Border Style="{StaticResource CardStyle}" Padding="0">
+                <Border  Padding="0">
                     <Grid DataContext="{Binding SelectedDetailProduct}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -513,31 +536,27 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <!-- Product Header -->
+                        <!--Product Header-->
                         <Border Grid.Row="0" 
                                 Background="#633FCE"
                                 Padding="20,25"
                                 CornerRadius="15">
                             <StackPanel HorizontalAlignment="Center">
-                                    <Ellipse Width="80" Height="80" Margin="0,0,0,15"
+                                <Ellipse Width="80" Height="80" Margin="0,0,0,15"
                                              Cursor="Hand" ToolTip="Nhấn để chọn ảnh">
-                                        <Ellipse.InputBindings>
-                                            <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.SelectImageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-                                        </Ellipse.InputBindings>
-                                        <Ellipse.Effect>
-                                            <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
-                                        </Ellipse.Effect>
-                                        <Ellipse.Fill>
-                                            <ImageBrush ImageSource="{Binding DataContext.EditImagePath, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource Anonymous}, FallbackValue={StaticResource Anonymous}}" Stretch="UniformToFill"/>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
+                                    <Ellipse.InputBindings>
+                                        <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.SelectImageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                    </Ellipse.InputBindings>
+                                    <Ellipse.Fill>
+                                        <ImageBrush ImageSource="{Binding DataContext.EditImagePath, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource DefaultProduct}, FallbackValue={StaticResource DefaultProduct}}" Stretch="UniformToFill"/>
+                                    </Ellipse.Fill>
+                                </Ellipse>
 
                                 <TextBlock Text="{Binding DataContext.EditProductName, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                            FontSize="18" 
                                            FontWeight="Bold" 
                                            Foreground="White" 
                                            HorizontalAlignment="Center" 
-                                           TextWrapping="Wrap" 
                                            TextAlignment="Center"
                                            MaxWidth="260"/>
                                 <TextBlock Text="{Binding ProductID}" 
@@ -548,70 +567,62 @@
                             </StackPanel>
                         </Border>
 
-                        <!-- Edit Form -->
+                        <!--Edit Form-->
                         <ScrollViewer Grid.Row="1" 
                                       Margin="0,5,0,0"
-                                      Padding="20,0"
-                                      VerticalScrollBarVisibility="Auto">
-                            <StackPanel>
-                                <!-- Category -->
-                                <TextBlock Text="DANH MỤC" 
-                                           FontSize="11" 
-                                           FontWeight="SemiBold"
-                                           Foreground="{DynamicResource SecondaryText}"
-                                           Margin="0,0,0,8"/>
-                                <ComboBox ItemsSource="{Binding DataContext.Categories, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                          SelectedValuePath="CategoryID"
-                                          SelectedValue="{Binding DataContext.EditCategoryID, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          DisplayMemberPath="CategoryName"
-                                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                          Margin="0,0,0,5"
-                                          Height="50" />
+                                      VerticalScrollBarVisibility="Auto"
+                                      CanContentScroll="True">
+                            <StackPanel 
+                                        DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
 
-                                <!-- Unit -->
-                                <TextBlock Text="ĐƠN VỊ TÍNH" 
-                                           FontSize="11" 
-                                           FontWeight="SemiBold"
-                                           Foreground="{DynamicResource SecondaryText}"
-                                           Margin="0,0,0,8"/>
-                                <TextBox Text="{Binding DataContext.EditUnit, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"
-                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                         Margin="0,0,0,5"/>
+                                <TextBlock Text="DANH MỤC" Style="{StaticResource HeaderLabelStyle}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <materialDesign:PackIcon Kind="Category" Style="{StaticResource FieldIconStyle}"/>
+                                    <ComboBox ItemsSource="{Binding Categories}"
+                                              SelectedValuePath="CategoryID"
+                                              SelectedValue="{Binding EditCategoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              DisplayMemberPath="CategoryName"
+                                              Width="230"
+                                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                                </StackPanel>
 
-                                <!-- Price -->
-                                <TextBlock Text="GIÁ BÁN (VNĐ)" 
-                                           FontSize="11" 
-                                           FontWeight="SemiBold"
-                                           Foreground="{DynamicResource SecondaryText}"
-                                           Margin="0,0,0,8"/>
-                                <TextBox Text="{Binding DataContext.EditPrice, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}"
-                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                         Margin="0,0,0,5"/>
-                                <!-- Stock -->
-                                <TextBlock Text="SỐ LƯỢNG TỒN KHO" 
-                                           FontSize="11" 
-                                           FontWeight="SemiBold"
-                                           Foreground="{DynamicResource SecondaryText}"
-                                           Margin="0,0,0,8"/>
-                                <TextBox Text="{Binding DataContext.EditStockQuantity, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"
-                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                         Margin="0,0,0,5"/>
+                                <TextBlock Text="ĐƠN VỊ TÍNH" Style="{StaticResource HeaderLabelStyle}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <materialDesign:PackIcon Kind="Scale" Style="{StaticResource FieldIconStyle}"/>
+                                    <TextBox Text="{Binding EditUnit, UpdateSourceTrigger=PropertyChanged}"
+                                             Width="230"
+                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                </StackPanel>
 
-                                <!-- Supplier (Read-only info) -->
-                                <TextBlock Text="NHÀ CUNG CẤP" 
-                                           FontSize="11" 
-                                           FontWeight="SemiBold"
-                                           Foreground="{DynamicResource SecondaryText}"
-                                           Margin="0,0,0,8"/>
-                                <TextBox Text="{Binding ImportReceipt.Supplier.SupplierName, TargetNullValue='Chưa có', Mode=OneWay}"
-                                         IsReadOnly="True"
-                                         Background="#F5F5F5"
-                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                         Margin="0,0,0,5"/>
+                                <TextBlock Text="GIÁ BÁN (VNĐ)" Style="{StaticResource HeaderLabelStyle}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <materialDesign:PackIcon Kind="Money" Style="{StaticResource FieldIconStyle}"/>
+                                    <TextBox Text="{Binding EditPrice, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}"
+                                             Width="230"
+                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                </StackPanel>
+
+                                <TextBlock Text="SỐ LƯỢNG TỒN" Style="{StaticResource HeaderLabelStyle}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <materialDesign:PackIcon Kind="BoxVariant" Style="{StaticResource FieldIconStyle}"/>
+                                    <TextBox Text="{Binding EditStockQuantity, UpdateSourceTrigger=PropertyChanged}"
+                                             Width="230"
+                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                </StackPanel>
+
+                                <TextBlock Text="NHÀ CUNG CẤP" Style="{StaticResource HeaderLabelStyle}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <materialDesign:PackIcon Kind="Factory" Style="{StaticResource FieldIconStyle}"/>
+                                    <TextBox Text="{Binding SupplierName, TargetNullValue='Chưa xác định', Mode=OneWay}"
+                                             IsReadOnly="True"
+                                             Width="230"
+                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                </StackPanel>
+
                             </StackPanel>
                         </ScrollViewer>
 
-                        <!-- Save Button -->
+                        <!--Save Button-->
                         <Border Grid.Row="2" 
                                 Padding="20"
                                 BorderBrush="#E0E0E0"
@@ -625,7 +636,7 @@
                             </StackPanel>
                         </Border>
                     </Grid>
-                </Border>
+                </Border> 
             </Border>
         </Grid>
     </Grid>

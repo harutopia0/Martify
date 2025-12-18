@@ -288,6 +288,7 @@
                                        BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
                                     <Setter Property="FontSize" Value="13"/>
                                     <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
                                     <Setter Property="Foreground" Value="#424242"/>
                                 </Style>
                             </DataGrid.Resources>
@@ -302,6 +303,8 @@
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+
                                             <Setter Property="FontSize" Value="13"/>
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
@@ -335,7 +338,7 @@
                                 </DataGridTextColumn>
 
                                 <!-- Quantity with Buttons -->
-                                <DataGridTemplateColumn Header="Số lượng" Width="140">
+                                <DataGridTemplateColumn Header="Số lượng" Width="150">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -475,7 +478,7 @@
                                                             Height="20"
                                                             VerticalAlignment="Center"
                                                             Margin="0,0,8,0"/>
-                                    <TextBlock Text="Xác nhận nhập" 
+                                    <TextBlock Text="Xác nhận"
                                                FontSize="14"
                                                VerticalAlignment="Center"/>
                                 </StackPanel>

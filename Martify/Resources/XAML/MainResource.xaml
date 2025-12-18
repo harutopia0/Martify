@@ -8,6 +8,8 @@
     <ViewModels:DashboardVM x:Key="DashboardVM"></ViewModels:DashboardVM>
     <ViewModels:ProductSelectionVM x:Key="ProductSelectionVM"></ViewModels:ProductSelectionVM>
     <ViewModels:ProductsVM x:Key="ProductsVM"></ViewModels:ProductsVM>
+    <ViewModels:AddProductVM x:Key="AddProductVM"></ViewModels:AddProductVM>
+    <ViewModels:ImportProductsVM x:Key="ImportProductVM"></ViewModels:ImportProductsVM>
     <ViewModels:EmployeeVM x:Key="EmployeeVM"></ViewModels:EmployeeVM>
     <ViewModels:AddEmployeeVM x:Key="AddEmployeeVM"></ViewModels:AddEmployeeVM>
     <ViewModels:InvoicesVM x:Key="InvoicesVM"></ViewModels:InvoicesVM>

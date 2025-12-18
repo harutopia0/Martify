@@ -127,8 +127,8 @@ Martify/
 > Màn hình bán hàng trực quan, hỗ trợ tìm kiếm và quét mã.
 
 <div align="center">
-  <img src="productselection.png" width="415">
-  <img src="productselectionqr.png" width="415">
+  <img src="productselection.png" width="750">
+  <img src="productselectionqr.png" width="750">
 </div>
 
 ### 4. Quản lý Sản phẩm
@@ -138,7 +138,7 @@ Martify/
   <hình ảnh minh họa>
 </div>
 
-### 5. Hóa đơn PDF
+### 5. Hóa đơn
 > Mẫu hóa đơn được xuất ra từ phần mềm.
 
 <div align="center">

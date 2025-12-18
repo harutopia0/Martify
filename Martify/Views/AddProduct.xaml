@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Name="addProductWindow"
         Title="Thêm sản phẩm mới" 
-        Height="600" 
+        Height="550" 
         Width="850"
         WindowStyle="None"
         BorderThickness="0"
@@ -307,23 +307,7 @@
                                 </ComboBox>
                             </Grid>
 
-                            <!-- Nhà cung cấp -->
-                            <Grid Margin="0,0,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" 
-                                           Text="Nhà cung cấp" 
-                                           Style="{StaticResource LabelText}"/>
-                                <ComboBox Grid.Column="1"
-                                          ItemsSource="{Binding SupplierList}"
-                                          DisplayMemberPath="SupplierName"
-                                          SelectedValuePath="SupplierID"
-                                          SelectedValue="{Binding SelectedSupplierID, UpdateSourceTrigger=PropertyChanged}"
-                                          materialDesign:HintAssist.Hint="Chọn nhà cung cấp (tùy chọn)"
-                                          Style="{StaticResource ValidatedComboBox}"/>
-                            </Grid>
+                           
                         </StackPanel>
 
                         <!-- Nút hành động -->

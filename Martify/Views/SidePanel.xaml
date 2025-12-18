@@ -140,11 +140,11 @@
                                                              DecelerationRatio="0.6"
                                                              From="0"
                                                              To="200"
-                                                             Duration="0:0:0.75" />
+                                                             Duration="0:0:0.25" />
                                             <ColorAnimation Storyboard.TargetName="Highlighter"
                                                             Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
                                                             To="#FFD3D3D3"
-                                                            Duration="0:0:0.3" />
+                                                            Duration="0:0:0.25" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                     <RemoveStoryboard BeginStoryboardName="Stop_Indicator" />
@@ -158,7 +158,7 @@
                                                              DecelerationRatio="0.6"
                                                              From="200"
                                                              To="0"
-                                                             Duration="0:0:0.75" />
+                                                             Duration="0:0:0.5" />
                                             <ColorAnimation Storyboard.TargetName="Highlighter"
                                                             Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
                                                             To="#FFD3D3D3"

@@ -89,11 +89,6 @@
         <Style x:Key="CardStyle" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
             <Setter Property="CornerRadius" Value="16"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.08" Color="#000000"/>
-                </Setter.Value>
-            </Setter>
         </Style>
 
         <!-- Filter Chip Style -->
@@ -131,7 +126,6 @@
 
     <Grid Background="Transparent">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
             <RowDefinition Height="60"/>
             <RowDefinition Height="75"/>
             <RowDefinition Height="*"/>
@@ -142,9 +136,9 @@
         </StackPanel>
 
         <!-- SEARCH & FILTER BAR -->
-            <Border Grid.Row="1" 
+            <Border Grid.Row="0" 
                         Style="{StaticResource CardStyle}"
-                        Margin="20,0,20, 0"
+                        Margin="20,10,150, 0"
                         Padding="20,0"
                         Background="#F8F9FA"
                         CornerRadius="22"
@@ -174,7 +168,7 @@
                     </Grid>
                 </Border>
         <!-- HEADER SECTION -->
-        <Grid Grid.Row="2" Margin="20,20,20,10">
+        <Grid Grid.Row="1" Margin="20,20,20,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -218,10 +212,10 @@
                            Height="22" 
                            Width="22"/>
                 </Button>
-                <TextBlock Margin="10,0,0,0" VerticalAlignment="Center">
-                            <Run Text="Tổng:" Foreground="{DynamicResource SecondaryText}" FontSize="13"/>
+                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">
+                            <Run Text="Tổng:" Foreground="{DynamicResource SecondaryText}" FontSize="12"/>
                             <Run Text="{Binding Products.Count, Mode=OneWay}" Foreground="#2196F3" FontWeight="SemiBold" FontSize="14"/>
-                            <Run Text="sản phẩm" Foreground="{DynamicResource SecondaryText}" FontSize="13"/>
+                            <Run Text="sản phẩm" Foreground="{DynamicResource SecondaryText}" FontSize="12"/>
                 </TextBlock>
             </StackPanel>
             <!-- Action Buttons -->
@@ -280,7 +274,7 @@
         <!-- MAIN CONTENT AREA -->
         <Grid Grid.Row="3" Margin="20,0,20,20">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="7*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
@@ -376,9 +370,6 @@
                                                 CornerRadius="10"
                                                 Background="#F5F5F5"
                                                 Margin="0,0,12,0">
-                                            <Border.Effect>
-                                                <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.1"/>
-                                            </Border.Effect>
                                             <Border CornerRadius="10" ClipToBounds="True">
                                                 <Image Stretch="UniformToFill"
                                                        Source="{Binding ImagePath, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource DefaultProduct} ,FallbackValue={StaticResource DefaultProduct}}"/>
@@ -490,7 +481,7 @@
                         </DataGridTemplateColumn>
 
                         <!-- Actions -->
-                        <DataGridTemplateColumn Header="THAO TÁC" Width="*">
+                        <DataGridTemplateColumn Header="CÔNG CỤ" Width="1*" MinWidth="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
@@ -568,55 +559,76 @@
                         </Border>
 
                         <!--Edit Form-->
-                        <ScrollViewer Grid.Row="1" 
-                                      Margin="0,5,0,0"
-                                      VerticalScrollBarVisibility="Auto"
+                        <ScrollViewer x:Name="DetailScrollViewer"
+                                      Grid.Row="1" 
+                                      Margin="0,15,0,0"
+                                      VerticalScrollBarVisibility="Visible"
                                       CanContentScroll="True">
                             <StackPanel 
                                         DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
 
-                                <TextBlock Text="DANH MỤC" Style="{StaticResource HeaderLabelStyle}"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                    <materialDesign:PackIcon Kind="Category" Style="{StaticResource FieldIconStyle}"/>
+                                    <materialDesign:PackIcon Kind="Category"
+                                                             Width="22"
+                                                             Height="22"
+                                                             Foreground="{DynamicResource SecondaryText}"
+                                                             Margin="15,0,15,0"
+                                                             VerticalAlignment="Center"/>
                                     <ComboBox ItemsSource="{Binding Categories}"
                                               SelectedValuePath="CategoryID"
-                                              SelectedValue="{Binding EditCategoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              SelectedValue="{Binding EditCategoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                               DisplayMemberPath="CategoryName"
                                               Width="230"
-                                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                                              ToolTip="Danh mục"/>
                                 </StackPanel>
 
-                                <TextBlock Text="ĐƠN VỊ TÍNH" Style="{StaticResource HeaderLabelStyle}"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                    <materialDesign:PackIcon Kind="Scale" Style="{StaticResource FieldIconStyle}"/>
-                                    <TextBox Text="{Binding EditUnit, UpdateSourceTrigger=PropertyChanged}"
+                                    <materialDesign:PackIcon Kind="Scale" 
+                                                             Width="22"
+                                                            Height="22"
+                                                            Foreground="{DynamicResource SecondaryText}"
+                                                            Margin="15,0,15,0"
+                                                            VerticalAlignment="Center"/>
+                                    <TextBox Text="{Binding EditUnit, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                              Width="230"
-                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                             ToolTip="Đơn vị tính"/>
                                 </StackPanel>
 
-                                <TextBlock Text="GIÁ BÁN (VNĐ)" Style="{StaticResource HeaderLabelStyle}"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                    <materialDesign:PackIcon Kind="Money" Style="{StaticResource FieldIconStyle}"/>
-                                    <TextBox Text="{Binding EditPrice, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}"
+                                    <materialDesign:PackIcon Kind="Money"
+                                                             Width="22"
+                                                            Height="22"
+                                                            Foreground="{DynamicResource SecondaryText}"
+                                                            Margin="15,0,15,0"
+                                                            VerticalAlignment="Center"/>
+                                    <TextBox Text="{Binding EditPrice, StringFormat=N0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                              Width="230"
-                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                             ToolTip="Đơn giá"/>
                                 </StackPanel>
 
-                                <TextBlock Text="SỐ LƯỢNG TỒN" Style="{StaticResource HeaderLabelStyle}"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                    <materialDesign:PackIcon Kind="BoxVariant" Style="{StaticResource FieldIconStyle}"/>
-                                    <TextBox Text="{Binding EditStockQuantity, UpdateSourceTrigger=PropertyChanged}"
+                                    <materialDesign:PackIcon Kind="BoxVariant"
+                                                             Width="22"
+                                                            Height="22"
+                                                            Foreground="{DynamicResource SecondaryText}"
+                                                            Margin="15,0,15,0"
+                                                            VerticalAlignment="Center"/>
+                                    <TextBox Text="{Binding EditStockQuantity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                              Width="230"
-                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                             ToolTip="Số lượng tồn"/>
                                 </StackPanel>
 
-                                <TextBlock Text="NHÀ CUNG CẤP" Style="{StaticResource HeaderLabelStyle}"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                    <materialDesign:PackIcon Kind="Factory" Style="{StaticResource FieldIconStyle}"/>
-                                    <TextBox Text="{Binding SupplierName, TargetNullValue='Chưa xác định', Mode=OneWay}"
+                                    <materialDesign:PackIcon Kind="Factory"
+                                                             Width="22"
+                                                            Height="22"
+                                                            Foreground="{DynamicResource SecondaryText}"
+                                                            Margin="15,0,15,0"
+                                                            VerticalAlignment="Center"/>
+                                    <TextBox Text="{Binding SupplierName, TargetNullValue='Chưa xác định', Mode=OneWay, ValidatesOnDataErrors=True}"
                                              IsReadOnly="True"
                                              Width="230"
-                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                             ToolTip="Nhà cung cấp"/>
                                 </StackPanel>
 
                             </StackPanel>

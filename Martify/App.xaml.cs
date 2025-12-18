@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Martify.Models;
+using System;
 using System.Linq;
 using System.Windows;
 
@@ -36,5 +37,7 @@ namespace Martify
             // 4. THÊM theme mới vào
             Resources.MergedDictionaries.Add(newTheme);
         }
+
+      
     }
 }

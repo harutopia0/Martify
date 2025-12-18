@@ -119,35 +119,35 @@ namespace Martify.ViewModels
         public string EditProductName
         {
             get => _editProductName;
-            set { _editProductName = value; OnPropertyChanged(); IsModified = true; }
+            set { _editProductName = value; OnPropertyChanged(); CheckModified(); }
         }
 
         private decimal _editPrice;
         public decimal EditPrice
         {
             get => _editPrice;
-            set { _editPrice = value; OnPropertyChanged(); IsModified = true; }
+            set { _editPrice = value; OnPropertyChanged(); CheckModified(); }
         }
 
         private int _editStockQuantity;
         public int EditStockQuantity
         {
             get => _editStockQuantity;
-            set { _editStockQuantity = value; OnPropertyChanged(); IsModified = true; }
+            set { _editStockQuantity = value; OnPropertyChanged(); CheckModified(); }
         }
 
         private string _editUnit;
         public string EditUnit
         {
             get => _editUnit;
-            set { _editUnit = value; OnPropertyChanged(); IsModified = true; }
+            set { _editUnit = value; OnPropertyChanged(); CheckModified(); }
         }
 
         private string _editCategoryID;
         public string EditCategoryID
         {
             get => _editCategoryID;
-            set { _editCategoryID = value; OnPropertyChanged(); IsModified = true; }
+            set { _editCategoryID = value; OnPropertyChanged(); CheckModified(); }
         }
 
         private string _editImagePath;
@@ -324,6 +324,17 @@ namespace Martify.ViewModels
             IsModified = false;
             SaveMessage = string.Empty;
             IsDetailsPanelOpen = true;
+        }
+
+        private void CheckModified()
+        {
+            if (SelectedDetailProduct == null) return;
+
+            IsModified = EditProductName != SelectedDetailProduct.ProductName ||
+                         EditPrice != SelectedDetailProduct.Price ||
+                         EditStockQuantity != SelectedDetailProduct.StockQuantity ||
+                         EditUnit != SelectedDetailProduct.Unit ||
+                         EditCategoryID != SelectedDetailProduct.CategoryID;
         }
 
         public void SetInventoryAlertFilter(InventoryAlertType alertType)

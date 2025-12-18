@@ -170,7 +170,11 @@
   </ItemGroup>
 
 
-
+	
+	
+	
+	
+	
 
 	<ItemGroup>
 		<None Update="Assets\**">
@@ -179,6 +183,8 @@
 	</ItemGroup>
 
 
+	
+	
 
 
 	<ItemGroup>
@@ -194,11 +200,9 @@
 	</ItemGroup>
 
 
-
-
-	<ItemGroup>
-	  <Folder Include="ViewModels\DesignTime\" />
-	</ItemGroup>
+	
+	
+	
 
 
 </Project>

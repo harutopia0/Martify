@@ -85,7 +85,6 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <!-- Camera Selection -->
@@ -213,25 +212,6 @@
                             </Grid>
                         </Border>
 
-                        <!-- Status Bar -->
-                        <Border Grid.Row="2"
-                                Background="{DynamicResource CardBackground}"
-                                CornerRadius="0,0,15,15"
-                                Padding="15,10">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <materialDesign:PackIcon Kind="InformationOutline"
-                                                         Width="18"
-                                                         Height="18"
-                                                         Foreground="#067FF8"
-                                                         VerticalAlignment="Center"
-                                                         Margin="0,0,8,0"/>
-                                <TextBlock Text="{Binding StatusMessage}"
-                                           FontSize="13"
-                                           FontFamily="Roboto Medium"
-                                           Foreground="{DynamicResource SecondaryText}"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
                     </Grid>
                 </Border>
 

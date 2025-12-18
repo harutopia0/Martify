@@ -84,7 +84,7 @@ Martify/
 ├── 📂 Views/            # Giao diện người dùng (Windows & UserControls)
 ├── 📂 Helpers/          # Các tiện ích: Mã hóa, Validate dữ liệu, Seed Data
 ├── 📂 Converters/       # Bộ chuyển đổi giá trị (Value Converters) cho XAML
-├── 📂 Resources/        # Tài nguyên: XAML, Sounds, Fonts, Images, Styles, Themes (Dark/Light)
+├── 📂 Resources/        # Tài nguyên: XAML, Sounds, Fonts, Images, Styles
 ├── 📂 Behaviors/        # Các hành vi tương tác giao diện (Animations)
 ├── App.xaml             # Cấu hình khởi chạy và quản lý ResourceDictionary
 ├── LoginWindow.xaml     # Cửa sổ đăng nhập để truy cập ứng dụng

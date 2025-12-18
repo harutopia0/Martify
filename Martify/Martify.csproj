@@ -194,4 +194,11 @@
 	</ItemGroup>
 
 
+
+
+	<ItemGroup>
+	  <Folder Include="ViewModels\DesignTime\" />
+	</ItemGroup>
+
+
 </Project>

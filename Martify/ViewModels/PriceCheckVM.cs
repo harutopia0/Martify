@@ -1,4 +1,4 @@
-using AForge.Video;
+Ôªøusing AForge.Video;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using Martify.Models;
@@ -159,9 +159,9 @@ namespace Martify.ViewModels
         {
             get
             {
-                if (StockQuantity == 0) return "Out of Stock";
-                if (StockQuantity <= 10) return "Low Stock";
-                return "In Stock";
+                if (StockQuantity == 0) return "H·∫øt h√†ng";
+                if (StockQuantity <= 10) return "S·∫Øp h·∫øt h√†ng";
+                return "C√≤n";
             }
         }
 
@@ -215,7 +215,7 @@ namespace Martify.ViewModels
                 execute: _ => LoadCameras()
             );
 
-            StatusMessage = "–ang kh?i t?o camera...";
+            StatusMessage = "ƒêang kh?i t?o camera...";
             LoadCameras();
         }
         #endregion
@@ -230,7 +230,7 @@ namespace Martify.ViewModels
 
                 if (_videoDevices.Count == 0)
                 {
-                    StatusMessage = "KhÙng t?m th?y camera n‡o!";
+                    StatusMessage = "Kh√¥ng t?m th?y camera n√†o!";
                     return;
                 }
 
@@ -251,7 +251,7 @@ namespace Martify.ViewModels
             }
             catch (Exception ex)
             {
-                StatusMessage = $"L?i khi t?i danh s·ch camera: {ex.Message}";
+                StatusMessage = $"L?i khi t?i danh s√°ch camera: {ex.Message}";
             }
         }
 
@@ -277,11 +277,11 @@ namespace Martify.ViewModels
 
                 _isScanning = true;
                 IsCameraActive = true;
-                StatusMessage = "–˝a m? QR/Barcode v‡o khung h?nh ? quÈt...";
+                StatusMessage = "ƒê∆∞a m? QR/Barcode v√†o khung h?nh ƒë? qu√©t...";
             }
             catch (Exception ex)
             {
-                StatusMessage = $"L?i khi kh?i ?ng camera: {ex.Message}";
+                StatusMessage = $"L?i khi kh?i ƒë?ng camera: {ex.Message}";
                 IsCameraActive = false;
             }
         }
@@ -383,7 +383,7 @@ namespace Martify.ViewModels
             Application.Current?.Dispatcher?.Invoke(() =>
             {
                 LastScannedCode = code;
-                StatusMessage = $"–? quÈt: {code}";
+                StatusMessage = $"ƒê? qu√©t: {code}";
 
                 // Freeze scanning while showing result
                 _isScanning = false;
@@ -418,7 +418,7 @@ namespace Martify.ViewModels
                 {
                     IsProductFound = false;
                     IsProductNotFound = true;
-                    StatusMessage = $"KhÙng t?m th?y s?n ph?m v?i m?: {code}";
+                    StatusMessage = $"Kh√¥ng t?m th?y s?n ph?m v?i m?: {code}";
                 }
             });
         }
@@ -435,7 +435,7 @@ namespace Martify.ViewModels
             ProductUnit = null;
             CategoryName = null;
             LastScannedCode = null;
-            StatusMessage = "–˝a m? QR/Barcode v‡o khung h?nh ? quÈt...";
+            StatusMessage = "ƒê∆∞a m? QR/Barcode v√†o khung h?nh ƒë? qu√©t...";
 
             // Resume scanning
             _isScanning = true;

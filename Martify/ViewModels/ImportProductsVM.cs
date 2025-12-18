@@ -118,7 +118,45 @@ namespace Martify.ViewModels
             ImportItems = new ObservableCollection<ImportItem>();
             LoadProducts();
             LoadSuppliers();
+            InitializeCommands();
+        }
 
+        /// <summary>
+        /// Constructor for pre-loading products with a default quantity (used for restocking from inventory alerts)
+        /// </summary>
+        /// <param name="products">Products to pre-load</param>
+        /// <param name="defaultQuantity">Default quantity for each product</param>
+        public ImportProductsVM(IEnumerable<Product> products, int defaultQuantity = 50)
+        {
+            ImportItems = new ObservableCollection<ImportItem>();
+            LoadProducts();
+            LoadSuppliers();
+            InitializeCommands();
+
+            // Pre-load selected products with default quantity
+            if (products != null)
+            {
+                foreach (var product in products)
+                {
+                    var importItem = new ImportItem
+                    {
+                        ProductID = product.ProductID,
+                        ProductName = product.ProductName,
+                        Unit = product.Unit,
+                        UnitPrice = product.Price,
+                        Quantity = defaultQuantity
+                    };
+
+                    importItem.PropertyChanged += ImportItem_PropertyChanged;
+                    ImportItems.Add(importItem);
+                }
+
+                CalculateTotal();
+            }
+        }
+
+        private void InitializeCommands()
+        {
             AddProductCommand = new RelayCommand<Product>(
                 (p) => p != null,
                 (p) => AddProductToImport(p));

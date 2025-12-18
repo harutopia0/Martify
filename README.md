@@ -158,7 +158,7 @@ Martify/
     ```bash
     git clone https://github.com/harutopia0/Martify.git
     ```
-2.  **Mở dự án:** Sử dụng Visual Studio mở file `Martify.sln`.
+2.  **Mở dự án:** Mở file `Martify.sln` bằng Visual Studio 2022.
 3.  **Build & Run:** Nhấn `F5` để chạy ứng dụng.
 
 ### Tài khoản mặc định

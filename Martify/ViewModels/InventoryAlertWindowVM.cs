@@ -1,6 +1,9 @@
+﻿using Martify.Models;
 using Martify.Models;
+using Martify.Views;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -20,6 +23,66 @@ namespace Martify.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                FilterProducts();
+            }
+        }
+
+        private ProductCategory _selectedCategory;
+        public ProductCategory SelectedCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                _selectedCategory = value;
+                OnPropertyChanged();
+                FilterProducts();
+            }
+        }
+
+        private string _selectedUnit;
+        public string SelectedUnit
+        {
+            get => _selectedUnit;
+            set
+            {
+                _selectedUnit = value;
+                OnPropertyChanged();
+                FilterProducts();
+            }
+        }
+
+        private ObservableCollection<ProductCategory> _categories;
+        public ObservableCollection<ProductCategory> Categories
+        {
+            get => _categories;
+            set
+            {
+                _categories = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<string> _unitList;
+        public ObservableCollection<string> UnitList
+        {
+            get => _unitList;
+            set
+            {
+                _unitList = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private List<SelectableProduct> _allProducts;
 
         private ObservableCollection<SelectableProduct> _products;
         public ObservableCollection<SelectableProduct> Products
@@ -96,11 +159,18 @@ namespace Martify.ViewModels
 
         public ICommand SelectAllCommand { get; set; }
         public ICommand RestockCommand { get; set; }
+        public ICommand ClearFilterCommand { get; set; }
+        public ICommand DeleteProductCommand { get; set; }
 
         public InventoryAlertWindowVM(InventoryAlertType alertType)
         {
             AlertType = alertType;
+            Categories = new ObservableCollection<ProductCategory>();
+            UnitList = new ObservableCollection<string>();
+            _allProducts = new List<SelectableProduct>();
             InitializeCommands();
+            LoadCategories();
+            LoadUnits();
             LoadProducts();
         }
 
@@ -108,6 +178,50 @@ namespace Martify.ViewModels
         {
             SelectAllCommand = new RelayCommand<object>((p) => true, (p) => SelectAllProducts());
             RestockCommand = new RelayCommand<object>((p) => HasSelectedProducts(), (p) => RestockSelectedProducts());
+            ClearFilterCommand = new RelayCommand<object>((p) => true, (p) => ClearFilters());
+            DeleteProductCommand = new RelayCommand<SelectableProduct>((p) => p != null, (p) => DeleteProduct(p));
+        }
+
+        private void ClearFilters()
+        {
+            SearchText = string.Empty;
+            SelectedCategory = null;
+            SelectedUnit = null;
+        }
+
+        private void LoadCategories()
+        {
+            try
+            {
+                var list = DataProvider.Ins.DB.ProductCategories
+                    .AsNoTracking()
+                    .OrderBy(c => c.CategoryName)
+                    .ToList();
+                Categories = new ObservableCollection<ProductCategory>(list);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi tải danh mục: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void LoadUnits()
+        {
+            try
+            {
+                var list = DataProvider.Ins.DB.Products
+                    .AsNoTracking()
+                    .Select(p => p.Unit)
+                    .Where(u => !string.IsNullOrEmpty(u))
+                    .Distinct()
+                    .OrderBy(unit => unit)
+                    .ToList();
+                UnitList = new ObservableCollection<string>(list);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi tải đơn vị: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private bool HasSelectedProducts()
@@ -140,26 +254,62 @@ namespace Martify.ViewModels
                     .ThenBy(p => p.ProductName)
                     .ToList();
 
-                Products = new ObservableCollection<SelectableProduct>(
-                    result.Select(p => new SelectableProduct(p))
-                );
+                // Store in master list
+                _allProducts = result.Select(p => new SelectableProduct(p)).ToList();
 
-                // Subscribe to selection changes
-                foreach (var selectableProduct in Products)
+                // Subscribe to selection changes for all products
+                foreach (var selectableProduct in _allProducts)
                 {
                     selectableProduct.PropertyChanged += SelectableProduct_PropertyChanged;
                 }
 
-                UpdateSelectedCount();
+                // Apply filters
+                FilterProducts();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"L?i khi t?i danh s�ch s?n ph?m: {ex.Message}",
-                    "L?i",
+                    $"Lỗi khi tải danh sách sản phẩm: {ex.Message}",
+                    "Lỗi",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
+        }
+
+        private void FilterProducts()
+        {
+            if (_allProducts == null)
+                return;
+
+            var filtered = _allProducts.AsEnumerable();
+
+            // Filter by search text
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                var search = SearchText.Trim().ToLower();
+                filtered = filtered.Where(sp =>
+                    sp.Product.ProductID.ToLower().Contains(search) ||
+                    sp.Product.ProductName.ToLower().Contains(search) ||
+                    (sp.Product.Unit != null && sp.Product.Unit.ToLower().Contains(search)) ||
+                    (sp.Product.Category != null && sp.Product.Category.CategoryName.ToLower().Contains(search)));
+            }
+
+            // Filter by category
+            if (SelectedCategory != null)
+            {
+                filtered = filtered.Where(sp => sp.Product.CategoryID == SelectedCategory.CategoryID);
+            }
+
+            // Filter by unit
+            if (!string.IsNullOrWhiteSpace(SelectedUnit))
+            {
+                var unitLower = SelectedUnit.Trim().ToLower();
+                filtered = filtered.Where(sp => sp.Product.Unit != null && sp.Product.Unit.ToLower() == unitLower);
+            }
+
+            Products = new ObservableCollection<SelectableProduct>(filtered);
+            UpdateSelectedCount();
+            UpdateSelectAllState();
         }
 
         private void SelectableProduct_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -203,6 +353,8 @@ namespace Martify.ViewModels
             IsAllSelected = newState;
         }
 
+        private const int DEFAULT_RESTOCK_QUANTITY = 50;
+
         private void RestockSelectedProducts()
         {
             var selectedProducts = Products?.Where(p => p.IsSelected).Select(sp => sp.Product).ToList();
@@ -210,21 +362,81 @@ namespace Martify.ViewModels
             if (selectedProducts == null || selectedProducts.Count == 0)
             {
                 MessageBox.Show(
-                    "Vui l?ng ch?n �t nh?t m?t s?n ph?m �? nh?p h�ng.",
-                    "Th�ng b�o",
+                    "Vui lòng chọn ít nhất một sản phẩm để nhập hàng.",
+                    "Thông báo",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
                 return;
             }
 
-            // TODO: Open import receipt dialog with selected products
-            // For now, show a message with the count
-            MessageBox.Show(
-                $"�? ch?n {selectedProducts.Count} s?n ph?m �? nh?p h�ng.\n" +
-                $"S?n ph?m: {string.Join(", ", selectedProducts.Select(p => p.ProductName))}",
-                "Nh?p h�ng",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            // Create ViewModel with pre-selected products and default quantity
+            var importVM = new ImportProductsVM(selectedProducts, DEFAULT_RESTOCK_QUANTITY);
+            
+            // Open ImportProducts window with pre-loaded products
+            var importWindow = new ImportProducts(importVM)
+            {
+                Owner = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive)
+            };
+            
+            importWindow.ShowDialog();
+
+            // Refresh products after import to reflect updated stock quantities
+            LoadProducts();
+        }
+
+        private void DeleteProduct(SelectableProduct selectableProduct)
+        {
+            if (selectableProduct == null) return;
+
+            var product = selectableProduct.Product;
+
+            try
+            {
+                var result = MessageBox.Show(
+                    $"Xóa sản phẩm:\n\nMã: {product.ProductID}\nTên: {product.ProductName}?",
+                    "Xác nhận xóa",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    var isUsedInOrders = DataProvider.Ins.DB.InvoiceDetails
+                        .Any(od => od.ProductID == product.ProductID);
+
+                    if (isUsedInOrders)
+                    {
+                        MessageBox.Show("Không thể xóa sản phẩm đã có trong đơn hàng.",
+                            "Không thể xóa", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    // Unsubscribe from property changed event
+                    selectableProduct.PropertyChanged -= SelectableProduct_PropertyChanged;
+
+                    // Remove from database
+                    var productInDb = DataProvider.Ins.DB.Products.Find(product.ProductID);
+                    if (productInDb != null)
+                    {
+                        DataProvider.Ins.DB.Products.Remove(productInDb);
+                        DataProvider.Ins.DB.SaveChanges();
+                    }
+
+                    // Remove from master list and filtered list
+                    _allProducts.Remove(selectableProduct);
+                    Products.Remove(selectableProduct);
+
+                    MessageBox.Show("Đã xóa sản phẩm!", "Thành công",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    CalculateStatistics();
+                    UpdateSelectedCount();
+                    UpdateSelectAllState();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void CalculateStatistics()

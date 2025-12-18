@@ -340,8 +340,8 @@
                                                 <Storyboard RepeatBehavior="Forever"
                                                             AutoReverse="True">
                                                     <ThicknessAnimation Storyboard.TargetProperty="Margin"
-                                                                        From="0,0,0,0"
-                                                                        To="0,300,0,0"
+                                                                        From="0,37,0,0"
+                                                                        To="0,354,0,0"
                                                                         Duration="0:0:1.5"/>
                                                 </Storyboard>
                                             </BeginStoryboard>

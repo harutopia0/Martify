@@ -32,7 +32,7 @@
 
 ## 📖 Giới thiệu
 
-**Martify** là phần mềm desktop dành cho các siêu thị mini và cửa hàng tiện lợi. Ứng dụng được xây dựng trên nền tảng **WPF (.NET 8)** với kiến trúc **MVVM**, tập trung vào trải nghiệm người dùng hiện đại (UI/UX) và bán hàng.
+**Martify** là giải pháp phần mềm desktop dành cho các siêu thị mini và cửa hàng tiện lợi. Ứng dụng được xây dựng trên nền tảng **WPF (.NET 8)** với kiến trúc **MVVM**, tập trung vào trải nghiệm người dùng hiện đại (UI/UX) và bán hàng.
 
 Mục tiêu của Martify là thay thế việc quản lý thủ công bằng một hệ thống số hóa chính xác, bảo mật và dễ sử dụng.
 

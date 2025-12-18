@@ -13,8 +13,6 @@
         Height="600" 
         Width="850"
         WindowStyle="None"
-        Background="Transparent"
-        Foreground="Transparent"
         BorderThickness="0"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
@@ -121,7 +119,7 @@
                                         <ImageBrush Stretch="UniformToFill">
                                             <ImageBrush.ImageSource>
                                                 <Binding Path="SelectedImagePath"
-                                                         FallbackValue="/Assets/placeholder-product.png"/>
+                                                         FallbackValue="{StaticResource DefaultProduct}"/>
                                             </ImageBrush.ImageSource>
                                         </ImageBrush>
                                     </Rectangle.Fill>

@@ -45,7 +45,8 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
             </Grid.ColumnDefinitions>
             <Border Background="{DynamicResource CardBackground}" 
                     Margin="20,20,15,0"
-                    CornerRadius="20" Grid.ColumnSpan="2">
+                    CornerRadius="20" Grid.ColumnSpan="2"
+                    CacheMode="BitmapCache">
                 <Border.Effect>
                     <DropShadowEffect Color="{DynamicResource ShadowColor}"
                                       BlurRadius="15"
@@ -359,7 +360,8 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                 Grid.RowSpan="3"
                 Background="{DynamicResource CardBackground}" 
                 Margin="0,20,20,20"
-                CornerRadius="20">
+                CornerRadius="20"
+                CacheMode="BitmapCache">
             <Border.Effect>
                 <DropShadowEffect Color="{DynamicResource ShadowColor}"
                                   BlurRadius="15"
@@ -375,8 +377,7 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                            HorizontalAlignment="Center"
                            Foreground="{DynamicResource PrimaryText}"/>
 
-                <Border Background="{DynamicResource ItemBackground}" 
-                        CornerRadius="15" 
+                <Border CornerRadius="15" 
                         Padding="15" 
                         Margin="0,0,0,15"
                         Cursor="Hand">
@@ -385,6 +386,16 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                             <i:InvokeCommandAction Command="{Binding NavigateToProductsCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="{DynamicResource ItemBackground}"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#E3F2FD"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <materialDesign:PackIcon Kind="Package" 
@@ -408,8 +419,7 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                     </StackPanel>
                 </Border>
 
-                <Border Background="{DynamicResource ItemBackground}" 
-                        CornerRadius="15" 
+                <Border CornerRadius="15" 
                         Padding="15" 
                         Margin="0,0,0,15"
                         Cursor="Hand">
@@ -418,6 +428,16 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                             <i:InvokeCommandAction Command="{Binding NavigateToInvoicesCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="{DynamicResource ItemBackground}"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#E8F5E9"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <materialDesign:PackIcon Kind="Receipt" 
@@ -441,8 +461,7 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                     </StackPanel>
                 </Border>
 
-                <Border Background="{DynamicResource ItemBackground}" 
-                        CornerRadius="15" 
+                <Border CornerRadius="15" 
                         Padding="15" 
                         Margin="0,0,0,15"
                         Cursor="Hand">
@@ -451,6 +470,16 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                             <i:InvokeCommandAction Command="{Binding NavigateToEmployeesCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="{DynamicResource ItemBackground}"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#FFF3E0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <materialDesign:PackIcon Kind="AccountGroup" 
@@ -496,8 +525,7 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                         </StackPanel>
 
                         <!-- Cảnh báo sắp hết hàng (Vàng/Cam) -->
-                        <Border Background="#FFF3E0" 
-                                CornerRadius="8" 
+                        <Border CornerRadius="8" 
                                 Padding="10,8"
                                 Margin="0,0,0,8"
                                 Cursor="Hand">
@@ -506,6 +534,16 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                                     <i:InvokeCommandAction Command="{Binding LowStockAlertCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="#FFF3E0"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FFE0B2"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -539,8 +577,7 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                         </Border>
 
                         <!-- Cảnh báo hết hàng (Đỏ) -->
-                        <Border Background="#FFEBEE" 
-                                CornerRadius="8" 
+                        <Border CornerRadius="8" 
                                 Padding="10,8"
                                 Cursor="Hand">
                             <i:Interaction.Triggers>
@@ -548,6 +585,16 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                                     <i:InvokeCommandAction Command="{Binding OutOfStockAlertCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="#FFEBEE"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FFCDD2"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -591,7 +638,8 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                 Background="{DynamicResource CardBackground}"
                 CornerRadius="20"
                 Margin="20,0,15,20"
-                Padding="20">
+                Padding="20"
+                CacheMode="BitmapCache">
             <Border.Effect>
                 <DropShadowEffect Color="{DynamicResource ShadowColor}"
                                   BlurRadius="15"
@@ -603,8 +651,7 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
             <UniformGrid Columns="4" HorizontalAlignment="Stretch">
 
                 <!-- Action 1: Create Order -->
-                <Border Background="{DynamicResource ItemBackground}"
-                        CornerRadius="15"
+                <Border CornerRadius="15"
                         Margin="0,0,10,0"
                         Padding="15,12"
                         Cursor="Hand">
@@ -615,13 +662,10 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                     </i:Interaction.Triggers>
                     <Border.Style>
                         <Style TargetType="Border">
+                            <Setter Property="Background" Value="{DynamicResource ItemBackground}"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background">
-                                        <Setter.Value>
-                                            <SolidColorBrush Color="#E3F2FD"/>
-                                        </Setter.Value>
-                                    </Setter>
+                                    <Setter Property="Background" Value="#E3F2FD"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -643,8 +687,7 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                 </Border>
 
                 <!-- Action 2: Import Goods -->
-                <Border Background="{DynamicResource ItemBackground}"
-                        CornerRadius="15"
+                <Border CornerRadius="15"
                         Margin="0,0,10,0"
                         Padding="15,12"
                         Cursor="Hand">
@@ -655,13 +698,10 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                     </i:Interaction.Triggers>
                     <Border.Style>
                         <Style TargetType="Border">
+                            <Setter Property="Background" Value="{DynamicResource ItemBackground}"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background">
-                                        <Setter.Value>
-                                            <SolidColorBrush Color="#E8F5E9"/>
-                                        </Setter.Value>
-                                    </Setter>
+                                    <Setter Property="Background" Value="#E8F5E9"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -683,8 +723,7 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                 </Border>
 
                 <!-- Action 3: Check Price -->
-                <Border Background="{DynamicResource ItemBackground}"
-                        CornerRadius="15"
+                <Border CornerRadius="15"
                         Margin="0,0,10,0"
                         Padding="15,12"
                         Cursor="Hand">
@@ -695,13 +734,10 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                     </i:Interaction.Triggers>
                     <Border.Style>
                         <Style TargetType="Border">
+                            <Setter Property="Background" Value="{DynamicResource ItemBackground}"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background">
-                                        <Setter.Value>
-                                            <SolidColorBrush Color="#FFF3E0"/>
-                                        </Setter.Value>
-                                    </Setter>
+                                    <Setter Property="Background" Value="#FFF3E0"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -723,8 +759,7 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                 </Border>
 
                 <!-- Action 4: Add Employee -->
-                <Border Background="{DynamicResource ItemBackground}"
-                        CornerRadius="15"
+                <Border CornerRadius="15"
                         Margin="0,0,0,0"
                         Padding="15,12"
                         Cursor="Hand">
@@ -735,13 +770,10 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                     </i:Interaction.Triggers>
                     <Border.Style>
                         <Style TargetType="Border">
+                            <Setter Property="Background" Value="{DynamicResource ItemBackground}"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background">
-                                        <Setter.Value>
-                                            <SolidColorBrush Color="#F3E5F5"/>
-                                        </Setter.Value>
-                                    </Setter>
+                                    <Setter Property="Background" Value="#F3E5F5"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -779,7 +811,8 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
             <Border Grid.Column="0" 
                     Background="{DynamicResource CardBackground}" 
                     Margin="0,0,10,0"
-                    CornerRadius="20">
+                    CornerRadius="20"
+                    CacheMode="BitmapCache">
                 <Border.Effect>
                     <DropShadowEffect Color="{DynamicResource ShadowColor}"
                                       BlurRadius="15"
@@ -1139,7 +1172,8 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
             <Border Grid.Column="1" 
                     Background="{DynamicResource CardBackground}" 
                     Margin="10,0,0,0"
-                    CornerRadius="20">
+                    CornerRadius="20"
+                    CacheMode="BitmapCache">
                 <Border.Effect>
                     <DropShadowEffect Color="{DynamicResource ShadowColor}"
                                       BlurRadius="15"

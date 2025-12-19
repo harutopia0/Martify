@@ -246,3 +246,9 @@ form {
 		transform: translateY(-50%); /* Căn giữa dòng kẻ viền */
 		z-index: 3;
 	}
+
+/* Tắt nút 'con mắt' mặc định của Edge/IE trên WebView2 */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+	display: none;
+}

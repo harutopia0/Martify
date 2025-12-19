@@ -22,7 +22,7 @@
         Name="loginWindow">
 
     <Grid>
-        <Border CornerRadius="30" Background="White" ClipToBounds="True">
+        <Border CornerRadius="20" Background="White">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
             </Border.Effect>

@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:Martify.Views"
              xmlns:vm="clr-namespace:Martify.ViewModels"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:uc="clr-namespace:Martify.Views"
              xmlns:cv="clr-namespace:Martify.Converters" 
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1200" d:Background="Transparent"
@@ -14,76 +13,12 @@
              d:Style="{x:Null}">
 
     <UserControl.DataContext>
-        <vm:ProductsVM />
+        <vm:ProductsVM/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
         <cv:StatusConverter x:Key="StatusConverter"/>
         <cv:ImagePathConverter x:Key="ImgConverter"/>
-
-        <ControlTemplate x:Key="ErrorTemplate">
-            <StackPanel>
-                <AdornedElementPlaceholder x:Name="placeholder" />
-                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" FontSize="10" Margin="0,2,0,0" HorizontalAlignment="Left" FontStyle="Italic"/>
-            </StackPanel>
-        </ControlTemplate>
-
-        <!-- Sliding Details Panel Style -->
-        <Style x:Key="SlidingDetailsPanelStyle"
-       TargetType="Border">
-            <Setter Property="Width"
-            Value="0"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsDetailsPanelOpen}"
-                     Value="True">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Width"
-                                         To="275"
-                                         Duration="0:0:0.25">
-                                    <DoubleAnimation.EasingFunction>
-                                        <QuadraticEase EasingMode="EaseOut"/>
-                                    </DoubleAnimation.EasingFunction>
-                                </DoubleAnimation>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.EnterActions>
-                    <DataTrigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Width"
-                                         To="0"
-                                         Duration="0:0:0.25">
-                                    <DoubleAnimation.EasingFunction>
-                                        <QuadraticEase EasingMode="EaseIn"/>
-                                    </DoubleAnimation.EasingFunction>
-                                </DoubleAnimation>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.ExitActions>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Save Button Style -->
-        <Style x:Key="SaveButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
-            <Setter Property="Background" Value="#E0E0E0"/>
-            <Setter Property="Foreground" Value="#9E9E9E"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsModified}" Value="True">
-                    <Setter Property="Background" Value="#4CAF50"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="Cursor" Value="Hand"/>
-                    <Setter Property="Effect">
-                        <Setter.Value>
-                            <DropShadowEffect Color="#4CAF50" BlurRadius="10" ShadowDepth="2" Opacity="0.4"/>
-                        </Setter.Value>
-                    </Setter>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
 
         <!-- Modern Card Style -->
         <Style x:Key="CardStyle" TargetType="Border">
@@ -102,26 +37,6 @@
             <Setter Property="BorderBrush" Value="#E0E0E0"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
-        <Style x:Key="HeaderLabelStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
-            <Setter Property="Margin" Value="0,0,0,8"/>
-        </Style>
-
-        <Style x:Key="FieldIconStyle" TargetType="materialDesign:PackIcon">
-            <Setter Property="Width" Value="22"/>
-            <Setter Property="Height" Value="22"/>
-            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
-            <Setter Property="Margin" Value="0,0,15,0"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-
-        <Style x:Key="FieldRowStyle" TargetType="StackPanel">
-            <Setter Property="Orientation" Value="Horizontal"/>
-            <Setter Property="Margin" Value="0,0,0,20"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
     </UserControl.Resources>
 
     <Grid Background="Transparent">
@@ -130,43 +45,40 @@
             <RowDefinition Height="75"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <!-- HEADER TITLE -->
-        <StackPanel Grid.Row="0"  VerticalAlignment="Center">
-            
-        </StackPanel>
 
-        <!-- SEARCH & FILTER BAR -->
-            <Border Grid.Row="0" 
-                        Style="{StaticResource CardStyle}"
-                        Margin="20,10,150, 0"
-                        Padding="20,0"
-                        Background="#F8F9FA"
-                        CornerRadius="22"
-                        BorderBrush="#E0E0E0"
-                        BorderThickness="1"
-                        Height="40"
-                        VerticalAlignment="Center">
-                <Grid>
-                        <materialDesign:PackIcon Kind="Magnify"
-                                               VerticalAlignment="Center"
-                                               HorizontalAlignment="Left"
-                                               Width="22" 
-                                               Height="22" 
-                                               Margin="18,0,0,0"
-                                               Foreground="#9E9E9E"/>
+        <!-- SEARCH BAR -->
+        <Border Grid.Row="0" 
+                Style="{StaticResource CardStyle}"
+                Margin="20,10,150,0"
+                Padding="20,0"
+                Background="#F8F9FA"
+                CornerRadius="22"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                Height="40"
+                VerticalAlignment="Center">
+            <Grid>
+                <materialDesign:PackIcon Kind="Magnify"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       Width="22" 
+                                       Height="22" 
+                                       Margin="18,0,0,0"
+                                       Foreground="#9E9E9E"/>
 
-                        <TextBox materialDesign:HintAssist.Hint="Tìm kiếm sản phẩm theo tên, mã..."
-                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
-                                 Height="40"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 VerticalAlignment="Center"
-                                 Margin="50,0,20,0"
-                                 FontSize="14"
-                                 Foreground="{DynamicResource PrimaryText}"
-                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
-                    </Grid>
-                </Border>
+                <TextBox materialDesign:HintAssist.Hint="Tìm kiếm sản phẩm theo tên, mã..."
+                         materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                         Height="40"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         VerticalAlignment="Center"
+                         Margin="50,0,20,0"
+                         FontSize="14"
+                         Foreground="{DynamicResource PrimaryText}"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+        </Border>
+
         <!-- HEADER SECTION -->
         <Grid Grid.Row="1" Margin="20,20,20,10">
             <Grid.ColumnDefinitions>
@@ -174,15 +86,13 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Title & Stats -->
-
             <!-- Filters -->
             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,15,0">
                 <ComboBox ItemsSource="{Binding Categories}"
-                              SelectedItem="{Binding SelectedCategory}" 
-                              materialDesign:HintAssist.Hint="Danh mục"
-                              Style="{StaticResource FilterChipStyle}"
-                              Margin="0,0,10,0">
+                          SelectedItem="{Binding SelectedCategory}" 
+                          materialDesign:HintAssist.Hint="Danh mục"
+                          Style="{StaticResource FilterChipStyle}"
+                          Margin="0,0,10,0">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding CategoryName}"/>
@@ -191,465 +101,324 @@
                 </ComboBox>
 
                 <ComboBox ItemsSource="{Binding UnitList}"
-                              SelectedItem="{Binding SelectedUnit}" 
-                              materialDesign:HintAssist.Hint="Đơn vị"
-                              Style="{StaticResource FilterChipStyle}">
+                          SelectedItem="{Binding SelectedUnit}" 
+                          materialDesign:HintAssist.Hint="Đơn vị"
+                          Style="{StaticResource FilterChipStyle}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+
                 <!-- Clear Filter Button -->
-                <Button Grid.Column="2"
-                        Style="{StaticResource MaterialDesignIconButton}" 
+                <Button Style="{StaticResource MaterialDesignIconButton}" 
                         Command="{Binding ClearFilterCommand}" 
                         ToolTip="Xóa bộ lọc" 
                         Height="42" 
                         Width="42">
                     <materialDesign:PackIcon Kind="FilterOff" 
-                           Foreground="#F44336" 
-                           Height="22" 
-                           Width="22"/>
+                                           Foreground="#F44336" 
+                                           Height="22" 
+                                           Width="22"/>
                 </Button>
+
                 <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">
-                            <Run Text="Tổng:" Foreground="{DynamicResource SecondaryText}" FontSize="12"/>
-                            <Run Text="{Binding Products.Count, Mode=OneWay}" Foreground="#2196F3" FontWeight="SemiBold" FontSize="14"/>
-                            <Run Text="sản phẩm" Foreground="{DynamicResource SecondaryText}" FontSize="12"/>
+                    <Run Text="Tổng:" Foreground="{DynamicResource SecondaryText}" FontSize="12"/>
+                    <Run Text="{Binding Products.Count, Mode=OneWay}" Foreground="#2196F3" FontWeight="SemiBold" FontSize="14"/>
+                    <Run Text="sản phẩm" Foreground="{DynamicResource SecondaryText}" FontSize="12"/>
                 </TextBlock>
             </StackPanel>
+
             <!-- Action Buttons -->
             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                 <!-- Import Button -->
                 <Button Margin="0,0,12,0"
-                Height="44"
-                Padding="20,0"
-                Command="{Binding ImportProductCommand}"
-                Style="{StaticResource MaterialDesignRaisedButton}"
-                Background="White"
-                Foreground="#FF6B35"
-                BorderBrush="#FF6B35"
-                BorderThickness="2"
-                ToolTip="Nhập hàng vào kho">
+                        Height="44"
+                        Padding="20,0"
+                        Command="{Binding ImportProductCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="White"
+                        Foreground="#FF6B35"
+                        BorderBrush="#FF6B35"
+                        BorderThickness="2"
+                        ToolTip="Nhập hàng vào kho">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="TrayArrowDown" 
-                                       Width="22" 
-                                       Height="22" 
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,10,0"/>
+                                               Width="22" 
+                                               Height="22" 
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,10,0"/>
                         <TextBlock Text="Nhập hàng" 
-                           VerticalAlignment="Center"
-                           FontSize="14"
-                           FontWeight="SemiBold"/>
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"/>
                     </StackPanel>
                 </Button>
 
                 <!-- Add Product Button -->
                 <Button Height="44"
-                Padding="20,0"
-                Command="{Binding AddProductCommand}"
-                Style="{StaticResource MaterialDesignRaisedButton}"
-                Background="#633FCE" 
-                Foreground="White"
-                BorderThickness="0"
-                ToolTip="Thêm sản phẩm mới">
+                        Padding="20,0"
+                        Command="{Binding AddProductCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="#633FCE" 
+                        Foreground="White"
+                        BorderThickness="0"
+                        ToolTip="Thêm sản phẩm mới">
                     <Button.Effect>
                         <DropShadowEffect Color="#633FCE" BlurRadius="12" ShadowDepth="3" Opacity="0.3"/>
                     </Button.Effect>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Plus" 
-                                       Width="22" 
-                                       Height="22" 
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,10,0"/>
+                                               Width="22" 
+                                               Height="22" 
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,10,0"/>
                         <TextBlock Text="Thêm sản phẩm" 
-                           VerticalAlignment="Center"
-                           FontSize="14"
-                           FontWeight="SemiBold"/>
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
         </Grid>
 
         <!-- MAIN CONTENT AREA -->
-        <Grid Grid.Row="3" Margin="20,0,20,20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="7*"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
+        <Border Grid.Row="2" 
+                Style="{StaticResource CardStyle}"
+                Margin="20,0,20,20"
+                Padding="5">
 
-            <!-- Products DataGrid Card -->
-            <Border Grid.Column="0" 
-                    Style="{StaticResource CardStyle}"
-                    Padding="5">
+            <DataGrid x:Name="productsDataGrid"
+                      Background="Transparent"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserReorderColumns="False"
+                      CanUserResizeColumns="False"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                      ItemsSource="{Binding Products}"
+                      SelectedItem="{Binding SelectedProduct}"
+                      GridLinesVisibility="None"
+                      HeadersVisibility="Column"
+                      RowHeight="50"
+                      ColumnHeaderHeight="50"
+                      BorderThickness="0"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling"
+                      EnableColumnVirtualization="True"
+                      EnableRowVirtualization="True">
 
-                <DataGrid x:Name="productsDataGrid"
-                          Background="Transparent"
-                          AutoGenerateColumns="False"
-                          CanUserAddRows="False"
-                          CanUserDeleteRows="False"
-                          CanUserReorderColumns="False"
-                          CanUserResizeColumns="False"
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          SelectionUnit="FullRow"
-                          ItemsSource="{Binding Products}"
-                          SelectedItem="{Binding SelectedProduct}"
-                          GridLinesVisibility="None"
-                          HeadersVisibility="Column"
-                          RowHeight="50"
-                          ColumnHeaderHeight="50"
-                          BorderThickness="0"
-                          VirtualizingPanel.IsVirtualizing="True"
-                          VirtualizingPanel.VirtualizationMode="Recycling"
-                          EnableColumnVirtualization="True"
-                          EnableRowVirtualization="True">
-    
-                    <DataGrid.InputBindings>
-                        <MouseBinding MouseAction="LeftDoubleClick"
-                                    Command="{Binding OpenDetailsCommand}"
-                                    CommandParameter="{Binding ElementName=productsDataGrid, Path=SelectedItem}"/>
-                    </DataGrid.InputBindings>
+                <DataGrid.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick"
+                                  Command="{Binding OpenDetailsCommand}"
+                                  CommandParameter="{Binding ElementName=productsDataGrid, Path=SelectedItem}"/>
+                </DataGrid.InputBindings>
 
-                    <DataGrid.RowStyle>
-                        <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-                            <Setter Property="Margin" Value="8,4"/>
-                            <Setter Property="Cursor" Value="Hand"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#F5F7FA"/>
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="True">    
-                                    <Setter Property="Background" Value="#E3F2FD"/>
-                                </Trigger>
-                                <DataTrigger Binding="{Binding StockQuantity}" Value="0">
-                                    <Setter Property="Opacity" Value="0.5"/>
-                                    <Setter Property="ToolTip" Value="Sản phẩm đã hết hàng"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGrid.RowStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                        <Setter Property="Margin" Value="8,4"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F5F7FA"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#E3F2FD"/>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding StockQuantity}" Value="0">
+                                <Setter Property="Opacity" Value="0.5"/>
+                                <Setter Property="ToolTip" Value="Sản phẩm đã hết hàng"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
 
-                    <DataGrid.Resources>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" 
-                               BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
-                            <Setter Property="FontSize" Value="13"/>
-                            <Setter Property="FontWeight" Value="SemiBold"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="Padding" Value="20,5"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                        </Style>
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type DataGridColumnHeader}" 
+                           BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                        <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Padding" Value="20,5"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    </Style>
 
-                        <Style TargetType="{x:Type DataGridCell}" 
-                               BasedOn="{StaticResource MaterialDesignDataGridCell}">
-                            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="Padding" Value="16,8"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                        </Style>
-                    </DataGrid.Resources>
+                    <Style TargetType="{x:Type DataGridCell}" 
+                           BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                        <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Padding" Value="16,8"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                    </Style>
+                </DataGrid.Resources>
 
-                    <DataGrid.Columns>
-                        <!-- Product Name with Image -->
-                        <DataGridTemplateColumn Header="SẢN PHẨM" Width="2*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
+                <DataGrid.Columns>
+                    <!-- Product Name with Image -->
+                    <DataGridTemplateColumn Header="SẢN PHẨM" Width="2*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                                        <!-- Product Image -->
-                                        <Border Grid.Column="0"
-                                                Width="35" 
-                                                Height="35"
-                                                CornerRadius="10"
-                                                Background="#F5F5F5"
-                                                Margin="0,0,12,0">
-                                            <Border CornerRadius="10" ClipToBounds="True">
-                                                <Image Stretch="UniformToFill"
-                                                       Source="{Binding ImagePath, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource DefaultProduct} ,FallbackValue={StaticResource DefaultProduct}}"/>
-                                            </Border>
-                                        </Border>
-
-                                        <!-- Product Info -->
-                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding ProductName}" 
-                                                       FontSize="14" 
-                                                       FontWeight="SemiBold"
-                                                       Foreground="{DynamicResource PrimaryText}"
-                                                       TextTrimming="CharacterEllipsis"
-                                                       MaxWidth="250"
-                                                       HorizontalAlignment="Left"/>
-                                            <TextBlock Text="{Binding ProductID}" 
-                                                       FontSize="12" 
-                                                       Foreground="{DynamicResource SecondaryText}"
-                                                       Margin="0,3,0,0"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                        <!-- Category -->
-                        <DataGridTemplateColumn Header="DANH MỤC" Width="1.5*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Border Background="#F0F4FF"
-                                            CornerRadius="6"
-                                            Padding="10,5"
+                                    <!-- Product Image -->
+                                    <Border Grid.Column="0"
+                                            Width="35" 
                                             Height="35"
-                                            VerticalAlignment="Center"
-                                            HorizontalAlignment="Left">
-                                        <TextBlock Text="{Binding Category.CategoryName}"
-                                                   FontSize="12"
-                                                   FontWeight="SemiBold"
-                                                   Foreground="#5B7EF4"
-                                                   TextAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   TextTrimming="CharacterEllipsis"/>
+                                            CornerRadius="10"
+                                            Background="#F5F5F5"
+                                            Margin="0,0,12,0">
+                                        <Border CornerRadius="10" ClipToBounds="True">
+                                            <Image Stretch="UniformToFill"
+                                                   Source="{Binding ImagePath, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource DefaultProduct}, FallbackValue={StaticResource DefaultProduct}}"/>
+                                        </Border>
                                     </Border>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
 
-                        <!-- Unit -->
-                        <DataGridTextColumn Header="ĐVT" 
-                                            Binding="{Binding Unit}" 
-                                            Width="*">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="FontSize" Value="13"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-
-                        <!-- Price -->
-                        <DataGridTemplateColumn Header="GIÁ BÁN" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel VerticalAlignment="Center">
-                                        <TextBlock FontSize="12" FontWeight="Bold" Foreground="#2196F3" VerticalAlignment="Center">
-                                            <Run Text="{Binding Price, StringFormat='N0'}"/>
-                                            <Run Text="₫" FontSize="13"/>
-                                        </TextBlock>
+                                    <!-- Product Info -->
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding ProductName}" 
+                                                   FontSize="14" 
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource PrimaryText}"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   MaxWidth="250"
+                                                   HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding ProductID}" 
+                                                   FontSize="12" 
+                                                   Foreground="{DynamicResource SecondaryText}"
+                                                   Margin="0,3,0,0"/>
                                     </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                        <!-- Stock -->
-                        <DataGridTemplateColumn Header="TỒN KHO" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Border CornerRadius="6" 
-                                            Padding="10,6"
-                                            Margin="6 0 0 0"
-                                            HorizontalAlignment="Left">
-                                        <Border.Style>
-                                            <Style TargetType="Border">
-                                                <Setter Property="Background" Value="#E8F5E9"/>
+                    <!-- Category -->
+                    <DataGridTemplateColumn Header="DANH MỤC" Width="1.5*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="#F0F4FF"
+                                        CornerRadius="6"
+                                        Padding="10,5"
+                                        Height="35"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left">
+                                    <TextBlock Text="{Binding Category.CategoryName}"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="#5B7EF4"
+                                               TextAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- Unit -->
+                    <DataGridTextColumn Header="ĐVT" 
+                                        Binding="{Binding Unit}" 
+                                        Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="13"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Price -->
+                    <DataGridTemplateColumn Header="GIÁ BÁN" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock FontSize="12" FontWeight="Bold" Foreground="#2196F3" VerticalAlignment="Center">
+                                        <Run Text="{Binding Price, StringFormat='N0'}"/>
+                                        <Run Text="₫" FontSize="13"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- Stock -->
+                    <DataGridTemplateColumn Header="TỒN KHO" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="6" 
+                                        Padding="10,6"
+                                        Margin="6,0,0,0"
+                                        HorizontalAlignment="Left">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#E8F5E9"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding StockQuantity}" Value="0">
+                                                    <Setter Property="Background" Value="#FFEBEE"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock FontSize="13" FontWeight="SemiBold" TextAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#4CAF50"/>
+                                                <Setter Property="Text" Value="{Binding StockQuantity}"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding StockQuantity}" Value="0">
-                                                        <Setter Property="Background" Value="#FFEBEE"/>
+                                                        <Setter Property="Foreground" Value="#F44336"/>
+                                                        <Setter Property="Text" Value="Hết"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                        </Border.Style>
-                                        <TextBlock FontSize="13" FontWeight="SemiBold" TextAlignment="Center" VerticalAlignment="Center">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Foreground" Value="#4CAF50"/>
-                                                    <Setter Property="Text" Value="{Binding StockQuantity}"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding StockQuantity}" Value="0">
-                                                            <Setter Property="Foreground" Value="#F44336"/>
-                                                            <Setter Property="Text" Value="Hết"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </Border>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                        <!-- Actions -->
-                        <DataGridTemplateColumn Header="CÔNG CỤ" Width="1*" MinWidth="100">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                ToolTip="Chỉnh sửa"
-                                                Command="{Binding DataContext.OpenDetailsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}"
-                                                Width="25" Height="25"
-                                                Margin="0,0,4,0">
-                                            <materialDesign:PackIcon Kind="Pencil" 
-                                                                   Width="18" 
-                                                                   Height="18"
-                                                                   Foreground="#2196F3"/>
-                                        </Button>
+                    <!-- Actions -->
+                    <DataGridTemplateColumn Header="CÔNG CỤ" Width="1*" MinWidth="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="Chỉnh sửa"
+                                            Command="{Binding DataContext.OpenDetailsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Width="25" Height="25"
+                                            Margin="0,0,4,0">
+                                        <materialDesign:PackIcon Kind="Pencil" 
+                                                               Width="18" 
+                                                               Height="18"
+                                                               Foreground="#2196F3"/>
+                                    </Button>
 
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                ToolTip="Xóa"
-                                                Command="{Binding DataContext.DeleteProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}"
-                                                Width="25" Height="25">
-                                            <materialDesign:PackIcon Kind="Delete" 
-                                                                   Width="18" 
-                                                                   Height="18"
-                                                                   Foreground="#F44336"/>
-                                        </Button>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Border>
-
-            <!-- Details Sidebar Panel -->
-            <Border Grid.Column="1"
-                    Style="{StaticResource SlidingDetailsPanelStyle}"
-                    Margin="5,0,0,0">
-                <Border  Padding="0">
-                    <Grid DataContext="{Binding SelectedDetailProduct}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <!--Product Header-->
-                        <Border Grid.Row="0" 
-                                Background="#633FCE"
-                                Padding="20,25"
-                                CornerRadius="15">
-                            <StackPanel HorizontalAlignment="Center">
-                                <Ellipse Width="80" Height="80" Margin="0,0,0,15"
-                                             Cursor="Hand" ToolTip="Nhấn để chọn ảnh">
-                                    <Ellipse.InputBindings>
-                                        <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.SelectImageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-                                    </Ellipse.InputBindings>
-                                    <Ellipse.Fill>
-                                        <ImageBrush ImageSource="{Binding DataContext.EditImagePath, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource ImgConverter}, TargetNullValue={StaticResource DefaultProduct}, FallbackValue={StaticResource DefaultProduct}}" Stretch="UniformToFill"/>
-                                    </Ellipse.Fill>
-                                </Ellipse>
-
-                                <TextBlock Text="{Binding DataContext.EditProductName, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                           FontSize="18" 
-                                           FontWeight="Bold" 
-                                           Foreground="White" 
-                                           HorizontalAlignment="Center" 
-                                           TextAlignment="Center"
-                                           MaxWidth="260"/>
-                                <TextBlock Text="{Binding ProductID}" 
-                                           FontSize="13" 
-                                           Foreground="#E0E0E0" 
-                                           HorizontalAlignment="Center" 
-                                           Margin="0,8,0,0"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!--Edit Form-->
-                        <ScrollViewer x:Name="DetailScrollViewer"
-                                      Grid.Row="1" 
-                                      Margin="0,15,0,0"
-                                      VerticalScrollBarVisibility="Visible"
-                                      CanContentScroll="True">
-                            <StackPanel 
-                                        DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
-
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                    <materialDesign:PackIcon Kind="Category"
-                                                             Width="22"
-                                                             Height="22"
-                                                             Foreground="{DynamicResource SecondaryText}"
-                                                             Margin="15,0,15,0"
-                                                             VerticalAlignment="Center"/>
-                                    <ComboBox ItemsSource="{Binding Categories}"
-                                              SelectedValuePath="CategoryID"
-                                              SelectedValue="{Binding EditCategoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                              DisplayMemberPath="CategoryName"
-                                              Width="230"
-                                              ToolTip="Danh mục"/>
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="Xóa"
+                                            Command="{Binding DataContext.DeleteProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Width="25" Height="25">
+                                        <materialDesign:PackIcon Kind="Delete" 
+                                                               Width="18" 
+                                                               Height="18"
+                                                               Foreground="#F44336"/>
+                                    </Button>
                                 </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                    <materialDesign:PackIcon Kind="Scale" 
-                                                             Width="22"
-                                                            Height="22"
-                                                            Foreground="{DynamicResource SecondaryText}"
-                                                            Margin="15,0,15,0"
-                                                            VerticalAlignment="Center"/>
-                                    <TextBox Text="{Binding EditUnit, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                             Width="230"
-                                             ToolTip="Đơn vị tính"/>
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                    <materialDesign:PackIcon Kind="Money"
-                                                             Width="22"
-                                                            Height="22"
-                                                            Foreground="{DynamicResource SecondaryText}"
-                                                            Margin="15,0,15,0"
-                                                            VerticalAlignment="Center"/>
-                                    <TextBox Text="{Binding EditPrice, StringFormat=N0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                             Width="230"
-                                             ToolTip="Đơn giá"/>
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                    <materialDesign:PackIcon Kind="BoxVariant"
-                                                             Width="22"
-                                                            Height="22"
-                                                            Foreground="{DynamicResource SecondaryText}"
-                                                            Margin="15,0,15,0"
-                                                            VerticalAlignment="Center"/>
-                                    <TextBox Text="{Binding EditStockQuantity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                             Width="230"
-                                             ToolTip="Số lượng tồn"/>
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                    <materialDesign:PackIcon Kind="Factory"
-                                                             Width="22"
-                                                            Height="22"
-                                                            Foreground="{DynamicResource SecondaryText}"
-                                                            Margin="15,0,15,0"
-                                                            VerticalAlignment="Center"/>
-                                    <TextBox Text="{Binding SupplierName, TargetNullValue='Chưa xác định', Mode=OneWay, ValidatesOnDataErrors=True}"
-                                             IsReadOnly="True"
-                                             Width="230"
-                                             ToolTip="Nhà cung cấp"/>
-                                </StackPanel>
-
-                            </StackPanel>
-                        </ScrollViewer>
-
-                        <!--Save Button-->
-                        <Border Grid.Row="2" 
-                                Padding="20"
-                                BorderBrush="#E0E0E0"
-                                BorderThickness="0,1,0,0">
-                            <StackPanel>
-                                <Button Content="LƯU THAY ĐỔI"
-                                        Height="48"
-                                        Style="{StaticResource SaveButtonStyle}"
-                                        Command="{Binding SaveChangesCommand}"
-                                        CommandParameter="{Binding}"/>
-                            </StackPanel>
-                        </Border>
-                    </Grid>
-                </Border> 
-            </Border>
-        </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
     </Grid>
 </UserControl>

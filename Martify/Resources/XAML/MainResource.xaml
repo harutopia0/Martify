@@ -20,5 +20,5 @@
                              Storyboard.TargetProperty="Transform.Children[0].Angle"
                              From="0" To="360" Duration="0:0:5" />
     </Storyboard>
-    
+
 </ResourceDictionary>

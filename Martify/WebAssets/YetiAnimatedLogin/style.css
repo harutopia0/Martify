@@ -52,7 +52,7 @@ form {
 		position: relative;
 		width: 200px;
 		height: 200px;
-		margin: 0 auto 1em;
+		margin: 0 auto 30px auto;
 		border-radius: 50%;
 		background: none;
 		border: solid 2.5px #3a5e77;

@@ -57,7 +57,7 @@
                                HorizontalAlignment="Center"/>
                 </StackPanel>
 
-                <Grid x:Name="WebViewContainer" Opacity="0">
+                <Grid x:Name="WebViewContainer" Opacity="0" Margin="0,-50,0,0">
                     <wv2:WebView2 x:Name="webView" 
                                   DefaultBackgroundColor="Transparent"
                                   Height="400"
@@ -69,7 +69,7 @@
                                 Panel.ZIndex="999"
                                 VerticalAlignment="Bottom"
                                 HorizontalAlignment="Center"
-                                Margin="0,0,0,30"/>
+                                Margin="0,0,0,70"/>
             </Grid>
 
             <Grid Grid.Column="1">

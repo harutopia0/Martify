@@ -39,7 +39,7 @@ namespace Martify
 
                 // 4. Đăng ký sự kiện
                 // Sự kiện khi tải xong trang -> Ẩn Loading, Hiện WebViewContainer
-                webView.NavigationCompleted += WebView_NavigationCompleted;
+                //webView.NavigationCompleted += WebView_NavigationCompleted;
 
                 // Sự kiện nhận thông tin đăng nhập từ JS
                 webView.WebMessageReceived += WebView_WebMessageReceived;
@@ -54,21 +54,21 @@ namespace Martify
         }
 
         // Xử lý khi WebView tải xong
-        private void WebView_NavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e)
-        {
-            // 1. Ẩn Loading Panel
-            if (LoadingPanel != null)
-            {
-                LoadingPanel.Visibility = Visibility.Collapsed;
-            }
+        //private void WebView_NavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e)
+        //{
+        //    // 1. Ẩn Loading Panel
+        //    if (LoadingPanel != null)
+        //    {
+        //        LoadingPanel.Visibility = Visibility.Collapsed;
+        //    }
 
-            // 2. Hiện dần WebViewContainer (Thay vì WebView trực tiếp để tránh lỗi Opacity setter)
-            if (WebViewContainer != null)
-            {
-                DoubleAnimation fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.5));
-                WebViewContainer.BeginAnimation(OpacityProperty, fadeIn);
-            }
-        }
+        //    // 2. Hiện dần WebViewContainer (Thay vì WebView trực tiếp để tránh lỗi Opacity setter)
+        //    if (WebViewContainer != null)
+        //    {
+        //        DoubleAnimation fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.5));
+        //        WebViewContainer.BeginAnimation(OpacityProperty, fadeIn);
+        //    }
+        //}
 
         private void WebView_WebMessageReceived(object? sender, CoreWebView2WebMessageReceivedEventArgs e)
         {

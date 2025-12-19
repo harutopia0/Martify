@@ -52,7 +52,7 @@ form {
 		position: relative;
 		width: 200px;
 		height: 200px;
-		margin: 0 auto 30px auto;
+		margin: -50px auto 30px auto;
 		border-radius: 50%;
 		background: none;
 		border: solid 2.5px #3a5e77;
@@ -288,4 +288,70 @@ form {
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
 	display: none;
+}
+
+
+/* =========================================
+   CSS LOADING SCREEN
+   ========================================= */
+
+/* 1. Khung nền che toàn màn hình */
+#loading-screen {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #ffffff; /* Nền trắng che giao diện */
+	z-index: 9999; /* Luôn nằm trên cùng */
+	display: flex;
+	justify-content: center; /* Căn giữa ngang */
+	align-items: center; /* Căn giữa dọc */
+	transition: opacity 0.5s ease-out; /* Hiệu ứng mờ dần khi tắt */
+}
+
+/* 2. Class để ẩn loading (JS sẽ thêm class này) */
+.hidden {
+	opacity: 0;
+	pointer-events: none; /* Cho phép click xuyên qua khi đã ẩn */
+}
+
+/* =========================================
+   USER'S LOADER CSS (Đã chỉnh màu cho hợp nền trắng)
+   ========================================= */
+.loader {
+	width: 48px;
+	height: 48px;
+	display: inline-block;
+	position: relative;
+}
+
+	.loader::after,
+	.loader::before {
+		content: '';
+		width: 48px;
+		height: 48px;
+		/* Cũ: border: 2px solid #FFF; (Màu trắng sẽ bị chìm trên nền trắng) */
+		/* Mới: Đổi sang màu xanh Martify */
+		border: 2px solid #217093;
+		position: absolute;
+		left: 0;
+		top: 0;
+		box-sizing: border-box;
+		animation: rotation 2s ease-in-out infinite;
+	}
+
+	.loader::after {
+		border-color: #FF3D00; /* Màu cam giữ nguyên theo ý bạn */
+		animation-delay: 1s;
+	}
+
+@keyframes rotation {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
 }

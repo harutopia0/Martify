@@ -3,15 +3,17 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Yeti Animated Login</title>
-
 	<link rel="stylesheet" href="style.css">
-
 	<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
 	<script src="https://unpkg.com/gsap@3/dist/MorphSVGPlugin.min.js"></script>
 	<script src="https://unpkg.com/gsap@3/dist/gsap-legacy.min.js"></script>
 </head>
 
 <body>
+
+	<div id="loading-screen">
+		<span class="loader"></span>
+	</div>
 
 	<form>
 		<div class="svgContainer">
@@ -157,5 +159,16 @@
 	</form>
 
 	<script src="script.js"></script>
+
+	<script>
+		// Khi mọi thứ đã load xong
+		window.addEventListener('load', function () {
+			var loader = document.getElementById('loading-screen');
+			// Đợi 1.5 giây rồi ẩn đi cho mượt
+			setTimeout(function () {
+				loader.classList.add('hidden');
+			}, 1500);
+		});
+	</script>
 </body>
 </html>

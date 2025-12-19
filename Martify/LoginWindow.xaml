@@ -26,11 +26,12 @@
             <Border.Effect>
                 <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
             </Border.Effect>
-            <Grid>
-                <Grid.Background>
-                    <ImageBrush ImageSource="{StaticResource LoginBackground}" Stretch="UniformToFill" Opacity="0.1"/>
-                </Grid.Background>
-            </Grid>
+            <Border CornerRadius="20">
+                <Border.Background>
+                    <ImageBrush ImageSource="{StaticResource LoginBackground}"
+                                Stretch="UniformToFill" Opacity="0.1"/>
+                </Border.Background>
+            </Border>
         </Border>
 
         <Grid>

@@ -20,6 +20,11 @@ body {
 	margin: 0;
 	padding: 0;
 	overflow: hidden; /* Ẩn thanh cuộn */
+	/* CHỐNG BÔI ĐEN TOÀN TRANG */
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 form {
@@ -107,6 +112,11 @@ form {
 		font-weight: 600;
 		font-family: inherit;
 		transition: box-shadow 0.2s linear, border-color 0.25s ease-out;
+		/* CHO PHÉP BÔI ĐEN TRONG INPUT ĐỂ SỬA TEXT */
+		-webkit-user-select: text;
+		-moz-user-select: text;
+		-ms-user-select: text;
+		user-select: text;
 	}
 
 		form input[type='email']:focus, form input[type="text"]:focus, form input[type='password']:focus {

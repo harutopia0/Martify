@@ -202,6 +202,12 @@
 	  <None Update="WebAssets\YetiAnimatedLogin\index.html">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="WebAssets\YetiAnimatedLogin\libs\gsap.min.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="WebAssets\YetiAnimatedLogin\libs\MorphSVGPlugin.min.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="WebAssets\YetiAnimatedLogin\script.js">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>

@@ -1,11 +1,10 @@
-﻿/* colors */
-html {
+﻿html {
 	width: 100%;
 	height: 100%;
-	background-color: transparent; /* Quan trọng: Nền trong suốt */
+	background-color: transparent;
 	margin: 0;
 	padding: 0;
-	overflow: hidden; /* Ẩn thanh cuộn */
+	overflow: hidden;
 }
 
 body {
@@ -16,11 +15,10 @@ body {
 	font-family: 'Source Sans Pro', sans-serif;
 	font-weight: 400;
 	-webkit-font-smoothing: antialiased;
-	background-color: transparent; /* Quan trọng: Nền trong suốt */
+	background-color: transparent;
 	margin: 0;
 	padding: 0;
-	overflow: hidden; /* Ẩn thanh cuộn */
-	/* CHỐNG BÔI ĐEN TOÀN TRANG */
+	overflow: hidden;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -31,8 +29,6 @@ form {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	/* CŨ: transform: translate(-50%, -50%); */
-	/* MỚI: Thêm scale(0.75) để thu nhỏ còn 75% kích thước */
 	transform: translate(-50%, -50%) scale(0.75);
 	display: block;
 	width: 100%;
@@ -44,7 +40,6 @@ form {
 	border: solid 1px transparent;
 	border-radius: 0.5em;
 	font-family: 'Source Sans Pro', sans-serif;
-	/* Thêm dòng này để khi scale không bị vỡ layout trên một số trình duyệt */
 	transform-origin: center center;
 }
 
@@ -112,7 +107,6 @@ form {
 		font-weight: 600;
 		font-family: inherit;
 		transition: box-shadow 0.2s linear, border-color 0.25s ease-out;
-		/* CHO PHÉP BÔI ĐEN TRONG INPUT ĐỂ SỬA TEXT */
 		-webkit-user-select: text;
 		-moz-user-select: text;
 		-ms-user-select: text;
@@ -171,69 +165,57 @@ form {
 	}
 
 	form .inputGroup1.focusWithText .helper {
-		/*input[type='email']:focus + .helper {
-		*/
 		transform: translate(1.4em, 2em) scale(0.65);
 		opacity: 1;
 	}
 
-/* ===== Material Outlined Input (Đã sửa lỗi căn giữa & Hint) ===== */
 .material-input {
 	position: relative;
-	height: 55px; /* Chiều cao cố định cho ô input */
-	margin-bottom: 20px; /* Khoảng cách giữa các ô */
+	height: 55px;
+	margin-bottom: 20px;
 	width: 100%;
 	font-size: 12px;
 }
 
-	/* Chỉnh sửa ô nhập liệu */
 	.material-input input {
 		width: 100%;
-		height: 100% !important; /* Bắt buộc lấy chiều cao theo cha */
-		/* Reset padding: Trên/Dưới=0, Trái=45px (né icon trái), Phải=45px (né nút show/hide) */
+		height: 100% !important;
 		padding: 0 45px 0 45px !important;
 		margin: 0;
-		/* Style viền và màu */
 		border: 2px solid #217093;
 		border-radius: 6px;
 		background-color: #f3fafd;
 		box-sizing: border-box;
-		/* Font chữ */
 		font-size: 16px;
 		color: #353538;
 		font-family: inherit;
 		font-weight: 600;
-		/* Quan trọng: bỏ outline mặc định */
 		outline: none;
 		transition: border-color 0.25s ease-out, box-shadow 0.2s;
 	}
 
-		/* Hiệu ứng khi focus vào ô input */
 		.material-input input:focus {
 			border-color: #4eb8dd;
 			box-shadow: 0px 2px 10px rgba(0, 0, 0, .1);
 		}
 
-	/* ===== ICON (Căn giữa tuyệt đối) ===== */
 	.material-input .icon {
 		position: absolute;
 		left: 12px;
-		top: 50%; /* Đặt đỉnh icon ở giữa chiều cao cha */
-		transform: translateY(-50%); /* Dịch ngược lại 50% chiều cao icon để chính xác giữa */
+		top: 50%;
+		transform: translateY(-50%);
 		width: 24px;
 		height: 24px;
-		fill: #217093; /* Màu icon */
-		pointer-events: none; /* Để click xuyên qua icon vào input */
+		fill: #217093;
+		pointer-events: none;
 		z-index: 2;
 	}
 
-	/* ===== LABEL (Chữ mờ hướng dẫn) ===== */
 	.material-input label {
 		position: absolute;
-		left: 45px; /* Cách lề trái để không đè lên icon */
-		top: 50%; /* Đặt đỉnh label ở giữa */
-		transform: translateY(-50%); /* Dịch ngược lại để tâm chữ nằm giữa */
-
+		left: 45px;
+		top: 50%;
+		transform: translateY(-50%);
 		color: #217093;
 		font-size: 16px;
 		font-weight: normal;
@@ -243,22 +225,18 @@ form {
 		padding: 0 5px;
 	}
 
-	/* ===== QUAN TRỌNG: SỬA LOGIC LABEL ===== */
-	/* Thay vì dùng :valid (phụ thuộc vào email đúng sai), ta dùng :not(:placeholder-shown) */
-	/* Selector này nghĩa là: Nếu input KHÔNG hiển thị placeholder (tức là đã có chữ) thì đẩy label lên */
 	.material-input input:focus + label,
 	.material-input input:not(:placeholder-shown) + label {
-		top: 0; /* Chạy lên mép trên cùng */
+		top: 0;
 		left: 15px;
 		font-size: 13px;
 		color: #4eb8dd;
 		font-weight: bold;
-		background-color: #f3fafd; /* Màu nền trùng màu input để che viền */
-		transform: translateY(-50%); /* Căn giữa dòng kẻ viền */
+		background-color: #f3fafd;
+		transform: translateY(-50%);
 		z-index: 3;
 	}
 
-/* ===== TOGGLE PASSWORD BUTTON ===== */
 .toggle-password {
 	position: absolute;
 	right: 12px;
@@ -284,41 +262,30 @@ form {
 		fill: #4eb8dd;
 	}
 
-/* Tắt nút 'con mắt' mặc định của Edge/IE trên WebView2 */
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
 	display: none;
 }
 
-
-/* =========================================
-   CSS LOADING SCREEN
-   ========================================= */
-
-/* 1. Khung nền che toàn màn hình */
 #loading-screen {
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: #ffffff; /* Nền trắng che giao diện */
-	z-index: 9999; /* Luôn nằm trên cùng */
+	background-color: #ffffff;
+	z-index: 9999;
 	display: flex;
-	justify-content: center; /* Căn giữa ngang */
-	align-items: center; /* Căn giữa dọc */
-	transition: opacity 0.5s ease-out; /* Hiệu ứng mờ dần khi tắt */
+	justify-content: center;
+	align-items: center;
+	transition: opacity 0.5s ease-out;
 }
 
-/* 2. Class để ẩn loading (JS sẽ thêm class này) */
 .hidden {
 	opacity: 0;
-	pointer-events: none; /* Cho phép click xuyên qua khi đã ẩn */
+	pointer-events: none;
 }
 
-/* =========================================
-   USER'S LOADER CSS (Đã chỉnh màu cho hợp nền trắng)
-   ========================================= */
 .loader {
 	width: 48px;
 	height: 48px;
@@ -331,8 +298,6 @@ input[type="password"]::-ms-clear {
 		content: '';
 		width: 48px;
 		height: 48px;
-		/* Cũ: border: 2px solid #FFF; (Màu trắng sẽ bị chìm trên nền trắng) */
-		/* Mới: Đổi sang màu xanh Martify */
 		border: 2px solid #217093;
 		position: absolute;
 		left: 0;
@@ -342,7 +307,7 @@ input[type="password"]::-ms-clear {
 	}
 
 	.loader::after {
-		border-color: #FF3D00; /* Màu cam giữ nguyên theo ý bạn */
+		border-color: #FF3D00;
 		animation-delay: 1s;
 	}
 
@@ -354,4 +319,42 @@ input[type="password"]::-ms-clear {
 	100% {
 		transform: rotate(360deg);
 	}
+}
+
+@keyframes shake {
+	0%, 100% {
+		transform: translateX(0);
+	}
+
+	20% {
+		transform: translateX(-10px);
+	}
+
+	40% {
+		transform: translateX(10px);
+	}
+
+	60% {
+		transform: translateX(-10px);
+	}
+
+	80% {
+		transform: translateX(10px);
+	}
+}
+
+.shake-element {
+	animation: shake 0.4s ease-in-out;
+}
+
+.input-error input {
+	border-color: #e74c3c !important;
+}
+
+.input-error .icon svg {
+	fill: #e74c3c !important;
+}
+
+.input-error label {
+	color: #e74c3c !important;
 }

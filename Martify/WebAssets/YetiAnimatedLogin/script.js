@@ -661,10 +661,16 @@ initLoginForm();
 
 window.addEventListener('load', function () {
     var loader = document.getElementById('loading-screen');
+    var form = document.querySelector('form');
     if (loader) {
         setTimeout(function () {
             loader.classList.add('hidden');
-        }, 500);
+            setTimeout(function () {
+                if (form) {
+                    form.classList.add('show-content');
+                }
+            }, 500);
+        }, 2000);
     }
 });
 
@@ -684,7 +690,7 @@ function showError(inputElement) {
     // REMOVED: inputElement.focus();
     setTimeout(function () {
         parent.classList.remove('shake-element');
-    }, 1500);
+    }, 500);
 }
 
 if (email) email.addEventListener('input', clearError);

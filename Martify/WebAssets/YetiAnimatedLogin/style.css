@@ -41,7 +41,13 @@ form {
 	border-radius: 0.5em;
 	font-family: 'Source Sans Pro', sans-serif;
 	transform-origin: center center;
+	opacity: 0;
+	transition: opacity 0.5s ease-out;
 }
+
+	form.show-content {
+		opacity: 1;
+	}
 
 	form .svgContainer {
 		position: relative;

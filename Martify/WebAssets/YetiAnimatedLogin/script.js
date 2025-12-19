@@ -1,5 +1,40 @@
-﻿var emailLabel = document.querySelector('#loginEmailLabel'), email = document.querySelector('#loginEmail'), passwordLabel = document.querySelector('#loginPasswordLabel'), password = document.querySelector('#loginPassword'), showPasswordCheck = document.querySelector('#showPasswordCheck'), showPasswordToggle = document.querySelector('#showPasswordToggle'), mySVG = document.querySelector('.svgContainer'), twoFingers = document.querySelector('.twoFingers'), armL = document.querySelector('.armL'), armR = document.querySelector('.armR'), eyeL = document.querySelector('.eyeL'), eyeR = document.querySelector('.eyeR'), nose = document.querySelector('.nose'), mouth = document.querySelector('.mouth'), mouthBG = document.querySelector('.mouthBG'), mouthSmallBG = document.querySelector('.mouthSmallBG'), mouthMediumBG = document.querySelector('.mouthMediumBG'), mouthLargeBG = document.querySelector('.mouthLargeBG'), mouthMaskPath = document.querySelector('#mouthMaskPath'), mouthOutline = document.querySelector('.mouthOutline'), tooth = document.querySelector('.tooth'), tongue = document.querySelector('.tongue'), chin = document.querySelector('.chin'), face = document.querySelector('.face'), eyebrow = document.querySelector('.eyebrow'), outerEarL = document.querySelector('.earL .outerEar'), outerEarR = document.querySelector('.earR .outerEar'), earHairL = document.querySelector('.earL .earHair'), earHairR = document.querySelector('.earR .earHair'), hair = document.querySelector('.hair'), bodyBG = document.querySelector('.bodyBGnormal'), bodyBGchanged = document.querySelector('.bodyBGchanged');
-var activeElement, curEmailIndex, screenCenter, svgCoords, emailCoords, emailScrollMax, chinMin = .5, dFromC, mouthStatus = "small", blinking, eyeScale = 1, eyesCovered = false, showPasswordClicked = false;
+﻿var emailLabel = document.querySelector('#loginEmailLabel'),
+	email = document.querySelector('#loginEmail'),
+	passwordLabel = document.querySelector('#loginPasswordLabel'),
+	password = document.querySelector('#loginPassword'),
+	mySVG = document.querySelector('.svgContainer'),
+	twoFingers = document.querySelector('.twoFingers'),
+	armL = document.querySelector('.armL'),
+	armR = document.querySelector('.armR'),
+	eyeL = document.querySelector('.eyeL'),
+	eyeR = document.querySelector('.eyeR'),
+	nose = document.querySelector('.nose'),
+	mouth = document.querySelector('.mouth'),
+	mouthBG = document.querySelector('.mouthBG'),
+	mouthSmallBG = document.querySelector('.mouthSmallBG'),
+	mouthMediumBG = document.querySelector('.mouthMediumBG'),
+	mouthLargeBG = document.querySelector('.mouthLargeBG'),
+	mouthMaskPath = document.querySelector('#mouthMaskPath'),
+	mouthOutline = document.querySelector('.mouthOutline'),
+	tooth = document.querySelector('.tooth'),
+	tongue = document.querySelector('.tongue'),
+	chin = document.querySelector('.chin'),
+	face = document.querySelector('.face'),
+	eyebrow = document.querySelector('.eyebrow'),
+	outerEarL = document.querySelector('.earL .outerEar'),
+	outerEarR = document.querySelector('.earR .outerEar'),
+	earHairL = document.querySelector('.earL .earHair'),
+	earHairR = document.querySelector('.earR .earHair'),
+	hair = document.querySelector('.hair'),
+	bodyBG = document.querySelector('.bodyBGnormal'),
+	bodyBGchanged = document.querySelector('.bodyBGchanged');
+
+// TOGGLE BUTTON & ICONS
+var togglePasswordBtn = document.querySelector('#togglePasswordBtn');
+var eyeSlashIcon = document.querySelector('.eye-slash');
+var eyeOpenIcon = document.querySelector('.eye-open');
+
+var activeElement, curEmailIndex, screenCenter, svgCoords, emailCoords, emailScrollMax, chinMin = .5, dFromC, mouthStatus = "small", blinking, eyeScale = 1, eyesCovered = false;
 var eyeLCoords, eyeRCoords, noseCoords, mouthCoords, eyeLAngle, eyeLX, eyeLY, eyeRAngle, eyeRX, eyeRY, noseAngle, noseX, noseY, mouthAngle, mouthX, mouthY, mouthR, chinX, chinY, chinS, faceX, faceY, faceSkew, eyebrowSkew, outerEarX, outerEarY, hairX, hairS;
 
 function calculateFaceMove(e) {
@@ -11,7 +46,6 @@ function calculateFaceMove(e) {
 		caretCoords = {}
 		;
 	if (carPos == null || carPos == 0) {
-		// if browser doesn't support 'selectionEnd' property on input[type="email"], use 'value.length' property instead
 		carPos = email.value.length;
 	}
 	[].forEach.call(copyStyle, function (prop) {
@@ -85,7 +119,6 @@ function onEmailInput(e) {
 	var value = email.value;
 	curEmailIndex = value.length;
 
-	// very crude email validation to trigger effects
 	if (curEmailIndex > 0) {
 		if (mouthStatus == "small") {
 			mouthStatus = "medium";
@@ -123,8 +156,6 @@ function onEmailInput(e) {
 function onEmailFocus(e) {
 	activeElement = "email";
 	e.target.parentElement.classList.add("focusWithText");
-	//stopBlinking();
-	//calculateFaceMove();
 	onEmailInput();
 }
 
@@ -136,7 +167,6 @@ function onEmailBlur(e) {
 			if (e.target.value == "") {
 				e.target.parentElement.classList.remove("focusWithText");
 			}
-			//startBlinking();
 			resetFace();
 		}
 	}, 100);
@@ -146,75 +176,93 @@ function onEmailLabelClick(e) {
 	activeElement = "email";
 }
 
+// ========== PASSWORD HANDLERS ==========
+
 function onPasswordFocus(e) {
 	activeElement = "password";
-	if (!eyesCovered) {
-		coverEyes();
+	// Khi focus, nếu đang ở chế độ ẩn pass (type="password") thì che mắt
+	// Nếu đang hiện pass (type="text") thì giữ nguyên (không che)
+	if (password.type === "password") {
+		if (!eyesCovered) {
+			coverEyes();
+		}
+	} else {
+		// Đang hiện pass thì Yeti phải bỏ tay ra
+		if (eyesCovered) {
+			uncoverEyes();
+			spreadFingers();
+		}
 	}
 }
 
 function onPasswordBlur(e) {
 	activeElement = null;
 	setTimeout(function () {
+		// Nếu click vào toggle button, không reset face vội
 		if (activeElement == "toggle" || activeElement == "password") {
 		} else {
 			uncoverEyes();
+			closeFingers(); // Reset ngón tay về
 		}
 	}, 100);
 }
 
-function onPasswordToggleFocus(e) {
+// Xử lý sự kiện nhập liệu Password
+function onPasswordInput(e) {
+	var val = e.target.value;
+	// Hiện nút show/hide nếu có nội dung
+	if (val.length > 0) {
+		togglePasswordBtn.style.display = 'flex';
+	} else {
+		togglePasswordBtn.style.display = 'none';
+		// Reset về trạng thái mặc định (ẩn pass) khi xóa hết
+		password.type = "password";
+		eyeSlashIcon.style.display = "block";
+		eyeOpenIcon.style.display = "none";
+		// Yeti che mắt lại vì về trạng thái ẩn
+		if (!eyesCovered) {
+			coverEyes();
+		}
+	}
+}
+
+// Xử lý sự kiện click nút Show/Hide
+function onTogglePasswordClick(e) {
+	// Giữ focus ở ô input để gõ tiếp được
 	activeElement = "toggle";
-	if (!eyesCovered) {
-		coverEyes();
+	password.focus();
+
+	if (password.type === "password") {
+		// CHUYỂN SANG HIỆN PASSWORD (Show)
+		password.type = "text";
+		// Đổi icon: Ẩn gạch chéo, hiện mắt thường
+		eyeSlashIcon.style.display = "none";
+		eyeOpenIcon.style.display = "block";
+
+		// Yeti: Hé ngón tay ra nhìn
+		spreadFingers();
+
+	} else {
+		// CHUYỂN SANG ẨN PASSWORD (Hide)
+		password.type = "password";
+		// Đổi icon: Hiện gạch chéo, ẩn mắt thường
+		eyeSlashIcon.style.display = "block";
+		eyeOpenIcon.style.display = "none";
+
+		// Yeti: Che mắt lại
+		closeFingers();
+		// Đảm bảo mắt bị che
+		if (!eyesCovered) coverEyes();
 	}
-}
-
-function onPasswordToggleBlur(e) {
-	activeElement = null;
-	if (!showPasswordClicked) {
-		setTimeout(function () {
-			if (activeElement == "password" || activeElement == "toggle") {
-			} else {
-				uncoverEyes();
-			}
-		}, 100);
-	}
-}
-
-function onPasswordToggleMouseDown(e) {
-	showPasswordClicked = true;
-}
-
-function onPasswordToggleMouseUp(e) {
-	showPasswordClicked = false;
-}
-
-function onPasswordToggleChange(e) {
-	setTimeout(function () {
-		// if checkbox is checked, show password
-		if (e.target.checked) {
-			password.type = "text";
-			spreadFingers();
-
-			// if checkbox is off, hide password
-		} else {
-			password.type = "password";
-			closeFingers();
-		}
-	}, 100);
-}
-
-function onPasswordToggleClick(e) {
-	//console.log("click: " + e.target.id);
-	e.target.focus();
 }
 
 function spreadFingers() {
+	// Yeti hé tay ra để nhìn trộm
 	TweenMax.to(twoFingers, .35, { transformOrigin: "bottom left", rotation: 30, x: -9, y: -2, ease: Power2.easeInOut });
 }
 
 function closeFingers() {
+	// Yeti khép tay lại
 	TweenMax.to(twoFingers, .35, { transformOrigin: "bottom left", rotation: 0, x: 0, y: 0, ease: Power2.easeInOut });
 }
 
@@ -284,21 +332,16 @@ function getPosition(el) {
 
 	while (el) {
 		if (el.tagName == "BODY") {
-			// deal with browser quirks with body/window/document and page scroll
 			var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
 			var yScroll = el.scrollTop || document.documentElement.scrollTop;
-
 			xPos += (el.offsetLeft - xScroll + el.clientLeft);
 			yPos += (el.offsetTop - yScroll + el.clientTop);
 		} else {
-			// for all other non-BODY elements
 			xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
 			yPos += (el.offsetTop - el.scrollTop + el.clientTop);
 		}
-
 		el = el.offsetParent;
 	}
-	//console.log("xPos: " + xPos + ", yPos: " + yPos);
 	return {
 		x: xPos,
 		y: yPos
@@ -312,7 +355,6 @@ function isMobileDevice() {
 };
 
 function initLoginForm() {
-	// some measurements for the svg's elements
 	svgCoords = getPosition(mySVG);
 	emailCoords = getPosition(email);
 	screenCenter = svgCoords.x + (mySVG.offsetWidth / 2);
@@ -321,67 +363,48 @@ function initLoginForm() {
 	noseCoords = { x: svgCoords.x + 97, y: svgCoords.y + 81 };
 	mouthCoords = { x: svgCoords.x + 100, y: svgCoords.y + 100 };
 
-	// handle events for email input
+	// EMAIL EVENTS
 	email.addEventListener('focus', onEmailFocus);
 	email.addEventListener('blur', onEmailBlur);
 	email.addEventListener('input', onEmailInput);
 	emailLabel.addEventListener('click', onEmailLabelClick);
 
-	// handle events for password input
+	// PASSWORD EVENTS
 	password.addEventListener('focus', onPasswordFocus);
 	password.addEventListener('blur', onPasswordBlur);
-	//passwordLabel.addEventListener('click', onPasswordLabelClick);
+	password.addEventListener('input', onPasswordInput); // Lắng nghe nhập liệu để hiện/ẩn nút toggle
 
-	// handle events for password checkbox
-	showPasswordCheck.addEventListener('change', onPasswordToggleChange);
-	showPasswordCheck.addEventListener('focus', onPasswordToggleFocus);
-	showPasswordCheck.addEventListener('blur', onPasswordToggleBlur);
-	showPasswordCheck.addEventListener('click', onPasswordToggleClick);
-	showPasswordToggle.addEventListener('mouseup', onPasswordToggleMouseUp);
-	showPasswordToggle.addEventListener('mousedown', onPasswordToggleMouseDown);
+	// TOGGLE BUTTON EVENT
+	togglePasswordBtn.addEventListener('click', onTogglePasswordClick);
 
-	// move arms to initial positions
+	// SETUP YETI
 	TweenMax.set(armL, { x: -93, y: 220, rotation: 105, transformOrigin: "top left" });
 	TweenMax.set(armR, { x: -93, y: 220, rotation: -105, transformOrigin: "top right" });
-
-	// set initial mouth property (fixes positioning bug)
 	TweenMax.set(mouth, { transformOrigin: "center center" });
 
-	// activate blinking
 	startBlinking(5);
-
-	// determine how far email input can go before scrolling occurs
-	// will be used as the furthest point avatar will look to the right
 	emailScrollMax = email.scrollWidth;
 
-	// check if we're on mobile/tablet, if so then show password initially
+	// Mobile check
 	if (isMobileDevice()) {
 		password.type = "text";
-		showPasswordCheck.checked = true;
+		// Mobile thì hiện luôn pass và spread fingers
 		TweenMax.set(twoFingers, { transformOrigin: "bottom left", rotation: 30, x: -9, y: -2, ease: Power2.easeInOut });
 	}
 
-	// clear the console
 	console.clear();
 }
 
 initLoginForm();
 
-// [THÊM VÀO CUỐI FILE script.js]
-
-// Tìm nút button trong form
+// [THÊM VÀO CUỐI FILE script.js - Code xử lý Login cho C#]
 var loginButton = document.querySelector('form button');
-
 if (loginButton) {
 	loginButton.addEventListener('click', function (e) {
-		// Ngăn không cho form reload trang
 		e.preventDefault();
-
-		// SỬA: Dùng ID đúng theo index.html (loginEmail và loginPassword)
 		var emailVal = document.querySelector('#loginEmail').value;
 		var passVal = document.querySelector('#loginPassword').value;
 
-		// Gửi JSON về cho C# (WPF) thông qua WebView2
 		if (window.chrome && window.chrome.webview) {
 			var data = {
 				username: emailVal,

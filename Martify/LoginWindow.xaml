@@ -41,10 +41,28 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
-                <wv2:WebView2 x:Name="webView" 
-                              DefaultBackgroundColor="Transparent"
-                              Height="400"
-                              Margin="20"/>
+
+                <StackPanel x:Name="LoadingPanel" 
+                            HorizontalAlignment="Center" 
+                            VerticalAlignment="Center">
+                    <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                 Value="0"
+                                 IsIndeterminate="True"
+                                 Width="30" Height="30"
+                                 Foreground="#217093"/>
+                    <TextBlock Text="Đang tải..." 
+                               Margin="0,10,0,0" 
+                               Foreground="#217093" 
+                               FontSize="12"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <Grid x:Name="WebViewContainer" Opacity="0">
+                    <wv2:WebView2 x:Name="webView" 
+                                  DefaultBackgroundColor="Transparent"
+                                  Height="400"
+                                  Margin="20"/>
+                </Grid>
 
                 <ContentControl Content="{Binding Status}"
                                 IsTabStop="False"

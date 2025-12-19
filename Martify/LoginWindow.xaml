@@ -11,7 +11,7 @@
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
         Title="Martify"
-        Height="450" Width="800"
+        Height="500" Width="800"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -41,7 +41,8 @@
 
             <Grid Grid.Column="0">
                 <wv2:WebView2 x:Name="webView" 
-                              DefaultBackgroundColor="Transparent" 
+                              DefaultBackgroundColor="Transparent"
+                              Height="400"
                               Margin="20"/>
 
                 <ContentControl Content="{Binding Status}"

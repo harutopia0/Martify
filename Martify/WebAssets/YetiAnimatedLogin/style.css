@@ -7,6 +7,7 @@ html {
 	padding: 0;
 	overflow: hidden; /* Ẩn thanh cuộn */
 }
+
 body {
 	position: relative;
 	width: 100%;
@@ -20,130 +21,228 @@ body {
 	padding: 0;
 	overflow: hidden; /* Ẩn thanh cuộn */
 }
- form {
-	 position: absolute;
-	 top: 50%;
-	 left: 50%;
-	 transform: translate(-50%, -50%);
-	 display: block;
-	 width: 100%;
-	 max-width: 400px;
-	 background-color: #fff;
-	 margin: 0;
-	 padding: 2.25em;
-	 box-sizing: border-box;
-	 border: solid 1px #ddd;
-	 border-radius: 0.5em;
-	 font-family: 'Source Sans Pro', sans-serif;
+
+form {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	/* CŨ: transform: translate(-50%, -50%); */
+	/* MỚI: Thêm scale(0.75) để thu nhỏ còn 75% kích thước */
+	transform: translate(-50%, -50%) scale(0.75);
+	display: block;
+	width: 100%;
+	max-width: 400px;
+	background-color: transparent;
+	margin: 0;
+	padding: 2.25em;
+	box-sizing: border-box;
+	border: solid 1px transparent;
+	border-radius: 0.5em;
+	font-family: 'Source Sans Pro', sans-serif;
+	/* Thêm dòng này để khi scale không bị vỡ layout trên một số trình duyệt */
+	transform-origin: center center;
 }
- form .svgContainer {
-	 position: relative;
-	 width: 200px;
-	 height: 200px;
-	 margin: 0 auto 1em;
-	 border-radius: 50%;
-	 background: none;
-	 border: solid 2.5px #3a5e77;
-	 overflow: hidden;
-	 pointer-events: none;
-}
- form .svgContainer div {
-	 position: relative;
-	 width: 100%;
-	 height: 0;
-	 overflow: hidden;
-	 padding-bottom: 100%;
-}
- form .svgContainer .mySVG {
-	 position: absolute;
-	 left: 0;
-	 top: 0;
-	 width: 100%;
-	 height: 100%;
-	 pointer-events: none;
-}
- form .inputGroup {
-	 margin: 0 0 2em;
-	 padding: 0;
-	 position: relative;
-}
- form .inputGroup:last-of-type {
-	 margin-bottom: 0;
-}
- form label {
-	 margin: 0 0 12px;
-	 display: block;
-	 font-size: 1.25em;
-	 color: #217093;
-	 font-weight: 700;
-	 font-family: inherit;
-}
- form input[type='email'], form input[type="text"], form input[type='password'] {
-	 display: block;
-	 margin: 0;
-	 padding: 0 1em 0;
-	 background-color: #f3fafd;
-	 border: solid 2px #217093;
-	 border-radius: 4px;
-	 -webkit-appearance: none;
-	 box-sizing: border-box;
-	 width: 100%;
-	 height: 65px;
-	 font-size: 1.55em;
-	 color: #353538;
-	 font-weight: 600;
-	 font-family: inherit;
-	 transition: box-shadow 0.2s linear, border-color 0.25s ease-out;
-}
- form input[type='email']:focus, form input[type="text"]:focus, form input[type='password']:focus {
-	 outline: none;
-	 box-shadow: 0px 2px 10px rgba(0, 0, 0, .1);
-	 border: solid 2px #4eb8dd;
-}
- form input[type='email'], form input[type="text"] {
-	 padding: 14px 1em 0px;
-}
- form button {
-	 display: block;
-	 margin: 0;
-	 padding: 0.65em 1em 1em;
-	 background-color: #4eb8dd;
-	 border: none;
-	 border-radius: 4px;
-	 box-sizing: border-box;
-	 box-shadow: none;
-	 width: 100%;
-	 height: 65px;
-	 font-size: 1.55em;
-	 color: #fff;
-	 font-weight: 600;
-	 font-family: inherit;
-	 transition: background-color 0.2s ease-out;
-}
- form button:hover, form button:active {
-	 background-color: #217093;
-}
- form .inputGroup1 .helper {
-	 position: absolute;
-	 z-index: 1;
-	 font-family: inherit;
-}
- form .inputGroup1 .helper1 {
-	 top: 0;
-	 left: 0;
-	 transform: translate(1.4em, 2.6em) scale(1);
-	 transform-origin: 0 0;
-	 color: #217093;
-	 font-size: 1.25em;
-	 font-weight: 400;
-	 opacity: 0.65;
-	 pointer-events: none;
-	 transition: transform 0.2s ease-out, opacity 0.2s linear;
-}
- form .inputGroup1.focusWithText .helper {
-	/*input[type='email']:focus + .helper {
-		*/
-		 transform: translate(1.4em, 2em) scale(0.65);
-		 opacity: 1;
+
+	form .svgContainer {
+		position: relative;
+		width: 200px;
+		height: 200px;
+		margin: 0 auto 1em;
+		border-radius: 50%;
+		background: none;
+		border: solid 2.5px #3a5e77;
+		overflow: hidden;
+		pointer-events: none;
 	}
-	 
+
+		form .svgContainer div {
+			position: relative;
+			width: 100%;
+			height: 0;
+			overflow: hidden;
+			padding-bottom: 100%;
+		}
+
+		form .svgContainer .mySVG {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+		}
+
+	form .inputGroup {
+		margin: 0 0 2em;
+		padding: 0;
+		position: relative;
+	}
+
+		form .inputGroup:last-of-type {
+			margin-bottom: 0;
+		}
+
+	form label {
+		margin: 0 0 12px;
+		display: block;
+		font-size: 1.25em;
+		color: #217093;
+		font-weight: 700;
+		font-family: inherit;
+	}
+
+	form input[type='email'], form input[type="text"], form input[type='password'] {
+		display: block;
+		margin: 0;
+		padding: 0 1em 0;
+		background-color: #f3fafd;
+		border: solid 2px #217093;
+		border-radius: 4px;
+		-webkit-appearance: none;
+		box-sizing: border-box;
+		width: 100%;
+		height: 65px;
+		font-size: 1.55em;
+		color: #353538;
+		font-weight: 600;
+		font-family: inherit;
+		transition: box-shadow 0.2s linear, border-color 0.25s ease-out;
+	}
+
+		form input[type='email']:focus, form input[type="text"]:focus, form input[type='password']:focus {
+			outline: none;
+			box-shadow: 0px 2px 10px rgba(0, 0, 0, .1);
+			border: solid 2px #4eb8dd;
+		}
+
+	form input[type='email'], form input[type="text"] {
+		padding: 14px 1em 0px;
+	}
+
+	form button {
+		display: block;
+		margin: 0;
+		padding: 0.65em 1em 1em;
+		background-color: #4eb8dd;
+		border: none;
+		border-radius: 4px;
+		box-sizing: border-box;
+		box-shadow: none;
+		width: 100%;
+		height: 65px;
+		font-size: 1.55em;
+		color: #fff;
+		font-weight: 600;
+		font-family: inherit;
+		transition: background-color 0.2s ease-out;
+	}
+
+		form button:hover, form button:active {
+			background-color: #217093;
+		}
+
+	form .inputGroup1 .helper {
+		position: absolute;
+		z-index: 1;
+		font-family: inherit;
+	}
+
+	form .inputGroup1 .helper1 {
+		top: 0;
+		left: 0;
+		transform: translate(1.4em, 2.6em) scale(1);
+		transform-origin: 0 0;
+		color: #217093;
+		font-size: 1.25em;
+		font-weight: 400;
+		opacity: 0.65;
+		pointer-events: none;
+		transition: transform 0.2s ease-out, opacity 0.2s linear;
+	}
+
+	form .inputGroup1.focusWithText .helper {
+		/*input[type='email']:focus + .helper {
+		*/
+		transform: translate(1.4em, 2em) scale(0.65);
+		opacity: 1;
+	}
+
+/* ===== Material Outlined Input (Đã sửa lỗi căn giữa & Hint) ===== */
+.material-input {
+	position: relative;
+	height: 55px; /* Chiều cao cố định cho ô input */
+	margin-bottom: 20px; /* Khoảng cách giữa các ô */
+	width: 100%;
+	font-size: 12px;
+}
+
+	/* Chỉnh sửa ô nhập liệu */
+	.material-input input {
+		width: 100%;
+		height: 100% !important; /* Bắt buộc lấy chiều cao theo cha */
+		padding: 0 15px 0 45px !important; /* Reset padding: Trên/Dưới=0, Trái=45px (né icon) */
+		margin: 0;
+		/* Style viền và màu */
+		border: 2px solid #217093;
+		border-radius: 6px;
+		background-color: #f3fafd;
+		box-sizing: border-box;
+		/* Font chữ */
+		font-size: 16px;
+		color: #353538;
+		font-family: inherit;
+		font-weight: 600;
+		/* Quan trọng: bỏ outline mặc định */
+		outline: none;
+		transition: border-color 0.25s ease-out, box-shadow 0.2s;
+	}
+
+		/* Hiệu ứng khi focus vào ô input */
+		.material-input input:focus {
+			border-color: #4eb8dd;
+			box-shadow: 0px 2px 10px rgba(0, 0, 0, .1);
+		}
+
+	/* ===== ICON (Căn giữa tuyệt đối) ===== */
+	.material-input .icon {
+		position: absolute;
+		left: 12px;
+		top: 50%; /* Đặt đỉnh icon ở giữa chiều cao cha */
+		transform: translateY(-50%); /* Dịch ngược lại 50% chiều cao icon để chính xác giữa */
+		width: 24px;
+		height: 24px;
+		fill: #217093; /* Màu icon */
+		pointer-events: none; /* Để click xuyên qua icon vào input */
+		z-index: 2;
+	}
+
+	/* ===== LABEL (Chữ mờ hướng dẫn) ===== */
+	.material-input label {
+		position: absolute;
+		left: 45px; /* Cách lề trái để không đè lên icon */
+		top: 50%; /* Đặt đỉnh label ở giữa */
+		transform: translateY(-50%); /* Dịch ngược lại để tâm chữ nằm giữa */
+
+		color: #217093;
+		font-size: 16px;
+		font-weight: normal;
+		pointer-events: none;
+		transition: 0.25s ease all;
+		background-color: transparent;
+		padding: 0 5px;
+	}
+
+	/* ===== QUAN TRỌNG: SỬA LOGIC LABEL ===== */
+	/* Thay vì dùng :valid (phụ thuộc vào email đúng sai), ta dùng :not(:placeholder-shown) */
+	/* Selector này nghĩa là: Nếu input KHÔNG hiển thị placeholder (tức là đã có chữ) thì đẩy label lên */
+	.material-input input:focus + label,
+	.material-input input:not(:placeholder-shown) + label {
+		top: 0; /* Chạy lên mép trên cùng */
+		left: 15px;
+		font-size: 13px;
+		color: #4eb8dd;
+		font-weight: bold;
+		background-color: #f3fafd; /* Màu nền trùng màu input để che viền */
+		transform: translateY(-50%); /* Căn giữa dòng kẻ viền */
+		z-index: 3;
+	}

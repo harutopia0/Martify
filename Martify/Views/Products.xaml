@@ -9,7 +9,6 @@
              xmlns:cv="clr-namespace:Martify.Converters" 
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1200" d:Background="Transparent"
-             Style="{StaticResource Page_CinematicFocus_Style}"
              d:Style="{x:Null}">
 
     <UserControl.DataContext>

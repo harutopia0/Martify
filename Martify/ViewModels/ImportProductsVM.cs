@@ -1,4 +1,5 @@
 ﻿using Martify.Models;
+using Martify.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -142,6 +143,8 @@ namespace Martify.ViewModels
         public ICommand IncreaseQuantityCommand { get; set; }
         public ICommand DecreaseQuantityCommand { get; set; }
         public ICommand AddSupplierCommand { get; set; }
+        
+        public ICommand ImportHistoryCommand { get; set; }
         public ICommand ValidateSupplierCommand { get; set; } // Command mới cho validation
 
         // =================================================================================================
@@ -215,6 +218,20 @@ namespace Martify.ViewModels
                 (p) => true,
                 (p) => ValidateSupplierName());
 
+            ImportHistoryCommand = new RelayCommand<object>(
+                (p) => true,
+                (p) =>
+                {
+                    try
+                    {
+                        var importHistory = new ImportHistory();
+                        importHistory.ShowDialog();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                });
             ImportItems.CollectionChanged += (s, e) => CalculateTotal();
         }
 

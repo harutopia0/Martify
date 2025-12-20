@@ -205,6 +205,7 @@
                       HeadersVisibility="Column"
                       RowHeight="50"
                       ColumnHeaderHeight="50"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       BorderThickness="0"
                       VirtualizingPanel.IsVirtualizing="True"
                       VirtualizingPanel.VirtualizationMode="Recycling"
@@ -326,7 +327,8 @@
                     <!-- Unit -->
                     <DataGridTextColumn Header="ĐVT" 
                                         Binding="{Binding Unit}" 
-                                        Width="*">
+                                        Width="*"
+                                        CanUserSort="False">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="FontSize" Value="13"/>
@@ -336,7 +338,7 @@
                     </DataGridTextColumn>
 
                     <!-- Price -->
-                    <DataGridTemplateColumn Header="GIÁ BÁN" Width="*">
+                    <DataGridTemplateColumn Header="GIÁ BÁN" Width="*" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel VerticalAlignment="Center">

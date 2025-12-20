@@ -38,8 +38,8 @@
                 <AdornedElementPlaceholder x:Name="placeholder" />
                 <TextBlock Text="{Binding [0].ErrorContent}" 
                            Foreground="#F44336" 
-                           FontSize="11" 
-                           Margin="5,3,0,0"
+                           FontSize="10" 
+                           Margin="5,0,0,0"
                            FontStyle="Italic"/>
             </StackPanel>
         </ControlTemplate>
@@ -277,7 +277,7 @@
                                       SelectedValue="{Binding SelectedSupplierID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                       materialDesign:HintAssist.Hint="Chọn hoặc nhập tên nhà cung cấp"
                                       Style="{StaticResource ValidatedComboBox}"
-                                      Margin="0,0,10,0">
+                                      Margin="0,0,10,5">
                                 <ComboBox.Text>
                                     <Binding Mode="TwoWay" 
                                              Path="SelectedSupplierName"
@@ -300,7 +300,7 @@
                             <Button Grid.Column="2"
                                     Margin="0"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                                    Command="{Binding AddSupplierCommand}"
+                                    Command="{Binding ImportHistoryCommand}"
                                     ToolTip="Lịch sử nhập hàng"
                                     Width="40"
                                     Height="40"
@@ -385,7 +385,7 @@
                                 </DataGridTextColumn>
 
                                 <!-- Quantity with Buttons -->
-                                <DataGridTemplateColumn Header="Số lượng" Width="150">
+                                <DataGridTemplateColumn Header="Số lượng" Width="160">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">

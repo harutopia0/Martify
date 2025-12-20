@@ -36,8 +36,8 @@
                 <AdornedElementPlaceholder x:Name="placeholder" />
                 <TextBlock Text="{Binding [0].ErrorContent}" 
                            Foreground="#F44336" 
-                           FontSize="11" 
-                           Margin="5,3,0,0"
+                           FontSize="10" 
+                           Margin="5,0,0,0"
                            FontStyle="Italic"/>
             </StackPanel>
         </ControlTemplate>
@@ -277,7 +277,6 @@
                                            Style="{StaticResource LabelText}"/>
                                 <TextBox Grid.Column="1"
                                          Text="{Binding StockQuantity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                         materialDesign:HintAssist.Hint="Nhập số lượng tồn kho"
                                          Style="{StaticResource ValidatedTextBox}"/>
                             </Grid>
 

@@ -25,6 +25,8 @@ namespace Martify.ViewModels
             set { _selectedDetailProduct = value; OnPropertyChanged(); }
         }
 
+        private string _sourceImageFile;
+
         private string _editProductName;
         public string EditProductName
         {
@@ -50,7 +52,7 @@ namespace Martify.ViewModels
         public string EditImagePath
         {
             get => _editImagePath;
-            set { _editImagePath = value; OnPropertyChanged(); }
+            set { _editImagePath = value; OnPropertyChanged(); CheckModified(); }
         }
 
         private string _supplierName;
@@ -167,6 +169,8 @@ namespace Martify.ViewModels
 
         public ICommand SaveChangesCommand { get; set; }
         public ICommand CloseWindowCommand { get; set; }
+
+        public ICommand SelectImageCommand { get; set; }
         public Action OnSaveCompleted { get; set; }
 
         public ProductDetailVM(Product product)
@@ -183,6 +187,8 @@ namespace Martify.ViewModels
             EditUnit = product.Unit;
             EditCategoryID = product.CategoryID;
             EditImagePath = product.ImagePath;
+            _sourceImageFile = null;
+
 
             // Hiển thị Text của Category ban đầu
             var currentCat = Categories?.FirstOrDefault(c => c.CategoryID == product.CategoryID);
@@ -193,7 +199,19 @@ namespace Martify.ViewModels
 
             SaveChangesCommand = new RelayCommand<object>((p) => IsModified, async (p) => await SaveChangesAsync());
             CloseWindowCommand = new RelayCommand<object>((p) => true, (p) => RequestClose?.Invoke(this, EventArgs.Empty));
+            SelectImageCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                var dlg = new Microsoft.Win32.OpenFileDialog
+                {
+                    Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp"
+                };
 
+                if (dlg.ShowDialog() == true)
+                {
+                    _sourceImageFile = dlg.FileName;
+                    EditImagePath = _sourceImageFile;
+                }
+            });
             IsModified = false;
         }
 
@@ -228,7 +246,9 @@ namespace Martify.ViewModels
                          EditStockQuantity != SelectedDetailProduct.StockQuantity ||
                          EditUnit != SelectedDetailProduct.Unit ||
                          EditCategoryID != SelectedDetailProduct.CategoryID ||
-                         SelectedCategoryText != Categories.FirstOrDefault(c => c.CategoryID == SelectedDetailProduct.CategoryID)?.CategoryName;
+                         SelectedCategoryText != Categories.FirstOrDefault(c => c.CategoryID == SelectedDetailProduct.CategoryID)?.CategoryName||
+                         EditImagePath != SelectedDetailProduct.ImagePath;
+
         }
 
         private async Task SaveChangesAsync()
@@ -261,6 +281,12 @@ namespace Martify.ViewModels
                 var productInDb = DataProvider.Ins.DB.Products.FirstOrDefault(x => x.ProductID == SelectedDetailProduct.ProductID);
                 if (productInDb != null)
                 {
+                    if (!string.IsNullOrEmpty(_sourceImageFile))
+                    {
+                        string newPath = HandleImageSave(productInDb.ProductID, _sourceImageFile);
+                        if (newPath != "ERROR") productInDb.ImagePath = newPath;
+                    }
+
                     productInDb.ProductName = EditProductName.Trim();
                     productInDb.Price = EditPrice;
                     productInDb.StockQuantity = EditStockQuantity;
@@ -300,5 +326,51 @@ namespace Martify.ViewModels
             }
             return "C" + (max + 1).ToString("D3");
         }
+
+        private string HandleImageSave(string prodId, string sourceFile)
+        {
+            try
+            {
+                string ext = System.IO.Path.GetExtension(sourceFile);
+                string fileName = $"{prodId}_{DateTime.Now:yyyyMMddHHmmss}{ext}";
+
+                string binFolder = AppDomain.CurrentDomain.BaseDirectory;
+                string binAssets = System.IO.Path.Combine(binFolder, "Assets", "Product");
+
+                if (!System.IO.Directory.Exists(binAssets))
+                    System.IO.Directory.CreateDirectory(binAssets);
+
+                string destFile = System.IO.Path.Combine(binAssets, fileName);
+                System.IO.File.Copy(sourceFile, destFile, true);
+
+                try
+                {
+                    string projectFolder = System.IO.Path.GetFullPath(
+                        System.IO.Path.Combine(binFolder, @"..\..\..\"));
+
+                    string projectAssets = System.IO.Path.Combine(projectFolder, "Assets", "Product");
+
+                    if (System.IO.Directory.Exists(System.IO.Path.Combine(projectFolder, "Assets")))
+                    {
+                        if (!System.IO.Directory.Exists(projectAssets))
+                            System.IO.Directory.CreateDirectory(projectAssets);
+
+                        System.IO.File.Copy(
+                            sourceFile,
+                            System.IO.Path.Combine(projectAssets, fileName),
+                            true
+                        );
+                    }
+                }
+                catch { }
+
+                return System.IO.Path.Combine("Assets", "Product", fileName);
+            }
+            catch
+            {
+                return "ERROR";
+            }
+        }
+
     }
 }

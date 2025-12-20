@@ -28,153 +28,109 @@
                                   BlurRadius="15" ShadowDepth="4" Direction="270" Opacity="0.3"/>
             </Border.Effect>
 
-            <StackPanel Margin="30">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="30">
 
-                <!-- 1. Thông Tin Tài Khoản -->
-                <Border Background="{DynamicResource ItemBackground}" 
-                        CornerRadius="15" Padding="20" Margin="0,0,0,20">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                    <Border Background="{DynamicResource ItemBackground}" 
+                            CornerRadius="15" Padding="20" Margin="0,0,0,20">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <materialDesign:PackIcon Grid.Column="0" Kind="AccountCircle" Width="40" Height="40" Foreground="#067FF8" VerticalAlignment="Center"/>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="AccountCircle" Width="40" Height="40" Foreground="#067FF8" VerticalAlignment="Center"/>
 
-                        <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                            <TextBlock Text="Thông Tin Tài Khoản" FontSize="18" FontFamily="Roboto Bold" 
-                                       Foreground="{DynamicResource PrimaryText}"/>
-                            <TextBlock Text="Chỉnh sửa thông tin cá nhân và mật khẩu" FontSize="14" FontFamily="Roboto" 
-                                       Foreground="{DynamicResource SecondaryText}"/>
-                        </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Text="Thông Tin Tài Khoản" FontSize="18" FontFamily="Roboto Bold" 
+                                           Foreground="{DynamicResource PrimaryText}"/>
+                                <TextBlock Text="Chỉnh sửa thông tin cá nhân và mật khẩu" FontSize="14" FontFamily="Roboto" 
+                                           Foreground="{DynamicResource SecondaryText}"/>
+                            </StackPanel>
 
-                        <Button Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}" 
-                                Content="CHỈNH SỬA" Foreground="#067FF8"
-                                Command="{Binding OpenEditProfileCommand}"/>
-                    </Grid>
-                </Border>
+                            <Button Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}" 
+                                    Content="CHỈNH SỬA" Foreground="#067FF8"
+                                    Command="{Binding OpenEditProfileCommand}"/>
+                        </Grid>
+                    </Border>
 
-                <!-- 2. Cấu Hình Chung -->
-                <Border Background="{DynamicResource ItemBackground}" 
-                        CornerRadius="15" Padding="20" Margin="0,0,0,20">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                    <Border Background="{DynamicResource ItemBackground}" 
+                            CornerRadius="15" Padding="20" Margin="0,0,0,20">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <materialDesign:PackIcon Grid.Column="0" Kind="Tune" Width="40" Height="40" Foreground="#FF9800" VerticalAlignment="Center"/>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="ThemeLightDark" Width="40" Height="40" Foreground="#9C27B0" VerticalAlignment="Center"/>
 
-                        <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                            <TextBlock Text="Cấu Hình Chung" FontSize="18" FontFamily="Roboto Bold" 
-                                       Foreground="{DynamicResource PrimaryText}"/>
-                            <TextBlock Text="Ngôn ngữ, thông báo và giao diện" FontSize="14" FontFamily="Roboto" 
-                                       Foreground="{DynamicResource SecondaryText}"/>
-                        </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Text="Giao Diện" FontSize="18" FontFamily="Roboto Bold" 
+                                           Foreground="{DynamicResource PrimaryText}"/>
+                                <TextBlock Text="Chuyển đổi giữa chế độ Sáng / Tối" FontSize="14" FontFamily="Roboto" 
+                                           Foreground="{DynamicResource SecondaryText}"/>
+                            </StackPanel>
 
-                        <Button Grid.Column="2" 
-                                Command="{Binding OpenConfigCommand}"
-                                Style="{StaticResource MaterialDesignOutlinedButton}" 
-                                Content="CÀI ĐẶT" BorderBrush="#FF9800" Foreground="#FF9800"/>
-                    </Grid>
-                </Border>
+                            <ToggleButton Grid.Column="2"
+                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          IsChecked="{Binding IsDarkMode}"
+                                          ToolTip="Bật/Tắt Chế độ tối"
+                                          Background="#9C27B0" 
+                                          BorderBrush="#9C27B0"/>
+                        </Grid>
+                    </Border>
 
-                <!-- 3. Về Martify -->
-                <Border Background="{DynamicResource ItemBackground}" 
-                        CornerRadius="15" Padding="20" Margin="0,0,0,20">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <materialDesign:PackIcon Grid.Column="0" Kind="Information" Width="40" Height="40" Foreground="#4CAF50" VerticalAlignment="Center"/>
-                        <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                            <TextBlock Text="Về Martify" FontSize="18" FontFamily="Roboto Bold" 
-                                       Foreground="{DynamicResource PrimaryText}"/>
-                            <TextBlock Text="Phiên bản 1.0.0 - Copyright 2024" FontSize="14" FontFamily="Roboto" 
-                                       Foreground="{DynamicResource SecondaryText}"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
+                    <Border Background="{DynamicResource ItemBackground}" 
+                            CornerRadius="15" Padding="20" Margin="0,0,0,20">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="Information" Width="40" Height="40" Foreground="#4CAF50" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Text="Về Martify" FontSize="18" FontFamily="Roboto Bold" 
+                                           Foreground="{DynamicResource PrimaryText}"/>
+                                <TextBlock Text="Phiên bản 1.0.0 - Copyright 2025" FontSize="14" FontFamily="Roboto" 
+                                           Foreground="{DynamicResource SecondaryText}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
 
-                <!-- 4. MỚI: Đăng Xuất -->
-                <Border Background="{DynamicResource ItemBackground}" 
-                        CornerRadius="15" Padding="20">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                    <Border Background="{DynamicResource ItemBackground}" 
+                            CornerRadius="15" Padding="20">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <!-- Icon Logout màu đỏ -->
-                        <materialDesign:PackIcon Grid.Column="0" Kind="Logout" 
-                                                 Width="40" Height="40" 
-                                                 Foreground="#FF5252" 
-                                                 VerticalAlignment="Center"/>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="Logout" 
+                                                     Width="40" Height="40" 
+                                                     Foreground="#FF5252" 
+                                                     VerticalAlignment="Center"/>
 
-                        <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                            <TextBlock Text="Đăng Xuất" FontSize="18" FontFamily="Roboto Bold" 
-                                       Foreground="{DynamicResource PrimaryText}"/>
-                            <TextBlock Text="Thoát khỏi phiên làm việc hiện tại" FontSize="14" FontFamily="Roboto" 
-                                       Foreground="{DynamicResource SecondaryText}"/>
-                        </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Text="Đăng Xuất" FontSize="18" FontFamily="Roboto Bold" 
+                                           Foreground="{DynamicResource PrimaryText}"/>
+                                <TextBlock Text="Thoát khỏi phiên làm việc hiện tại" FontSize="14" FontFamily="Roboto" 
+                                           Foreground="{DynamicResource SecondaryText}"/>
+                            </StackPanel>
 
-                        <!-- Nút bấm Đăng xuất -->
-                        <Button Grid.Column="2" 
-                                Command="{Binding LogoutCommand}"
-                                Style="{StaticResource MaterialDesignOutlinedButton}" 
-                                Content="THOÁT" 
-                                BorderBrush="#FF5252" 
-                                Foreground="#FF5252"/>
-                    </Grid>
-                </Border>
+                            <Button Grid.Column="2" 
+                                    Command="{Binding LogoutCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}" 
+                                    Content="THOÁT" 
+                                    BorderBrush="#FF5252" 
+                                    Foreground="#FF5252"/>
+                        </Grid>
+                    </Border>
 
-            </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
         </Border>
-
-        <!-- Popup Cấu Hình (Giữ nguyên) -->
-        <Grid Background="#AA000000" Visibility="{Binding ConfigVisibility}">
-            <Border Width="400" Height="300" 
-                    Background="{DynamicResource CardBackground}" 
-                    CornerRadius="20" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Grid Margin="20">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Chi Tiết Cấu Hình" FontSize="20" FontWeight="Bold" 
-                               HorizontalAlignment="Center"
-                               Foreground="{DynamicResource PrimaryText}"/>
-
-                    <StackPanel Grid.Row="1" VerticalAlignment="Center">
-                        <CheckBox Content="Bật thông báo hệ thống" Margin="0,10"
-                                  Foreground="{DynamicResource PrimaryText}"/>
-
-                        <CheckBox Content="Chế độ tối (Dark Mode)" 
-                                  IsChecked="{Binding IsDarkMode}" 
-                                  Margin="0,10"
-                                  Foreground="{DynamicResource PrimaryText}"/>
-
-                        <ComboBox materialDesign:HintAssist.Hint="Ngôn Ngữ" Margin="0,10"
-                                  Foreground="{DynamicResource PrimaryText}">
-                            <ComboBoxItem Content="Tiếng Việt"/>
-                            <ComboBoxItem Content="English"/>
-                        </ComboBox>
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="Hủy" Style="{StaticResource MaterialDesignFlatButton}" 
-                                Command="{Binding CloseConfigCommand}" Margin="0,0,10,0"/>
-                        <Button Content="Lưu Thay Đổi" Command="{Binding CloseConfigCommand}"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-        </Grid>
-
     </Grid>
 </UserControl>

@@ -2,6 +2,8 @@
 using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions; 
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,7 +21,6 @@ namespace Martify.ViewModels
         private string _email;
         public string Email { get => _email; set { _email = value; OnPropertyChanged(); } }
 
-        // [MỚI] Thêm thuộc tính PhoneNumber
         private string _phoneNumber;
         public string PhoneNumber { get => _phoneNumber; set { _phoneNumber = value; OnPropertyChanged(); } }
 
@@ -46,7 +47,7 @@ namespace Martify.ViewModels
             Username = acc.Username;
             FullName = acc.Employee.FullName;
             Email = acc.Employee.Email;
-            PhoneNumber = acc.Employee.Phone; // [MỚI] Load SĐT
+            PhoneNumber = acc.Employee.Phone;
             AvatarPath = acc.Employee.ImagePath;
         }
 
@@ -60,12 +61,65 @@ namespace Martify.ViewModels
             }
         }
 
+        // Hàm kiểm tra định dạng Email
+        bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email)) return false;
+            try
+            {
+                // Regex đơn giản để check email
+                return Regex.IsMatch(email,
+                    @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+                    RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+        }
+
         void SaveChanges(Window w)
         {
+            // -----------------------------------------------------
+            // [LOGIC KIỂM TRA DỮ LIỆU ĐẦU VÀO]
+            // -----------------------------------------------------
+
+            // 1. Kiểm tra Email
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                MessageBox.Show("Email không được để trống!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (!IsValidEmail(Email))
+            {
+                MessageBox.Show("Định dạng Email không hợp lệ!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // 2. Kiểm tra Số điện thoại
+            if (string.IsNullOrWhiteSpace(PhoneNumber))
+            {
+                MessageBox.Show("Số điện thoại không được để trống!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            // Chỉ được chứa số và độ dài từ 9 đến 11 ký tự
+            if (!PhoneNumber.All(char.IsDigit))
+            {
+                MessageBox.Show("Số điện thoại chỉ được chứa ký tự số!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (PhoneNumber.Length < 9 || PhoneNumber.Length > 11)
+            {
+                MessageBox.Show("Số điện thoại phải từ 9 đến 11 số!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // -----------------------------------------------------
+
             var acc = DataProvider.Ins.CurrentAccount;
             if (acc == null) return;
 
-            // 1. Xử lý lưu ảnh (giữ nguyên logic cũ)
+            // Xử lý lưu ảnh
             if (!string.IsNullOrEmpty(AvatarPath) && Path.IsPathRooted(AvatarPath))
             {
                 try
@@ -88,18 +142,30 @@ namespace Martify.ViewModels
                 }
             }
 
-            // 2. Xử lý đổi mật khẩu (giữ nguyên logic cũ)
+            // Xử lý đổi mật khẩu
             var passwordBox = w.FindName("txtNewPass") as PasswordBox;
             var confirmBox = w.FindName("txtConfirmPass") as PasswordBox;
             var oldPassBox = w.FindName("txtOldPass") as PasswordBox;
 
             if (passwordBox != null && !string.IsNullOrEmpty(passwordBox.Password))
             {
+                if (string.IsNullOrEmpty(oldPassBox.Password))
+                {
+                    MessageBox.Show("Vui lòng nhập mật khẩu cũ để xác thực!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 string inputOldPassHash = LoginVM.ConvertToSHA256(oldPassBox.Password);
 
                 if (inputOldPassHash != acc.HashPassword)
                 {
                     MessageBox.Show("Mật khẩu cũ không đúng!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (passwordBox.Password.Length < 6)
+                {
+                    MessageBox.Show("Mật khẩu mới quá ngắn (tối thiểu 6 ký tự)!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -112,16 +178,12 @@ namespace Martify.ViewModels
                 acc.HashPassword = LoginVM.ConvertToSHA256(passwordBox.Password);
             }
 
-            // [QUAN TRỌNG] Cập nhật thông tin cá nhân
-            // acc.Employee.FullName = FullName; // <-- [ĐÃ BỎ] Không cập nhật tên nữa
+            // Lưu thông tin hợp lệ
+            acc.Employee.Email = Email;
+            acc.Employee.Phone = PhoneNumber;
 
-            acc.Employee.Email = Email;          // Cập nhật Email
-            acc.Employee.Phone = PhoneNumber; // [MỚI] Cập nhật SĐT
-
-            // Lưu xuống Database
             DataProvider.Ins.DB.SaveChanges();
 
-            // Cập nhật lại giao diện chính (SidePanel)
             if (Application.Current.MainWindow.DataContext is MainVM mainVM)
             {
                 mainVM.LoadCurrentUserData();

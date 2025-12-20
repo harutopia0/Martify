@@ -29,7 +29,7 @@ namespace Martify.ViewModels
             set { _selectedImportItem = value; OnPropertyChanged(); }
         }
 
-        private List<Product> _allProducts; // Cache toàn bộ sản phẩm
+        private List<Product> _allProducts;
         public List<Product> AllProducts
         {
             get => _allProducts;
@@ -51,17 +51,36 @@ namespace Martify.ViewModels
             {
                 _selectedSupplierID = value;
                 OnPropertyChanged();
-
-                // YÊU CẦU 1: Khi chọn nhà cung cấp, lọc sản phẩm
                 FilterProductsBySupplier();
             }
         }
 
         private string _selectedSupplierName;
+        private string _lastCheckedSupplierName; // Biến để track tên đã check
+
         public string SelectedSupplierName
         {
             get => _selectedSupplierName;
-            set { _selectedSupplierName = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedSupplierName = value;
+                OnPropertyChanged();
+
+                // Chỉ xử lý khi text thay đổi và không rỗng
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    // Kiểm tra xem có tồn tại trong danh sách không
+                    var existingSupplier = SupplierList?.FirstOrDefault(s =>
+                        s.SupplierName.Equals(value.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                    if (existingSupplier != null)
+                    {
+                        // Nếu tồn tại, set ID
+                        SelectedSupplierID = existingSupplier.SupplierID;
+                        _lastCheckedSupplierName = value.Trim();
+                    }
+                }
+            }
         }
 
         private string _searchText;
@@ -122,7 +141,8 @@ namespace Martify.ViewModels
         public ICommand CloseCommand { get; set; }
         public ICommand IncreaseQuantityCommand { get; set; }
         public ICommand DecreaseQuantityCommand { get; set; }
-        public ICommand AddSupplierCommand { get; set; } // YÊU CẦU 3
+        public ICommand AddSupplierCommand { get; set; }
+        public ICommand ValidateSupplierCommand { get; set; } // Command mới cho validation
 
         // =================================================================================================
         // CONSTRUCTOR
@@ -136,9 +156,6 @@ namespace Martify.ViewModels
             InitializeCommands();
         }
 
-        /// <summary>
-        /// Constructor for pre-loading products with a default quantity (used for restocking from inventory alerts)
-        /// </summary>
         public ImportProductsVM(IEnumerable<Product> products, int defaultQuantity = 50)
         {
             ImportItems = new ObservableCollection<ImportItem>();
@@ -146,7 +163,6 @@ namespace Martify.ViewModels
             LoadSuppliers();
             InitializeCommands();
 
-            // Pre-load selected products with default quantity
             if (products != null)
             {
                 foreach (var product in products)
@@ -194,12 +210,11 @@ namespace Martify.ViewModels
                 (p) => p != null && p.Quantity > 1,
                 (p) => p.Quantity--);
 
-            //// YÊU CẦU 3: Command thêm nhà cung cấp mới
-            //AddSupplierCommand = new RelayCommand<object>(
-            //    (p) => true,
-            //    (p) => AddNewSupplier());
+            // Command mới để validate khi blur hoặc enter
+            ValidateSupplierCommand = new RelayCommand<object>(
+                (p) => true,
+                (p) => ValidateSupplierName());
 
-            // Subscribe to collection changes
             ImportItems.CollectionChanged += (s, e) => CalculateTotal();
         }
 
@@ -207,11 +222,42 @@ namespace Martify.ViewModels
         // METHODS
         // =================================================================================================
 
+        /// <summary>
+        /// Method mới: Validate tên nhà cung cấp khi user hoàn tất nhập
+        /// </summary>
+        public void ValidateSupplierName()
+        {
+            if (string.IsNullOrWhiteSpace(SelectedSupplierName))
+                return;
+
+            var trimmedName = SelectedSupplierName.Trim();
+
+            // Kiểm tra xem đã validate tên này chưa
+            if (trimmedName == _lastCheckedSupplierName)
+                return;
+
+            // Kiểm tra xem nhà cung cấp có tồn tại không
+            var existingSupplier = SupplierList?.FirstOrDefault(s =>
+                s.SupplierName.Equals(trimmedName, StringComparison.OrdinalIgnoreCase));
+
+            if (existingSupplier != null)
+            {
+                // Nhà cung cấp đã tồn tại
+                SelectedSupplierID = existingSupplier.SupplierID;
+                _lastCheckedSupplierName = trimmedName;
+            }
+            else
+            {
+                // Nhà cung cấp chưa tồn tại -> hỏi user
+                _lastCheckedSupplierName = trimmedName;
+                HandleNewSupplier(trimmedName);
+            }
+        }
+
         private void LoadProducts()
         {
             try
             {
-                // Load tất cả sản phẩm cùng với ImportReceipt để biết nhà cung cấp
                 AllProducts = DataProvider.Ins.DB.Products
                     .OrderBy(p => p.ProductName)
                     .ToList();
@@ -238,37 +284,31 @@ namespace Martify.ViewModels
             }
         }
 
-        // YÊU CẦU 1: Lọc sản phẩm theo nhà cung cấp đã chọn
         private void FilterProductsBySupplier()
         {
             if (string.IsNullOrWhiteSpace(SelectedSupplierID))
             {
-                // Nếu không chọn nhà cung cấp, hiển thị tất cả
                 FilterProducts();
                 return;
             }
 
             try
             {
-                // Lấy danh sách ProductID mà nhà cung cấp này đã cung cấp
                 var supplierProductIds = DataProvider.Ins.DB.ImportReceiptDetails
                     .Where(ird => ird.ImportReceipt.SupplierID == SelectedSupplierID)
                     .Select(ird => ird.ProductID)
                     .Distinct()
                     .ToList();
 
-                // Lọc sản phẩm
                 var filteredList = AllProducts
                     .Where(p => supplierProductIds.Contains(p.ProductID))
                     .ToList();
 
-                // Nếu không có sản phẩm nào của nhà cung cấp này, hiển thị tất cả
                 if (!filteredList.Any())
                 {
                     filteredList = AllProducts.ToList();
                 }
 
-                // Áp dụng thêm search text nếu có
                 if (!string.IsNullOrWhiteSpace(SearchText))
                 {
                     var search = SearchText.Trim().ToLower();
@@ -292,7 +332,6 @@ namespace Martify.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(SelectedSupplierID))
             {
-                // Nếu đã chọn nhà cung cấp, dùng filter theo supplier
                 FilterProductsBySupplier();
                 return;
             }
@@ -317,13 +356,11 @@ namespace Martify.ViewModels
         {
             if (product == null) return;
 
-            // YÊU CẦU 2: Tự động chọn nhà cung cấp khi thêm sản phẩm
             if (string.IsNullOrWhiteSpace(SelectedSupplierID))
             {
                 AutoSelectSupplierForProduct(product.ProductID);
             }
 
-            // Check if product already exists in import list
             var existing = ImportItems.FirstOrDefault(i => i.ProductID == product.ProductID);
             if (existing != null)
             {
@@ -346,12 +383,10 @@ namespace Martify.ViewModels
             ImportItems.Add(importItem);
         }
 
-        // YÊU CẦU 2: Tự động chọn nhà cung cấp dựa trên sản phẩm
         private void AutoSelectSupplierForProduct(string productID)
         {
             try
             {
-                // Tìm nhà cung cấp gần nhất từng cung cấp sản phẩm này
                 var lastSupplier = DataProvider.Ins.DB.ImportReceiptDetails
                     .Where(ird => ird.ProductID == productID)
                     .OrderByDescending(ird => ird.ImportReceipt.ImportDate)
@@ -362,47 +397,20 @@ namespace Martify.ViewModels
                 {
                     SelectedSupplierID = lastSupplier;
 
-                    // Cập nhật tên nhà cung cấp
                     var supplier = SupplierList.FirstOrDefault(s => s.SupplierID == lastSupplier);
                     if (supplier != null)
                     {
-                        SelectedSupplierName = supplier.SupplierName;
+                        _selectedSupplierName = supplier.SupplierName;
+                        _lastCheckedSupplierName = supplier.SupplierName;
+                        OnPropertyChanged(nameof(SelectedSupplierName));
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Không hiển thị lỗi, chỉ log nếu cần
                 System.Diagnostics.Debug.WriteLine($"Không thể tự động chọn nhà cung cấp: {ex.Message}");
             }
         }
-
-        // YÊU CẦU 3: Thêm nhà cung cấp mới
-        //private void AddNewSupplier()
-        //{
-        //    try
-        //    {
-        //        var addSupplierWindow = new Martify.Views.AddSupplier();
-        //        if (addSupplierWindow.ShowDialog() == true)
-        //        {
-        //            // Reload danh sách nhà cung cấp
-        //            LoadSuppliers();
-
-        //            // Tự động chọn nhà cung cấp vừa thêm
-        //            var newSupplier = SupplierList.LastOrDefault();
-        //            if (newSupplier != null)
-        //            {
-        //                SelectedSupplierID = newSupplier.SupplierID;
-        //                SelectedSupplierName = newSupplier.SupplierName;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Lỗi thêm nhà cung cấp: {ex.Message}",
-        //            "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-        //    }
-        //}
 
         private void ImportItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -442,9 +450,7 @@ namespace Martify.ViewModels
 
             try
             {
-                // Create import receipt
                 string receiptID = GenerateReceiptID();
-
                 var user = DataProvider.Ins.CurrentAccount;
 
                 var receipt = new ImportReceipt
@@ -458,7 +464,6 @@ namespace Martify.ViewModels
 
                 DataProvider.Ins.DB.ImportReceipts.Add(receipt);
 
-                // Update product stock quantities and create receipt details
                 foreach (var item in ImportItems)
                 {
                     var product = DataProvider.Ins.DB.Products
@@ -480,14 +485,12 @@ namespace Martify.ViewModels
                             };
 
                             item.ProductID = newProduct.ProductID;
-
                             DataProvider.Ins.DB.Products.Add(newProduct);
                             newProduct.StockQuantity += item.Quantity;
                         }
                         else
                             product.StockQuantity += item.Quantity;
 
-                        // Create receipt detail
                         var detail = new ImportReceiptDetail
                         {
                             ReceiptID = receiptID,
@@ -580,6 +583,70 @@ namespace Martify.ViewModels
             catch
             {
                 return "PN001";
+            }
+        }
+
+        private void HandleNewSupplier(string newName)
+        {
+            var result = MessageBox.Show(
+                $"Nhà cung cấp '{newName}' chưa có trong hệ thống. Bạn có muốn thêm mới không?",
+                "Thông báo",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                AddNewSupplier(newName);
+            }
+            else
+            {
+                // Reset về rỗng nếu user không muốn thêm
+                _selectedSupplierName = string.Empty;
+                _lastCheckedSupplierName = string.Empty;
+                OnPropertyChanged(nameof(SelectedSupplierName));
+            }
+        }
+
+        private void AddNewSupplier(string suggestedName)
+        {
+            try
+            {
+                var addSupplierWindow = new Martify.Views.AddSupplier();
+
+                // Truyền tên gợi ý vào ViewModel của AddSupplier nếu cần
+                if (addSupplierWindow.DataContext is AddSupplierVM addSupplierVM)
+                {
+                    addSupplierVM.SupplierName = suggestedName;
+                }
+
+                if (addSupplierWindow.ShowDialog() == true)
+                {
+                    LoadSuppliers();
+
+                    var newSupplier = SupplierList.FirstOrDefault(s =>
+                        s.SupplierName.Equals(suggestedName, StringComparison.OrdinalIgnoreCase))
+                                     ?? SupplierList.LastOrDefault();
+
+                    if (newSupplier != null)
+                    {
+                        SelectedSupplierID = newSupplier.SupplierID;
+                        _selectedSupplierName = newSupplier.SupplierName;
+                        _lastCheckedSupplierName = newSupplier.SupplierName;
+                        OnPropertyChanged(nameof(SelectedSupplierName));
+                    }
+                }
+                else
+                {
+                    // Nếu user hủy dialog thêm supplier
+                    _selectedSupplierName = string.Empty;
+                    _lastCheckedSupplierName = string.Empty;
+                    OnPropertyChanged(nameof(SelectedSupplierName));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi mở cửa sổ thêm nhà cung cấp: {ex.Message}",
+                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

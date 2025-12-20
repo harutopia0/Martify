@@ -58,13 +58,18 @@
 
                                     <Border x:Name="Highlighter"
                                             Height="35"
-                                            Width="190"
+                                            Width="300"
                                             Background="White"
-                                            CornerRadius="0,10,10,0"
-                                            HorizontalAlignment="Left"
+                                            CornerRadius="1"
+                                            HorizontalAlignment="Right"
                                             VerticalAlignment="Center"
-                                            Margin="0,0,0,0">
-                                    </Border>
+                                            Margin="0,0,15,0" />
+                                    <Ellipse x:Name="ActiveCircle"
+                                             Width="35"
+                                             Height="35"
+                                             Fill="White"
+                                             HorizontalAlignment="Right"
+                                             VerticalAlignment="Center" />
 
 
                                     <TextBlock x:Name="UpperCase_Text"
@@ -95,7 +100,7 @@
                                 <Setter TargetName="SidePanel_Menu_Image"
                                         Property="Source"
                                         Value="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RadioButton}}}" />
-                                <Setter Property="Background" TargetName="Highlighter" Value="#FFD3D3D3" />
+                                <!--<Setter Property="Background" TargetName="Highlighter" Value="#FFD3D3D3" />-->
                             </Trigger>
 
                             <Trigger Property="RadioButton.IsChecked"
@@ -139,12 +144,8 @@
                                                              Storyboard.TargetProperty="Width"
                                                              DecelerationRatio="0.6"
                                                              From="0"
-                                                             To="200"
-                                                             Duration="0:0:0.25" />
-                                            <ColorAnimation Storyboard.TargetName="Highlighter"
-                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                            To="#FFD3D3D3"
-                                                            Duration="0:0:0.25" />
+                                                             To="185"
+                                                             Duration="0:0:0.5" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                     <RemoveStoryboard BeginStoryboardName="Stop_Indicator" />
@@ -156,13 +157,9 @@
                                             <DoubleAnimation Storyboard.TargetName="Sliding_UpperCase_Panel"
                                                              Storyboard.TargetProperty="Width"
                                                              DecelerationRatio="0.6"
-                                                             From="200"
+                                                             From="185"
                                                              To="0"
                                                              Duration="0:0:0.5" />
-                                            <ColorAnimation Storyboard.TargetName="Highlighter"
-                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                            To="#FFD3D3D3"
-                                                            Duration="0:0:0.3" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                     <RemoveStoryboard BeginStoryboardName="Release_Indicator" />
@@ -183,13 +180,14 @@
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetName="Sliding_UpperCase_Panel"
                                                              Storyboard.TargetProperty="Width"
-                                                             From="200"
-                                                             To="200"
+                                                             From="185"
+                                                             To="185"
                                                              Duration="0:0:0.3" />
-                                            <ColorAnimation Storyboard.TargetName="Highlighter"
-                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                            To="#FFFFFF"
-                                                            Duration="0:0:0.3" />
+
+                                            <ColorAnimation Storyboard.TargetName="ActiveCircle"
+                                                            Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
+                                                            To="LightBlue"
+                                                            Duration="0:0:1" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </MultiTrigger.EnterActions>
@@ -199,19 +197,24 @@
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetName="Sliding_UpperCase_Panel"
                                                              Storyboard.TargetProperty="Width"
-                                                             From="165"
+                                                             From="185"
                                                              To="160"
-                                                             Duration="0:0:0.3" />
+                                                             Duration="0:0:0" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                     <BeginStoryboard x:Name="Stop_Indicator">
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetName="Sliding_UpperCase_Panel"
                                                              Storyboard.TargetProperty="Width"
-                                                             From="160"
+                                                             From="185"
                                                              To="0"
-                                                             BeginTime="0:0:0.15"
+                                                             BeginTime="0:0:0"
                                                              Duration="0:0:0.5" />
+                                            
+                                            <ColorAnimation Storyboard.TargetName="ActiveCircle"
+                                                            Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
+                                                            To="White"
+                                                            Duration="0:0:0.5" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </MultiTrigger.ExitActions>
@@ -263,7 +266,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
+
         <StackPanel Grid.Row="0">
             <ListBox x:Name="SidePanel_ListBox" 
                      Style="{StaticResource SidePanelListBoxStyle}"
@@ -412,8 +415,8 @@
                                                         Value="NHÂN VIÊN" />
                                                 <Setter Property="Image.Source"
                                                         Value="{StaticResource StaffNormal}" />
-                                                
-                                                
+
+
                                                 <Setter Property="Tag"
                                                         Value="{StaticResource StaffHover}" />
 
@@ -456,7 +459,7 @@
                                                 <Setter Property="Image.Source"
                                                         Value="{StaticResource ReceiptNormal}" />
 
-                                                
+
                                                 <Setter Property="Tag"
                                                         Value="{StaticResource ReceiptHover}" />
 
@@ -494,7 +497,7 @@
 
                                                 <Setter Property="Image.Source"
                                                         Value="{StaticResource SettingsNormal}" />
-                                                
+
                                                 <Setter Property="Tag"
                                                         Value="{StaticResource SettingsHover}" />
 
@@ -572,7 +575,7 @@
                              Style="{StaticResource settings_listboxitem_style}" />
             </ListBox>
         </StackPanel>
-        
+
         <!-- Martify Logo at Bottom -->
         <Border Grid.Row="1" 
                 Background="Transparent"

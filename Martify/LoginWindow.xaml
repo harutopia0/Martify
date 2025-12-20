@@ -8,9 +8,10 @@
         xmlns:ctrl="clr-namespace:Martify.Controls"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
         Title="Martify"
-        Height="450" Width="800"
+        Height="500" Width="800"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -21,17 +22,17 @@
         Name="loginWindow">
 
     <Grid>
-
-
-
-
-        <Border CornerRadius="30">
-            <Border.Background>
-                <ImageBrush ImageSource="{StaticResource LoginBackground}"
-                            Stretch="UniformToFill" />
-            </Border.Background>
+        <Border CornerRadius="20" Background="White">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
+            </Border.Effect>
+            <Border CornerRadius="20">
+                <Border.Background>
+                    <ImageBrush ImageSource="{StaticResource LoginBackground}"
+                                Stretch="UniformToFill" Opacity="0.1"/>
+                </Border.Background>
+            </Border>
         </Border>
-
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -39,179 +40,44 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <ContentControl Grid.Column="0" Content="{Binding Status}"
-                            IsTabStop="False"
-                            Width="200" Height="30"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            Margin="0,275,0,0">
-
-            </ContentControl>
-
-
             <Grid Grid.Column="0">
-                <Grid Width="250"
-                      VerticalAlignment="Center"
-                      HorizontalAlignment="Center">
 
-                    <!-- Viền ngoài của Form -->
-                    <Border CornerRadius="10"
-                            BorderThickness="1"
-                            BorderBrush="White">
-
-                        <Grid Margin="20,15,20,15">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-
-                            <!-- Row 0: Tiêu đề "Login" -->
-                            <Label Grid.Row="0"
-                                   Content="Welcome"
-                                   HorizontalAlignment="Center"
-                                   FontFamily="{StaticResource BungeeSpice}"
-                                   FontSize="35"
-                                   FontWeight="Bold"
-                                   VerticalContentAlignment="Center">
-                                <Label.Foreground>
-                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                        <GradientStop Color="#FF7179D9" />
-                                        <GradientStop Color="#FFD895F0" Offset="1" />
-                                    </LinearGradientBrush>
-                                </Label.Foreground>
-                            </Label>
-
-                            <Label Grid.Row="1" Margin="0,-7.5,0,0"
-                                   Content="Đăng nhập vào tài khoản của bạn"
-                                   HorizontalAlignment="Center"
-                                   FontFamily="{StaticResource MaterialDesignFont}"
-                                   FontSize="12"
-                                   FontWeight="Bold"
-                                   VerticalContentAlignment="Center">
-                                <Label.Foreground>
-                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                        <GradientStop Color="#FF7179D9" />
-                                        <GradientStop Color="#FFC695F0" Offset="1" />
-                                    </LinearGradientBrush>
-                                </Label.Foreground>
-                            </Label>
-
-                            <!-- Row 1: Username Section -->
-                            <Grid Grid.Row="2" Margin="0,15,0,0">
-                                <Border>
-                                    <Grid>
-                                        <Grid>
-                                            <TextBox Height="40"
-                                                     VerticalAlignment="Top"
-                                                     materialDesign:HintAssist.Hint="Email hoặc tên người dùng"
-                                                     materialDesign:HintAssist.HintPaddingBrush="White"
-                                                     IsEnabled="True"
-                                                     Padding="32.5,0,5,0"
-                                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                                     FontSize="14" 
-                                                     FontFamily="Times New Roman"
-                                                     Text="{Binding Username}"/>
-
-                                            <materialDesign:PackIcon Kind="AccountCircleOutline"
-                                                             Width="25"
-                                                             Height="25"
-                                                             VerticalAlignment="Center"
-                                                             HorizontalAlignment="Left"
-                                                             Margin="5,0,0,0"
-                                                             Foreground="Gray" />
-                                        </Grid>
-                                    </Grid>
-                                </Border>
-                            </Grid>
-
-                            <!-- Row 4: Password Section -->
-                            <!-- (Lưu ý: Row 2 và 3 đang trống) -->
-                            <Grid Grid.Row="3" Margin="0,10,0,0">
-                                <Border>
-                                    <Grid>
-                                        <Grid>
-                                            <PasswordBox x:Name="OutlinedPassword"
-                                                         VerticalAlignment="Top"
-                                                         Height="40"
-                                                         Padding="32.5,0,5,0"
-                                                         materialDesign:HintAssist.Hint="Mật khẩu"
-                                                         materialDesign:HintAssist.HintPaddingBrush="White"
-                                                         IsEnabled="True"
-                                                         FontSize="14"
-                                                         Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
-                                                         FontFamily="Times New Roman">
-                                                <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="PasswordChanged">
-                                                        <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" 
-                                                                               CommandParameter="{Binding ElementName=OutlinedPassword}"/>
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>
-                                            </PasswordBox>
-
-                                            <materialDesign:PackIcon Kind="PasswordOutline"
-                                                             Width="25"
-                                                             Height="25"
-                                                             VerticalAlignment="Center"
-                                                             HorizontalAlignment="Left"
-                                                             Margin="5,0,0,0"
-                                                             Foreground="Gray" />
-                                        </Grid>
-                                    </Grid>
-                                </Border>
-                            </Grid>
-
-                            <!-- Row 5: Nút "Log In" -->
-                            <Grid Grid.Row="4" Margin="0,15,0,0">
-                                <Grid Width="125">
-                                    <Button Height="40"
-                                        materialDesign:ButtonAssist.CornerRadius="10"
-                                        Style="{StaticResource MaterialDesignRaisedButton}" Foreground="White" BorderBrush="{x:Null}"
-                                        IsDefault="True"
-                                        Command="{Binding LoginCommand}"
-                                        CommandParameter="{Binding ElementName=loginWindow}">           
-                                        <Button.Background>
-                                            <LinearGradientBrush StartPoint="0,0.2" EndPoint="1,0.8">
-                                                <GradientStop Color="Black" Offset="1"/>
-                                                <GradientStop Color="#FF5474E2" Offset="0"/>
-                                                <GradientStop Color="#FFCB6EF9" Offset="0.999"/>
-                                            </LinearGradientBrush>
-                                        </Button.Background>
-                                        <TextBlock Text="Login"
-                                           FontFamily="Times New Roman"
-                                           FontSize="14"/>              
-                                    </Button>
-                                </Grid>
-
-                            </Grid>
-                        </Grid>
-                    </Border>
+                <Grid x:Name="WebViewContainer">
+                    <wv2:WebView2 x:Name="webView" 
+                                  DefaultBackgroundColor="Transparent"
+                                  Height="400"
+                                  Margin="20"/>
                 </Grid>
+
+                <ContentControl Content="{Binding Status}"
+                                IsTabStop="False"
+                                Panel.ZIndex="999"
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Center"
+                                Margin="0,0,0,55"/>
             </Grid>
 
             <Grid Grid.Column="1">
                 <Grid VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Height="150"
-                      Width="250">
+                      Width="300">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="0.5*" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="3*" />
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
                         <Label FontFamily="{StaticResource BungeeSpice}"
-                               FontSize="27.5"
+                               FontSize="35"
                                FontWeight="Bold"
-                               VerticalContentAlignment="Center"
+                               Margin="57,0,0,0"
                                HorizontalAlignment="Left"
-                               Margin="50,0,0,0"
-                               Foreground="Black">
+                               VerticalAlignment="Center"
+                               Foreground="Black"
+                               Content="Martify">
                             <Label.Style>
                                 <Style TargetType="Label">
-                                    <Setter Property="Content" Value="Martify"></Setter>
                                     <Style.Triggers>
                                         <EventTrigger RoutedEvent="Window.Loaded">
                                             <BeginStoryboard Storyboard="{StaticResource MartifyAnimation}"></BeginStoryboard>
@@ -223,7 +89,12 @@
                     </Grid>
 
                     <Grid Grid.Row="1">
-                        <TextBlock FontSize="14" Margin="0,10,0,0" TextAlignment="Justify" TextWrapping="Wrap"
+                        <TextBlock FontSize="14"
+                                   TextAlignment="Justify" 
+                                   TextWrapping="Wrap"
+                                   LineHeight="22"
+                                   VerticalAlignment="Center"
+                                   Foreground="#555"
                                    Text="Martify là ứng dụng WPF quản lý siêu thị, giúp theo dõi sản phẩm, nhân viên, khách hàng và hóa đơn. Giao diện trực quan, dễ dùng, hỗ trợ thống kê và quản lý hiệu quả hoạt động siêu thị.">
                         </TextBlock>
                     </Grid>
@@ -231,9 +102,7 @@
             </Grid>
         </Grid>
 
-        <uc:WindowControl></uc:WindowControl>
-
-
+        <uc:WindowControl Panel.ZIndex="1000"/>
 
     </Grid>
 </Window>

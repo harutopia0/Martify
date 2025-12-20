@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -50,20 +49,6 @@ namespace Martify.ViewModels
             }
         }
 
-        private string _supplierName;
-        public string SupplierName
-        {
-            get => _supplierName;
-            set { _supplierName = value; OnPropertyChanged(); }
-        }
-
-        private string _saveMessage;
-        public string SaveMessage
-        {
-            get => _saveMessage;
-            set { _saveMessage = value; OnPropertyChanged(); }
-        }
-
         private InventoryAlertType _inventoryAlertFilter;
         public InventoryAlertType InventoryAlertFilter
         {
@@ -104,73 +89,6 @@ namespace Martify.ViewModels
             set { _selectedProduct = value; OnPropertyChanged(); }
         }
 
-        private Product _selectedDetailProduct;
-        public Product SelectedDetailProduct
-        {
-            get => _selectedDetailProduct;
-            set
-            {
-                _selectedDetailProduct = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _editProductName;
-        public string EditProductName
-        {
-            get => _editProductName;
-            set { _editProductName = value; OnPropertyChanged(); CheckModified(); }
-        }
-
-        private decimal _editPrice;
-        public decimal EditPrice
-        {
-            get => _editPrice;
-            set { _editPrice = value; OnPropertyChanged(); CheckModified(); }
-        }
-
-        private int _editStockQuantity;
-        public int EditStockQuantity
-        {
-            get => _editStockQuantity;
-            set { _editStockQuantity = value; OnPropertyChanged(); CheckModified(); }
-        }
-
-        private string _editUnit;
-        public string EditUnit
-        {
-            get => _editUnit;
-            set { _editUnit = value; OnPropertyChanged(); CheckModified(); }
-        }
-
-        private string _editCategoryID;
-        public string EditCategoryID
-        {
-            get => _editCategoryID;
-            set { _editCategoryID = value; OnPropertyChanged(); CheckModified(); }
-        }
-
-        private string _editImagePath;
-        public string EditImagePath
-        {
-            get => _editImagePath;
-            set { _editImagePath = value; OnPropertyChanged(); }
-        }
-
-        private bool _isModified;
-        public bool IsModified
-        {
-            get => _isModified;
-            set { _isModified = value; OnPropertyChanged(); }
-        }
-
-        private bool _isDetailsPanelOpen;
-        public bool IsDetailsPanelOpen
-        {
-            get => _isDetailsPanelOpen;
-            set { _isDetailsPanelOpen = value; OnPropertyChanged(); }
-        }
-
         private bool _isLoading;
         public bool IsLoading
         {
@@ -182,10 +100,8 @@ namespace Martify.ViewModels
         public ICommand DeleteProductCommand { get; set; }
         public ICommand RefreshCommand { get; set; }
         public ICommand ImportProductCommand { get; set; }
-        public ICommand SaveChangesCommand { get; set; }
         public ICommand OpenDetailsCommand { get; set; }
         public ICommand ClearFilterCommand { get; set; }
-        public ICommand SelectImageCommand { get; set; }
 
         // Cache toàn bộ products trong memory
         private List<Product> _allProductsList;
@@ -204,7 +120,6 @@ namespace Martify.ViewModels
             DeleteProductCommand = new RelayCommand<Product>((p) => p != null, (p) => DeleteProduct(p));
             RefreshCommand = new RelayCommand<object>((p) => true, (p) => LoadData());
             ImportProductCommand = new RelayCommand<object>((p) => true, (p) => ImportProducts());
-            SelectImageCommand = new RelayCommand<object>((p) => true, (p) => { });
 
             OpenDetailsCommand = new RelayCommand<Product>(
                 (p) => p != null,
@@ -218,13 +133,7 @@ namespace Martify.ViewModels
                     SelectedCategory = null;
                     SelectedUnit = null;
                     InventoryAlertFilter = InventoryAlertType.None;
-                    IsDetailsPanelOpen = false;
-                    SelectedDetailProduct = null;
                 });
-
-            SaveChangesCommand = new RelayCommand<object>(
-                (p) => IsModified,
-                async (p) => await SaveChangesAsync());
 
             // Load data
             LoadData();
@@ -237,104 +146,35 @@ namespace Martify.ViewModels
             LoadProducts();
         }
 
-        private bool IsValid()
+        private void OpenDetails(Product product)
         {
-            if (SelectedDetailProduct == null) return false;
-            if (string.IsNullOrWhiteSpace(EditProductName)) return false;
-            if (string.IsNullOrWhiteSpace(EditUnit)) return false;
-            if (EditPrice <= 0) return false;
-            if (EditStockQuantity < 0) return false;
-            if (string.IsNullOrWhiteSpace(EditCategoryID)) return false;
-            return true;
-        }
-
-        private async Task SaveChangesAsync()
-        {
-            if (SelectedDetailProduct == null) return;
-
-            if (!IsValid())
-            {
-                SaveMessage = "Vui lòng kiểm tra lại thông tin!";
-                await Task.Delay(3000);
-                if (SaveMessage == "Vui lòng kiểm tra lại thông tin!")
-                    SaveMessage = "";
-                return;
-            }
+            if (product == null) return;
 
             try
             {
-                var productInDb = DataProvider.Ins.DB.Products
-                    .FirstOrDefault(x => x.ProductID == SelectedDetailProduct.ProductID);
+                // Load full product with related data
+                var fullProduct = DataProvider.Ins.DB.Products
+                    .Include(p => p.Category)
+                    .Include(p => p.ImportReceiptDetails)
+                        .ThenInclude(ir => ir.ImportReceipt)
+                        .ThenInclude(sp => sp.Supplier)
+                    .FirstOrDefault(p => p.ProductID == product.ProductID);
 
-                if (productInDb != null)
+                if (fullProduct != null)
                 {
-                    productInDb.ProductName = EditProductName?.Trim();
-                    productInDb.Price = EditPrice;
-                    productInDb.StockQuantity = EditStockQuantity;
-                    productInDb.Unit = EditUnit?.Trim();
-                    productInDb.CategoryID = EditCategoryID;
+                    var detailVM = new ProductDetailVM(fullProduct);
 
-                    DataProvider.Ins.DB.SaveChanges();
+                    // Set callback to refresh data after save
+                    detailVM.OnSaveCompleted = () => LoadProducts();
 
-                    SaveMessage = "Đã lưu thay đổi!";
-                    IsModified = false;
-
-                    LoadProducts();
-
-                    SelectedDetailProduct = Products.FirstOrDefault(
-                        x => x.ProductID == productInDb.ProductID);
-
-                    await Task.Delay(3000);
-                    if (SaveMessage == "Đã lưu thay đổi!")
-                        SaveMessage = "";
+                    var detailWindow = new ProductDetail(detailVM);
+                    detailWindow.ShowDialog();
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                SaveMessage = "Lỗi khi lưu!";
             }
-        }
-
-        private void OpenDetails(Product product)
-        {
-            if (product == null) return;
-
-            if (IsDetailsPanelOpen && SelectedDetailProduct != null && SelectedDetailProduct.ProductID == product.ProductID)
-            {
-                IsDetailsPanelOpen = false;
-                return;
-            }
-
-            EditProductName = product.ProductName;
-            EditPrice = product.Price;
-            EditStockQuantity = product.StockQuantity;
-            EditUnit = product.Unit;
-            EditCategoryID = product.CategoryID;
-            EditImagePath = product.ImagePath;
-
-            var lastImport = product.ImportReceiptDetails?
-                            .OrderByDescending(d => d.ImportReceipt.ImportDate)
-                            .FirstOrDefault();
-
-            SupplierName = lastImport?.ImportReceipt?.Supplier?.SupplierName ?? "Chưa có đợt nhập hàng";
-
-            SelectedDetailProduct = product;
-
-            IsModified = false;
-            SaveMessage = string.Empty;
-            IsDetailsPanelOpen = true;
-        }
-
-        private void CheckModified()
-        {
-            if (SelectedDetailProduct == null) return;
-
-            IsModified = EditProductName != SelectedDetailProduct.ProductName ||
-                         EditPrice != SelectedDetailProduct.Price ||
-                         EditStockQuantity != SelectedDetailProduct.StockQuantity ||
-                         EditUnit != SelectedDetailProduct.Unit ||
-                         EditCategoryID != SelectedDetailProduct.CategoryID;
         }
 
         public void SetInventoryAlertFilter(InventoryAlertType alertType)

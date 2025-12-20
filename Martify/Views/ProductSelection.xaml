@@ -12,7 +12,6 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="720"
              d:DesignWidth="864"
-             Style="{StaticResource Page_CinematicFocus_Style}"
              d:Style="{x:Null}"
              Unloaded="UserControl_Unloaded">
 

@@ -12,7 +12,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="720" 
              d:DesignWidth="864"
-             Style="{StaticResource Page_RadarReveal_Style}"
              d:Style="{x:Null}">
 
     <UserControl.DataContext>

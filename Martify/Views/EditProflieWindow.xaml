@@ -4,75 +4,214 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:vm="clr-namespace:Martify.ViewModels"
         xmlns:cv="clr-namespace:Martify.Converters" 
-        Title="Chỉnh sửa hồ sơ" Height="600" Width="400" 
+        Title="Chỉnh sửa hồ sơ" Height="760" Width="460" 
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent">
 
     <Window.Resources>
         <cv:ImagePathConverter x:Key="ImgCvt" />
+        <BitmapImage x:Key="DefaultAvatar" UriSource="pack://application:,,,/Resources/Images/anonymous.png" />
     </Window.Resources>
 
     <Window.DataContext>
         <vm:EditProfileVM />
     </Window.DataContext>
 
-    <Border CornerRadius="20" Background="{DynamicResource CardBackground}" 
-            BorderBrush="#067FF8" BorderThickness="1"
-            MouseLeftButtonDown="Border_MouseDown">
+    <Grid Margin="15">
+        <Border CornerRadius="25" 
+                Background="{DynamicResource CardBackground}"
+                MouseLeftButtonDown="Border_MouseDown">
 
-        <Grid Margin="20">
-            <StackPanel>
-                <TextBlock Text="CHỈNH SỬA HỒ SƠ" FontSize="24" FontWeight="Bold" 
-                           Foreground="#067FF8" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="25" ShadowDepth="5" Direction="270" 
+                                  Color="Black" Opacity="0.4"/>
+            </Border.Effect>
 
-                <Grid HorizontalAlignment="Center" Margin="0,0,0,20">
-                    <Ellipse Width="100" Height="100" Stroke="#067FF8" StrokeThickness="2">
+            <Grid Margin="30">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="0,0,0,25">
+                    <TextBlock Text="HỒ SƠ CÁ NHÂN" 
+                               FontSize="24" FontWeight="Bold" 
+                               Foreground="#067FF8" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                    <Button HorizontalAlignment="Right" VerticalAlignment="Top"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            Foreground="{DynamicResource SecondaryText}"
+                            ToolTip="Đóng" Margin="0,-10,-15,0">
+                        <materialDesign:PackIcon Kind="Close" Width="25" Height="25"/>
+                    </Button>
+                </Grid>
+
+                <Grid Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,30">
+                    <Ellipse Width="120" Height="120" 
+                             Stroke="#067FF8" 
+                             StrokeThickness="3">
+                        <Ellipse.Effect>
+                            <DropShadowEffect BlurRadius="10" Color="#067FF8" Opacity="0.3"/>
+                        </Ellipse.Effect>
+                    </Ellipse>
+
+                    <Ellipse Width="110" Height="110">
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding AvatarPath, Converter={StaticResource ImgCvt}}" 
+                            <ImageBrush ImageSource="{Binding AvatarPath, 
+                                                      Converter={StaticResource ImgCvt}, 
+                                                      TargetNullValue={StaticResource DefaultAvatar}, 
+                                                      FallbackValue={StaticResource DefaultAvatar}}" 
                                         Stretch="UniformToFill"/>
                         </Ellipse.Fill>
                     </Ellipse>
 
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                            Command="{Binding UploadImageCommand}"
-                            HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-10,0" 
-                            Background="White" BorderBrush="White">
-                        <materialDesign:PackIcon Kind="Camera" Foreground="#067FF8"/>
+                    <Button Command="{Binding UploadImageCommand}"
+                            HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-5,0"
+                            Width="36" Height="36"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                            Background="{DynamicResource CardBackground}" 
+                            BorderBrush="#067FF8"
+                            Foreground="#067FF8"
+                            ToolTip="Đổi ảnh đại diện">
+                        <materialDesign:PackIcon Kind="Camera" Width="20" Height="20"/>
                     </Button>
                 </Grid>
 
-                <TextBox materialDesign:HintAssist.Hint="Tên đăng nhập (Username)" 
-                         Text="{Binding Username}" 
-                         IsReadOnly="True" Focusable="False" FontWeight="Bold"
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,10" Opacity="0.8"/>
+                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden" Margin="0,0,0,10">
+                    <StackPanel>
 
-                <TextBox materialDesign:HintAssist.Hint="Họ và tên" Text="{Binding FullName}" 
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,10"/>
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="AccountCircle" Width="24" Height="24" 
+                                                     Foreground="#067FF8" VerticalAlignment="Bottom" Margin="0,0,10,6"/>
+                            <TextBox Grid.Column="1"
+                                     materialDesign:HintAssist.Hint="Tên đăng nhập"
+                                     Text="{Binding Username}" 
+                                     IsReadOnly="True" Focusable="False" FontWeight="Bold"
+                                     Foreground="{DynamicResource PrimaryText}"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     BorderBrush="{DynamicResource SecondaryText}"/>
+                            <materialDesign:PackIcon Grid.Column="2" Kind="Lock" Width="20" Height="20" 
+                                                     Foreground="{DynamicResource SecondaryText}" VerticalAlignment="Bottom" Margin="5,0,0,6" Opacity="0.5"/>
+                        </Grid>
 
-                <TextBox materialDesign:HintAssist.Hint="Email" Text="{Binding Email}" 
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,10"/>
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="BadgeAccount" Width="24" Height="24" 
+                                                     Foreground="#067FF8" VerticalAlignment="Bottom" Margin="0,0,10,6"/>
+                            <TextBox Grid.Column="1"
+                                     materialDesign:HintAssist.Hint="Họ và tên"
+                                     Text="{Binding FullName, Mode=OneWay}" 
+                                     IsReadOnly="True" Focusable="False"
+                                     Foreground="{DynamicResource PrimaryText}"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     BorderBrush="{DynamicResource SecondaryText}"/>
+                            <materialDesign:PackIcon Grid.Column="2" Kind="Lock" Width="20" Height="20" 
+                                                     Foreground="{DynamicResource SecondaryText}" VerticalAlignment="Bottom" Margin="5,0,0,6" Opacity="0.5"/>
+                        </Grid>
 
-                <TextBlock Text="Đổi mật khẩu (Bỏ trống nếu không đổi)" Margin="0,15,0,0" Opacity="0.6"/>
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="Email" Width="24" Height="24" 
+                                                     Foreground="#067FF8" VerticalAlignment="Bottom" Margin="0,0,10,6"/>
+                            <TextBox Grid.Column="1"
+                                     materialDesign:HintAssist.Hint="Email liên hệ"
+                                     Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" 
+                                     Foreground="{DynamicResource PrimaryText}"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     BorderBrush="{DynamicResource SecondaryText}"/>
+                        </Grid>
 
-                <PasswordBox x:Name="txtOldPass" materialDesign:HintAssist.Hint="Mật khẩu cũ" 
-                             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="0,5"/>
+                        <Grid Margin="0,0,0,25">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="Phone" Width="24" Height="24" 
+                                                     Foreground="#067FF8" VerticalAlignment="Bottom" Margin="0,0,10,6"/>
+                            <TextBox Grid.Column="1"
+                                     materialDesign:HintAssist.Hint="Số điện thoại"
+                                     Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" 
+                                     Foreground="{DynamicResource PrimaryText}"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     BorderBrush="{DynamicResource SecondaryText}"/>
+                        </Grid>
 
-                <PasswordBox x:Name="txtNewPass" materialDesign:HintAssist.Hint="Mật khẩu mới" 
-                             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="0,5"/>
+                        <Separator Background="{DynamicResource SecondaryText}" Margin="0,0,0,15" Opacity="0.5"/>
 
-                <PasswordBox x:Name="txtConfirmPass" materialDesign:HintAssist.Hint="Nhập lại mật khẩu mới" 
-                             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="0,5"/>
+                        <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
+                            <materialDesign:PackIcon Kind="Security" VerticalAlignment="Center" Margin="0,0,10,0" 
+                                                     Foreground="{DynamicResource SecondaryText}"/>
+                            <TextBlock Text="Đổi mật khẩu" FontWeight="Bold" VerticalAlignment="Center"
+                                       Foreground="{DynamicResource SecondaryText}" FontSize="13"/>
+                        </StackPanel>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,30,0,0">
-                    <Button Content="Hủy" Command="{Binding CloseCommand}" 
+                        <PasswordBox x:Name="txtOldPass"
+                                     materialDesign:HintAssist.Hint="Mật khẩu hiện tại"
+                                     Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                     Foreground="{DynamicResource PrimaryText}"
+                                     BorderBrush="{DynamicResource SecondaryText}"
+                                     Margin="35,0,0,15"/>
+
+                        <PasswordBox x:Name="txtNewPass"
+                                     materialDesign:HintAssist.Hint="Mật khẩu mới"
+                                     Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                     Foreground="{DynamicResource PrimaryText}"
+                                     BorderBrush="{DynamicResource SecondaryText}"
+                                     Margin="35,0,0,15"/>
+
+                        <PasswordBox x:Name="txtConfirmPass"
+                                     materialDesign:HintAssist.Hint="Nhập lại mật khẩu mới"
+                                     Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                     Foreground="{DynamicResource PrimaryText}"
+                                     BorderBrush="{DynamicResource SecondaryText}"
+                                     Margin="35,0,0,5"/>
+
+                        <TextBlock Text="* Để trống nếu không muốn đổi mật khẩu" 
+                                   FontStyle="Italic" FontSize="11" 
+                                   Foreground="{DynamicResource SecondaryText}" 
+                                   Margin="35,0,0,0"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <Grid Grid.Row="3" Margin="0,20,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Content="Hủy bỏ" 
+                            Command="{Binding CloseCommand}" 
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                            Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,10,0"/>
+                            Style="{StaticResource MaterialDesignFlatButton}" 
+                            Foreground="{DynamicResource SecondaryText}"
+                            Margin="0,0,10,0"/>
 
-                    <Button Content="LƯU THAY ĐỔI" Command="{Binding SaveCommand}" 
+                    <Button Grid.Column="1" Content="LƯU THAY ĐỔI" 
+                            Command="{Binding SaveCommand}" 
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                            Background="#067FF8" BorderBrush="#067FF8"/>
-                </StackPanel>
-            </StackPanel>
-        </Grid>
-    </Border>
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            materialDesign:ButtonAssist.CornerRadius="10"
+                            Background="#067FF8" BorderBrush="#067FF8"
+                            FontSize="14" FontWeight="Bold"/>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>

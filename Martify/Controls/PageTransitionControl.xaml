@@ -13,7 +13,7 @@
         </ContentControl>
 
         <Grid x:Name="LoadingOverlay" 
-              Background="#80000000" 
+              Background="Transparent"
               Visibility="Collapsed">
             <Border Background="{DynamicResource CardBackground}"
                     CornerRadius="20"
@@ -43,7 +43,7 @@
                                  Height="75" 
                                  Stroke="#2196F3" 
                                  StrokeThickness="6"
-                                 StrokeDashCap="Square"
+                                 StrokeDashCap="round"
                                  StrokeDashArray="0 2"
                                  RenderTransformOrigin="0.5,0.5">
                             <Ellipse.RenderTransform>

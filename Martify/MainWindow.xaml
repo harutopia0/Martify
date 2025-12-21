@@ -100,9 +100,9 @@
 
 
             <Grid Grid.Column="1">
-                <!-- Replace ContentControl with PageTransitionControl -->
                 <ctrl:PageTransitionControl x:Name="Pages" 
                                             CurrentPage="{Binding Navigation.CurrentView}"/>
+
             </Grid>
 
         </Grid>

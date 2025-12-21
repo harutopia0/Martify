@@ -1,0 +1,484 @@
+﻿<Window x:Class="Martify.Views.ImportHistory"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vm="clr-namespace:Martify.ViewModels"
+        Title="Lịch Sử Nhập Hàng" 
+        Height="750" 
+        Width="1100"
+        WindowStyle="None"
+        BorderThickness="0"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent">
+
+    <Window.DataContext>
+        <vm:ImportHistoryVM/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <Style x:Key="ModernCard" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="HeaderText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#424242"/>
+        </Style>
+
+        <Style x:Key="DataText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#616161"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="#F5F5F5" CornerRadius="15">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header Bar -->
+            <Border Grid.Row="0" 
+                    Background="#2196F3" 
+                    CornerRadius="15,15,0,0"
+                    MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" 
+                                Orientation="Horizontal" 
+                                VerticalAlignment="Center" 
+                                Margin="25,0,0,0">
+                        <materialDesign:PackIcon Kind="History" 
+                                                 Width="28" 
+                                                 Height="28"
+                                                 Foreground="White"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,15,0"/>
+                        <TextBlock Text="Lịch sử nhập hàng" 
+                                   FontSize="22" 
+                                   FontWeight="SemiBold"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Close Button -->
+                    <Button Grid.Column="1"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            Foreground="White"
+                            Width="40"
+                            Height="40"
+                            Margin="0,0,10,0"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                            ToolTip="Đóng">
+                        <materialDesign:PackIcon Kind="Close" 
+                                                 Width="24" 
+                                                 Height="24"/>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Main Content -->
+            <ScrollViewer Grid.Row="1" 
+                          VerticalScrollBarVisibility="Visible"
+                          Padding="15">
+                <StackPanel>
+                    <!-- Summary Card -->
+                    <Border Style="{StaticResource ModernCard}" 
+                            Padding="20,15" 
+                            Margin="0,0,0,15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <materialDesign:PackIcon Grid.Column="0"
+                                                     Kind="Receipt" 
+                                                     Width="24" 
+                                                     Height="24" 
+                                                     VerticalAlignment="Center" 
+                                                     Foreground="#2196F3"
+                                                     Margin="0,0,15,0"/>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="Tổng số phiếu nhập: " 
+                                           FontSize="14" 
+                                           VerticalAlignment="Center" 
+                                           Foreground="#616161"/>
+                                <TextBlock Text="{Binding ImportReceipts.Count}" 
+                                           FontSize="16" 
+                                           FontWeight="Bold" 
+                                           VerticalAlignment="Center" 
+                                           Foreground="#2196F3"
+                                           Margin="5,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" 
+                                        Orientation="Horizontal" 
+                                        VerticalAlignment="Center" 
+                                        Margin="5 0,25,0">
+                                <DatePicker Width="140"
+                                            materialDesign:HintAssist.Hint="Từ ngày" 
+                                            materialDesign:HintAssist.Background="Transparent"
+                                            SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged}"
+                                            Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                            materialDesign:TextFieldAssist.HasClearButton="True"
+                                            Background="Transparent"
+                                            Margin="0,0,10,0"/>
+
+                                <DatePicker Width="140"
+                                            materialDesign:HintAssist.Hint="Đến ngày" 
+                                            materialDesign:HintAssist.Background="Transparent"
+                                            SelectedDate="{Binding EndDate, UpdateSourceTrigger=PropertyChanged}"
+                                            Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                            materialDesign:TextFieldAssist.HasClearButton="True"
+                                            Background="White"  
+                                            Margin="0,0,15,0"/>
+
+                                <Button Command="{Binding RefreshCommand}" 
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Height="40"
+                                        Padding="20,0"
+                                        Background="White"
+                                        Foreground="#2196F3">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Refresh" 
+                                     Width="20" 
+                                     Height="20" 
+                                     VerticalAlignment="Center"/>
+                                        <TextBlock Text="Làm mới" 
+                                                   Margin="8,0,0,0" 
+                                                   VerticalAlignment="Center" 
+                                                   FontWeight="Medium"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Import Receipts List -->
+                    <ItemsControl ItemsSource="{Binding ImportReceipts}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource ModernCard}" 
+                                        Padding="0" 
+                                        Margin="0,0,0,15"
+                                        Cursor="Hand">
+                                    <Border.InputBindings>
+                                        <MouseBinding MouseAction="LeftClick" 
+                                                      Command="{Binding DataContext.ToggleDetailsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                      CommandParameter="{Binding}"/>
+                                    </Border.InputBindings>
+
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Receipt Header -->
+                                        <Grid Grid.Row="0" Background="White">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="140"/>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="200"/>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="60"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Receipt ID -->
+                                            <StackPanel Grid.Column="0" Margin="20,15">
+                                                <TextBlock Text="MÃ PHIẾU" 
+                                                           Style="{StaticResource HeaderText}"
+                                                           Foreground="#9E9E9E"
+                                                           FontSize="11"
+                                                           Margin="0,0,0,5"/>
+                                                <TextBlock Text="{Binding ReceiptID}" 
+                                                           FontSize="14"
+                                                           FontWeight="Bold"
+                                                           Foreground="#2196F3"/>
+                                            </StackPanel>
+
+                                            <!-- Import Date -->
+                                            <StackPanel Grid.Column="1" Margin="15">
+                                                <TextBlock Text="NGÀY NHẬP" 
+                                                           Style="{StaticResource HeaderText}"
+                                                           Foreground="#9E9E9E"
+                                                           FontSize="11"
+                                                           Margin="0,0,0,5"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="Calendar" 
+                                                                             Width="16" 
+                                                                             Height="16"
+                                                                             Foreground="#616161"
+                                                                             VerticalAlignment="Center"
+                                                                             Margin="0,0,5,0"/>
+                                                    <TextBlock Text="{Binding ImportDate, StringFormat={}{0:dd/MM/yyyy HH:mm}}" 
+                                                               Style="{StaticResource DataText}"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Supplier -->
+                                            <StackPanel Grid.Column="2" Margin="15">
+                                                <TextBlock Text="NHÀ CUNG CẤP" 
+                                                           Style="{StaticResource HeaderText}"
+                                                           Foreground="#9E9E9E"
+                                                           FontSize="11"
+                                                           Margin="0,0,0,5"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="Factory" 
+                                                                             Width="16" 
+                                                                             Height="16"
+                                                                             Foreground="#616161"
+                                                                             VerticalAlignment="Center"
+                                                                             Margin="0,0,5,0"/>
+                                                    <TextBlock Text="{Binding Supplier.SupplierName}" 
+                                                               Style="{StaticResource DataText}"
+                                                               TextTrimming="CharacterEllipsis"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Employee -->
+                                            <StackPanel Grid.Column="3" Margin="15">
+                                                <TextBlock Text="NHÂN VIÊN" 
+                                                           Style="{StaticResource HeaderText}"
+                                                           Foreground="#9E9E9E"
+                                                           FontSize="11"
+                                                           Margin="0,0,0,5"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="Account" 
+                                                                             Width="16" 
+                                                                             Height="16"
+                                                                             Foreground="#616161"
+                                                                             VerticalAlignment="Center"
+                                                                             Margin="0,0,5,0"/>
+                                                    <TextBlock Text="{Binding Employee.FullName}" 
+                                                               Style="{StaticResource DataText}"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Total Amount -->
+                                            <StackPanel Grid.Column="4" Margin="15" HorizontalAlignment="Right">
+                                                <TextBlock Text="TỔNG TIỀN" 
+                                                           Style="{StaticResource HeaderText}"
+                                                           Foreground="#9E9E9E"
+                                                           FontSize="11"
+                                                           HorizontalAlignment="Right"
+                                                           Margin="0,0,0,5"/>
+                                                <Border Background="#E8F5E9" 
+                                                        CornerRadius="5" 
+                                                        Padding="12,6">
+                                                    <TextBlock FontSize="15"
+                                                               FontWeight="Bold"
+                                                               Foreground="#2E7D32"
+                                                               HorizontalAlignment="Right">
+                                                        <Run Text="{Binding TotalAmount, StringFormat=N0}"/>
+                                                        <Run Text="₫" FontSize="13"/>
+                                                    </TextBlock>
+                                                </Border>
+                                            </StackPanel>
+
+                                            <!-- Expand Icon -->
+                                            <materialDesign:PackIcon Grid.Column="5" 
+                                                                     Width="24" 
+                                                                     Height="24" 
+                                                                     Foreground="#BDBDBD"
+                                                                     VerticalAlignment="Center"
+                                                                     HorizontalAlignment="Center">
+                                                <materialDesign:PackIcon.Style>
+                                                    <Style TargetType="materialDesign:PackIcon">
+                                                        <Setter Property="Kind" Value="ChevronDown"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsExpanded}" Value="True">
+                                                                <Setter Property="Kind" Value="ChevronUp"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </materialDesign:PackIcon.Style>
+                                            </materialDesign:PackIcon>
+                                        </Grid>
+
+                                        <!-- Receipt Details (Expandable) -->
+                                        <Border Grid.Row="1" 
+                                                Background="#FAFAFA"
+                                                BorderBrush="#E0E0E0"
+                                                BorderThickness="0,1,0,0">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsExpanded}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+
+                                            <StackPanel Margin="60,20">
+                                                <!-- Details Header -->
+                                                <Border Background="#2196F3" 
+                                                        CornerRadius="8"
+                                                        Padding="15,10" 
+                                                        Margin="0,0,0,0">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="5" ShadowDepth="1" Opacity="0.2"/>
+                                                    </Border.Effect>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <materialDesign:PackIcon Kind="PackageVariant" 
+                                                                                 Width="20" 
+                                                                                 Height="20" 
+                                                                                 Foreground="White" 
+                                                                                 VerticalAlignment="Center"/>
+                                                        <TextBlock Text="CHI TIẾT SẢN PHẨM NHẬP" 
+                                                                   FontSize="14"
+                                                                   FontWeight="SemiBold" 
+                                                                   Foreground="White" 
+                                                                   VerticalAlignment="Center" 
+                                                                   Margin="10,0,0,0"/>
+                                                    </StackPanel>
+                                                </Border>
+
+                                                <!-- Details List -->
+                                                <ItemsControl ItemsSource="{Binding ImportReceiptDetails}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Background="White"
+                                                                    CornerRadius="6"
+                                                                    Padding="15,12"
+                                                                    Margin="0,0,0,1">
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                        <ColumnDefinition Width="120"/>
+                                                                        <ColumnDefinition Width="140"/>
+                                                                        <ColumnDefinition Width="160"/>
+                                                                    </Grid.ColumnDefinitions>
+
+                                                                    <!-- Product Name -->
+                                                                    <StackPanel Grid.Column="0">
+                                                                        <TextBlock Text="{Binding Product.ProductName}" 
+                                                                                   FontSize="13"
+                                                                                   FontWeight="SemiBold"
+                                                                                   Foreground="#424242"/>
+                                                                        <TextBlock Text="{Binding Product.ProductID}" 
+                                                                                   FontSize="11"
+                                                                                   Foreground="#9E9E9E"
+                                                                                   Margin="0,3,0,0"/>
+                                                                    </StackPanel>
+
+                                                                    <!-- Quantity -->
+                                                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                                        <TextBlock Text="Số lượng" 
+                                                                                   FontSize="11"
+                                                                                   Foreground="#9E9E9E"
+                                                                                   Margin="0,0,0,3"/>
+                                                                        <TextBlock FontSize="14"
+                                                                                   FontWeight="SemiBold"
+                                                                                   Foreground="#424242">
+                                                                            <Run Text="{Binding Quantity}"/>
+                                                                            <Run Text="{Binding Product.Unit}" Foreground="#9E9E9E" FontSize="12"/>
+                                                                        </TextBlock>
+                                                                    </StackPanel>
+
+                                                                    <!-- Unit Price -->
+                                                                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                                                        <TextBlock Text="Đơn giá" 
+                                                                                   FontSize="11"
+                                                                                   Foreground="#9E9E9E"
+                                                                                   HorizontalAlignment="Right"
+                                                                                   Margin="0,0,0,3"/>
+                                                                        <TextBlock FontSize="13"
+                                                                                   Foreground="#616161"
+                                                                                   HorizontalAlignment="Right">
+                                                                            <Run Text="{Binding UnitPrice, StringFormat=N0}"/>
+                                                                            <Run Text="₫"/>
+                                                                        </TextBlock>
+                                                                    </StackPanel>
+
+                                                                    <!-- Subtotal -->
+                                                                    <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                                                                        <TextBlock Text="Thành tiền" 
+                                                                                   FontSize="11"
+                                                                                   Foreground="#9E9E9E"
+                                                                                   HorizontalAlignment="Right"
+                                                                                   Margin="0,0,0,3"/>
+                                                                        <Border Background="#E8F5E9"
+                                                                                CornerRadius="5"
+                                                                                Padding="10,5"
+                                                                                HorizontalAlignment="Right">
+                                                                            <TextBlock FontSize="14"
+                                                                                       FontWeight="Bold"
+                                                                                       Foreground="#2E7D32">
+                                                                                <Run Text="{Binding Subtotal, StringFormat=N0}"/>
+                                                                                <Run Text="₫"/>
+                                                                            </TextBlock>
+                                                                        </Border>
+                                                                    </StackPanel>
+                                                                </Grid>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- Empty State -->
+                    <Border Padding="60">
+                        <Border.Style>
+                            <Style TargetType="Border" BasedOn="{StaticResource ModernCard}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasNoReceipts}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel HorizontalAlignment="Center">
+                            <materialDesign:PackIcon Kind="FileDocumentOutline"
+                                                     Width="80"
+                                                     Height="80"
+                                                     Foreground="#E0E0E0"
+                                                     HorizontalAlignment="Center"/>
+                            <TextBlock Text="Không có phiếu nhập nào"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="#9E9E9E"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,15,0,5"/>
+                            <TextBlock Text="Chọn khoảng thời gian khác hoặc tạo phiếu nhập mới"
+                                       FontSize="13"
+                                       Foreground="#BDBDBD"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</Window>

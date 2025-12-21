@@ -60,10 +60,10 @@
             <Grid Grid.Column="1">
                 <Grid VerticalAlignment="Center"
                       HorizontalAlignment="Center"
-                      Height="200"
+                      Height="150"
                       Width="300">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="0.5*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
@@ -71,7 +71,9 @@
                         <Label FontFamily="{StaticResource BungeeSpice}"
                                FontSize="35"
                                FontWeight="Bold"
-                               HorizontalAlignment="Center"
+                               Margin="57,0,0,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
                                Foreground="Black"
                                Content="Martify">
                             <Label.Style>
@@ -87,11 +89,11 @@
                     </Grid>
 
                     <Grid Grid.Row="1">
-                        <TextBlock FontSize="14" 
-                                   Margin="0,20,0,0" 
-                                   TextAlignment="Center" 
+                        <TextBlock FontSize="14"
+                                   TextAlignment="Justify" 
                                    TextWrapping="Wrap"
                                    LineHeight="22"
+                                   VerticalAlignment="Center"
                                    Foreground="#555"
                                    Text="Martify là ứng dụng WPF quản lý siêu thị, giúp theo dõi sản phẩm, nhân viên, khách hàng và hóa đơn. Giao diện trực quan, dễ dùng, hỗ trợ thống kê và quản lý hiệu quả hoạt động siêu thị.">
                         </TextBlock>

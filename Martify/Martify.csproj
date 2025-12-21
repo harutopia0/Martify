@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\MultiplyConverters.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\Fonts\BungeeSpice-Regular.ttf" />
     <None Remove="Resources\Fonts\Charm-Regular.ttf" />
     <None Remove="Resources\Fonts\FleurDeLeah-Regular.ttf" />

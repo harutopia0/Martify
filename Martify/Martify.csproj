@@ -21,6 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Behaviors\PageTransitionBehavior.cs" />
+    <Compile Remove="Views\LoadingOverlay.xaml.cs" />
     <Compile Remove="Views\MultiplyConverters.cs" />
   </ItemGroup>
 
@@ -40,6 +42,10 @@
     <None Remove="Resources\Images\receipt_hover.png" />
     <None Remove="Resources\Images\settings_hover.png" />
     <None Remove="Resources\Images\staff_hover.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\LoadingOverlay.xaml" />
   </ItemGroup>
 
   <ItemGroup>

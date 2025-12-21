@@ -1,0 +1,128 @@
+﻿<UserControl x:Class="Martify.Controls.PageTransitionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <Grid>
+        <!-- Content Container with Fade Animation -->
+        <ContentControl x:Name="PageContent"
+                        Content="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=CurrentPage}"
+                        Opacity="0">
+            <ContentControl.RenderTransform>
+                <TranslateTransform x:Name="ContentTranslate" Y="20"/>
+            </ContentControl.RenderTransform>
+        </ContentControl>
+
+        <!-- Loading Overlay -->
+        <Grid x:Name="LoadingOverlay" 
+              Background="#80000000" 
+              Visibility="Collapsed">
+            <Border Background="{DynamicResource CardBackground}"
+                    CornerRadius="20"
+                    Padding="40"
+                    Width="200"
+                    Height="200"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="30" 
+                                      ShadowDepth="0" 
+                                      Opacity="0.5" 
+                                      Color="Black"/>
+                </Border.Effect>
+
+                <StackPanel VerticalAlignment="Center" 
+                            HorizontalAlignment="Center">
+                    <!-- Spinning Circle -->
+                    <Grid Width="75" Height="75" Margin="0,0,0,20">
+                        <Ellipse Width="75" 
+                                 Height="75" 
+                                 Stroke="#2196F3" 
+                                 StrokeThickness="6" 
+                                 Opacity="0.2"/>
+
+                        <Ellipse x:Name="SpinningCircle"
+                                 Width="75" 
+                                 Height="75" 
+                                 Stroke="#2196F3" 
+                                 StrokeThickness="6"
+                                 StrokeDashCap="Square"
+                                 StrokeDashArray="0 2"
+                                 RenderTransformOrigin="0.5,0.5">
+                            <Ellipse.RenderTransform>
+                                <RotateTransform x:Name="SpinTransform" Angle="0"/>
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                    </Grid>
+
+                    <!-- Loading Text -->
+                    <TextBlock x:Name="LoadingText"
+                               Text="Đang tải..."
+                               Padding="0 0 5 0"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource PrimaryText}"
+                               HorizontalAlignment="Center"
+                               Opacity="0">
+                        
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+
+    <UserControl.Triggers>
+        <!-- Show Loading Animation -->
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <!-- Continuous Rotation -->
+                    <DoubleAnimation Storyboard.TargetName="SpinTransform"
+                                     Storyboard.TargetProperty="Angle"
+                                     From="0"
+                                     To="360"
+                                     Duration="0:0:5"
+                                     RepeatBehavior="Forever">
+                        <DoubleAnimation.EasingFunction>
+                            <QuadraticEase EasingMode="EaseInOut"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+
+                    <!-- Text Pulse -->
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LoadingText"
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    RepeatBehavior="Forever">
+                        <LinearDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                        <LinearDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
+                        <LinearDoubleKeyFrame KeyTime="0:0:3" Value="1"/>
+                        <LinearDoubleKeyFrame KeyTime="0:0:5" Value="0"/>
+                    </DoubleAnimationUsingKeyFrames>
+
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TextScale"
+                                                    Storyboard.TargetProperty="ScaleX"
+                                                    RepeatBehavior="Forever">
+                        <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.8"/>
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.75" Value="1">
+                            <EasingDoubleKeyFrame.EasingFunction>
+                                <CubicEase EasingMode="EaseInOut"/>
+                            </EasingDoubleKeyFrame.EasingFunction>
+                        </EasingDoubleKeyFrame>
+                        <EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="0.8"/>
+                    </DoubleAnimationUsingKeyFrames>
+
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TextScale"
+                                                    Storyboard.TargetProperty="ScaleY"
+                                                    RepeatBehavior="Forever">
+                        <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.8"/>
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.75" Value="1">
+                            <EasingDoubleKeyFrame.EasingFunction>
+                                <CubicEase EasingMode="EaseInOut"/>
+                            </EasingDoubleKeyFrame.EasingFunction>
+                        </EasingDoubleKeyFrame>
+                        <EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="0.8"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+</UserControl>

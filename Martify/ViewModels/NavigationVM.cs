@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Martify.Models;
+using Martify.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +19,13 @@ namespace Martify.ViewModels
         {
             get { return _currentView; }
             set { _currentView = value; OnPropertyChanged(); }
+        }
+
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set { _isLoading = value; OnPropertyChanged(); }
         }
 
         #region commands
@@ -38,11 +47,41 @@ namespace Martify.ViewModels
         /// Điều hướng đến Products với bộ lọc cảnh báo tồn kho
         /// </summary>
         /// <param name="alertType">Loại cảnh báo (LowStock hoặc SlowMoving)</param>
-        public void NavigateToProductsWithAlert(Models.InventoryAlertType alertType)
+        public void NavigateToProductsWithAlert(InventoryAlertType alertType)
         {
-            var productsVM = new ProductsVM();
-            productsVM.SetInventoryAlertFilter(alertType);
-            CurrentView = productsVM;
+            var productsView = new Products();
+            if (productsView.DataContext is ProductsVM productsVM)
+            {
+                productsVM.SetInventoryAlertFilter(alertType);
+            }
+
+            _ = NavigateToAsync(productsView);
+        }
+
+        private async Task NavigateToAsync(object newView)
+        {
+            // Start loading
+            IsLoading = true;
+
+            try
+            {
+                // Simulate minimum loading time for smooth UX (optional)
+                await Task.Delay(300);
+
+                // Navigate to new view
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    CurrentView = newView;
+                });
+
+                // Give time for view to load
+                await Task.Delay(200);
+            }
+            finally
+            {
+                // Stop loading
+                IsLoading = false;
+            }
         }
 
         public NavigationVM()

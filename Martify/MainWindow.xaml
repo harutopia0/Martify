@@ -6,9 +6,10 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:Martify" 
         xmlns:uc="clr-namespace:Martify.Views"
+        xmlns:ctrl="clr-namespace:Martify.Controls"
         mc:Ignorable="d"
         xmlns:cv="clr-namespace:Martify.Converters"
-        Title="Marity" 
+        Title="Martify" 
         Height="720" Width="1080"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
@@ -99,8 +100,9 @@
 
 
             <Grid Grid.Column="1">
-                <ContentControl x:Name="Pages" IsTabStop="False"
-                                    Content="{Binding Navigation.CurrentView}"/>
+                <!-- Replace ContentControl with PageTransitionControl -->
+                <ctrl:PageTransitionControl x:Name="Pages" 
+                                            CurrentPage="{Binding Navigation.CurrentView}"/>
             </Grid>
 
         </Grid>

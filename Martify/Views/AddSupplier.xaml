@@ -8,17 +8,19 @@
         mc:Ignorable="d"
         Name="addSupplierWindow"
         Title="Thêm nhà cung cấp" 
-        Height="550" 
-        Width="500"
+        Height="680" 
+        Width="520"
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
-        <Window.DataContext>
-            <vm:AddSupplierVM />
-        </Window.DataContext>
-        <Window.Resources>
+
+    <Window.DataContext>
+        <vm:AddSupplierVM />
+    </Window.DataContext>
+
+    <Window.Resources>
         <Style x:Key="LabelText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#424242" />
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -40,9 +42,17 @@
 
         <Style x:Key="ValidatedTextBox" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
             <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplate}" />
-            <Setter Property="Height" Value="45"/>
+            <Setter Property="Height" Value="48"/>
             <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="12,10"/>
             <Setter Property="materialDesign:TextFieldAssist.HasClearButton" Value="True"/>
+        </Style>
+
+        <Style x:Key="InfoCard" TargetType="Border">
+            <Setter Property="Background" Value="#E3F2FD"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
         </Style>
     </Window.Resources>
 
@@ -57,103 +67,185 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
+            <!-- Header -->
             <Border Grid.Row="0" 
                     Background="#2196F3" 
-                    CornerRadius="15,15,0,0">
-                <!--MouseLeftButtonDown="Border_MouseLeftButtonDown">-->
+                    CornerRadius="15,15,0,0"
+                    MouseLeftButtonDown="Border_MouseLeftButtonDown">
                 <Grid>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal" 
+                                VerticalAlignment="Center" 
+                                Margin="25,0,0,0">
                         <materialDesign:PackIcon Kind="TruckPlus" 
-                                               Width="28" 
-                                               Height="28"
-                                               Foreground="White"
-                                               VerticalAlignment="Center"
-                                               Margin="0,0,12,0"/>
+                                                 Width="28" 
+                                                 Height="28"
+                                                 Foreground="White"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,12,0"/>
                         <TextBlock Text="Thêm nhà cung cấp mới" 
                                    FontSize="20" 
                                    FontWeight="SemiBold"
                                    Foreground="White"
                                    VerticalAlignment="Center"/>
                     </StackPanel>
+
+                    <!-- Close Button -->
+                    <Button Grid.Column="1"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            Foreground="White"
+                            Width="40"
+                            Height="40"
+                            Margin="0,0,10,0"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                            ToolTip="Đóng">
+                        <materialDesign:PackIcon Kind="Close" 
+                                                 Width="24" 
+                                                 Height="24"/>
+                    </Button>
                 </Grid>
             </Border>
 
+            <!-- Content -->
             <Border Grid.Row="1" 
                     Background="White" 
                     Margin="15" 
                     CornerRadius="10" 
-                    Padding="5">
+                    Padding="25,20">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.1"/>
                 </Border.Effect>
 
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <!-- Info Card -->
+                    <Border Grid.Row="0" Style="{StaticResource InfoCard}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <materialDesign:PackIcon Grid.Column="0"
+                                                     Kind="InformationOutline"
+                                                     Width="20"
+                                                     Height="20"
+                                                     Foreground="#2196F3"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,10,0"/>
+
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Mã nhà cung cấp sẽ được tự động tạo"
+                                           FontSize="12"
+                                           Foreground="#1976D2"
+                                           FontWeight="Medium"/>
+                                <TextBlock Margin="0,3,0,0">
+                                    <Run Text="Mã:" FontSize="11" Foreground="#1976D2"/>
+                                    <Run Text="{Binding SupplierID}" 
+                                         FontSize="12" 
+                                         FontWeight="Bold" 
+                                         Foreground="#0D47A1"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Form Fields -->
+                    <ScrollViewer Grid.Row="1" 
+                                  VerticalScrollBarVisibility="Auto"
+                                  Padding="0,0,5,0">
                         <StackPanel>
-                            <TextBlock Text="Tên nhà cung cấp *" Style="{StaticResource LabelText}"/>
+                            <!-- Supplier Name -->
+                            <TextBlock Text="Tên nhà cung cấp *" 
+                                       Style="{StaticResource LabelText}"/>
                             <TextBox materialDesign:HintAssist.Hint="Nhập tên nhà cung cấp..."
                                      Text="{Binding SupplierName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                      Style="{StaticResource ValidatedTextBox}"
-                                     Margin="0,0,0,20"
-                                     Height="Auto"/>
+                                     Margin="0,0,0,18"/>
 
-                            <TextBlock Text="Số điện thoại *" Style="{StaticResource LabelText}"/>
-                            <TextBox materialDesign:HintAssist.Hint="Nhập số điện thoại..."
+                            <!-- Phone -->
+                            <TextBlock Text="Số điện thoại *" 
+                                       Style="{StaticResource LabelText}"/>
+                            <TextBox materialDesign:HintAssist.Hint="Ví dụ: 0901234567"
                                      Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                      Style="{StaticResource ValidatedTextBox}"
-                                     Margin="0,0,0,20"
-                                     Height="auto"/>
+                                     MaxLength="11"
+                                     Margin="0,0,0,18"/>
 
-                            <TextBlock Text="Email" Style="{StaticResource LabelText}"/>
-                            <TextBox materialDesign:HintAssist.Hint="example@gmail.com"
+                            <!-- Email -->
+                            <TextBlock Text="Email (Tùy chọn)" 
+                                       Style="{StaticResource LabelText}"/>
+                            <TextBox materialDesign:HintAssist.Hint="example@company.com"
                                      Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                      Style="{StaticResource ValidatedTextBox}"
-                                     Margin="0,0,0,20"
-                                     Height="auto"/>
+                                     MaxLength="255"
+                                     Margin="0,0,0,18"/>
 
-                            <TextBlock Text="Địa chỉ" Style="{StaticResource LabelText}"/>
-                            <TextBox materialDesign:HintAssist.Hint="Nhập địa chỉ..."
-                                     Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}"
+                            <!-- Address -->
+                            <TextBlock Text="Địa chỉ (Tùy chọn)" 
+                                       Style="{StaticResource LabelText}"/>
+                            <TextBox materialDesign:HintAssist.Hint="Nhập địa chỉ nhà cung cấp..."
+                                     Text="{Binding Address, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                      Style="{StaticResource ValidatedTextBox}"
+                                     MaxLength="300"
                                      Height="80"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      VerticalContentAlignment="Top"
-                                     Padding="10"/>
+                                     VerticalScrollBarVisibility="Auto"/>
                         </StackPanel>
                     </ScrollViewer>
 
-                    <StackPanel Grid.Row="1" 
+                    <!-- Action Buttons -->
+                    <StackPanel Grid.Row="2" 
                                 Orientation="Horizontal" 
                                 HorizontalAlignment="Right" 
                                 Margin="0,20,0,0">
                         <Button Height="45" 
-                                Width="120"
+                                Width="130"
                                 Margin="0,0,10,0"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Command="{Binding CloseCommand}"
                                 CommandParameter="{Binding ElementName=addSupplierWindow}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Close" Width="18" Height="18" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="Hủy bỏ" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="Close" 
+                                                         Width="20" 
+                                                         Height="20" 
+                                                         Margin="0,0,8,0" 
+                                                         VerticalAlignment="Center"/>
+                                <TextBlock Text="Hủy bỏ" 
+                                           FontSize="14"
+                                           VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
                         <Button Height="45" 
-                                Width="140"
+                                Width="150"
                                 Background="#4CAF50"
                                 BorderBrush="{x:Null}"
                                 Style="{StaticResource MaterialDesignRaisedButton}"
                                 Command="{Binding SaveCommand}"
                                 CommandParameter="{Binding ElementName=addSupplierWindow}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="ContentSave" Width="18" Height="18" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="Lưu thông tin" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="ContentSave" 
+                                                         Width="20" 
+                                                         Height="20" 
+                                                         Margin="0,0,8,0" 
+                                                         VerticalAlignment="Center"/>
+                                <TextBlock Text="Lưu thông tin" 
+                                           FontSize="14"
+                                           VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

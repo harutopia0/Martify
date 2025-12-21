@@ -4,16 +4,14 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <Grid>
-        <!-- Content Container with Fade Animation -->
         <ContentControl x:Name="PageContent"
                         Content="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=CurrentPage}"
                         Opacity="0">
             <ContentControl.RenderTransform>
-                <TranslateTransform x:Name="ContentTranslate" Y="20"/>
+                <TranslateTransform x:Name="ContentTranslate" Y="0"/>
             </ContentControl.RenderTransform>
         </ContentControl>
 
-        <!-- Loading Overlay -->
         <Grid x:Name="LoadingOverlay" 
               Background="#80000000" 
               Visibility="Collapsed">
@@ -33,7 +31,6 @@
 
                 <StackPanel VerticalAlignment="Center" 
                             HorizontalAlignment="Center">
-                    <!-- Spinning Circle -->
                     <Grid Width="75" Height="75" Margin="0,0,0,20">
                         <Ellipse Width="75" 
                                  Height="75" 
@@ -55,7 +52,6 @@
                         </Ellipse>
                     </Grid>
 
-                    <!-- Loading Text -->
                     <TextBlock x:Name="LoadingText"
                                Text="Đang tải..."
                                Padding="0 0 5 0"
@@ -63,8 +59,11 @@
                                FontWeight="SemiBold"
                                Foreground="{DynamicResource PrimaryText}"
                                HorizontalAlignment="Center"
-                               Opacity="0">
-                        
+                               Opacity="0"
+                               RenderTransformOrigin="0.5, 0.5">
+                        <TextBlock.RenderTransform>
+                            <ScaleTransform x:Name="TextScale" ScaleX="1" ScaleY="1"/>
+                        </TextBlock.RenderTransform>
                     </TextBlock>
                 </StackPanel>
             </Border>
@@ -72,11 +71,9 @@
     </Grid>
 
     <UserControl.Triggers>
-        <!-- Show Loading Animation -->
         <EventTrigger RoutedEvent="UserControl.Loaded">
             <BeginStoryboard>
                 <Storyboard>
-                    <!-- Continuous Rotation -->
                     <DoubleAnimation Storyboard.TargetName="SpinTransform"
                                      Storyboard.TargetProperty="Angle"
                                      From="0"
@@ -88,10 +85,9 @@
                         </DoubleAnimation.EasingFunction>
                     </DoubleAnimation>
 
-                    <!-- Text Pulse -->
                     <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LoadingText"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    RepeatBehavior="Forever">
+                                                   Storyboard.TargetProperty="Opacity"
+                                                   RepeatBehavior="Forever">
                         <LinearDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
                         <LinearDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
                         <LinearDoubleKeyFrame KeyTime="0:0:3" Value="1"/>
@@ -99,8 +95,8 @@
                     </DoubleAnimationUsingKeyFrames>
 
                     <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TextScale"
-                                                    Storyboard.TargetProperty="ScaleX"
-                                                    RepeatBehavior="Forever">
+                                                   Storyboard.TargetProperty="ScaleX"
+                                                   RepeatBehavior="Forever">
                         <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.8"/>
                         <EasingDoubleKeyFrame KeyTime="0:0:0.75" Value="1">
                             <EasingDoubleKeyFrame.EasingFunction>
@@ -111,8 +107,8 @@
                     </DoubleAnimationUsingKeyFrames>
 
                     <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TextScale"
-                                                    Storyboard.TargetProperty="ScaleY"
-                                                    RepeatBehavior="Forever">
+                                                   Storyboard.TargetProperty="ScaleY"
+                                                   RepeatBehavior="Forever">
                         <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.8"/>
                         <EasingDoubleKeyFrame KeyTime="0:0:0.75" Value="1">
                             <EasingDoubleKeyFrame.EasingFunction>

@@ -37,17 +37,30 @@ namespace Martify.Controls
 
         private async Task TransitionToNewPage(object newPage)
         {
+
             if (newPage == null) return;
+
+            if (PageContent.Content is Martify.Views.Settings oldSettingsPage)
+            {
+                // Nếu đúng, ẩn ngay WebView đi để nó không bị "đơ" trên màn hình
+                // WebView2 bỏ qua Opacity, nên phải dùng Visibility.Hidden
+                oldSettingsPage.ThemeSwitchWebView.Visibility = Visibility.Hidden;
+            }
+
 
             // Step 1: Fade out current content
             await FadeOutContent();
 
-            // Step 2: Show loading overlay
-            LoadingOverlay.Visibility = Visibility.Visible;
-            await Task.Delay(600); // Simulate loading time
-
             // Step 3: Update content
             PageContent.Content = newPage;
+
+            // Step 2: Show loading overlay
+            LoadingOverlay.Visibility = Visibility.Visible;
+
+
+            await Task.Delay(500); // Simulate loading time
+
+
 
             // Step 4: Hide loading overlay
             LoadingOverlay.Visibility = Visibility.Collapsed;
@@ -67,7 +80,7 @@ namespace Martify.Controls
             {
                 From = PageContent.Opacity,
                 To = 0,
-                Duration = TimeSpan.FromMilliseconds(200),
+                Duration = TimeSpan.FromMilliseconds(150),
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
             };
             Storyboard.SetTarget(fadeOut, PageContent);
@@ -79,7 +92,7 @@ namespace Martify.Controls
             {
                 From = 0,
                 To = -20,
-                Duration = TimeSpan.FromMilliseconds(200),
+                Duration = TimeSpan.FromMilliseconds(150),
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
             };
             Storyboard.SetTarget(slideUp, ContentTranslate);
@@ -115,7 +128,7 @@ namespace Martify.Controls
             {
                 From = 20,
                 To = 0,
-                Duration = TimeSpan.FromMilliseconds(400),
+                Duration = TimeSpan.FromMilliseconds(150),
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
             };
             Storyboard.SetTarget(slideIn, ContentTranslate);

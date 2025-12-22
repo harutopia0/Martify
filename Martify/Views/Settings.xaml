@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Martify.Views"
              xmlns:vm="clr-namespace:Martify.ViewModels"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="864"
              d:Style="{x:Null}">
@@ -72,12 +73,12 @@
                                            Foreground="{DynamicResource SecondaryText}"/>
                             </StackPanel>
 
-                            <ToggleButton Grid.Column="2"
-                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                          IsChecked="{Binding IsDarkMode}"
-                                          ToolTip="Bật/Tắt Chế độ tối"
-                                          Background="#9C27B0" 
-                                          BorderBrush="#9C27B0"/>
+                            <Wpf:WebView2 x:Name="ThemeSwitchWebView"
+                                          x:FieldModifier="public"
+                                          Width="150" Height="70"
+                                          DefaultBackgroundColor="Transparent"
+                                          NavigationCompleted="ThemeSwitchWebView_NavigationCompleted"
+                                          Grid.Column="2"/>
                         </Grid>
                     </Border>
 

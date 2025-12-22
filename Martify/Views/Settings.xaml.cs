@@ -1,9 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Windows.Controls;
+﻿using Martify.ViewModels; // Nhớ using namespace chứa SettingsVM
 using Microsoft.Web.WebView2.Core;
-using Martify.ViewModels; // Nhớ using namespace chứa SettingsVM
+using System;
+using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace Martify.Views
 {
@@ -74,6 +75,47 @@ namespace Martify.Views
                     vm.IsDarkMode = false;
                 }
             }
+        }
+
+        public async Task FreezeWebView()
+        {
+            if (ThemeSwitchWebView.CoreWebView2 != null)
+            {
+                try
+                {
+                    // 1. Tạo luồng nhớ đệm
+                    using (var stream = new MemoryStream())
+                    {
+                        // 2. Bảo WebView2 chụp ảnh hiện tại của nó ra luồng đó
+                        await ThemeSwitchWebView.CoreWebView2.CapturePreviewAsync(
+                            CoreWebView2CapturePreviewImageFormat.Png, stream);
+
+                        // 3. Chuyển dữ liệu ảnh sang BitmapImage của WPF
+                        var bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.StreamSource = stream;
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.EndInit();
+                        bitmap.Freeze(); // Đóng băng để dùng được trên thread UI
+
+                        // 4. Gán ảnh cho thằng thế thân
+                        ThemeSwitchPlaceholder.Source = bitmap;
+
+                        // 5. Tráo đổi: Hiện ảnh tĩnh, Ẩn WebView
+                        ThemeSwitchPlaceholder.Visibility = Visibility.Visible;
+                        ThemeSwitchWebView.Visibility = Visibility.Hidden;
+                    }
+                }
+                catch (Exception) { /* Bỏ qua lỗi nếu chụp thất bại */ }
+            }
+        }
+
+        public void UnfreezeWebView()
+        {
+            // Đảo ngược lại: Hiện WebView, Ẩn ảnh tĩnh
+            ThemeSwitchWebView.Visibility = Visibility.Visible;
+            ThemeSwitchPlaceholder.Visibility = Visibility.Collapsed;
+            ThemeSwitchPlaceholder.Source = null; // Giải phóng ram
         }
     }
 }

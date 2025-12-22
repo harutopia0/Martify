@@ -73,6 +73,14 @@
                                            Foreground="{DynamicResource SecondaryText}"/>
                             </StackPanel>
 
+                            <Image x:Name="ThemeSwitchPlaceholder" 
+                                           Stretch="Uniform" 
+                                           Visibility="Collapsed"
+                                           HorizontalAlignment="Center" 
+                                           VerticalAlignment="Center"
+                                           Width="150" Height="70"
+                                           Grid.Column="2"/>
+                            
                             <Wpf:WebView2 x:Name="ThemeSwitchWebView"
                                           x:FieldModifier="public"
                                           Width="150" Height="70"

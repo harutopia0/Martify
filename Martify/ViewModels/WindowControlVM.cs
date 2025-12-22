@@ -40,7 +40,7 @@ namespace Martify.ViewModels
 
         public WindowControlVM()
         {
-            CloseWindowCommand = new RelayCommand<UserControl>((p) => { return p != null; }, (p) =>
+            CloseWindowCommand = new RelayCommand<UserControl>((p) => { return p != null; }, async (p) =>
             {
                 Window parentWindow = Window.GetWindow(p);
                 if (parentWindow != null)
@@ -51,6 +51,20 @@ namespace Martify.ViewModels
                     }
                     else
                     {
+                        // FIX LỖI: Tìm view Settings trong cây giao diện thay vì check CurrentPage
+                        if (parentWindow is MainWindow mainWindow)
+                        {
+                            // Dùng hàm FindVisualChild để tìm view Settings thật sự
+                            var settingsPage = FindVisualChild<Martify.Views.Settings>(mainWindow);
+
+                            if (settingsPage != null && settingsPage.IsVisible)
+                            {
+                                // Gọi hàm đóng băng (Chụp ảnh & Ẩn WebView)
+                                await settingsPage.FreezeWebView();
+                            }
+                        }
+
+
                         IsAlertVisible = Visibility.Visible;
                     }
                 }
@@ -64,6 +78,20 @@ namespace Martify.ViewModels
             CancelExitCommand = new RelayCommand<object>((p) => true, (p) =>
             {
                 IsAlertVisible = Visibility.Collapsed;
+
+
+
+                // FIX LỖI: Tìm view Settings để rã đông
+                if (Application.Current.MainWindow is MainWindow mainWindow)
+                {
+                    var settingsPage = FindVisualChild<Martify.Views.Settings>(mainWindow);
+
+                    if (settingsPage != null)
+                    {
+                        // Hiện lại WebView thật
+                        settingsPage.UnfreezeWebView();
+                    }
+                }
             });
 
             HideWindowCommand = new RelayCommand<UserControl>((p) => p != null, (p) =>
@@ -83,6 +111,24 @@ namespace Martify.ViewModels
                     win.DragMove();
                 }
             });
+        }
+
+
+        // Hàm hỗ trợ tìm kiếm control con trong giao diện WPF
+        private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            if (parent == null) return null;
+
+            for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = System.Windows.Media.VisualTreeHelper.GetChild(parent, i);
+                if (child != null && child is T t)
+                    return t;
+
+                var childItem = FindVisualChild<T>(child);
+                if (childItem != null) return childItem;
+            }
+            return null;
         }
     }
 }

@@ -3,25 +3,45 @@ using Martify.Views;
 using System.Windows;
 using System.Windows.Input;
 using Martify;
+using System.Windows.Threading;
 
 namespace Martify.ViewModels
 {
     public class SettingsVM : BaseVM
     {
-       
         private static bool _globalDarkModeState = false;
 
         private Visibility _configVisibility = Visibility.Collapsed;
         public Visibility ConfigVisibility
         {
-            get { return _configVisibility; }
-            set { _configVisibility = value; OnPropertyChanged(); }
+            get => _configVisibility;
+            set
+            {
+                _configVisibility = value;
+                OnPropertyChanged();
+            }
         }
 
-        public ICommand OpenConfigCommand { get; set; }
-        public ICommand CloseConfigCommand { get; set; }
-        public ICommand LogoutCommand { get; set; }
-        public ICommand OpenEditProfileCommand { get; set; }
+        public ICommand OpenConfigCommand
+        {
+            get;
+            set;
+        }
+        public ICommand CloseConfigCommand
+        {
+            get;
+            set;
+        }
+        public ICommand LogoutCommand
+        {
+            get;
+            set;
+        }
+        public ICommand OpenEditProfileCommand
+        {
+            get;
+            set;
+        }
 
         public SettingsVM()
         {
@@ -41,53 +61,38 @@ namespace Martify.ViewModels
 
         private void Logout(object obj)
         {
-            // [MỚI] Xóa sạch các đơn hàng đang treo khi đăng xuất
             ProductSelectionVM.ClearStaticData();
-
             DataProvider.Ins.CurrentAccount = null;
-            ConfigVisibility = Visibility.Collapsed;
 
-         
-            var mainWindow = Application.Current.MainWindow;
-            if (mainWindow == null)
+            var oldWindow = Application.Current.MainWindow;
+
+            if (oldWindow?.DataContext is MainVM mainVM)
             {
-                foreach (Window w in Application.Current.Windows)
-                {
-                    if (w.DataContext is MainVM) { mainWindow = w; break; }
-                }
+                mainVM.ResetSession();
             }
-            if (mainWindow != null) mainWindow.Hide();
 
-           
+            oldWindow?.Close();
+
             LoginWindow loginWindow = new LoginWindow();
-
             if (loginWindow.DataContext is LoginVM vm)
             {
                 vm.isLogin = false;
-                vm.Username = ""; 
-                vm.Password = ""; 
+                vm.Username = "";
+                vm.Password = "";
             }
-
-            // 4. Hiện màn hình đăng nhập
             loginWindow.ShowDialog();
 
-            // 5. Kiểm tra kết quả sau khi đóng form Login
             if (loginWindow.DataContext is LoginVM loginVM && loginVM.isLogin)
             {
-                // Chỉ khi đăng nhập thành công (isLogin = true) mới hiện lại Main
-                if (mainWindow != null && mainWindow.DataContext is MainVM mainVM)
-                {
-                    mainVM.LoadCurrentUserData();
-                }
-                mainWindow?.Show();
+                MainWindow newWindow = new MainWindow();
+                Application.Current.MainWindow = newWindow;
+                newWindow.Show();
             }
             else
             {
-                // Nếu tắt form Login (isLogin = false) -> Tắt App
-                System.Environment.Exit(0);
+                Application.Current.Shutdown();
             }
         }
-
 
         private bool _isDarkMode;
         public bool IsDarkMode

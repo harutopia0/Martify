@@ -14,69 +14,110 @@ namespace Martify.ViewModels
     public class MainVM : BaseVM
     {
         public bool isLoaded = false;
-        public ICommand LoadedWindowCommand { get; set; }
-        public NavigationVM Navigation { get; }
+        public ICommand LoadedWindowCommand
+        {
+            get;
+            set;
+        }
+        public NavigationVM Navigation
+        {
+            get;
+        }
 
         private bool _isAdmin;
         public bool IsAdmin
         {
-            get { return _isAdmin; }
-            set { _isAdmin = value; OnPropertyChanged(); }
+            get => _isAdmin;
+            set
+            {
+                _isAdmin = value;
+                OnPropertyChanged();
+            }
         }
 
-        // [SỬA LỖI] Đặt mặc định là -1. 
-        // Điều này đảm bảo khi App mới chạy, chưa có nút nào được chọn.
-        // Khi đăng nhập xong, code sẽ set thẳng vào 0 hoặc 1, tránh việc chuyển từ 0->1 gây hiệu ứng tắt.
         private int _selectedMenuIndex = -1;
         public int SelectedMenuIndex
         {
-            get { return _selectedMenuIndex; }
-            set { _selectedMenuIndex = value; OnPropertyChanged(); }
+            get => _selectedMenuIndex;
+            set
+            {
+                _selectedMenuIndex = value;
+                OnPropertyChanged();
+            }
         }
 
         private string _FullName;
         public string FullName
         {
-            get { return _FullName; }
-            set { _FullName = value; OnPropertyChanged(); }
+            get => _FullName;
+            set
+            {
+                _FullName = value;
+                OnPropertyChanged();
+            }
         }
 
         private string _Email;
         public string Email
         {
-            get { return _Email; }
-            set { _Email = value; OnPropertyChanged(); }
+            get => _Email;
+            set
+            {
+                _Email = value;
+                OnPropertyChanged();
+            }
         }
 
-        private string _imagePath;
+        private string _ImagePath;
         public string ImagePath
         {
-            get { return _imagePath; }
-            set { _imagePath = value; OnPropertyChanged(); }
+            get => _ImagePath;
+            set
+            {
+                _ImagePath = value;
+                OnPropertyChanged();
+            }
         }
-
 
         public MainVM()
         {
-            Navigation = new NavigationVM();
-
-            LoadedWindowCommand = new RelayCommand<Window>((p) => { return true; }, (p) => {
+            LoadedWindowCommand = new RelayCommand<Window>((p) => { return true; }, (p) =>
+            {
                 isLoaded = true;
                 if (p == null) return;
-                p.Hide();
-                LoginWindow loginWindow = new LoginWindow();
-                loginWindow.ShowDialog();
 
-                if (loginWindow.DataContext == null) return;
-                var loginVM = loginWindow.DataContext as LoginVM;
+                if (DataProvider.Ins.CurrentAccount == null)
+                {
+                    p.Hide();
+                    LoginWindow loginWindow = new LoginWindow();
+                    loginWindow.ShowDialog();
 
-                if (loginVM.isLogin)
+                    if (loginWindow.DataContext is LoginVM loginVM && loginVM.isLogin)
+                    {
+                        LoadCurrentUserData();
+                        p.Show();
+                    }
+                    else
+                    {
+                        p.Close();
+                    }
+                }
+                else
                 {
                     LoadCurrentUserData();
-                    p.Show();
                 }
-                else p.Close();
             });
+
+            Navigation = new NavigationVM();
+        }
+
+        public void ResetSession()
+        {
+            SelectedMenuIndex = -1;
+            Navigation.CurrentView = null;
+            FullName = string.Empty;
+            Email = string.Empty;
+            ImagePath = null;
         }
 
         public void LoadCurrentUserData()
@@ -89,17 +130,17 @@ namespace Martify.ViewModels
                 Email = acc.Employee.Email;
                 ImagePath = acc.Employee.ImagePath;
 
-                if (acc.Role == 0) // Admin
+                if (acc.Role == 0)
                 {
                     IsAdmin = true;
                     Navigation.DashboardCommand.Execute(null);
-                    SelectedMenuIndex = 0; // Chọn Dashboard
+                    SelectedMenuIndex = 0;
                 }
-                else // Staff
+                else
                 {
                     IsAdmin = false;
                     Navigation.ProductSelectionCommand.Execute(null);
-                    SelectedMenuIndex = 1; // Chọn Sell -> Sell sẽ sáng lên ngay lập tức, Dashboard vẫn giữ nguyên trạng thái tắt
+                    SelectedMenuIndex = 1;
                 }
             }
             else

@@ -43,7 +43,7 @@
                                       HorizontalAlignment="Left">
 
                                     <TextBlock Text="{TemplateBinding TextBlock.Text}"
-                                               FontFamily="Roboto"
+                                               FontFamily="Segoe UI Light"
                                                FontWeight="SemiBold"
                                                FontSize="17"
                                                VerticalAlignment="Center"
@@ -80,7 +80,7 @@
                                                Text="{Binding Content, 
                                                       RelativeSource={RelativeSource FindAncestor,
                                                       AncestorType={x:Type RadioButton}}}"
-                                               FontFamily="Roboto"
+                                               FontFamily="Segoe UI Light"
                                                FontWeight="Bold"
                                                FontSize="17"
                                                Foreground="#3A5EEA"
@@ -300,7 +300,7 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Trang Chủ" />
+                                                        Value="Trang chủ" />
 
                                                 <Setter Property="Content"
                                                         Value="TRANG CHỦ" />
@@ -340,7 +340,7 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Bán Hàng" />
+                                                        Value="Bán hàng" />
                                                 <Setter Property="Content"
                                                         Value="BÁN HÀNG" />
 
@@ -380,7 +380,7 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Sản Phẩm" />
+                                                        Value="Sản phẩm" />
                                                 <Setter Property="Content"
                                                         Value="SẢN PHẨM" />
 
@@ -420,7 +420,7 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Nhân Viên" />
+                                                        Value="Nhân viên" />
                                                 <Setter Property="Content"
                                                         Value="NHÂN VIÊN" />
                                                 <Setter Property="Image.Source"
@@ -460,7 +460,7 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Hóa Đơn" />
+                                                        Value="Hóa đơn" />
                                                 <Setter Property="Content"
                                                         Value="HÓA ĐƠN" />
 
@@ -500,7 +500,7 @@
                                                    BasedOn="{StaticResource SidePanelStyle}">
 
                                                 <Setter Property="TextBlock.Text"
-                                                        Value="Cài Đặt" />
+                                                        Value="Cài đặt" />
                                                 <Setter Property="Content"
                                                         Value="CÀI ĐẶT" />
 

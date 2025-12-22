@@ -12,6 +12,10 @@
 
         <Style x:Key="SidePanelStyle"
            TargetType="RadioButton">
+            <Setter Property="IsTabStop"
+                    Value="False" />
+            <Setter Property="Focusable"
+                    Value="False" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
@@ -230,6 +234,12 @@
 
         <Style x:Key="SidePanelListBoxStyle"
                TargetType="{x:Type ListBox}">
+
+            <Setter Property="IsTabStop"
+                    Value="False"/>
+
+            <Setter Property="Focusable"
+                    Value="False" />
 
             <Setter Property="VerticalAlignment"
                     Value="Top" />
@@ -546,30 +556,42 @@
                 </ListBox.ItemsPanel>
 
                 <ListBoxItem x:Name="dashboard_sidepanel_listboxitem"
+                             IsTabStop="False"
+                             Focusable="False"
                              Grid.Row="0"
                              Style="{StaticResource dashboard_listboxitem_style}"
                              IsEnabled="{Binding DataContext.IsAdmin, ElementName=ucPanel}"
                              Width="200"/>
 
                 <ListBoxItem x:Name="sellproducts_sidepanel_listboxitem"
+                             IsTabStop="False"
+                             Focusable="False"
                              Grid.Row="1"
                              Style="{StaticResource productselection_listboxitem_style}" />
 
                 <ListBoxItem x:Name="products_sidepanel_listboxitem"
+                             IsTabStop="False"
+                             Focusable="False"
                              Grid.Row="2"
                              IsEnabled="{Binding DataContext.IsAdmin, ElementName=ucPanel}"
                              Style="{StaticResource products_listboxitem_style}" />
 
                 <ListBoxItem x:Name="staff_sidepanel_listboxitem"
+                             IsTabStop="False"
+                             Focusable="False"
                              Grid.Row="3"
                              IsEnabled="{Binding DataContext.IsAdmin, ElementName=ucPanel}"
                              Style="{StaticResource staff_listboxitem_style}" />
 
                 <ListBoxItem x:Name="invoices_sidepanel_listboxitem"
+                             IsTabStop="False"
+                             Focusable="False"
                              Grid.Row="4"
                              Style="{StaticResource invoices_listboxitem_style}" />
 
                 <ListBoxItem x:Name="settings_sidepanel_listboxitem"
+                             IsTabStop="False"
+                             Focusable="False"
                              VerticalAlignment="Bottom"
                              Grid.Row="5"
                              Style="{StaticResource settings_listboxitem_style}" />

@@ -47,7 +47,7 @@ namespace Martify.ViewModels
                 {
                     if (parentWindow is LoginWindow)
                     {
-                        parentWindow.Close();
+                        System.Environment.Exit(0);
                     }
                     else
                     {

@@ -38,6 +38,7 @@ namespace Martify.ViewModels
         private bool _isLoggingIn = false;
         public ICommand LoginCommand { get; set; }
         public ICommand PasswordChangedCommand { get; set; }
+        public ICommand CloseWindowCommand { get; set; }
 
         public LoginVM()
         {
@@ -55,6 +56,14 @@ namespace Martify.ViewModels
 
             FailedLoginCommand = new RelayCommand(LoginErrorPopup);
             Status = null;
+
+            CloseWindowCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                if (!isLogin)
+                {
+                    System.Environment.Exit(0);
+                }
+            });
 
 
             //CreateAdminAccountIfMissing();

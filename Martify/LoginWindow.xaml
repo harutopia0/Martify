@@ -21,6 +21,12 @@
         Background="Transparent"
         Name="loginWindow">
 
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding CloseWindowCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
         <Border CornerRadius="20" Background="White">
             <Border.Effect>

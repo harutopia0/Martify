@@ -41,28 +41,51 @@ namespace Martify.ViewModels
 
         private void Logout(object obj)
         {
-            // 1. Dọn dẹp dữ liệu tĩnh & Session
+            // [MỚI] Xóa sạch các đơn hàng đang treo khi đăng xuất
             ProductSelectionVM.ClearStaticData();
+
             DataProvider.Ins.CurrentAccount = null;
             ConfigVisibility = Visibility.Collapsed;
 
-            // 2. Lấy cửa sổ hiện tại (cái cũ)
-            var oldWindow = Application.Current.MainWindow;
+         
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow == null)
+            {
+                foreach (Window w in Application.Current.Windows)
+                {
+                    if (w.DataContext is MainVM) { mainWindow = w; break; }
+                }
+            }
+            if (mainWindow != null) mainWindow.Hide();
 
-            // 3. Tạo cửa sổ mới
-            // KHI CỬA SỔ NÀY ĐƯỢC "SHOW", NÓ SẼ TỰ ĐỘNG CHẠY LoadedWindowCommand CỦA BẠN
-            // VÀ TỰ ĐỘNG HIỆN LOGIN WINDOW.
-            MainWindow newWindow = new MainWindow();
+           
+            LoginWindow loginWindow = new LoginWindow();
 
-            // 4. Gán cửa sổ chính của App sang cái mới (để tránh tắt App khi đóng cái cũ)
-            Application.Current.MainWindow = newWindow;
+            if (loginWindow.DataContext is LoginVM vm)
+            {
+                vm.isLogin = false;
+                vm.Username = ""; 
+                vm.Password = ""; 
+            }
 
-            // 5. Hiển thị cửa sổ mới
-            // (Ngay lúc này, MainVM sẽ chặn lại, ẩn đi và hiện Login như bạn muốn)
-            newWindow.Show();
+            // 4. Hiện màn hình đăng nhập
+            loginWindow.ShowDialog();
 
-            // 6. Đóng cửa sổ cũ đi
-            oldWindow?.Close();
+            // 5. Kiểm tra kết quả sau khi đóng form Login
+            if (loginWindow.DataContext is LoginVM loginVM && loginVM.isLogin)
+            {
+                // Chỉ khi đăng nhập thành công (isLogin = true) mới hiện lại Main
+                if (mainWindow != null && mainWindow.DataContext is MainVM mainVM)
+                {
+                    mainVM.LoadCurrentUserData();
+                }
+                mainWindow?.Show();
+            }
+            else
+            {
+                // Nếu tắt form Login (isLogin = false) -> Tắt App
+                System.Environment.Exit(0);
+            }
         }
 
 

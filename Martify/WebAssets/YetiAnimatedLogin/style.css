@@ -279,48 +279,72 @@ input[type="password"]::-ms-clear {
 	display: none;
 }
 
+/* --- PHẦN LOADING SCREEN GIỮ NGUYÊN LOGIC CŨ, CHỈ SỬA STYLE BÊN TRONG --- */
+
 #loading-screen {
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: transparent;
+	background-color: transparent; /* Giữ nguyên transparent như cũ */
 	z-index: 9999;
 	display: flex;
+	flex-direction: column; /* Thêm dòng này để text nằm dưới icon */
 	justify-content: center;
 	align-items: center;
-	transition: opacity 0.5s ease-out;
+	transition: opacity 0.5s ease-out; /* Giữ nguyên hiệu ứng mờ dần */
 }
 
+/* Class này được JS thêm vào để ẩn loading -> Logic cũ vẫn hoạt động */
 .hidden {
 	opacity: 0;
 	pointer-events: none;
 }
 
+/* Text Loading mới */
+#loading-screen p {
+	color: #1b1616;
+	margin-top: 20px;
+	letter-spacing: 2px;
+	font-size: 14px;
+	opacity: 0.8;
+}
+
+/* Animation Loader mới (Hình vuông) */
 .loader {
 	width: 48px;
 	height: 48px;
 	display: inline-block;
 	position: relative;
+	border: 2px solid #0080ff;
+	box-sizing: border-box;
+	animation: rotation 2s linear infinite;
 }
 
 	.loader::after,
 	.loader::before {
 		content: '';
-		width: 48px;
-		height: 48px;
-		border: 2px solid #217093;
+		box-sizing: border-box;
 		position: absolute;
 		left: 0;
+		right: 0;
 		top: 0;
-		box-sizing: border-box;
-		animation: rotation 2s ease-in-out infinite;
+		bottom: 0;
+		margin: auto;
+		border: 2px solid #FF3D00;
+		width: 38px;
+		height: 38px;
+		animation: rotationBack 1.5s linear infinite;
+		transform-origin: center center;
 	}
 
-	.loader::after {
-		border-color: #FF3D00;
-		animation-delay: 1s;
+	.loader::before {
+		width: 28px;
+		height: 28px;
+		border-color: #f500f5;
+		box-sizing: border-box;
+		animation: rotation 1s linear infinite;
 	}
 
 @keyframes rotation {
@@ -330,6 +354,16 @@ input[type="password"]::-ms-clear {
 
 	100% {
 		transform: rotate(360deg);
+	}
+}
+
+@keyframes rotationBack {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(-360deg);
 	}
 }
 

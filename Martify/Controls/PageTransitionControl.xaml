@@ -13,8 +13,9 @@
         </ContentControl>
 
         <Grid x:Name="LoadingOverlay" 
-              Background="Transparent"
-              Visibility="Collapsed">
+              Background="Transparent" 
+              Visibility="Collapsed"
+              IsHitTestVisible="True">
             <Border Background="{DynamicResource CardBackground}"
                     CornerRadius="20"
                     Padding="40"
@@ -32,19 +33,14 @@
                 <StackPanel VerticalAlignment="Center" 
                             HorizontalAlignment="Center">
                     <Grid Width="75" Height="75" Margin="0,0,0,20">
-                        <Ellipse Width="75" 
-                                 Height="75" 
-                                 Stroke="#2196F3" 
-                                 StrokeThickness="6" 
-                                 Opacity="0.2"/>
-
+                        
                         <Ellipse x:Name="SpinningCircle"
                                  Width="75" 
                                  Height="75" 
                                  Stroke="#2196F3" 
-                                 StrokeThickness="6"
+                                 StrokeThickness="13"
                                  StrokeDashCap="round"
-                                 StrokeDashArray="0 2"
+                                 StrokeDashArray="0 1.5"
                                  RenderTransformOrigin="0.5,0.5">
                             <Ellipse.RenderTransform>
                                 <RotateTransform x:Name="SpinTransform" Angle="0"/>
@@ -78,7 +74,7 @@
                                      Storyboard.TargetProperty="Angle"
                                      From="0"
                                      To="360"
-                                     Duration="0:0:5"
+                                     Duration="0:0:3"
                                      RepeatBehavior="Forever">
                         <DoubleAnimation.EasingFunction>
                             <QuadraticEase EasingMode="EaseInOut"/>

@@ -245,7 +245,8 @@
                         <Setter Property="FontSize" Value="13"/>
                         <Setter Property="FontWeight" Value="SemiBold"/>
                         <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Padding" Value="20,5"/>
+                        <Setter Property="Padding" Value="23 ,5"/>
+                       
                         <Setter Property="HorizontalContentAlignment" Value="Left"/>
                     </Style>
 

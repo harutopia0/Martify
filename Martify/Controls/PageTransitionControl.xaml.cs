@@ -9,6 +9,9 @@ namespace Martify.Controls
 {
     public partial class PageTransitionControl : UserControl
     {
+        private bool _isTransitioning = false;
+        private object _pendingPage = null;
+
         public static readonly DependencyProperty CurrentPageProperty =
             DependencyProperty.Register(
                 nameof(CurrentPage),
@@ -26,7 +29,14 @@ namespace Martify.Controls
         {
             if (d is PageTransitionControl control)
             {
-                await control.TransitionToNewPage(e.NewValue);
+                // Nếu đang chuyển trang, chỉ lưu lại trang mới nhất và thoát
+                if (control._isTransitioning)
+                {
+                    control._pendingPage = e.NewValue;
+                    return;
+                }
+
+                await control.InternalTransition(e.NewValue);
             }
         }
 
@@ -35,34 +45,49 @@ namespace Martify.Controls
             InitializeComponent();
         }
 
-        private async Task TransitionToNewPage(object newPage)
+        private async Task InternalTransition(object newPage)
         {
             if (newPage == null) return;
 
-            // Step 1: Fade out current content
-            await FadeOutContent();
+            _isTransitioning = true;
+            _pendingPage = null; // Xóa trang chờ vì chúng ta đang xử lý trang hiện tại
 
-            // Step 2: Show loading overlay
-            LoadingOverlay.Visibility = Visibility.Visible;
-            await Task.Delay(600); // Simulate loading time
+            try
+            {
+                // Bước 1: Fade out
+                await FadeOutContent();
 
-            // Step 3: Update content
-            PageContent.Content = newPage;
+                // Bước 2: Hiển thị loading và đợi
+                LoadingOverlay.Visibility = Visibility.Visible;
+                await Task.Delay(400);
 
-            // Step 4: Hide loading overlay
-            LoadingOverlay.Visibility = Visibility.Collapsed;
+                // Bước 3: Cập nhật nội dung
+                PageContent.Content = newPage;
 
-            // Step 5: Fade in new content
-            await FadeInContent();
+                // Bước 4: Ẩn loading
+                LoadingOverlay.Visibility = Visibility.Collapsed;
+
+                // Bước 5: Fade in
+                await FadeInContent();
+            }
+            finally
+            {
+                _isTransitioning = false;
+
+                // KIỂM TRA: Nếu trong lúc đang chạy có một click mới (_pendingPage có dữ liệu)
+                // thì thực hiện chuyển đến trang đó ngay lập tức.
+                if (_pendingPage != null)
+                {
+                    await InternalTransition(_pendingPage);
+                }
+            }
         }
 
         private Task FadeOutContent()
         {
             var tcs = new TaskCompletionSource<bool>();
-
             var storyboard = new Storyboard();
 
-            // Fade out opacity
             var fadeOut = new DoubleAnimation
             {
                 From = PageContent.Opacity,
@@ -74,7 +99,6 @@ namespace Martify.Controls
             Storyboard.SetTargetProperty(fadeOut, new PropertyPath(OpacityProperty));
             storyboard.Children.Add(fadeOut);
 
-            // Slide up slightly
             var slideUp = new DoubleAnimation
             {
                 From = 0,
@@ -88,17 +112,14 @@ namespace Martify.Controls
 
             storyboard.Completed += (s, e) => tcs.SetResult(true);
             storyboard.Begin();
-
             return tcs.Task;
         }
 
         private Task FadeInContent()
         {
             var tcs = new TaskCompletionSource<bool>();
-
             var storyboard = new Storyboard();
 
-            // Fade in opacity
             var fadeIn = new DoubleAnimation
             {
                 From = 0,
@@ -110,7 +131,6 @@ namespace Martify.Controls
             Storyboard.SetTargetProperty(fadeIn, new PropertyPath(OpacityProperty));
             storyboard.Children.Add(fadeIn);
 
-            // Slide in from below
             var slideIn = new DoubleAnimation
             {
                 From = 20,
@@ -124,7 +144,6 @@ namespace Martify.Controls
 
             storyboard.Completed += (s, e) => tcs.SetResult(true);
             storyboard.Begin();
-
             return tcs.Task;
         }
     }

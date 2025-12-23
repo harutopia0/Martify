@@ -97,7 +97,10 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                                     </Grid.RowDefinitions>
 
                                     <!-- Bar Container -->
-                                    <Grid Grid.Row="0" VerticalAlignment="Bottom" Margin="0,0,0,5">
+                                    <Grid Grid.Row="0" 
+                                          VerticalAlignment="Bottom" 
+                                          Margin="0,0,0,5"
+                                          ToolTipService.InitialShowDelay="0">
                                         <Grid.ToolTip>
                                             <ToolTip Background="Transparent" 
                                                      BorderBrush="Transparent"
@@ -853,7 +856,8 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                                     <Border Background="{DynamicResource ItemBackground}" 
                                             CornerRadius="15" 
                                             Padding="15" 
-                                            Margin="5,5,5,10">
+                                            Margin="5,5,5,10"
+                                            ToolTipService.InitialShowDelay="0">
                                         <Border.ToolTip>
                                             <ToolTip Background="Transparent" 
                                                      BorderBrush="Transparent"
@@ -1214,7 +1218,8 @@ d:DataContext="{d:DesignInstance Type=vm:DashboardVM, IsDesignTimeCreatable=True
                                     <Border Background="{DynamicResource ItemBackground}" 
                                             CornerRadius="15" 
                                             Padding="12" 
-                                            Margin="5,5,5,10">
+                                            Margin="5,5,5,10"
+                                            ToolTipService.InitialShowDelay="0">
                                         <Border.ToolTip>
                                             <ToolTip Background="Transparent" 
                                                      BorderBrush="Transparent"

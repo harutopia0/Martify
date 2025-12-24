@@ -57,12 +57,14 @@ namespace Martify.Controls
                 // Bước 1: Fade out
                 await FadeOutContent();
 
-                // Bước 2: Hiển thị loading và đợi
-                LoadingOverlay.Visibility = Visibility.Visible;
-                await Task.Delay(400);
-
                 // Bước 3: Cập nhật nội dung
                 PageContent.Content = newPage;
+
+                // Bước 2: Hiển thị loading và đợi
+                LoadingOverlay.Visibility = Visibility.Visible;
+                await Task.Delay(500);
+
+
 
                 // Bước 4: Ẩn loading
                 LoadingOverlay.Visibility = Visibility.Collapsed;

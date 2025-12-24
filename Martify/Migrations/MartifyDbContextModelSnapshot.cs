@@ -202,6 +202,9 @@ namespace Martify.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ImagePath")
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");

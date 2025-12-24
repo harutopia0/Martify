@@ -101,7 +101,8 @@
 
             <Grid Grid.Column="1">
                 <ctrl:PageTransitionControl x:Name="Pages" 
-                                            CurrentPage="{Binding Navigation.CurrentView}"/>
+                                            CurrentPage="{Binding Navigation.CurrentView}"
+                                            x:FieldModifier="public"/>
 
             </Grid>
 

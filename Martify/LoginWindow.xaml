@@ -21,6 +21,12 @@
         Background="Transparent"
         Name="loginWindow">
 
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding CloseWindowCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
         <Border CornerRadius="20" Background="White">
             <Border.Effect>
@@ -29,7 +35,7 @@
             <Border CornerRadius="20">
                 <Border.Background>
                     <ImageBrush ImageSource="{StaticResource LoginBackground}"
-                                Stretch="UniformToFill" Opacity="0.1"/>
+                                Stretch="UniformToFill"/>
                 </Border.Background>
             </Border>
         </Border>

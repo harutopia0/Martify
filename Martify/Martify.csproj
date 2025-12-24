@@ -209,6 +209,15 @@
 	  <None Update="Resources\Sounds\store-scanner-beep.wav">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="WebAssets\ThemeToggle\index.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="WebAssets\ThemeToggle\script.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="WebAssets\ThemeToggle\style.css">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="WebAssets\YetiAnimatedLogin\index.html">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>

@@ -78,7 +78,7 @@ namespace Martify.ViewModels
                     var catName = cat?.CategoryName;
                     if (!string.Equals(SelectedCategoryText, catName, StringComparison.Ordinal))
                     {
-                        _selectedCategoryText = catName; // set backing field to avoid setter logic
+                        _selectedCategoryText = catName;
                         OnPropertyChanged(nameof(SelectedCategoryText));
                     }
                 }
@@ -127,7 +127,7 @@ namespace Martify.ViewModels
                 if (!string.IsNullOrWhiteSpace(_selectedCategoryText) && CategoryList != null)
                 {
                     var match = CategoryList
-                        .FirstOrDefault(c => string.Equals(c.CategoryName?.Trim(), _selectedCategoryText.Trim(), StringComparison.OrdinalIgnoreCase));
+                        .FirstOrDefault(p => p.CategoryName.Trim().ToLower() == SelectedCategoryText.Trim().ToLower());
 
                     if (match != null)
                     {

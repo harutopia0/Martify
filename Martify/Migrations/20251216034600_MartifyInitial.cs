@@ -106,7 +106,6 @@ namespace Martify.Migrations
                     ProductName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Unit = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Price = table.Column<decimal>(type: "TEXT", nullable: false),
-                    Cost = table.Column<decimal>(type: "TEXT", nullable: false),
                     StockQuantity = table.Column<int>(type: "INTEGER", nullable: false),
                     ImagePath = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
                     CategoryID = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false)

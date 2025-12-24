@@ -169,7 +169,7 @@ Martify/
 | **Quản lý (Admin)** | `admin` | `admin` | Toàn quyền |
 | **Nhân viên (Staff)** | `staff` | `staff` | Chỉ truy cập Bán hàng & Tra cứu |
 
-Lưu ý: Dữ liệu có sẵn chỉ có 2 tài khoản trên, các bảng dữ liệu khác sẽ trống.
+Lưu ý: Dữ liệu có sẵn chỉ có 2 tài khoản trên, các bảng dữ liệu khác sẽ trống.  
 Sao chép file `Martify.db` vào thư mục `bin\debug` và chọn ghi đè, chạy lại ứng dụng để dùng dữ liệu mẫu.
 
 ---

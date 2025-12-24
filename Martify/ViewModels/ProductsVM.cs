@@ -135,7 +135,6 @@ namespace Martify.ViewModels
                     InventoryAlertFilter = InventoryAlertType.None;
                 });
 
-            // Load data
             LoadData();
         }
 
@@ -336,7 +335,7 @@ namespace Martify.ViewModels
                     $"Xóa sản phẩm:\n\nMã: {product.ProductID}\nTên: {product.ProductName}?",
                     "Xác nhận xóa",
                     MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
+                    MessageBoxImage.Warning);   
 
                 if (result == MessageBoxResult.Yes)
                 {

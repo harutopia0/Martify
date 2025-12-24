@@ -23,6 +23,7 @@ namespace Martify.Models
 
         [Range(0, double.MaxValue, ErrorMessage = "Giá không được âm")]
         public decimal Price { get; set; }
+        public decimal Cost { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Tồn kho không được âm")]
         public int StockQuantity { get; set; }

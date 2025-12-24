@@ -15,8 +15,8 @@
         <vm:SettingsVM />
     </UserControl.DataContext>
 
-    <Grid Background="{DynamicResource MainBackground}">
-        <TextBlock Text="Cài Đặt Hệ Thống"
+    <Grid>
+        <TextBlock Text="Cài đặt hệ thống"
                    FontSize="30" FontFamily="Roboto Black" 
                    Foreground="{DynamicResource PrimaryText}"
                    Margin="30,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -43,7 +43,7 @@
                             <materialDesign:PackIcon Grid.Column="0" Kind="AccountCircle" Width="40" Height="40" Foreground="#067FF8" VerticalAlignment="Center"/>
 
                             <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="Thông Tin Tài Khoản" FontSize="18" FontFamily="Roboto Bold" 
+                                <TextBlock Text="Thông tin tài khoản" FontSize="18" FontFamily="Roboto Bold" 
                                            Foreground="{DynamicResource PrimaryText}"/>
                                 <TextBlock Text="Chỉnh sửa thông tin cá nhân và mật khẩu" FontSize="14" FontFamily="Roboto" 
                                            Foreground="{DynamicResource SecondaryText}"/>
@@ -67,7 +67,7 @@
                             <materialDesign:PackIcon Grid.Column="0" Kind="ThemeLightDark" Width="40" Height="40" Foreground="#9C27B0" VerticalAlignment="Center"/>
 
                             <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="Giao Diện" FontSize="18" FontFamily="Roboto Bold" 
+                                <TextBlock Text="Giao diện" FontSize="18" FontFamily="Roboto Bold" 
                                            Foreground="{DynamicResource PrimaryText}"/>
                                 <TextBlock Text="Chuyển đổi giữa chế độ Sáng / Tối" FontSize="14" FontFamily="Roboto" 
                                            Foreground="{DynamicResource SecondaryText}"/>
@@ -99,9 +99,9 @@
                             </Grid.ColumnDefinitions>
                             <materialDesign:PackIcon Grid.Column="0" Kind="Information" Width="40" Height="40" Foreground="#4CAF50" VerticalAlignment="Center"/>
                             <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="Về Martify" FontSize="18" FontFamily="Roboto Bold" 
+                                <TextBlock Text="Martify" FontSize="18" FontFamily="Roboto Bold" 
                                            Foreground="{DynamicResource PrimaryText}"/>
-                                <TextBlock Text="Phiên bản 1.0.0 - Copyright 2025" FontSize="14" FontFamily="Roboto" 
+                                <TextBlock Text="Phiên bản 1.0.0" FontSize="14" FontFamily="Roboto" 
                                            Foreground="{DynamicResource SecondaryText}"/>
                             </StackPanel>
                         </Grid>
@@ -122,7 +122,7 @@
                                                      VerticalAlignment="Center"/>
 
                             <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="Đăng Xuất" FontSize="18" FontFamily="Roboto Bold" 
+                                <TextBlock Text="Đăng xuất" FontSize="18" FontFamily="Roboto Bold" 
                                            Foreground="{DynamicResource PrimaryText}"/>
                                 <TextBlock Text="Thoát khỏi phiên làm việc hiện tại" FontSize="14" FontFamily="Roboto" 
                                            Foreground="{DynamicResource SecondaryText}"/>

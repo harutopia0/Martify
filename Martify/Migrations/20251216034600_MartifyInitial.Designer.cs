@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Martify.Migrations
 {
     [DbContext(typeof(MartifyDbContext))]
-    [Migration("20251224074951_MartifyInitial")]
+    [Migration("20251216034600_MartifyInitial")]
     partial class MartifyInitial
     {
         /// <inheritdoc />
@@ -203,9 +203,6 @@ namespace Martify.Migrations
                     b.Property<string>("CategoryID")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Cost")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImagePath")

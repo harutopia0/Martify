@@ -4,8 +4,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:vm="clr-namespace:Martify.ViewModels"
         Title="Lịch Sử Nhập Hàng" 
-        Height="750" 
-        Width="1100"
+        Height="700" 
+        Width="900"
         WindowStyle="None"
         BorderThickness="0"
         AllowsTransparency="True"
@@ -236,7 +236,7 @@
                                                 </StackPanel>
                                             </StackPanel>
 
-                                            <!-- Supplier -->
+                                            <!-- Supplier --><!--
                                             <StackPanel Grid.Column="2" Margin="15">
                                                 <TextBlock Text="NHÀ CUNG CẤP" 
                                                            Style="{StaticResource HeaderText}"
@@ -254,7 +254,7 @@
                                                                Style="{StaticResource DataText}"
                                                                TextTrimming="CharacterEllipsis"/>
                                                 </StackPanel>
-                                            </StackPanel>
+                                            </StackPanel>-->
 
                                             <!-- Employee -->
                                             <StackPanel Grid.Column="3" Margin="15">

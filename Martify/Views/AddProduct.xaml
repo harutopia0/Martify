@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Name="addProductWindow"
         Title="Thêm sản phẩm mới" 
-        Height="550" 
+        Height="500" 
         Width="850"
         WindowStyle="None"
         BorderThickness="0"
@@ -152,7 +152,7 @@
 
                         <!-- Nút chọn ảnh -->
                         <Button Height="45"
-                                
+                                IsTabStop="False"
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource MaterialDesignRaisedButton}"
                                 Command="{Binding SelectImageCommand}"
@@ -203,6 +203,7 @@
                                 <TextBox Grid.Column="1"
                                          Text="(Tự động tạo)"
                                          IsReadOnly="True"
+                                         IsTabStop="False"
                                          Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                          Height="45"
                                          FontSize="13"
@@ -267,19 +268,7 @@
                                          Style="{StaticResource ValidatedTextBox}"/>
                             </Grid>
 
-                            <!-- Số lượng tồn -->
-                            <Grid Margin="0,0,0,15">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" 
-                                           Text="Số lượng *" 
-                                           Style="{StaticResource LabelText}"/>
-                                <TextBox Grid.Column="1"
-                                         Text="{Binding StockQuantity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                         Style="{StaticResource ValidatedTextBox}"/>
-                            </Grid>
+                            
 
                             <!-- Danh mục -->
                             <Grid Margin="0,0,0,15">

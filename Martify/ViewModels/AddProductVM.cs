@@ -62,6 +62,7 @@ namespace Martify.ViewModels
         }
 
         private string _selectedCategoryID;
+
         public string SelectedCategoryID
         {
             get => _selectedCategoryID;
@@ -69,26 +70,13 @@ namespace Martify.ViewModels
             {
                 if (_selectedCategoryID == value) return;
                 _selectedCategoryID = value;
-                CategoryID = value; // Giữ đồng bộ
+                CategoryID = value;
 
-                // When an existing category is selected, update the displayed text to its name (no recursion)
-                if (!string.IsNullOrWhiteSpace(_selectedCategoryID) && CategoryList != null)
+                var category = CategoryList?.FirstOrDefault(c => c.CategoryID == value);
+                if (category != null)
                 {
-                    var cat = CategoryList.FirstOrDefault(c => c.CategoryID == _selectedCategoryID);
-                    var catName = cat?.CategoryName;
-                    if (!string.Equals(SelectedCategoryText, catName, StringComparison.Ordinal))
-                    {
-                        _selectedCategoryText = catName;
-                        OnPropertyChanged(nameof(SelectedCategoryText));
-                    }
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(SelectedCategoryText))
-                    {
-                        _selectedCategoryText = null;
-                        OnPropertyChanged(nameof(SelectedCategoryText));
-                    }
+                    _selectedCategoryText = category.CategoryName;
+                    OnPropertyChanged(nameof(SelectedCategoryText));
                 }
 
                 OnPropertyChanged();
@@ -123,30 +111,30 @@ namespace Martify.ViewModels
                 if (_selectedCategoryText == value) return;
                 _selectedCategoryText = value;
 
-                // if typed text matches an existing CategoryName, sync SelectedCategoryID
                 if (!string.IsNullOrWhiteSpace(_selectedCategoryText) && CategoryList != null)
                 {
-                    var match = CategoryList
-                        .FirstOrDefault(p => p.CategoryName.Trim().ToLower() == SelectedCategoryText.Trim().ToLower());
+                    var match = CategoryList.FirstOrDefault(p =>
+                        string.Equals(p.CategoryName.Trim(), _selectedCategoryText.Trim(), StringComparison.OrdinalIgnoreCase));
 
                     if (match != null)
                     {
-                        if (!string.Equals(SelectedCategoryID, match.CategoryID, StringComparison.Ordinal))
-                            SelectedCategoryID = match.CategoryID;
+                        if (_selectedCategoryID != match.CategoryID)
+                        {
+                            _selectedCategoryID = match.CategoryID;
+                            CategoryID = match.CategoryID;
+                            OnPropertyChanged(nameof(SelectedCategoryID));
+                        }
                     }
                     else
                     {
-                        // user typed a new category name -> clear SelectedCategoryID so SaveProduct will create it
-                        if (!string.IsNullOrEmpty(SelectedCategoryID))
-                            SelectedCategoryID = null;
+                        if (_selectedCategoryID != null)
+                        {
+                            _selectedCategoryID = null;
+                            CategoryID = null;
+                            OnPropertyChanged(nameof(SelectedCategoryID));
+                        }
                     }
                 }
-                else
-                {
-                    if (!string.IsNullOrEmpty(SelectedCategoryID))
-                        SelectedCategoryID = null;
-                }
-
                 OnPropertyChanged();
             }
         }
@@ -396,7 +384,7 @@ namespace Martify.ViewModels
                 {
                     // check by name
                     var existing = DataProvider.Ins.DB.ProductCategories
-                        .FirstOrDefault(c => c.CategoryName.Trim().Equals(typedCategory, StringComparison.OrdinalIgnoreCase));
+                        .FirstOrDefault(c => c.CategoryName.Trim().ToLower() == typedCategory.ToLower()); 
                     if (existing != null)
                     {
                         chosenCategoryID = existing.CategoryID;
@@ -414,8 +402,9 @@ namespace Martify.ViewModels
                         DataProvider.Ins.DB.SaveChanges();
 
                         // update local list & chosen id
-                        LoadCategories(); // reload to keep view consistent
                         chosenCategoryID = newCatId;
+                        LoadCategories(); // reload to keep view consistent
+
                     }
                 }
 
@@ -430,7 +419,7 @@ namespace Martify.ViewModels
                     ProductName = ProductName.Trim(),
                     Unit = newUnit,
                     Price = Price.Value,
-                    StockQuantity = StockQuantity.Value,
+                    StockQuantity = 0,
                     ImagePath = dbImagePath,
                     CategoryID = chosenCategoryID,
                 };

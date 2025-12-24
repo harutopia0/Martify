@@ -488,6 +488,7 @@ namespace Martify.ViewModels
 
                     if (product != null)
                     {
+                        //Thêm sản phẩm mới nếu đơn giá khác
                         if (product.Price != item.UnitPrice)
                         {
                             var newProduct = new Product
@@ -503,10 +504,30 @@ namespace Martify.ViewModels
 
                             item.ProductID = newProduct.ProductID;
                             DataProvider.Ins.DB.Products.Add(newProduct);
-                            newProduct.StockQuantity += item.Quantity;
+                            DataProvider.Ins.DB.SaveChanges();
+                            product = newProduct;
                         }
-                        else
-                            product.StockQuantity += item.Quantity;
+                        //Thêm sản phẩm mới nếu khác nhà cung cấp
+                        else if (product.ImportReceiptDetails
+                            .FirstOrDefault(ird => ird.ImportReceipt.SupplierID == SelectedSupplierID) == null)
+                        {
+                            var newProduct = new Product
+                            {
+                                ProductID = GenerateProductID(),
+                                ProductName = product.ProductName,
+                                Unit = product.Unit,
+                                Price = item.UnitPrice,
+                                StockQuantity = 0,
+                                CategoryID = product.CategoryID,
+                                ImagePath = product.ImagePath
+                            };
+                            item.ProductID = newProduct.ProductID;
+                            DataProvider.Ins.DB.Products.Add(newProduct);
+                            DataProvider.Ins.DB.SaveChanges();
+                            product = newProduct;
+                        }
+
+                        product.StockQuantity += item.Quantity;
 
                         var detail = new ImportReceiptDetail
                         {

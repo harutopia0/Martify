@@ -60,9 +60,7 @@
     </Window.Resources>
 
     <Border Background="#F5F5F5" CornerRadius="15">
-        <Border.Effect>
-            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
-        </Border.Effect>
+      
 
         <Grid>
             <Grid.RowDefinitions>

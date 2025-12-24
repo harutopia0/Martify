@@ -392,30 +392,21 @@
                     <DataGridTemplateColumn Header="CÔNG CỤ" Width="1*" MinWidth="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                     <Button Style="{StaticResource MaterialDesignIconButton}"
                                             ToolTip="Chỉnh sửa"
                                             Command="{Binding DataContext.OpenDetailsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}"
                                             Width="25" Height="25"
-                                            Margin="0,0,4,0">
+                                            Margin="15,0,4,0"
+                                            HorizontalAlignment="Left">
                                         <materialDesign:PackIcon Kind="Pencil" 
                                                                Width="18" 
                                                                Height="18"
                                                                Foreground="#2196F3"/>
                                     </Button>
 
-                                    <Button Style="{StaticResource MaterialDesignIconButton}"
-                                            ToolTip="Xóa"
-                                            Command="{Binding DataContext.DeleteProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}"
-                                            Width="25" Height="25">
-                                        <materialDesign:PackIcon Kind="Delete" 
-                                                               Width="18" 
-                                                               Height="18"
-                                                               Foreground="#F44336"/>
-                                    </Button>
-                                </StackPanel>
+                                    
+                                    
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

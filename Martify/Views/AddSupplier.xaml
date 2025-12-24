@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Name="addSupplierWindow"
         Title="Thêm nhà cung cấp" 
-        Height="680" 
+        Height="600" 
         Width="520"
         WindowStyle="None"
         Background="Transparent"
@@ -57,9 +57,7 @@
     </Window.Resources>
 
     <Border Background="#F5F5F5" CornerRadius="15">
-        <Border.Effect>
-            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
-        </Border.Effect>
+
 
         <Grid>
             <Grid.RowDefinitions>
@@ -183,14 +181,7 @@
                                      MaxLength="11"
                                      Margin="0,0,0,18"/>
 
-                            <!-- Email -->
-                            <TextBlock Text="Email (Tùy chọn)" 
-                                       Style="{StaticResource LabelText}"/>
-                            <TextBox materialDesign:HintAssist.Hint="example@company.com"
-                                     Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                     Style="{StaticResource ValidatedTextBox}"
-                                     MaxLength="255"
-                                     Margin="0,0,0,18"/>
+                           
 
                             <!-- Address -->
                             <TextBlock Text="Địa chỉ (Tùy chọn)" 
@@ -199,7 +190,7 @@
                                      Text="{Binding Address, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                      Style="{StaticResource ValidatedTextBox}"
                                      MaxLength="300"
-                                     Height="80"
+                                     Height="100"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      VerticalContentAlignment="Top"

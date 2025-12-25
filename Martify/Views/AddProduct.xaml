@@ -19,7 +19,7 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
 
-        <Window.DataContext>
+    <Window.DataContext>
         <vm:AddProductVM />
     </Window.DataContext>
 
@@ -59,7 +59,7 @@
     </Window.Resources>
 
     <Border Background="#F5F5F5" CornerRadius="15">
-       
+
 
         <Grid>
             <Grid.RowDefinitions>
@@ -72,17 +72,42 @@
                     Background="#2196F3" 
                     CornerRadius="15,15,0,0"
                     MouseLeftButtonDown="Border_MouseLeftButtonDown">
-                <Grid Background="Transparent">
+                <StackPanel Orientation="Horizontal" Background="Transparent" VerticalAlignment="Center">
+                    <Border
+                            CornerRadius="50"
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Center"
+                            Width="40"
+                            Height="40"
+                            Margin="15,0,0,0">
+                        <Border.Background>
+                            <SolidColorBrush Color="White" Opacity="0.7"/>
+                        </Border.Background>
+
+                        <materialDesign:PackIcon Kind="PackageVariantAdd"
+                                               Foreground="#067FF8"
+                                               Width="30" 
+                                               Height="30"
+                                               Opacity="1"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,0,0,0"/>
+
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="5" ShadowDepth="0" Opacity="0.2"/>
+                        </Border.Effect>
+                    </Border>
+
                     <TextBlock Text="Thêm sản phẩm mới" 
                                FontSize="20" 
                                FontWeight="SemiBold"
                                Background="Transparent"
                                Foreground="White"
                                VerticalAlignment="Center"
-                               Margin="25,0,0,0"/>
-                    
-                    
-                </Grid>
+                               Margin="10,0,0,0"/>
+
+
+                </StackPanel>
             </Border>
 
             <!-- Nội dung chính -->
@@ -252,7 +277,7 @@
                                     </ComboBox.Text>
                                 </ComboBox>
                             </Grid>
-                            
+
                             <!-- Số lượng tồn -->
                             <Grid Margin="0,0,0,15">
                                 <Grid.ColumnDefinitions>
@@ -282,7 +307,7 @@
                                          Style="{StaticResource ValidatedTextBox}"/>
                             </Grid>
 
-                            
+
 
                             <!-- Danh mục -->
                             <Grid Margin="0,0,0,15">
@@ -310,7 +335,7 @@
                                 </ComboBox>
                             </Grid>
 
-                           
+
                         </StackPanel>
 
                         <!-- Nút hành động -->

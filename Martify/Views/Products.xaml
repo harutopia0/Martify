@@ -131,7 +131,7 @@
 
             <!-- Action Buttons -->
             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <!-- Import Button -->
+                <!-- Import Button --><!--
                 <Button Margin="0,0,12,0"
                         Height="44"
                         Padding="20,0"
@@ -153,26 +153,37 @@
                                    FontSize="14"
                                    FontWeight="SemiBold"/>
                     </StackPanel>
-                </Button>
+                </Button>-->
 
                 <!-- Add Product Button -->
                 <Button Height="44"
-                        Padding="20,0"
+                        Padding="10,0"
                         Command="{Binding AddProductCommand}"
                         Style="{StaticResource MaterialDesignRaisedButton}"
-                        Background="#633FCE" 
-                        Foreground="White"
-                        BorderThickness="0"
-                        ToolTip="Thêm sản phẩm mới">
+                        Background="#FAFAFA" 
+                        Foreground="#067FF8"
+                        BorderThickness="1.5"
+                        ToolTip="Thêm sản phẩm mới"
+                        BorderBrush="#067FF8">
                     <Button.Effect>
-                        <DropShadowEffect Color="#633FCE" BlurRadius="12" ShadowDepth="3" Opacity="0.3"/>
+                        <DropShadowEffect Color="#FAFAFA" BlurRadius="12" ShadowDepth="3" Opacity="0.3"/>
                     </Button.Effect>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Plus" 
-                                               Width="22" 
-                                               Height="22" 
-                                               VerticalAlignment="Center"
-                                               Margin="0,0,10,0"/>
+                        <Border Background="#E3F2FD"
+                                CornerRadius="50"
+                                HorizontalAlignment="Left" 
+                                Width="34"
+                                Height="34"
+                                Margin="0,0,10,0">
+                          <materialDesign:PackIcon Kind="PackageVariantAdd"
+                                                   Width="22" 
+                                                   Height="22" 
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"
+                                                   Margin="0,0,0,0"/>
+
+                            
+                        </Border>
                         <TextBlock Text="Thêm sản phẩm" 
                                    VerticalAlignment="Center"
                                    FontSize="14"

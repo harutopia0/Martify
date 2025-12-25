@@ -419,7 +419,7 @@ namespace Martify.ViewModels
                     ProductName = ProductName.Trim(),
                     Unit = newUnit,
                     Price = Price.Value,
-                    StockQuantity = 0,
+                    StockQuantity = StockQuantity.Value,
                     ImagePath = dbImagePath,
                     CategoryID = chosenCategoryID,
                 };

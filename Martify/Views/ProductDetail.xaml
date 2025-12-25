@@ -4,7 +4,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:cv="clr-namespace:Martify.Converters"
         Title="Chi tiết sản phẩm"
-        Height="580"
+        Height="550"
         Width="400"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
@@ -86,7 +86,7 @@
 
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                         <!-- Avatar / Product Image với viền trắng -->
-                        <Border Width="120" Height="120" CornerRadius="15" Panel.ZIndex="2"
+                        <Border Margin="0 10 0 0" Width="140" Height="140" CornerRadius="15" Panel.ZIndex="2"
                             BorderBrush="White" BorderThickness="3" 
                             Background="White">
                             <Border.Effect>
@@ -103,13 +103,8 @@
                             </Rectangle>
                         </Border>
 
-                        <TextBlock Text="{Binding EditProductName}" 
-                               Margin="0,15,0,0"
-                               FontSize="18" FontWeight="Bold" Foreground="White"
-                               HorizontalAlignment="Center" TextAlignment="Center"
-                               TextWrapping="Wrap" MaxWidth="300"/>
-
-                        <Border Background="#40000000" CornerRadius="10" Padding="8,2" Margin="0,5,0,0" HorizontalAlignment="Center">
+                        
+                        <Border Background="#40000000" CornerRadius="10" Padding="8,2" Margin="0,15,0,0" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding SelectedDetailProduct.ProductID}" 
                                    FontSize="12" Foreground="White" Opacity="0.9"/>
                         </Border>
@@ -121,7 +116,7 @@
             <ScrollViewer Grid.Row="1" Margin="25 10,25 0" VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
                     <!-- Row: Name & Category -->
-                    <Grid Margin="0,5,0,10">
+                    <Grid Margin="0,5,0,20">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
@@ -137,7 +132,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <Grid Margin="0,0,0,10"> 
+                    <Grid Margin="0,0,0,20"> 
                         <StackPanel>
                             <TextBlock Text="DANH MỤC" Style="{StaticResource FieldLabelStyle}" FontFamily="Roboto Black"/>
                             <ComboBox ItemsSource="{Binding Categories}"
@@ -206,16 +201,7 @@
                     <!-- Unit & Supplier -->
 
 
-                    <StackPanel Margin="0,0,0,10">
-                        <TextBlock Text="NHÀ CUNG CẤP" Style="{StaticResource FieldLabelStyle}" FontFamily="Roboto Black"/>
-                        <Border Background="#F8F9FA" CornerRadius="8" Padding="10,8">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Factory" Foreground="#9E9E9E" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding SupplierName, TargetNullValue='Chưa xác định'}"  FontFamily="Roboto Black"
-                                      Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Medium" Foreground="#616161"/>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
+                   
 
                     <!-- Error/Success Message -->
                     <TextBlock Text="{Binding SaveMessage}"

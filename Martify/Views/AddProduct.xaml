@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Name="addProductWindow"
         Title="Thêm sản phẩm mới" 
-        Height="500" 
+        Height="550" 
         Width="850"
         WindowStyle="None"
         BorderThickness="0"
@@ -252,7 +252,21 @@
                                     </ComboBox.Text>
                                 </ComboBox>
                             </Grid>
-
+                            
+                            <!-- Số lượng tồn -->
+                            <Grid Margin="0,0,0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           Text="Số lượng" 
+                                           Style="{StaticResource LabelText}"/>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding StockQuantity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, StringFormat=N0}"
+                                         materialDesign:HintAssist.Hint="Nhập số lượng"
+                                         Style="{StaticResource ValidatedTextBox}"/>
+                            </Grid>
                             <!-- Giá -->
                             <Grid Margin="0,0,0,15">
                                 <Grid.ColumnDefinitions>

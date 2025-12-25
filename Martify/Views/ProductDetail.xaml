@@ -72,7 +72,7 @@
     </Window.Resources>
 
     <!-- Border chính để tạo Shadow và Bo góc cho toàn bộ Window -->
-    <Border Margin="15" Background="White" CornerRadius="25">
+    <Border Margin="15" Background="{DynamicResource MainBackground}" CornerRadius="25">
         <Border.Effect>
             <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.15" Color="Black"/>
         </Border.Effect>

@@ -111,7 +111,7 @@
             </Border>
 
             <!-- Nội dung chính -->
-            <Border Grid.Row="1" Background="#F5F5F5" CornerRadius="0 0 15 15"></Border>
+            <Border Grid.Row="1" Background="{DynamicResource MainBackground}" CornerRadius="0 0 15 15"></Border>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="280"/>

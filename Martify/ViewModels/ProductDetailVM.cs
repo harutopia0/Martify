@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,7 +11,7 @@ using System.Windows.Input;
 
 namespace Martify.ViewModels
 {
-    public class ProductDetailVM : BaseVM
+    public class ProductDetailVM : BaseVM, IDataErrorInfo
     {
         public event EventHandler RequestClose;
 
@@ -146,7 +147,7 @@ namespace Martify.ViewModels
             set { _unitList = value; OnPropertyChanged(); }
         }
 
-        private string _editUnit; // Lưu giá trị thực tế của Product
+        private string _editUnit;
         public string EditUnit
         {
             get => _editUnit;
@@ -158,9 +159,67 @@ namespace Martify.ViewModels
             get => EditUnit;
             set
             {
-                EditUnit = value; // Gán trực tiếp vì Unit chỉ là string
+                EditUnit = value;
                 OnPropertyChanged();
             }
+        }
+
+        // =================================================================================================
+        // XÁC THỰC DỮ LIỆU (VALIDATION)
+        // =================================================================================================
+
+        private bool _isSaveClicked = false;
+
+        public string Error => null;
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = GetValidationError(columnName);
+                if (string.IsNullOrEmpty(error)) return null;
+                if (!_isSaveClicked) return null;
+                return error;
+            }
+        }
+
+        private string GetValidationError(string columnName)
+        {
+            string result = null;
+            switch (columnName)
+            {
+                case nameof(EditProductName):
+                    if (string.IsNullOrWhiteSpace(EditProductName))
+                        result = "Vui lòng nhập tên sản phẩm.";
+                    else if (EditProductName.Trim().Length > 100)
+                        result = "Tên sản phẩm không được quá 100 ký tự.";
+                    break;
+
+                case nameof(EditUnit):
+                case nameof(SelectedUnitText):
+                    if (string.IsNullOrWhiteSpace(EditUnit))
+                        result = "Vui lòng nhập đơn vị tính.";
+                    else if (EditUnit.Trim().Length > 20)
+                        result = "Đơn vị tính không được quá 20 ký tự.";
+                    break;
+
+                case nameof(EditPrice):
+                    if (EditPrice <= 0)
+                        result = "Giá bán phải lớn hơn 0.";
+                    break;
+
+                case nameof(EditStockQuantity):
+                    if (EditStockQuantity < 0)
+                        result = "Số lượng không được âm.";
+                    break;
+
+                case nameof(EditCategoryID):
+                case nameof(SelectedCategoryText):
+                    if (string.IsNullOrWhiteSpace(EditCategoryID) && string.IsNullOrWhiteSpace(SelectedCategoryText))
+                        result = "Vui lòng chọn hoặc nhập danh mục.";
+                    break;
+            }
+            return result;
         }
 
         // =================================================================================================
@@ -169,7 +228,6 @@ namespace Martify.ViewModels
 
         public ICommand SaveChangesCommand { get; set; }
         public ICommand CloseWindowCommand { get; set; }
-
         public ICommand SelectImageCommand { get; set; }
         public Action OnSaveCompleted { get; set; }
 
@@ -188,7 +246,6 @@ namespace Martify.ViewModels
             EditCategoryID = product.CategoryID;
             EditImagePath = product.ImagePath;
             _sourceImageFile = null;
-
 
             // Hiển thị Text của Category ban đầu
             var currentCat = Categories?.FirstOrDefault(c => c.CategoryID == product.CategoryID);
@@ -246,19 +303,22 @@ namespace Martify.ViewModels
                          EditStockQuantity != SelectedDetailProduct.StockQuantity ||
                          EditUnit != SelectedDetailProduct.Unit ||
                          EditCategoryID != SelectedDetailProduct.CategoryID ||
-                         SelectedCategoryText != Categories.FirstOrDefault(c => c.CategoryID == SelectedDetailProduct.CategoryID)?.CategoryName||
+                         SelectedCategoryText != Categories.FirstOrDefault(c => c.CategoryID == SelectedDetailProduct.CategoryID)?.CategoryName ||
                          EditImagePath != SelectedDetailProduct.ImagePath;
-
         }
 
         private async Task SaveChangesAsync()
         {
             if (SelectedDetailProduct == null) return;
 
-            // Validate cơ bản (phải có tên và danh mục)
-            if (string.IsNullOrWhiteSpace(EditProductName) || string.IsNullOrWhiteSpace(SelectedCategoryText))
+            // Kích hoạt validation
+            _isSaveClicked = true;
+            OnPropertyChanged(null); // Cập nhật tất cả thuộc tính
+
+            // Kiểm tra validation
+            if (!IsValid())
             {
-                SaveMessage = "Vui lòng nhập đầy đủ thông tin!";
+                SaveMessage = "Vui lòng kiểm tra lại thông tin!";
                 return;
             }
 
@@ -297,10 +357,12 @@ namespace Martify.ViewModels
 
                     SaveMessage = "Đã cập nhật thành công!";
                     IsModified = false;
+                    _isSaveClicked = false; // Reset validation state
 
                     // Đồng bộ object gốc để UI bên ngoài cập nhật theo
                     SelectedDetailProduct.ProductName = productInDb.ProductName;
                     SelectedDetailProduct.Price = productInDb.Price;
+                    SelectedDetailProduct.StockQuantity = productInDb.StockQuantity;
                     SelectedDetailProduct.Unit = productInDb.Unit;
                     SelectedDetailProduct.CategoryID = productInDb.CategoryID;
 
@@ -311,7 +373,46 @@ namespace Martify.ViewModels
             }
             catch (Exception ex)
             {
+                SaveMessage = "Lỗi khi lưu!";
                 MessageBox.Show($"Lỗi lưu: {ex.Message}");
+            }
+        }
+
+        private bool IsValid()
+        {
+            string[] properties =
+            {
+                nameof(EditProductName),
+                nameof(EditUnit),
+                nameof(EditPrice),
+                nameof(EditStockQuantity),
+                nameof(EditCategoryID),
+                nameof(SelectedCategoryText)
+            };
+
+            foreach (var prop in properties)
+            {
+                if (!string.IsNullOrEmpty(GetValidationError(prop)))
+                    return false;
+            }
+
+            return true;
+        }
+
+        private bool CheckProductNameExist(string productName, string currentProductID)
+        {
+            if (string.IsNullOrWhiteSpace(productName))
+                return false;
+
+            try
+            {
+                return DataProvider.Ins.DB.Products
+                    .Any(p => p.ProductName.Trim().ToLower() == productName.Trim().ToLower()
+                           && p.ProductID != currentProductID);
+            }
+            catch
+            {
+                return false;
             }
         }
 
@@ -371,6 +472,5 @@ namespace Martify.ViewModels
                 return "ERROR";
             }
         }
-
     }
 }

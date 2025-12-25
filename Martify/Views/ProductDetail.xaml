@@ -16,6 +16,28 @@
     <Window.Resources>
         <cv:ImagePathConverter x:Key="ImgConverter"/>
 
+        <!-- Error Template -->
+        <ControlTemplate x:Key="ErrorTemplate">
+            <StackPanel>
+                <AdornedElementPlaceholder x:Name="placeholder" />
+                <TextBlock Text="{Binding [0].ErrorContent}" 
+                           Foreground="#F44336" 
+                           FontSize="10" 
+                           Margin="5,2,0,0"
+                           FontStyle="Italic"/>
+            </StackPanel>
+        </ControlTemplate>
+
+        <!-- Validated TextBox Style -->
+        <Style x:Key="ValidatedTextBox" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplate}" />
+        </Style>
+
+        <!-- Validated ComboBox Style -->
+        <Style x:Key="ValidatedComboBox" TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplate}" />
+        </Style>
+
         <!-- Nâng cấp Style nút Lưu với animation nhẹ -->
         <Style x:Key="SaveButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
             <Setter Property="Background" Value="#F5F5F5"/>
@@ -103,7 +125,7 @@
                             </Rectangle>
                         </Border>
 
-                        
+
                         <Border Background="#40000000" CornerRadius="10" Padding="8,2" Margin="0,15,0,0" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding SelectedDetailProduct.ProductID}" 
                                    FontSize="12" Foreground="White" Opacity="0.9"/>
@@ -121,33 +143,35 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel> 
+                        <StackPanel>
                             <TextBlock Text="TÊN SẢN PHẨM" Style="{StaticResource FieldLabelStyle}" Margin="0 0 0 0" FontFamily="Roboto Black"/>
-                            <TextBox Text="{Binding EditProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding EditProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                  materialDesign:TextFieldAssist.PrefixText=""
-                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Style="{StaticResource ValidatedTextBox}"
                                  FontSize="14"
                                  FontFamily="Roboto Black"
                                  Margin="0 -5 0 0"/>
                         </StackPanel>
                     </Grid>
 
-                    <Grid Margin="0,0,0,20"> 
+                    <Grid Margin="0,0,0,20">
                         <StackPanel>
                             <TextBlock Text="DANH MỤC" Style="{StaticResource FieldLabelStyle}" FontFamily="Roboto Black"/>
                             <ComboBox ItemsSource="{Binding Categories}"
                                       SelectedValuePath="CategoryID"
-                                      SelectedValue="{Binding EditCategoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedValue="{Binding EditCategoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                       DisplayMemberPath="CategoryName"
-                                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                      Style="{StaticResource ValidatedComboBox}"
                                       IsEditable="True"
+                                      IsTextSearchCaseSensitive="True"
                                       FontFamily="Roboto Black"
                                       Margin="0 -5 0 0">
                                 <ComboBox.Text>
                                     <Binding
                                          Mode="TwoWay"
                                          Path="SelectedCategoryText"
-                                         UpdateSourceTrigger="PropertyChanged">
+                                         UpdateSourceTrigger="PropertyChanged"
+                                         ValidatesOnDataErrors="True">
                                     </Binding>
                                 </ComboBox.Text>
                             </ComboBox>
@@ -166,42 +190,40 @@
 
                         <StackPanel Grid.Column="0">
                             <TextBlock Text="GIÁ BÁN (VNĐ)" Style="{StaticResource FieldLabelStyle}" FontFamily="Roboto Black"/>
-                            <TextBox Text="{Binding EditPrice, StringFormat=N0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding EditPrice, StringFormat=N0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                      materialDesign:TextFieldAssist.SuffixText="₫ "
                                      FontFamily="Roboto Black"
-                                     Style="{StaticResource MaterialDesignTextBox}"/>
+                                     Style="{StaticResource ValidatedTextBox}"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="TỒN KHO" Style="{StaticResource FieldLabelStyle}" FontFamily="Roboto Black"/>
-                            <TextBox Text="{Binding EditStockQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding EditStockQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                  materialDesign:TextFieldAssist.PrefixText="SL: "
                                  FontFamily="Roboto Black"
-                                 Style="{StaticResource MaterialDesignTextBox}"/>
+                                 Style="{StaticResource ValidatedTextBox}"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="4">
                             <TextBlock Text="ĐƠN VỊ TÍNH" Style="{StaticResource FieldLabelStyle}" FontFamily="Roboto Black"/>
                             <ComboBox ItemsSource="{Binding UnitList}"
-                                      SelectedValue="{Binding EditUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                      IsEditable="True"
+                                      IsTextSearchCaseSensitive="True"
+                                      SelectedValue="{Binding EditUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                      Style="{StaticResource ValidatedComboBox}"
                                       FontFamily="Roboto Black"
                                       Margin="0 -8 0 0">
                                 <ComboBox.Text>
                                     <Binding
                                          Mode="TwoWay"
                                          Path="SelectedUnitText"
-                                         UpdateSourceTrigger="PropertyChanged">
+                                         UpdateSourceTrigger="PropertyChanged"
+                                         ValidatesOnDataErrors="True">
                                     </Binding>
                                 </ComboBox.Text>
                             </ComboBox>
                         </StackPanel>
                     </Grid>
-
-                    <!-- Unit & Supplier -->
-
-
-                   
 
                     <!-- Error/Success Message -->
                     <TextBlock Text="{Binding SaveMessage}"

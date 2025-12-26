@@ -70,7 +70,7 @@ namespace Martify
                     // --- XỬ LÝ LOGIC LOADING (2.5 GIÂY) ---
 
                     // 1. Web đã tải xong. Giữ nguyên màn hình Loading xoay trong 2 giây.
-                    await Task.Delay(2000);
+                    await Task.Delay(1000);
 
                     // 2. Ra lệnh cho JS bắt đầu hiệu ứng mờ dần (Fade Out).
                     // Trong CSS đã set transition: opacity 0.5s.

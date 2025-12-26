@@ -41,6 +41,9 @@ namespace Martify.ViewModels
         public ObservableCollection<int> Years { get; set; } = new ObservableCollection<int>();
 
         public ICommand ClearFilterCommand { get; set; }
+        public ICommand CloseDetailsCommand { get; set; }
+
+        
         public ICommand OpenDetailsCommand { get; set; }
         public ICommand ExportPDFCommand { get; set; }
 
@@ -76,6 +79,11 @@ namespace Martify.ViewModels
                 SelectedYear = null;
                 IsDetailsPanelOpen = false;
                 LoadList();
+            });
+
+            CloseDetailsCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                IsDetailsPanelOpen = false;
             });
 
             ExportPDFCommand = new RelayCommand<Invoice>((p) => p != null, (p) => ExportInvoiceToPdf(p));

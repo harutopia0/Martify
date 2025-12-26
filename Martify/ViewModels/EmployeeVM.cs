@@ -163,6 +163,10 @@ namespace Martify.ViewModels
 
         public ICommand AddEmployeeCommand { get; set; }
         public ICommand ClearFilterCommand { get; set; }
+
+        public ICommand CloseDetailsCommand { get; set; }
+
+        
         public ICommand OpenDetailsCommand { get; set; }
         public ICommand ToggleStatusCommand { get; set; }
         public ICommand SaveChangesCommand { get; set; }
@@ -291,6 +295,11 @@ namespace Martify.ViewModels
                 EditPhone = null;
 
                 LoadList();
+            });
+
+            CloseDetailsCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                IsDetailsPanelOpen = false;
             });
 
             ToggleStatusCommand = new RelayCommand<object>((p) => true, (p) =>

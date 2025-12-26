@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="uit.png" alt="UIT Logo" width="600">
+  <img src="ReadmeAssets/uit.png" alt="UIT Logo" width="600">
 </p>
 
 <h1 align="center">MARTIFY - PHẦN MỀM QUẢN LÝ SIÊU THỊ</h1>
@@ -113,7 +113,7 @@ Martify/
 > Giao diện đăng nhập với hiệu ứng Animation chữ chạy và hình nền hiện đại.
 
 <div align="center">
-  <img src="login.png" width="750">
+  <img src="ReadmeAssets/login.png" width="750">
 </div>
 
 ### 2. Dashboard (Bảng điều khiển)
@@ -127,8 +127,8 @@ Martify/
 > Màn hình bán hàng trực quan, hỗ trợ tìm kiếm và quét mã.
 
 <div align="center">
-  <img src="productselection.png" width="750">
-  <img src="productselectionqr.png" width="750">
+  <img src="ReadmeAssets/productselection.png" width="750">
+  <img src="ReadmeAssets/productselectionqr.png" width="750">
 </div>
 
 ### 4. Quản lý Sản phẩm
@@ -142,7 +142,7 @@ Martify/
 > Mẫu hóa đơn được xuất ra từ phần mềm.
 
 <div align="center">
-  <img src="printer.png" width="500">
+  <img src="ReadmeAssets/printer.png" width="500">
 </div>
 
 ---
@@ -170,7 +170,7 @@ Martify/
 | **Nhân viên (Staff)** | `staff` | `staff` | Chỉ truy cập Bán hàng & Tra cứu |
 
 Lưu ý: Dữ liệu có sẵn chỉ có 2 tài khoản trên, các bảng dữ liệu khác sẽ trống.  
-Sao chép file `Martify.db` vào thư mục `bin\debug` và chọn ghi đè, chạy lại ứng dụng để dùng dữ liệu mẫu.
+Sao chép chỉ file `Martify.db` và thư mục `Assets` bên trong thư mục `DemoDatabase` (không sao chép thư mục `DemoDatabase` itself) vào thư mục `bin\Debug\net8.0-windows`, chọn Replace/Overwrite khi được hỏi. Sau đó chạy lại ứng dụng để sử dụng dữ liệu mẫu.
 
 ---
 

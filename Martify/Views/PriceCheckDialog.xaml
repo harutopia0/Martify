@@ -55,7 +55,7 @@
                                              VerticalAlignment="Center"
                                              Margin="0,0,15,0"/>
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="Tra Cứu Giá Sản Phẩm"
+                        <TextBlock Text="Tra cứu giá sản phẩm"
                                    FontSize="24"
                                    FontFamily="Roboto Bold"
                                    Foreground="White"/>

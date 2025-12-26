@@ -11,6 +11,18 @@ using System.Windows.Input;
 
 namespace Martify.ViewModels
 {
+
+    // Class chứa dữ liệu hiển thị cho Tooltip
+    public class InventoryTooltipModel
+    {
+        public string Title { get; set; }
+        public List<Product> TopProducts { get; set; }
+        public int RemainingCount { get; set; }
+        public bool HasMoreProducts => RemainingCount > 0;
+        public string RemainingCountText => $"+ {RemainingCount} sản phẩm khác...";
+        public bool IsEmpty => (TopProducts == null || TopProducts.Count == 0);
+    }
+
     class DashboardVM : BaseVM
     {
         // [SỬA LỖI]: Sử dụng DataProvider.Ins.DB thay vì tạo mới để đảm bảo DB đã được khởi tạo
@@ -164,6 +176,29 @@ namespace Martify.ViewModels
             }
         }
 
+        // --- PROPERTIES CHO TOOLTIP ---
+        private InventoryTooltipModel _lowStockTooltip;
+        public InventoryTooltipModel LowStockTooltip
+        {
+            get => _lowStockTooltip;
+            set { _lowStockTooltip = value; OnPropertyChanged(); }
+        }
+
+        private InventoryTooltipModel _outOfStockTooltip;
+        public InventoryTooltipModel OutOfStockTooltip
+        {
+            get => _outOfStockTooltip;
+            set { _outOfStockTooltip = value; OnPropertyChanged(); }
+        }
+
+        // Count hiển thị trên Dashboard Card (giữ nguyên cái này để hiện số to)
+        private int _productsLowStockCount;
+        public int ProductsLowStockCount { get => _productsLowStockCount; set { _productsLowStockCount = value; OnPropertyChanged(); } }
+
+        private int _productsOutOfStockCount;
+        public int ProductsOutOfStockCount { get => _productsOutOfStockCount; set { _productsOutOfStockCount = value; OnPropertyChanged(); } }
+
+
         // Commands
         public ICommand OpenAddEmployeeCommand { get; }
         public ICommand LowStockAlertCommand { get; }
@@ -228,8 +263,53 @@ namespace Martify.ViewModels
                 execute: _ => LoadDashboardData()
             );
 
+            LowStockTooltip = new InventoryTooltipModel { Title = "Đang tải...", TopProducts = new List<Product>() };
+            OutOfStockTooltip = new InventoryTooltipModel { Title = "Đang tải...", TopProducts = new List<Product>() };
+
+            LoadInventoryAlerts();
             LoadDashboardData();
         }
+
+        private void LoadInventoryAlerts()
+        {
+            try
+            {
+                // 1. Sắp hết hàng (1 <= SL <= 10)
+                var lowStockQuery = _dbContext.Products
+                    .Where(p => p.StockQuantity > 0 && p.StockQuantity <= 10)
+                    .OrderBy(p => p.StockQuantity);
+
+                var lowStockList = lowStockQuery.Take(5).ToList();
+                var lowStockTotal = lowStockQuery.Count();
+
+                LowStockTooltip = new InventoryTooltipModel
+                {
+                    Title = "Sắp hết hàng",
+                    TopProducts = lowStockList,
+                    RemainingCount = lowStockTotal > 5 ? lowStockTotal - 5 : 0
+                };
+                ProductsLowStockCount = lowStockTotal;
+
+                // 2. Hết hàng (SL = 0)
+                var outOfStockQuery = _dbContext.Products
+                    .Where(p => p.StockQuantity == 0)
+                    .OrderBy(p => p.ProductName);
+
+                var outStockList = outOfStockQuery.Take(5).ToList();
+                var outStockTotal = outOfStockQuery.Count();
+
+                OutOfStockTooltip = new InventoryTooltipModel
+                {
+                    Title = "Đã hết hàng",
+                    TopProducts = outStockList,
+                    RemainingCount = outStockTotal > 5 ? outStockTotal - 5 : 0
+                };
+                ProductsOutOfStockCount = outStockTotal;
+            }
+            catch { }
+        }
+
+
 
         /// <summary>
         /// Mở cửa sổ thêm nhân viên
@@ -289,32 +369,11 @@ namespace Martify.ViewModels
         /// </summary>
         private void ShowImportChoiceDialog()
         {
-            var choiceDialog = new Views.ImportChoiceDialog
+            var addProducts = new Views.AddProduct
             {
                 Owner = Application.Current.MainWindow
             };
-
-            if (choiceDialog.ShowDialog() == true)
-            {
-                switch (choiceDialog.SelectedChoice)
-                {
-                    case Views.ImportChoiceDialog.ImportChoice.AddNewProduct:
-                        var addProductWindow = new Views.AddProduct
-                        {
-                            Owner = Application.Current.MainWindow
-                        };
-                        addProductWindow.ShowDialog();
-                        break;
-
-                    case Views.ImportChoiceDialog.ImportChoice.ImportProducts:
-                        var importProductsWindow = new Views.ImportProducts
-                        {
-                            Owner = Application.Current.MainWindow
-                        };
-                        importProductsWindow.ShowDialog();
-                        break;
-                }
-            }
+            addProducts.ShowDialog();
         }
 
         /// <summary>

@@ -551,12 +551,19 @@
                         <Border CornerRadius="8"
                                     Padding="10,8"
                                     Margin="0,0,0,8"
-                                    Cursor="Hand">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseLeftButtonDown">
-                                    <i:InvokeCommandAction Command="{Binding LowStockAlertCommand}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
+                                    Cursor="Hand"
+                                ToolTipService.InitialShowDelay="0">
+
+                            <Border.ToolTip>
+                                <ToolTip Background="Transparent" 
+                             BorderThickness="0" 
+                             Padding="0" 
+                             HasDropShadow="False"
+                             DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                    <local:InventoryTooltip DataContext="{Binding LowStockTooltip}"/>
+                                </ToolTip>
+                            </Border.ToolTip>
+
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Setter Property="Background"
@@ -604,12 +611,18 @@
 
                         <Border CornerRadius="8"
                                     Padding="10,8"
-                                    Cursor="Hand">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseLeftButtonDown">
-                                    <i:InvokeCommandAction Command="{Binding OutOfStockAlertCommand}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
+                                    Cursor="Hand"
+                                ToolTipService.InitialShowDelay="0">
+
+                            <Border.ToolTip>
+                                <ToolTip Background="Transparent" 
+                             BorderThickness="0" 
+                             Padding="0" 
+                             HasDropShadow="False"
+                             DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                    <local:InventoryTooltip DataContext="{Binding OutOfStockTooltip}"/>
+                                </ToolTip>
+                            </Border.ToolTip>
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Setter Property="Background"
@@ -744,7 +757,7 @@
                                                      Foreground="#4CAF50"
                                                      HorizontalAlignment="Center"
                                                      Margin="0,0,0,8"/>
-                        <TextBlock Text="Nhập hàng"
+                        <TextBlock Text="Thêm hàng"
                                        FontSize="13"
                                        FontFamily="Times New Roman"
                                        Foreground="{DynamicResource PrimaryText}"

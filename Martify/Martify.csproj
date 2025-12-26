@@ -238,6 +238,15 @@
 
 	
 	
+
+
+	<ItemGroup>
+	  <Folder Include="Assets\Product\" />
+	</ItemGroup>
+
+
+	
+	
 	
 
 

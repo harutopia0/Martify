@@ -37,8 +37,8 @@ namespace Martify.Helpers
             if (!Regex.IsMatch(phone, @"^[0-9]+$"))
                 return "SĐT chỉ được chứa số.";
 
-            if (phone.Length < 9 || phone.Length > 12)
-                return "SĐT phải từ 9-12 số.";
+            if (phone.Length < 10 || phone.Length > 11)
+                return "SĐT phải từ 10-11 số.";
 
             // Kiểm tra trùng trong DB
             var query = DataProvider.Ins.DB.Employees.AsQueryable();
